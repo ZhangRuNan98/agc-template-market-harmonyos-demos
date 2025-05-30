@@ -41,7 +41,7 @@
   <tr>
     <td><a href="#运动健康">运动健康</a></td>
     <td><a href="#健身房元服务模板">健身房元服务模板</a></td>
-    <td><a href="./HealthAndFitnessTemplate//MuseumTicket/README.md" target="_blank">快速开始</a></td>
+    <td><a href="./HealthAndFitnessTemplate/FitnessCenter/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td rowspan="3"><a href="#旅游">旅游</a></td>
