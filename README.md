@@ -54,7 +54,7 @@
   </tr>
   <tr>
    <td><a href="#民宿应用模板">民宿应用模板</a></td>
-   <td><a href="./TravelTemplate/TouristAttraction/README.md" target="_blank">快速开始</a></td>
+   <td><a href="./TravelTemplate/HomeStay/README.md" target="_blank">快速开始</a></td>
   </tr>
     <tr>
     <td rowspan="2"><a href="#购物">购物</a></td>
