@@ -46,6 +46,18 @@ export enum OrderTabBarType {
   READY = 4
 }
 
+// 有无的标记
+export enum StatusFLAG {
+  YES = 'Y',
+  NO = 'N',
+}
+
+// ALL:全部，NEW:最新，HOT:最热
+export enum QueryTravelogueListType {
+  ALL = 'ALL',
+  NEW = 'NEW',
+  HOT = 'HOT',
+}
 
 export enum NavPathName {
   RESERVE = 'Reserve',

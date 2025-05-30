@@ -1,4 +1,3 @@
-import { Discovery } from 'discovery';
 import { Personal } from 'personal';
 import { MapPage } from 'map';
 import { Shop } from 'shop';
@@ -6,6 +5,7 @@ import { Home } from 'home';
 import { Constants } from 'constant';
 import { CustomTabBar } from './CustomTabBar';
 import { MainPageVM } from '../viewmodel/MainPageVM';
+import { PageGround } from 'discovery';
 
 @Entry
 @Component
@@ -41,7 +41,9 @@ struct Main {
           };
 
           TabContent() {
-            Discovery();
+            PageGround({
+              isShowBack: false,
+            })
           };
 
           TabContent() {

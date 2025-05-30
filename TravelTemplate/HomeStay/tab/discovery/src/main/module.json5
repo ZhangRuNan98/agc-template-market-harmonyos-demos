@@ -1,14 +1,11 @@
 {
   "module": {
     "name": "discovery",
-    "type": "shared",
-    "description": "$string:shared_desc",
+    "type": "har",
     "deviceTypes": [
-      "phone",
-      "tablet"
-    ],
-    "deliveryWithInstall": true,
-    "installationFree": false,
-    "routerMap": "$profile:router_map"
+      "default",
+      "tablet",
+      "2in1"
+    ]
   }
 }

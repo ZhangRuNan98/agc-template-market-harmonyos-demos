@@ -76,7 +76,9 @@ export struct Home {
     let dates: Promise<undefined> = new Promise(() => {
       if (!AppStorage.get('startDate') && !AppStorage.get('endDate')) {
         this.startDate = getRealTimeDate();
-        let days = getLastDayOfMonth(this.currentYear ?? 2025, this.currentMonth ?? 0);
+        let date = new Date();
+        let days = getLastDayOfMonth(this.currentYear ?? date.getFullYear(),
+          this.currentMonth ?? date.getMonth());
         if (this.startDate.day >= days) {
           this.endDate =
             new DateModel(this.startDate.day - days + 1, this.startDate.week, this.startDate.month + 1,

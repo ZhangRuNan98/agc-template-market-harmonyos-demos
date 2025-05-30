@@ -1,0 +1,14 @@
+{
+  "routerMap": [
+    {
+      "name": "sportDetail",
+      "pageSourceFile": "src/main/ets/generated/RouterBuilder.ets",
+      "buildFunction": "SportDetailBuilder"
+    },
+    {
+      "name": "clubEnvironmentDetail",
+      "pageSourceFile": "src/main/ets/generated/RouterBuilder.ets",
+      "buildFunction": "ClubEnvironmentDetailBuilder"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "uiComponents",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}

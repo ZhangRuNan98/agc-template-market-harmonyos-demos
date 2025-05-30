@@ -5,13 +5,9 @@
   "main": "Index.ets",
   "author": "",
   "license": "Apache-2.0",
-  "packageType": "InterfaceHar",
   "dependencies": {
-    "util": "file:../../common/util",
-    "network": "file:../../function/network",
-    "account": "file:../../function/account",
+    '@ohos/axios': 'latest',
+    '@ohos/pulltorefresh': '2.1.0',
     "constant": "file:../../common/constant",
-    "type": "file:../../common/type",
-    "component": "file:../../common/component"
   }
 }

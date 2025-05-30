@@ -44,6 +44,7 @@
  |-- 发现
  |    └-- 发现列表
  |         └-- 发现详情
+ |         └-- 发现搜索
  |-- 地图
  |    └-- 民宿信息
  |    └-- 民宿导航
@@ -121,12 +122,20 @@ HomeStay
   |   |    |- types                               // 接口类型定义      
   |   |
   |- tab                                          // tab特性层
-  |   |- discovery/src/main/ets                   // 发现模块(hsp)
-  |   |    |- components                          // 抽离组件 
+  |   |- discovery/src/main/ets                   // 发现模块(har)
+  |   |    |- components                          // 抽离组件
+  |   |    |    ContentCard.ets                   // 发现卡片组件
+  |   |    |- constant                              
+  |   |    |    Index.ets                         // 常量
+  |   |    |- model      
+  |   |    |    Index.ets                         // 模型
+  |   |    |    IRequest.ets                      // 请求模型
+  |   |    |    IResponse.ets                     // 返回模型
   |   |    |- pages                              
-  |   |    |    Discovery.ets                     // 发现列表页
+  |   |    |    PageSearch.ets                    // 发现搜索页
   |   |    |    PageDetail.ets                    // 发现详情页
-  |   |    └- viewmodel                           // 与页面一一对应的vm层
+  |   |    |    PageWaterFlow.ets                 // 发现列表页
+  |   |    └- util                                // 请求工具
   |   |- home/src/main/ets                        // 首页模块(hsp)
   |   |    |- components                          // 抽离组件 
   |   |    |- model                               // class类型定义 

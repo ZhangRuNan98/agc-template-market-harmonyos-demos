@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "Gymnasium"
+    },
+    {
+      "name": "agcit_huawei_fitness_center",
+      "value": "1.0.0"
+    },
+    {
+      "name": "agcittype_huawei_fitness_center",
+      "value": "industryTemplate"
+    }
+  ]
+}

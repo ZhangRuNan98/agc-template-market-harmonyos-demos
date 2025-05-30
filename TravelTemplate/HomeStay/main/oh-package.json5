@@ -9,11 +9,12 @@
     "personal": "file:../tab/personal",
     "home": "file:../tab/home",
     "map": "file:../tab/map",
-    "discovery": "file:../tab/discovery",
     "account": "file:../function/account",
     "shop": "file:../tab/shop",
     "network": "file:../function/network",
     "type": "file:../common/type",
-    "constant": "file:../common/constant"
+    "constant": "file:../common/constant",
+    "component": "file:../common/component",
+    "discovery": "file:../tab/discovery"
   }
 }

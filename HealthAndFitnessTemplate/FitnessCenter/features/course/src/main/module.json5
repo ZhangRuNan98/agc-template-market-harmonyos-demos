@@ -1,0 +1,11 @@
+{
+  "module": {
+    "name": "course",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ],
+    "routerMap": "$profile:route_map"
+  }
+}

@@ -6,7 +6,7 @@ import { Constants, NavPathName } from 'constant';
 import { AccountUtil } from 'account';
 import { createOrder } from '../viewmodel/PurchasePageVM';
 import { PurchaseInfo } from 'type';
-import { doRandBySync, getCurrentTime } from 'util';
+import { doRandBySync, getCurrentTime, Logger } from 'util';
 import { TitleBar } from 'component';
 import { CreateOrderRequest, https, UpdateOrderRequest } from 'network';
 
@@ -128,6 +128,18 @@ export struct Purchase {
     });
   }
 
+  async updateOrder(orderSn: string) {
+    promptAction.showToast({
+      message: '模拟支付成功',
+      duration: 1000,
+    });
+    const res = await https.updateOrder({ orderSn: orderSn, orderStatus: 2 } as UpdateOrderRequest);
+
+    if (res.code === 200) {
+      this.mainPathStack.pushPathByName(NavPathName.PAY_SUCCESS, 1);
+    }
+  }
+
   async purchase() {
     const data: CreateOrderRequest = {
       appId: '',
@@ -160,23 +172,17 @@ export struct Purchase {
       paymentService.requestPayment(getContext(this) as common.UIAbilityContext, res.data).then(() => {
         payStr = '支付成功';
       }).catch(async (error: BusinessError) => {
+        this.updateOrder(data.orderSn);
         if (error.code === 1001930000) {
           payStr = '取消支付';
         } else if (error.code === 1001930001) {
-          payStr = '模拟支付成功';
-          promptAction.showToast({
-            message: payStr,
-            duration: 1000,
-          });
-          const res = await https.updateOrder({ orderSn: data.orderSn, orderStatus: 2 } as UpdateOrderRequest);
-          if (res.code === 200) {
-            this.mainPathStack.pushPathByName(NavPathName.PAY_SUCCESS, 1);
-          }
+          payStr = '参数错误';
         } else if (error.code === 1001930011) {
           payStr = '网络链接异常';
         } else if (error.code === 1001930010) {
           payStr = '重复请求';
         }
+        Logger.info('pay fail with reason ' + payStr);
       });
     }
   }

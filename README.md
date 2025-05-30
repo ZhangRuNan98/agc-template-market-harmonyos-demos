@@ -225,11 +225,11 @@
 
 本模板已集成华为账号、支付等服务，只需做少量配置和定制即可快速实现华为账号的登录、购买商品等功能。
 
-<a href="./LifestyleAndServiceTemplate/HouseholdService/README.md" target="_blank">详细说明</a>
+<a href="./LifestyleAndServiceTemplate/HouseholdService/HouseholdService/README.md" target="_blank">详细说明</a>
 
 | 首页                                                                         | 全部服务                                                                             | 我的                                                                         |
 | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| ![首页](./LifestyleAndServiceTemplate/HouseholdService/screenshots/首页.jpg) | ![全部服务](./LifestyleAndServiceTemplate/HouseholdService/screenshots/全部服务.jpg) | ![我的](./LifestyleAndServiceTemplate/HouseholdService/screenshots/我的.jpg) |
+| ![首页](./LifestyleAndServiceTemplate/HouseholdService/HouseholdService/screenshots/首页.jpg) | ![全部服务](./LifestyleAndServiceTemplate/HouseholdService/HouseholdService/screenshots/全部服务.jpg) | ![我的](./LifestyleAndServiceTemplate/HouseholdService//HouseholdService/screenshots/我的.jpg) |
 
 ### 日历应用模板
 
@@ -241,11 +241,47 @@
 - 黄历：根据选择日历展示黄历内容，支持切换日期查看今日宜以及今日忌。
 - 我的：展示个人信息、华为账号一键登录、切换主题等。
 
-<a href="./LifestyleAndServiceTemplate/Calendar/README.md" target="_blank">详细说明</a>
+<a href="./LifestyleAndServiceTemplate/Calendar/Calendar/README.md" target="_blank">详细说明</a>
 
 | 万年历                                                                                          | 黄历                                                                                             | 我的                                                                                          |
 | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| <img src="./LifestyleAndServiceTemplate/Calendar/screenshot/home.png" alt="万年历" width="300"> | <img src="./LifestyleAndServiceTemplate/Calendar/screenshot/huangli.png" alt="黄历" width="300"> | <img src="./LifestyleAndServiceTemplate/Calendar/screenshot/mine.png" alt="我的" width="300"> |
+| <img src="./LifestyleAndServiceTemplate/Calendar/Calendar/screenshot/home.png" alt="万年历" width="300"> | <img src="./LifestyleAndServiceTemplate/Calendar/Calendar/screenshot/huangli.png" alt="黄历" width="300"> | <img src="./LifestyleAndServiceTemplate/Calendar/Calendar/screenshot/mine.png" alt="我的" width="300"> |
+
+### 停车缴费模板
+
+**功能介绍**
+
+本模板为停车缴费元服务提供了常用功能的开发样例，模板主要分首页、找车位和我的三大模块：
+
+- 首页：主要提供车牌轮播、停车缴费、常去地址、附近和收藏停车场展示等功能。
+- 找车位：主要提供停车场的地图标注和列表展示功能，支持联想搜索和地图查找。
+- 我的：展示个人信息，车牌、订单和收藏的管理以及联系客服功能。
+
+<a href="./LifestyleAndServiceTemplate/Parking/README.md" target="_blank">详细说明</a>
+
+| 首页                                                           | 找车位                                                           | 我的                                                           |
+|--------------------------------------------------------------|---------------------------------------------------------------|--------------------------------------------------------------|
+| <img src="./LifestyleAndServiceTemplate/Parking/screenshots/pic_home.jpeg" alt="首页" width="300"> | <img src="./LifestyleAndServiceTemplate/Parking/screenshots/pic_find.jpeg" alt="找车位" width="300"> | <img src="./LifestyleAndServiceTemplate/Parking/screenshots/pic_mine.jpeg" alt="我的" width="300"> |
+
+## 运动健康
+
+### 健身房元服务模板
+
+**功能介绍**
+
+本模板为健身房会员平台的元服务提供了常用功能的开发样例，提供了健身房信息展示、课程展示、卡项展示、课程预定、卡项购买、会员中心等能力。模板主要分首页、预约、我的三大模块：
+
+- 首页：展示健身房环境，包含运动项目、卡项、课程等。
+- 预约：展示可预约的课程时间信息。
+- 我的：提供账号管理、预约记录、订单记录、会员充值等功能。
+
+本模板已集成华为账号、通话等服务，只需做少量配置和定制即可快速实现华为账号登录、一键拨号等功能。
+
+<a href="./HealthAndFitnessTemplate/FitnessCenter/README.md" target="_blank">详细说明</a>
+
+| 首页                              | 预约                                 | 我的                              |
+|---------------------------------|------------------------------------|---------------------------------|
+| <img src="./HealthAndFitnessTemplate//FitnessCenter//screenshots/homePage.png" alt="首页" width="300"> | <img src="./HealthAndFitnessTemplate//FitnessCenter//screenshots/bookingPage.png" alt="产品" width="300"> | <img src="./HealthAndFitnessTemplate//FitnessCenter//screenshots/minePage.png" alt="我的" width="300"> |
 
 ## 休闲娱乐
 
@@ -263,11 +299,11 @@
 
 本模板已集成华为账号、地图、支付等服务，只需做少量配置和定制即可快速实现华为账号的登录及展览预定等功能。
 
-<a href="./LifestyleAndServiceTemplate/MuseumTicket/README.md" target="_blank">详细说明</a>
+<a href="./EntertainmentTemplate/MuseumTicket/README.md" target="_blank">详细说明</a>
 
 | 首页                                                                      | 会员                                                                               | 我的                                                                       |
 | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| ![首页](./LifestyleAndServiceTemplate/MuseumTicket/screenshots/首页.jpeg) | ![我的预定](./LifestyleAndServiceTemplate/MuseumTicket//screenshots/我的预定.jpeg) | ![我的](./LifestyleAndServiceTemplate/MuseumTicket//screenshots/我的.jpeg) |
+| ![首页](./EntertainmentTemplate/MuseumTicket/screenshots/首页.jpeg) | ![我的预定](./EntertainmentTemplate/MuseumTicket//screenshots/我的预定.jpeg) | ![我的](./EntertainmentTemplate/MuseumTicket//screenshots/我的.jpeg) |
 
 ## 旅游
 
@@ -413,17 +449,18 @@
 
 本模板为美食菜谱类应用提供了常用功能的开发样例，模板主要分首页、分类和我的三大模块：
 
-- 首页：展示菜谱信息、按名称搜索、按类别搜索。
-- 分类：按分类展示菜谱，支持查看详情、收藏菜谱、加入菜篮子和管理菜篮子。
-- 我的：展示账号相关信息，展示我的菜谱和上传菜谱，展示我的收藏菜谱，展示浏览记录，以及设置等功能。
+- 首页：展示菜谱信息，支持按名称、类别搜索菜谱。
+- 分类：按类别展示菜谱，支持查看详情、收藏菜谱、加入菜篮子和管理菜篮子。
+- 热量计算：展示每日热量和每周热量，支持按时间段增加饮食计划，展示计划饮食的热量。
+- 我的：展示账号相关信息，展示我的菜谱和上传菜谱，展示收藏的菜谱，展示浏览记录，以及设置等功能。
 
 本模板已集成华为账号服务，只需做少量配置和定制即可快速实现华为账号的登录等功能。
 
-<a href="./FoodAndDrinkTemplate/Recipes/README.md" target="_blank">详细说明</a>
+<a href="./FoodAndDrinkTemplate/Recipes/Recipes/README.md" target="_blank">详细说明</a>
 
-| 首页                                                                                              | 分类                                                                                                  | 我的                                                                                              |
-| ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_home.png" alt="首页" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_category.png" alt="分类" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_mine.png" alt="我的" width="300"> |
+| 首页                                                                | 分类                                                                    | 热量计算                                                                   | 我的                                                                |
+|-------------------------------------------------------------------|-----------------------------------------------------------------------|----------------------------------------------------------------------|-------------------------------------------------------------------|
+| <img src="./FoodAndDrinkTemplate/Recipes/Recipes/screenshots/Screenshot_home.jpeg" alt="首页" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/Recipes/screenshots/Screenshot_category.jpeg" alt="分类" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/Recipes/screenshots/Screenshot_calorie.jpeg" alt="热量计算" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/Recipes/screenshots/Screenshot_mine.jpeg" alt="我的" width="300"> |
 
 ## 金融理财
 

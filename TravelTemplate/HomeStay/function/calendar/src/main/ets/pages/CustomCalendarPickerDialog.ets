@@ -23,6 +23,7 @@ export struct CustomCalendarPickerDialog {
   @Link priceList: Price[];
   @Link isShowPrice: boolean;
   @Link @Watch('readyToClose') readyCloseDialog: boolean;
+  @State cloneStartDate: DateModel = new DateModel(0, 0, 0, 0);
   controller: CustomDialogController;
   cancel: () => void = () => {
   };
@@ -33,16 +34,11 @@ export struct CustomCalendarPickerDialog {
       this.controller.close();
       // 未选择离店日期时重置
       if (this.endDate.day === 0) {
-        let selectedStartDate = CalenderUtil.getStartDate();
-        // 开始时间被单独重置情况处理
-        if (selectedStartDate?.day ?? this.currentDay > this.currentDay) {
-          AppStorage.setOrCreate('startDate', new DateModel(this.currentDay, 0, this.currentMonth, this.currentYear));
-        }
-
         this.startDate =
-          CalenderUtil.getStartDate() ?? new DateModel(this.currentDay, 0, this.currentMonth, this.currentYear);
+          new DateModel(this.cloneStartDate.day, 0, this.cloneStartDate.month, this.cloneStartDate.year);
         this.endDate =
-          CalenderUtil.getEndDate() ?? new DateModel(this.currentDay + 1, 0, this.currentMonth, this.currentYear);
+          CalenderUtil.getEndDate() ??
+            new DateModel(this.cloneStartDate.day + 1, 0, this.cloneStartDate.month, this.cloneStartDate.year);
       }
     }, Constants.TRANSITION_DURATION);
     animateTo({
@@ -60,6 +56,9 @@ export struct CustomCalendarPickerDialog {
 
   // 获取当前月和下个月的日期数据
   aboutToAppear() {
+    this.cloneStartDate.year = this.startDate.year;
+    this.cloneStartDate.month = this.startDate.month;
+    this.cloneStartDate.day = this.startDate.day;
     let currentDate: DateModel = getRealTimeDate() ?? new DateModel(0, 0, 0, 0);
     this.currentMonth = currentDate.month;
     this.currentDay = currentDate.day;
