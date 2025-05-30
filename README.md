@@ -9,7 +9,7 @@
     <th width="150px">文档</th>
   </tr>
   <tr>
-    <td rowspan="5"><a href="#生活服务">生活服务</a></td>
+    <td rowspan="6"><a href="#生活服务">生活服务</a></td>
     <td><a href="#政务应用模板">政务应用模板</a></td>
     <td><a href="./LifestyleAndServiceTemplate/GovernmentService/Application/README.md" target="_blank">快速开始</a></td>
   </tr>
@@ -23,16 +23,25 @@
   </tr>
   <tr>
     <td><a href="#家政元服务模板">家政元服务模板</a></td>
-    <td><a href="./LifestyleAndServiceTemplate/HouseholdService/README.md" target="_blank">快速开始</a></td>
+    <td><a href="./LifestyleAndServiceTemplate/HouseholdService/HouseholdService/README.md" target="_blank">快速开始</a></td>
   </tr>
-    <tr>
+  <tr>
+    <td><a href="#停车缴费元服务模板">停车缴费元服务模板</a></td>
+    <td><a href="./LifestyleAndServiceTemplate/Parking/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
     <td><a href="#日历应用模板">日历应用模板</a></td>
-    <td><a href="./LifestyleAndServiceTemplate/Calendar/README.md" target="_blank">快速开始</a></td>
+    <td><a href="./LifestyleAndServiceTemplate/Calendar/Calendar/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#休闲娱乐">休闲娱乐</a></td>
     <td><a href="#娱乐票务元服务模板">娱乐票务元服务模板</a></td>
-    <td><a href="./LifestyleAndServiceTemplate/MuseumTicket/README.md" target="_blank">快速开始</a></td>
+    <td><a href="./EntertainmentTemplate/MuseumTicket/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
+    <td><a href="#运动健康">运动健康</a></td>
+    <td><a href="#健身房元服务模板">健身房元服务模板</a></td>
+    <td><a href="./HealthAndFitnessTemplate//MuseumTicket/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td rowspan="3"><a href="#旅游">旅游</a></td>
@@ -67,7 +76,7 @@
   </tr>
   <tr>
     <td><a href="#菜谱应用模板">菜谱应用模板</a></td>
-    <td><a href="./FoodAndDrinkTemplate/Recipes/README.md" target="_blank">快速开始</a></td>
+    <td><a href="./FoodAndDrinkTemplate/Recipes/Recipes/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#金融理财">金融理财</a></td>
@@ -247,7 +256,7 @@
 | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
 | <img src="./LifestyleAndServiceTemplate/Calendar/Calendar/screenshot/home.png" alt="万年历" width="300"> | <img src="./LifestyleAndServiceTemplate/Calendar/Calendar/screenshot/huangli.png" alt="黄历" width="300"> | <img src="./LifestyleAndServiceTemplate/Calendar/Calendar/screenshot/mine.png" alt="我的" width="300"> |
 
-### 停车缴费模板
+### 停车缴费元服务模板
 
 **功能介绍**
 
