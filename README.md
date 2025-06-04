@@ -23,7 +23,7 @@
   </tr>
   <tr>
     <td><a href="#家政元服务模板">家政元服务模板</a></td>
-    <td><a href="./LifestyleAndServiceTemplate/HouseholdService/HouseholdService/README.md" target="_blank">快速开始</a></td>
+    <td><a href="./LifestyleAndServiceTemplate/HouseholdService/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#停车缴费元服务模板">停车缴费元服务模板</a></td>
@@ -31,7 +31,7 @@
   </tr>
   <tr>
     <td><a href="#日历应用模板">日历应用模板</a></td>
-    <td><a href="./LifestyleAndServiceTemplate/Calendar/Calendar/README.md" target="_blank">快速开始</a></td>
+    <td><a href="./LifestyleAndServiceTemplate/Calendar/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#休闲娱乐">休闲娱乐</a></td>
@@ -76,7 +76,7 @@
   </tr>
   <tr>
     <td><a href="#菜谱应用模板">菜谱应用模板</a></td>
-    <td><a href="./FoodAndDrinkTemplate/Recipes/Recipes/README.md" target="_blank">快速开始</a></td>
+    <td><a href="./FoodAndDrinkTemplate/Recipes/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#金融理财">金融理财</a></td>
@@ -234,11 +234,11 @@
 
 本模板已集成华为账号、支付等服务，只需做少量配置和定制即可快速实现华为账号的登录、购买商品等功能。
 
-<a href="./LifestyleAndServiceTemplate/HouseholdService/HouseholdService/README.md" target="_blank">详细说明</a>
+<a href="./LifestyleAndServiceTemplate/HouseholdService/README.md" target="_blank">详细说明</a>
 
 | 首页                                                                         | 全部服务                                                                             | 我的                                                                         |
 | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| ![首页](./LifestyleAndServiceTemplate/HouseholdService/HouseholdService/screenshots/首页.jpg) | ![全部服务](./LifestyleAndServiceTemplate/HouseholdService/HouseholdService/screenshots/全部服务.jpg) | ![我的](./LifestyleAndServiceTemplate/HouseholdService//HouseholdService/screenshots/我的.jpg) |
+| ![首页](./LifestyleAndServiceTemplate/HouseholdService/screenshots/首页.jpg) | ![全部服务](./LifestyleAndServiceTemplate/HouseholdService/screenshots/全部服务.jpg) | ![我的](./LifestyleAndServiceTemplate/HouseholdService/screenshots/我的.jpg) |
 
 ### 日历应用模板
 
@@ -250,11 +250,11 @@
 - 黄历：根据选择日历展示黄历内容，支持切换日期查看今日宜以及今日忌。
 - 我的：展示个人信息、华为账号一键登录、切换主题等。
 
-<a href="./LifestyleAndServiceTemplate/Calendar/Calendar/README.md" target="_blank">详细说明</a>
+<a href="./LifestyleAndServiceTemplate/Calendar/README.md" target="_blank">详细说明</a>
 
 | 万年历                                                                                          | 黄历                                                                                             | 我的                                                                                          |
 | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| <img src="./LifestyleAndServiceTemplate/Calendar/Calendar/screenshot/home.png" alt="万年历" width="300"> | <img src="./LifestyleAndServiceTemplate/Calendar/Calendar/screenshot/huangli.png" alt="黄历" width="300"> | <img src="./LifestyleAndServiceTemplate/Calendar/Calendar/screenshot/mine.png" alt="我的" width="300"> |
+| <img src="./LifestyleAndServiceTemplate/Calendar/screenshot/home.png" alt="万年历" width="300"> | <img src="./LifestyleAndServiceTemplate/Calendar/screenshot/huangli.png" alt="黄历" width="300"> | <img src="./LifestyleAndServiceTemplate/Calendar/screenshot/mine.png" alt="我的" width="300"> |
 
 ### 停车缴费元服务模板
 
@@ -290,7 +290,7 @@
 
 | 首页                              | 预约                                 | 我的                              |
 |---------------------------------|------------------------------------|---------------------------------|
-| <img src="./HealthAndFitnessTemplate//FitnessCenter//screenshots/homePage.png" alt="首页" width="300"> | <img src="./HealthAndFitnessTemplate//FitnessCenter//screenshots/bookingPage.png" alt="产品" width="300"> | <img src="./HealthAndFitnessTemplate//FitnessCenter//screenshots/minePage.png" alt="我的" width="300"> |
+| <img src="./HealthAndFitnessTemplate//FitnessCenter/screenshots/homePage.png" alt="首页" width="300"> | <img src="./HealthAndFitnessTemplate//FitnessCenter/screenshots/bookingPage.png" alt="产品" width="300"> | <img src="./HealthAndFitnessTemplate/FitnessCenter/screenshots/minePage.png" alt="我的" width="300"> |
 
 ## 休闲娱乐
 
@@ -469,7 +469,7 @@
 
 | 首页                                                                | 分类                                                                    | 热量计算                                                                   | 我的                                                                |
 |-------------------------------------------------------------------|-----------------------------------------------------------------------|----------------------------------------------------------------------|-------------------------------------------------------------------|
-| <img src="./FoodAndDrinkTemplate/Recipes/Recipes/screenshots/Screenshot_home.jpeg" alt="首页" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/Recipes/screenshots/Screenshot_category.jpeg" alt="分类" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/Recipes/screenshots/Screenshot_calorie.jpeg" alt="热量计算" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/Recipes/screenshots/Screenshot_mine.jpeg" alt="我的" width="300"> |
+| <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_home.jpeg" alt="首页" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_category.jpeg" alt="分类" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_calorie.jpeg" alt="热量计算" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_mine.jpeg" alt="我的" width="300"> |
 
 ## 金融理财
 
