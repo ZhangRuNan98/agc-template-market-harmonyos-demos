@@ -1,7 +1,8 @@
 import { TitleBar } from 'component';
 import { Constants } from 'constant';
-import { CommonMap } from 'mapview';
+import { CommonMap } from 'travel_map';
 import { TenantInfo } from 'type';
+import { Logger } from 'util';
 import { BasicInfoArea } from '../components/BasicInfoArea';
 import { Checkout } from '../components/Checkout';
 import { Foundations } from '../components/Foundations';
@@ -23,7 +24,7 @@ export function HotelBuilder() {
 
 @Component
 export struct Hotel {
-  @State isShow: boolean = true;
+  @State isShow: boolean = false;
   @State index: number = 0;
   @State activeIndex: number = 0;
   vm: HomePageVM = HomePageVM.instance;
@@ -89,13 +90,27 @@ export struct Hotel {
       ListItem() {
         Column({ space: 16 }) {
           Text(`周边信息`).fontSize(16).fontWeight(500).alignSelf(ItemAlign.Start);
-          CommonMap({
-            latitude: this.tenantInfo?.position[1],
-            longitude: this.tenantInfo?.position[0],
-            name: this.tenantInfo?.appName,
-            isShow: this.isShow,
-          })
-            .height(172);
+          CommonMap(
+            {
+              travelMapOptions: {
+                location: {
+                  latitude: Number(this.tenantInfo?.position[1]),
+                  longitude: Number(this.tenantInfo?.position[0]),
+                },
+                icon: $r('app.media.point'),
+                titleOptions: {
+                  name: this.tenantInfo?.appName ?? '',
+                  strokeColor: 0xFFFFFFFF,
+                },
+                cameraSpeed: 1000,
+                zoom: 10,
+                height: 172,
+                pointClickCallBack: () => {
+                  Logger.info('click point annotation');
+                },
+              },
+            },
+          );
         };
       };
     }.scrollBar(BarState.Off).padding({ left: 16, right: 16 }).edgeEffect(EdgeEffect.Spring);
@@ -136,7 +151,7 @@ export struct Hotel {
             this.goToHotelInfo();
           });
         };
-      }
+      };
     }.hideTitleBar(true);
   }
 }

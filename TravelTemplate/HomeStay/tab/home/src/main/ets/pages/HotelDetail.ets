@@ -1,6 +1,6 @@
 import { Constants, NavPathName } from 'constant';
 import { TitleBar } from 'component';
-import { CalenderUtil, DateInfo, DateModel, Price } from 'calendar';
+import { CalendarUtil, DateInfo, DateModel, Price } from 'calendar_select';
 import { RoomType } from 'type';
 import { Foundations } from '../components/Foundations';
 import { Reservation } from '../components/Reservation';
@@ -24,9 +24,9 @@ export struct HotelDetail {
   @State roomType: RoomType = new RoomType();
   @State scrollIndex: number = 0;
   @State activeIndex: number = 0;
-  @State startDate: DateModel | undefined = CalenderUtil.getStartDate();
-  @State endDate: DateModel | undefined = CalenderUtil.getEndDate();
-  @State night: number = CalenderUtil.getNight() ?? 1;
+  @StorageLink('startDate') startDate: DateModel | undefined = CalendarUtil.getStartDate();
+  @StorageLink('endDate') endDate: DateModel | undefined = CalendarUtil.getEndDate();
+  @StorageLink('night') night: number = CalendarUtil.getNight() ?? 1;
   @State priceList: Price[] = [];
   @StorageLink('currentUser') currentUser: string | undefined = AccountUtil.getCurrentUser();
 
@@ -63,13 +63,15 @@ export struct HotelDetail {
                     .padding({ left: 16, right: 16, top: 16 });
 
                   Column({ space: 16 }) {
-                    DateInfo({
-                      startDate: this.startDate,
-                      endDate: this.endDate,
-                      night: this.night,
-                      isShowPrice: true,
-                      priceList: this.priceList,
-                    })
+                    DateInfo(
+                      {
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        night: this.night,
+                        isShowPrice: true,
+                        priceList: this.priceList,
+                      },
+                    )
                       .backgroundColor('#F5F6FA').borderRadius(8);
                   }.padding({ left: 16, right: 16 }).alignItems(HorizontalAlign.Start).margin({ top: 16 });
                 };
@@ -92,7 +94,7 @@ export struct HotelDetail {
         Row() {
           Text() {
             Span('￥').fontSize(12).fontWeight(500).fontColor('#F0353A');
-            Span(`${this.vm.getPriceByDate(this.roomType.roomTypePriceList, CalenderUtil.getCurrentDate(), 0)
+            Span(`${this.vm.getPriceByDate(this.roomType.roomTypePriceList, CalendarUtil.getCurrentDate(), 0)
               .toFixed(2)}`)
               .fontSize(20)
               .fontWeight(500)

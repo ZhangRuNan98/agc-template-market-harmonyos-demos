@@ -2,7 +2,6 @@ import { promptAction } from '@kit.ArkUI';
 import fs from '@ohos.file.fs';
 import { Constants } from 'constant';
 import { AccountUtil } from 'account';
-import { getFormatDate } from 'calendar';
 import { GetInfoRequest, https } from 'network';
 import { PersonalInfoVM } from '../viewmodel/PersonalInfoVM';
 import { Logger } from 'util/Index';
@@ -10,6 +9,7 @@ import { FunctionalButton, functionalButtonComponentManager } from '@kit.Scenari
 import { util } from '@kit.ArkTS';
 import { TitleBar } from 'component';
 import { PersonalPopInfo } from '../model/Index';
+import { getFormatDate } from 'calendar_select';
 
 @Builder
 export function PersonalInfoBuilder() {

@@ -13,6 +13,6 @@
     "personal": "file:../personal",
     "type": "file:../../common/type",
     "constant": "file:../../common/constant",
-    "mapview": "file:../../function/mapview"
+    "travel_map": "file:../../components/travel_map"
   }
 }

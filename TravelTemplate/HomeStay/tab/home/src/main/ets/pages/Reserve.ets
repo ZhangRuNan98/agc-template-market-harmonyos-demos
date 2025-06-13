@@ -6,7 +6,7 @@ import { Constants, NavPathName } from 'constant';
 import { EnhancedSource, Source } from '../model/Index';
 import { Passenger } from '../model/Passengers';
 import { RoomType } from 'type';
-import { CalenderUtil, DateModel } from 'calendar';
+import { CalendarUtil, DateModel } from 'calendar_select';
 import { AccountUtil } from 'account';
 import { getRoomOrderAmount } from '../viewmodel/ReservePageVM';
 import { doRandBySync, getCurrentTime, checkPsgInfo, hasPassenger, isValidPhoneNo, Logger } from 'util';
@@ -27,8 +27,8 @@ export struct Reserve {
   @State remark: string = '';
   @State amount: number = 0;
   @State count: number = 1;
-  @State startDate: DateModel | undefined = CalenderUtil.getStartDate();
-  @State endDate: DateModel | undefined = CalenderUtil.getEndDate();
+  @State startDate: DateModel | undefined = CalendarUtil.getStartDate();
+  @State endDate: DateModel | undefined = CalendarUtil.getEndDate();
   @State openId: string | undefined = AccountUtil.getOpenId();
   @State roomTypeItem: RoomType = new RoomType();
   @State selectPassenger: Passenger = new Passenger();
@@ -233,10 +233,10 @@ export struct Reserve {
       orderStatus: 1,
       orderType: 0,
       orderRemark: this.remark,
-      planCheckInDate: CalenderUtil.getFormatDate(this.startDate ?? new DateModel(1970, 1, 1, 0)) ?? '',
-      planCheckOutDate: CalenderUtil.getFormatDate(this.endDate ?? new DateModel(1970, 1, 1, 0)) ?? '',
+      planCheckInDate: CalendarUtil.getFormatDate(this.startDate ?? new DateModel(1970, 1, 1, 0)) ?? '',
+      planCheckOutDate: CalendarUtil.getFormatDate(this.endDate ?? new DateModel(1970, 1, 1, 0)) ?? '',
       checkInPersonNum: 2,
-      dayCount: CalenderUtil.getDayCount(this.startDate ?? new DateModel(1970, 1, 1, 0),
+      dayCount: CalendarUtil.getDayCount(this.startDate ?? new DateModel(1970, 1, 1, 0),
         this.endDate ?? new DateModel(1970, 1, 1, 0)),
       openId: this.openId ?? '',
       orderSn: doRandBySync(),

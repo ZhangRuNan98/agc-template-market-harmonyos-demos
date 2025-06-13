@@ -15,6 +15,6 @@
     "type": "file:../common/type",
     "constant": "file:../common/constant",
     "component": "file:../common/component",
-    "discovery": "file:../tab/discovery"
+    "travel_discovery": "file:../components/travel_discovery"
   }
 }

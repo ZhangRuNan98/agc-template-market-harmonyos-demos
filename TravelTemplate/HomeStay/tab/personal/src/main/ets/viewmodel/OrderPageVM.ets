@@ -2,7 +2,7 @@ import { AccountUtil } from 'account';
 import { https, Mock } from 'network';
 import { Order, Passenger } from 'type';
 import { Constants, OrderTabBarType } from 'constant';
-import { CalenderUtil, DateModel } from 'calendar';
+import { CalendarUtil, DateModel } from 'calendar_select';
 
 @ObservedV2
 export class OrderPageVM {
@@ -109,7 +109,7 @@ export class OrderPageVM {
   isOverdue(orderItem: Order) {
     let result = false;
     let dueTime = orderItem.planCheckInDate;
-    let curTime: DateModel = CalenderUtil.getCurrentDate() ?? new DateModel(0, 0, 0, 0);
+    let curTime: DateModel = CalendarUtil.getCurrentDate() ?? new DateModel(0, 0, 0, 0);
 
     let timeArr = dueTime.split('-');
 

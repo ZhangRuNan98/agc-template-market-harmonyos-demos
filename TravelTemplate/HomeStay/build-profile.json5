@@ -52,8 +52,8 @@
       ]
     },
     {
-      "name": "discovery",
-      "srcPath": "./tab/discovery",
+      "name": "travel_discovery",
+      "srcPath": "./components/travel_discovery",
       "targets": [
         {
           "name": "default",
@@ -78,18 +78,6 @@
     {
       "name": "home",
       "srcPath": "./tab/home",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "calendar",
-      "srcPath": "./function/calendar",
       "targets": [
         {
           "name": "default",
@@ -184,16 +172,12 @@
       ]
     },
     {
-      "name": "mapview",
-      "srcPath": "./function/mapview",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
+      "name": "calendar_select",
+      "srcPath": "./components/calendar_select",
+    },
+    {
+      "name": "travel_map",
+      "srcPath": "./components/travel_map",
     }
   ]
 }

@@ -46,19 +46,6 @@ export enum OrderTabBarType {
   READY = 4
 }
 
-// 有无的标记
-export enum StatusFLAG {
-  YES = 'Y',
-  NO = 'N',
-}
-
-// ALL:全部，NEW:最新，HOT:最热
-export enum QueryTravelogueListType {
-  ALL = 'ALL',
-  NEW = 'NEW',
-  HOT = 'HOT',
-}
-
 export enum NavPathName {
   RESERVE = 'Reserve',
   PURCHASE = 'Purchase',
@@ -126,7 +113,7 @@ export class Constants {
       title: '须知',
     },
   ];
-  static readonly week: string[] = ['日', '一', '二', '三', '四', '五', '六'];
+
   static readonly COMMON_SERVICE_INFO: Array<OrderTextModel> = [
     {
       value: 0,

@@ -1,13 +1,13 @@
 import { AccountUtil } from 'account';
 import {
-  CalenderUtil,
+  CalendarUtil,
   CustomCalendarPickerDialog,
   DateInfo,
   DateModel,
   getLastDayOfMonth,
   getRealTimeDate,
   Price,
-} from 'calendar';
+} from 'calendar_select';
 import { Constants, NavPathName } from 'constant';
 import { CarouselImage, RoomType } from 'type';
 import { Logger } from 'util';
@@ -27,16 +27,16 @@ export struct Home {
   private scrollerForScroll: Scroller = new Scroller();
   @State isShow: boolean = false;
   @State showIndex: number = 0;
-  @StorageLink('night') night: number = CalenderUtil.getNight() ?? 1;
-  @State isShowPrice: boolean = true;
+  @StorageLink('night') night: number = CalendarUtil.getNight() ?? 1;
+  @State isShowPrice: boolean = false;
   @State readyCloseDialog: boolean = false;
   @State priceList: Price[] = [];
   @State currentMonthDay: number[] = [];
-  @State currentMonth: number | undefined = CalenderUtil.getCurrentDate()?.month;
-  @State currentDay: number | undefined = CalenderUtil.getCurrentDate()?.day;
-  @State currentYear: number | undefined = CalenderUtil.getCurrentDate()?.year;
-  @StorageLink('startDate') startDate: DateModel | undefined = CalenderUtil.getStartDate();
-  @StorageLink('endDate') endDate: DateModel | undefined = CalenderUtil.getEndDate();
+  @State currentMonth: number | undefined = CalendarUtil.getCurrentDate()?.month;
+  @State currentDay: number | undefined = CalendarUtil.getCurrentDate()?.day;
+  @State currentYear: number | undefined = CalendarUtil.getCurrentDate()?.year;
+  @StorageLink('startDate') startDate: DateModel | undefined = CalendarUtil.getStartDate();
+  @StorageLink('endDate') endDate: DateModel | undefined = CalendarUtil.getEndDate();
   @StorageLink('currentUser') currentUser: string | undefined = AccountUtil.getCurrentUser();
   @Consume('homeTabIndex') homeTabIndex: number;
   @Consume('mainPathStack') mainPathStack: NavPathStack;
@@ -48,7 +48,6 @@ export struct Home {
       startDate: this.startDate,
       endDate: this.endDate,
       night: this.night,
-      cancel: this.onCancel,
       isShowPrice: this.isShowPrice,
       readyCloseDialog: this.readyCloseDialog,
       priceList: this.priceList,
@@ -62,10 +61,6 @@ export struct Home {
       }, Constants.TRANSITION_DURATION);
     },
   });
-
-  // 点击遮障层退出时的回调
-  onCancel() {
-  }
 
   aboutToAppear() {
     this.initialDate();
@@ -130,19 +125,17 @@ export struct Home {
 
   @Builder
   DateAreaBuilder() {
-    DateInfo({
-      startDate: CalenderUtil.getStartDate(),
-      endDate: CalenderUtil.getEndDate(),
-      night: this.night,
-      isShowPrice: false,
-      priceList: [],
-    })
+    DateInfo(
+      {
+        startDate: CalendarUtil.getStartDate(),
+        endDate: CalendarUtil.getEndDate(),
+        night: this.night,
+        isShowPrice: false,
+        priceList: [],
+      },
+    )
       .backgroundColor('#f5f6fa')
-      .borderRadius(8)
-      .onClick(() => {
-        this.isShowPrice = false;
-        this.dialogController.open();
-      });
+      .borderRadius(8);
   }
 
   @Builder
@@ -168,7 +161,7 @@ export struct Home {
       Row() {
         Text() {
           Span('￥').fontSize(12).fontWeight(500);
-          Span(`${this.vm.getPriceByDate(item.roomTypePriceList, CalenderUtil.getCurrentDate(), 0)}`)
+          Span(`${this.vm.getPriceByDate(item.roomTypePriceList, CalendarUtil.getCurrentDate(), 0)}`)
             .fontWeight(500);
           Span('.00').fontSize(12).fontWeight(500);
         };

@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "packageType": "InterfaceHar",
   "dependencies": {
-    "calendar": "file:../../function/calendar",
+    "calendar_select": "file:../../components/calendar_select",
     "account": "file:../../function/account",
     "util": "file:../../common/util",
     "network": "file:../../function/network",

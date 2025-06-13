@@ -1,4 +1,4 @@
-# 旅游（民宿）行业模板快速入门
+# 旅游（民宿）应用模板快速入门
 
 ## 目录
 
@@ -11,7 +11,12 @@
 
 ## 功能介绍
 
+您可以基于此[模板](#模板)直接定制应用/元服务，也可以挑选此模板中提供的多种[组件](#组件)使用，从而降低您的开发难度，提高您的开发效率。
+
+### 模板
+
 本模板为民宿住宿类应用提供了常用功能的开发样例，模板主要分首页、发现、地图、商城和我的五大模块：
+
 * 首页：提供民宿轮播展示、民宿信息查看、入住时间选择、热门房型选择。
 * 发现：展示发现列表，展示发现详情。
 * 地图：提供民宿地理位置展示、民宿导航。
@@ -20,8 +25,8 @@
 
 本模板已集成华为账号、通话、地图、华为支付等服务，只需做少量配置和定制即可快速实现华为账号的登录、一键拨打服务电话、民宿位置定位导航、订房下单、购买商品等功能。
 
-| 首页                             | 发现                                        | 地图                                       | 商城                                       | 我的                                      |
-|--------------------------------|-------------------------------------------|------------------------------------------|------------------------------------------|-----------------------------------------|
+| 首页                             | 发现                            | 地图                                       | 商城                                       | 我的                                      |
+|--------------------------------|-------------------------------|------------------------------------------|------------------------------------------|-----------------------------------------|
 | ![image](screenshots/home.jpg) | ![image](screenshots/discovery.jpg) | ![image](screenshots/map.jpg) | ![image](screenshots/shop.jpg) | ![image](screenshots/mine.jpg) |
 
 
@@ -97,22 +102,34 @@ HomeStay
   |        |    CustomTabBar.ets                  // 导航栏自定义页面
   |        |- model                               // 类型定义
   |        |- viewmodel                           // 与页面一一对应的vm层          
+  |      
+  |- components                                   // 可分可合组件层
+  |   |- calendar_select/src/main/ets             // 日历组件(har)
+  |   |    |- components                          // 组件页面
+  |   |    |    CustomCalendarPickerDialog.ets    // 日历弹窗
+  |   |    |    DateInfo.ets                      // 日历组件 
+  |   |    |- constant                            // 日历组件常量
+  |   |    |- model                               // 日历组件模型  
+  |   |    |- utils                               // 日历组件工具类             
+  |   |    
+  |   |- travel_discovery/src/main/ets            // 游记组件(har)
+  |   |    |- components                          // 组件
+  |   |    |    ContentCard.ets                   // 游记卡片  
+  |   |    |- constant                            // 游记组件常量
+  |   |    |- model                               // 游记组件模型     
+  |   |    |- pages                              
+  |   |    |    PageDetail.ets                    // 游记详情页面
+  |   |    |    PageSearch.ets                    // 游记搜索页面
+  |   |    |    PageWaterFlow.ets                 // 游记瀑布流页面
+  |   |    └- utils                               // 日历工具类 
+  |   |- travel_map/src/main/ets                  // 地图组件(har)
+  |   |    |- components                          // 组件页面
+  |   |    |    Map.ets                           // 地图  
+  |   |    |- model                               // 地图组件模型
   |                                           
   |- function                                     // 特性层
   |   |- account/src/main/ets                     // 账号维护模块(hsp)
-  |   |    |- AccountUtil                         // 账号信息维护类                
-  |   |    
-  |   |- calendar/src/main/ets                    // 日历模块(hsp)
-  |   |    |- component                           // 抽离组件   
-  |   |    |- data                                // 懒加载数据 
-  |   |    |- model                               // class类型定义     
-  |   |    |- pages                              
-  |   |    |    CustomCalendarPickerDialog.ets    // 日历选择页面
-  |   |    └- utils                               // 日历工具类 
-  |   | 
-  |   |- mapview/src/main/ets                     // 地图模块(hsp)   
-  |   |    |- pages                              
-  |   |    |    Map.ets                           // 地图组件页面 
+  |   |    |- AccountUtil                         // 账号信息维护类                  
   |   |
   |   |- network/src/main/ets                     // 网络请求模块(hsp)
   |   |    |- api                                 // 接口请求方法类   
@@ -181,6 +198,15 @@ HomeStay
   |   |    └- viewmodel                           // 与页面一一对应的vm层           
 ```
 
+### 组件
+本模板中提供了多种组件，您可以按需选择合适的组件进行使用，所有组件存放在工程根目录的components下。
+
+| 组件                | 描述 | 使用指导 |
+| ------------------- | ---- | -------- |
+| 日历组件（calendar_select） |  提供入住、离开日期选择的功能。    |[使用指导](components/calendar_select/README.md)|
+|      游记组件（travel_discovery）               |   提供游记浏览搜索、详情查看及评论等功能。   |  [使用指导](components/travel_discovery/README.md)        |
+|      地图（定位选点）组件（travel_map）               |   提供地图展示能力，并支持地图定位和选点定制功能。   |  [使用指导](components/travel_map/README.md)        |
+
 ## 环境要求
 
 ### 软件
@@ -211,13 +237,13 @@ HomeStay
    a. 将应用的client ID配置到main模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
    b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
-   
+
 4. 配置地图服务。
 
    a. 将应用的client ID配置到main模块的module.json5文件，如果华为账号服务已配置，可跳过此步骤。
 
    b. 添加公钥指纹，如果华为账号服务已配置，可跳过此步骤。
-   
+
    c. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
 
 5. 配置支付服务。
@@ -230,11 +256,11 @@ HomeStay
 2. 对应用签名：由于模板中集成了华为账号、地图等服务，所以需要采用[手动签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
 
 3. 配置多模块调试：由于本模板存在多个模块，运行时需确保所有模块安装至调试设备。
-   
+
    a. 在DevEco Studio菜单选择“Run > Edit Configurations”，进入“Run/Debug Configurations”界面。
-   
+
    b. 左侧导航选择“main”模块，选择“Deploy Multi Hap”页签，勾选上模板中所有模块。
-   
+
    c. 点击"Run"，运行模板工程。
 
 

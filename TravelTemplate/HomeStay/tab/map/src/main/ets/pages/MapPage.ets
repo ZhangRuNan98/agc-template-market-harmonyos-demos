@@ -1,7 +1,7 @@
 import { Constants, NavPathName } from 'constant';
 import { common, Want } from '@kit.AbilityKit';
 import { TenantInfo } from 'type';
-import { CommonMap } from 'mapview';
+import { CommonMap } from 'travel_map';
 
 @Component
 export struct MapPage {
@@ -14,12 +14,27 @@ export struct MapPage {
   build() {
     NavDestination() {
       Stack({ alignContent: Alignment.Bottom }) {
-        CommonMap({
-          latitude: this.tenantInfo?.position[1],
-          longitude: this.tenantInfo?.position[0],
-          name: this.tenantInfo?.appName,
-          isShow: this.isShow,
-        }).height(Constants.FULL_SCREEN);
+        CommonMap(
+          {
+            travelMapOptions: {
+              location: {
+                latitude: Number(this.tenantInfo?.position[1]) ,
+                longitude: Number(this.tenantInfo?.position[0]),
+              },
+              icon: $r('app.media.point'),
+              titleOptions: {
+                name: this.tenantInfo?.appName ?? '',
+                strokeColor: 0xFFFFFFFF,
+              },
+              cameraSpeed: 1000,
+              zoom: 10,
+              height: '100%',
+              pointClickCallBack: ()=> {
+                this.isShow = true;
+              }
+            },
+          }
+        );
 
         if (this.isShow) {
           Column() {

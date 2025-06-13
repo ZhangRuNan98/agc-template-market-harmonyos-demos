@@ -1,0 +1,29 @@
+{
+  "routerMap": [
+    {
+      "name": "QuickLoginPage",
+      "pageSourceFile": "src/main/ets/pages/QuickLoginPage.ets",
+      "buildFunction": "QuickLoginPageBuilder"
+    },
+    {
+      "name": "EditNamePage",
+      "pageSourceFile": "src/main/ets/pages/EditNamePage.ets",
+      "buildFunction": "EditNamePageBuilder"
+    },
+    {
+      "name": "PersonalInformationPage",
+      "pageSourceFile": "src/main/ets/pages/PersonalInformationPage.ets",
+      "buildFunction": "PersonalInformationPageBuilder"
+    },
+    {
+      "name": "PrivacyPage",
+      "pageSourceFile": "src/main/ets/pages/PrivacyPage.ets",
+      "buildFunction": "PrivacyPageBuilder"
+    },
+    {
+      "name": "SettingPage",
+      "pageSourceFile": "src/main/ets/pages/SettingPage.ets",
+      "buildFunction": "SettingPageBuilder"
+    }
+  ]
+}

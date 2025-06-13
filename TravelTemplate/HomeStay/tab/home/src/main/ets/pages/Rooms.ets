@@ -1,5 +1,5 @@
 import { AccountUtil } from 'account';
-import { CalenderUtil, CustomCalendarPickerDialog, DateInfo, DateModel, Price } from 'calendar';
+import { CalendarUtil, CustomCalendarPickerDialog, DateInfo, DateModel, Price } from 'calendar_select';
 import { TitleBar } from 'component';
 import { Constants, NavPathName } from 'constant';
 import { RoomType } from 'type';
@@ -27,17 +27,17 @@ function operateButton() {
 @Component
 export struct Rooms {
   vm: HomePageVM = HomePageVM.instance;
-  @State night: number = CalenderUtil.getNight() ?? 1;
+  @StorageLink('night') night: number = CalendarUtil.getNight() ?? 1;
   @State isShowPrice: boolean = true;
   @State readyCloseDialog: boolean = false;
   @StorageLink('currentUser') currentUser: string | undefined = AccountUtil.getCurrentUser();
   @State priceList: Price[] = [];
   @State currentMonthDay: number[] = [];
-  @State currentMonth: number | undefined = CalenderUtil.getCurrentDate()?.month;
-  @State currentDay: number | undefined = CalenderUtil.getCurrentDate()?.day;
-  @State currentYear: number | undefined = CalenderUtil.getCurrentDate()?.year;
-  @State startDate: DateModel | undefined = CalenderUtil.getStartDate();
-  @State endDate: DateModel | undefined = CalenderUtil.getEndDate();
+  @State currentMonth: number | undefined = CalendarUtil.getCurrentDate()?.month;
+  @State currentDay: number | undefined = CalendarUtil.getCurrentDate()?.day;
+  @State currentYear: number | undefined = CalendarUtil.getCurrentDate()?.year;
+  @StorageLink('startDate') startDate: DateModel | undefined = CalendarUtil.getStartDate();
+  @StorageLink('endDate') endDate: DateModel | undefined = CalendarUtil.getEndDate();
   @State windowBottomHeight: number = AppStorage.get('windowBottomHeight') as number || 28;
   @Consume('mainPathStack') mainPathStack: NavPathStack;
   dialogController: CustomDialogController = new CustomDialogController({
@@ -48,7 +48,6 @@ export struct Rooms {
       startDate: this.startDate,
       endDate: this.endDate,
       night: this.night,
-      cancel: this.onCancel,
       isShowPrice: this.isShowPrice,
       readyCloseDialog: this.readyCloseDialog,
       priceList: this.priceList,
@@ -62,10 +61,6 @@ export struct Rooms {
       }, Constants.TRANSITION_DURATION);
     },
   });
-
-  // 点击遮障层退出时的回调
-  onCancel() {
-  }
 
   reserveRoom(roomTypeItem: RoomType) {
     this.mainPathStack.pushPathByName(NavPathName.RESERVE, {
@@ -96,7 +91,7 @@ export struct Rooms {
               Row() {
                 Text() {
                   Span('￥').fontSize(12).fontWeight(500);
-                  Span(`${this.vm.getPriceByDate(roomTypeItem.roomTypePriceList, CalenderUtil.getCurrentDate(),
+                  Span(`${this.vm.getPriceByDate(roomTypeItem.roomTypePriceList, CalendarUtil.getCurrentDate(),
                     0)}`)
                     .fontWeight(500);
                   Span('.00').fontSize(12).fontWeight(500);
@@ -145,13 +140,15 @@ export struct Rooms {
 
   @Builder
   DateAreaBuilder() {
-    DateInfo({
-      startDate: this.startDate,
-      endDate: this.endDate,
-      night: this.night,
-      isShowPrice: false,
-      priceList: [],
-    })
+    DateInfo(
+      {
+        startDate: this.startDate,
+        endDate: this.endDate,
+        night: this.night,
+        isShowPrice: false,
+        priceList: [],
+      },
+    )
       .backgroundColor(Color.White)
       .borderRadius(8)
       .onClick(() => {

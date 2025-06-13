@@ -3,7 +3,7 @@ import { NavigationConfig } from '../model/Index';
 import { CarouselImage, Commodity, HotelInfo, HotScenicSpot, RoomType, RoomTypePrice, Tag, TenantInfo } from 'type';
 import { mapHotelInfoResponse } from '../mapper/HotelInfoMapper';
 import { LazyDataSource } from 'util'
-import { CalenderUtil, DateModel, Price } from 'calendar';
+import { CalendarUtil, DateModel, Price } from 'calendar_select';
 
 @ObservedV2
 export class HomePageVM {
@@ -48,7 +48,7 @@ export class HomePageVM {
   getPriceByDate(priceList: RoomTypePrice[], date: DateModel, type: number): number {
     let priceItem =
       priceList.find((priceItem: RoomTypePrice) => priceItem.roomPriceDay ===
-        `${date.year}-${CalenderUtil.formatDate(date.month)}-${CalenderUtil.formatDate(date.day)}`);
+        `${date.year}-${CalendarUtil.formatDate(date.month)}-${CalendarUtil.formatDate(date.day)}`);
     return type === 0 ? priceItem?.actualPrice ?? 0 : priceItem?.originalPrice ?? 0;
   }
 

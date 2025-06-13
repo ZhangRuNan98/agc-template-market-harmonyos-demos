@@ -1,5 +1,5 @@
 import { JSON } from '@kit.ArkTS';
-import { formatDate, getDateByIncrement, getFormatDate, getRealTimeDate } from 'calendar';
+import { formatDate, getDateByIncrement, getFormatDate, getRealTimeDate } from 'calendar_select';
 import {
   CarouselImage,
   Commodity,

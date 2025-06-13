@@ -4,4 +4,4 @@ export { Constants,
   OrderTextModel,
   Member,
   OrderTabBarType,
-  OtherTabNavModel, RoomFeatureModel, NavPathName, StatusFLAG, QueryTravelogueListType } from './src/main/ets/common/Constants'
+  OtherTabNavModel, RoomFeatureModel, NavPathName } from './src/main/ets/common/Constants'

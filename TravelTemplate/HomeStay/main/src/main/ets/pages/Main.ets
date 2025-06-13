@@ -5,7 +5,7 @@ import { Home } from 'home';
 import { Constants } from 'constant';
 import { CustomTabBar } from './CustomTabBar';
 import { MainPageVM } from '../viewmodel/MainPageVM';
-import { PageGround } from 'discovery';
+import { PageGround } from 'travel_discovery';
 
 @Entry
 @Component

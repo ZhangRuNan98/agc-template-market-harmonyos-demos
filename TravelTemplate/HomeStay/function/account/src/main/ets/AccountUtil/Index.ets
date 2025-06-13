@@ -56,7 +56,7 @@ export class AccountUtil {
         AppStorage.setOrCreate('openID', openID);
       }).catch((error: BusinessError) => {
         if (error.code === 1001502001) {
-          promptAction.showToast({ message: '请先登录华为帐号' });
+          promptAction.showToast({ message: '请先登录华为账号' });
         }
         AccountUtil.dealAllError(error);
       });
