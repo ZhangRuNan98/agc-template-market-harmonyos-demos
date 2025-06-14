@@ -57,9 +57,13 @@
    <td><a href="./TravelTemplate/HomeStay/README.md" target="_blank">快速开始</a></td>
   </tr>
     <tr>
-    <td rowspan="2"><a href="#购物">购物</a></td>
+    <td rowspan="3"><a href="#购物">购物</a></td>
     <td><a href="#商城元服务模板">商城元服务模板</a></td>
     <td><a href="./ShoppingTemplate/ComprehensiveMall/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
+    <td><a href="#快递物流应用模板">快递物流应用模板</a></td>
+    <td><a href="./ShoppingTemplate/Express/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#优惠券场景模板">优惠券场景模板</a></td>
@@ -79,9 +83,13 @@
     <td><a href="./FoodAndDrinkTemplate/Recipes/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
-    <td><a href="#金融理财">金融理财</a></td>
+    <td rowspan="2"><a href="#金融理财">金融理财</a></td>
     <td><a href="#理财元服务模板">理财元服务模板</a></td>
     <td><a href="./FinanceTemplate/FinancialManagement/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
+    <td><a href="#记账应用模板">记账应用模板</a></td>
+    <td><a href="./FinanceTemplate/MoneyTrack/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td rowspan="2"><a href="#教育">教育</a></td>
@@ -117,13 +125,17 @@
     <td><a href="./KidsTemplate/PostpartumCareCenter/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
-    <td rowspan="2"><a href="#商务">商务</a></td>
+    <td rowspan="3"><a href="#商务">商务</a></td>
     <td><a href="#办公考勤应用模板">办公考勤应用模板</a></td>
     <td><a href="./BusinessTemplate/OfficeAttendance/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#企业招聘应用模板">企业招聘应用模板</a></td>
     <td><a href="./BusinessTemplate/EnterpriseRecruitment/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
+    <td><a href="#笔记应用模板">笔记应用模板</a></td>
+    <td><a href="./BusinessTemplate/Notes/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#汽车">汽车</a></td>
@@ -152,6 +164,11 @@
   <tr>
    <td><a href="#航空出行元服务模板">航空出行元服务模板</a></td>
    <td><a href="./NavigationTemplate/AirTrip/Application/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
+    <td><a href="#影音娱乐">影音娱乐</a></td>
+    <td><a href="#视频短剧元服务模板">视频短剧元服务模板</a></td>
+    <td><a href="./MovieTVAndLivestreamingTemplate/WebShortDrama/README.md" target="_blank">快速开始</a></td>
   </tr>
 </table>
 
@@ -397,6 +414,28 @@
 | ------------------------------------------------------------------ | ---------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | ![首页](./ShoppingTemplate/ComprehensiveMall//screenshot/home.jpg) | ![分类](./ShoppingTemplate/ComprehensiveMall//screenshot/category.jpg) | ![购物车](./ShoppingTemplate/ComprehensiveMall//screenshot/cart.jpg) | ![我的](./ShoppingTemplate/ComprehensiveMall//screenshot/profile.jpg) |
 
+### 快递物流应用模板
+
+**功能介绍**
+
+本模板为快递物流类应用提供了常用功能的开发样例，模板主要分寄快递、查快递、会员福利和我的四大模块：
+
+- 寄快递：提供寄快递、模板、物品等。
+
+- 查快递：展示快递信息，筛选搜索快递等。
+
+- 会员福利：展示签到、优惠券等。
+
+- 我的：展示登录、地址簿、实名认证等。
+
+<a href="./ShoppingTemplate/Express/README.md" target="_blank">详细说明</a>
+
+本模板已集成华为账号、支付等服务，只需做少量配置和定制即可快速实现华为账号的登录和寄快递等功能。
+
+| 寄快递                          | 查快递                          | 会员福利                           | 我的                         |
+|------------------------------|------------------------------|--------------------------------|----------------------------|
+| ![寄快递](./ShoppingTemplate/Express/screenshots/寄快递.jpeg) | ![查快递](./ShoppingTemplate/Express//screenshots/查快递.jpeg) | ![会员福利](./ShoppingTemplate/Express/screenshots/会员福利.jpeg) | ![我的](./ShoppingTemplate/Express/screenshots/我的.jpeg) |
+
 ### 优惠券场景模板
 
 **功能介绍**
@@ -489,6 +528,24 @@
 | 理财                                                                                   | 我的                                                                                   |
 | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | <img src= "./FinanceTemplate/FinancialManagement/screenshots/首页.jpeg" width="300" /> | <img src= "./FinanceTemplate/FinancialManagement/screenshots/我的.jpeg" width="300" /> |
+
+### 记账应用模板
+
+**功能介绍**
+
+本模板为记账类应用提供了常用功能的开发样例，模板主要分首页、统计和资产三大模块：
+
+- 首页：主要展示账单列表，支持根据月份和类型进行账单筛选，支持点击悬浮按钮添加账单，编辑账单类型等常用功能。
+
+- 统计：根据账单展示统计图表，支持根据月份筛选，支持展示饼图、金额排行、月度柱状图、统计报表、日历图等。
+
+- 资产：主要展示资产列表，支持用户添加、编辑资产信息，支持在对应资产内完成记账等功能。
+
+<a href="./FinanceTemplate/MoneyTrack/README.md" target="_blank">详细说明</a>
+
+| 首页                                                  | 统计                                                       | 资产                                                   |
+| ----------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------ |
+| <img src="./FinanceTemplate/MoneyTrack/snapshots/home.png" alt="首页" width="300"> | <img src="./FinanceTemplate/MoneyTrack/snapshots/statistic.png" alt="统计" width="300"> | <img src="./FinanceTemplate/MoneyTrack/snapshots/asset.png" alt="资产" width="300"> |
 
 ## 教育
 
@@ -673,6 +730,24 @@
 | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | <img src= "./BusinessTemplate/EnterpriseRecruitment/pictures/首页-企业生活.jpg" width="200px" /> | <img src= "./BusinessTemplate/EnterpriseRecruitment/pictures/职位列表页.jpg" width="200px" /> | <img src= "./BusinessTemplate/EnterpriseRecruitment/pictures/我的.jpg" width="200px" /> |
 
+### 笔记应用模板
+
+**功能介绍**
+
+本模板为笔记类应用提供了常用功能的开发样例，模板主要分首页、我的两大模块：
+
+- 首页：展示全部笔记，分类，搜索，排序，编辑笔记
+
+- 我的：提供回收站以及保密设置
+
+本模板已集成账号服务，只需做少量配置和定制即可快速实现华为账号一键登录。
+
+<a href="./BusinessTemplate/Notes/README.md" target="_blank">详细说明</a>
+
+| 首页                                    | 我的                                |
+|---------------------------------------|-----------------------------------|
+| <img src="./BusinessTemplate/Notes/screenshots/homepage.jpg" alt="首页" width="300"> | <img src="./BusinessTemplate/Notes/screenshots/mine.jpg" alt="我的" width="300"/> |
+
 ## 汽车
 
 ### 汽车保养应用模板
@@ -794,6 +869,30 @@
 | 首页                                                                   | 行程                                                                        | 航班动态                                                                     | 我的                                                                   |
 | ---------------------------------------------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | ![首页](./NavigationTemplate/AirTrip/Application/screenshot/home.jpeg) | ![行程](./NavigationTemplate/AirTrip/Application/screenshot/itinerary.jpeg) | ![航班动态](./NavigationTemplate/AirTrip/Application/screenshot/flight.jpeg) | ![我的](./NavigationTemplate/AirTrip/Application/screenshot/mine.jpeg) |
+
+## 影音娱乐
+
+### 视频短剧元服务模板
+
+**功能介绍**
+
+本模板为短剧类元服务提供了常用功能的开发样例，模板主要分首页、剧场、我的及详情播放页三大模块：
+
+- 首页：提供短剧推荐流功能，按照剧目播放。
+
+- 剧场：提供榜单和优选短剧浏览，支持输入剧名搜索。
+
+- 我的：支持账号的管理和常用服务(追剧/观看记录)。
+
+- 详情: 沉浸式观看短剧，支持剧集播放常用功能(上下滑切换剧集，选集，社交交互等)
+
+本模板已集成华为账号等服务，只需做少量配置和定制即可快速实现华为账号的登录功能。
+
+<a href="./MovieTVAndLivestreamingTemplate/WebShortDrama/README.md" target="_blank">详细说明</a>
+
+| 首页                         | 剧场                         | 我的                         | 详情                         |
+|----------------------------|----------------------------|----------------------------|----------------------------|
+| ![首页](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/首页.jpeg) | ![剧场](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/剧场.jpeg) | ![我的](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/我的.jpeg) | ![详情](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/详情.jpeg) |
 
 ## 开源许可协议
 
