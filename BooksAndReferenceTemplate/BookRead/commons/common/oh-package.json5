@@ -5,5 +5,9 @@
   "main": "Index.ets",
   "author": "",
   "license": "Apache-2.0",
-  "dependencies": {}
+  "dependencies": {
+    "@cashier_alipay/cashiersdk": "^15.8.29",
+    "@tencent/wechat_open_sdk": "^1.0.7",
+    "base_common": "file:../../components/base_common"
+  }
 }

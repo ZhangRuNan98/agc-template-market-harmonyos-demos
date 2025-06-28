@@ -1,5 +1,5 @@
-import { BookCover, BookInfo, Constants, LazyDataVM, TCRouter } from 'common';
-
+import { BookCover, BookInfo, Constants, TCRouter } from 'common';
+import { LazyDataVM } from 'swiper_card'
 
 @ComponentV2
 export struct BookWaterFlowCard {
@@ -45,7 +45,7 @@ export struct BookWaterFlowCard {
     .padding({ bottom: 12 })
     .onClick(() => {
       if (info) {
-        TCRouter.push(Constants.READ_ROUTER, info);
+        TCRouter.pushByLogin(Constants.READ_KIT_ROUTER, info);
       }
     })
   }
@@ -68,8 +68,9 @@ export struct BookWaterFlowCard {
               this.waterItem(info)
             }
             .width(Constants.FULL_SIZE)
-          }, (item: BookInfo) => `${item.id}${new Date().toString()}`)
+          }, (item: BookInfo) => `${item.id}+${new Date().toString()}`)
         }
+        .cachedCount(5)
         .columnsTemplate('1fr 1fr')
         .columnsGap(10)
         .rowsGap(5)

@@ -1,36 +1,26 @@
-import { BookApi, BookInfo, Constants, GetBookApiRsp, LazyDataVM, NavHeaderBar, TSearch, WindowUtils } from 'common';
-import { EpubParser, PageRect } from 'parse';
+import { BookApi, BookInfo, Constants, GetBookApiRsp, NavHeaderBar, TSearch, WindowUtils } from 'common';
+import { BookListCard } from '../comps/BookListCard';
 
 import { BookSwiperCard } from '../comps/BookSwiperCard';
 import { BookViewCard } from '../comps/BookViewCard';
 import { BookWaterFlowCard } from '../comps/BookWaterFlowCard';
-
+import { LazyDataVM } from 'swiper_card';
 @ComponentV2
 export struct BookListPage {
   @Local books: LazyDataVM<BookInfo> | undefined = undefined;
+  @Local recommendBooks: LazyDataVM<BookInfo> | undefined = undefined;
   @Local swiperImg: Resource[] = new Array(4).fill('').map((item: string, index) => {
     return index%2 ? $r(`app.media.swiper_list_0`) : $r(`app.media.swiper_list_1`)
   })
   @Local categoryText: Resource[] = [];
   @Local currentIndex: number = 0;
-
+  @Param currentNumber: number = 0;
   async aboutToAppear(): Promise<void> {
-    this.init();
     await this.getHomeBooks();
-
+    await this.getRecommendBooks();
     this.categoryText.push($r('app.string.recommend'));
-    this.categoryText.push($r('app.string.member'));
-    this.categoryText.push($r('app.string.free'));
-  }
-
-  init() {
-    const rect: PageRect = {
-      mRowSize: px2vp(500),
-      mPadding: px2vp(200),
-      mTop: px2vp(30),
-      mBottom: px2vp(1200),
-    }
-    EpubParser.initManager(WindowUtils.getWindowWidth(), WindowUtils.getWindowHeight(), rect, 70);
+    this.categoryText.push($r('app.string.boys_channel'));
+    this.categoryText.push($r('app.string.girls_channel'));
   }
 
   async getHomeBooks() {
@@ -38,15 +28,20 @@ export struct BookListPage {
     this.books = new LazyDataVM<BookInfo>(rsp.books);
   }
 
-  async filterBook(status: boolean) {
+  async getRecommendBooks() {
+    const rsp: GetBookApiRsp = await BookApi.getRecommendBookList();
+    this.recommendBooks = new LazyDataVM<BookInfo>(rsp.books);
+  }
+
+  // 区分各类频道
+  async filterBook(status: string) {
     const rsp: GetBookApiRsp = await BookApi.getBookList();
     let tmp: BookInfo[] = [];
     for (let i = 0; i < rsp.books.length; i++) {
-      if (rsp.books[i].isFree === status) {
+      if (rsp.books[i].gender === status) {
         tmp.push(rsp.books[i]);
       }
     }
-
     this.books = new LazyDataVM<BookInfo>(tmp);
   }
 
@@ -83,9 +78,11 @@ export struct BookListPage {
               if (index === 0) {
                 await this.getHomeBooks();
               } else if (index === 1) {
-                await this.filterBook(false);
+                // await this.getHomeBooks();
+                await this.filterBook('2');
               } else {
-                await this.filterBook(true);
+                // await this.getHomeBooks();
+                await this.filterBook('1');
               }
             })
         }
@@ -93,14 +90,18 @@ export struct BookListPage {
     }
     .scrollBar(BarState.Off)
     .listDirection(Axis.Horizontal)
-    .padding({ top: 20, left: 18, right: 18 })
+    .padding({ top: 10, left: 18, right: 18 })
   }
 
   @Builder
-  bookList(books: LazyDataVM<BookInfo> | undefined) {
-    BookViewCard({ books: books, categoryName: $r('app.string.popular_book') });
-    BookViewCard({ books: books, categoryName: $r('app.string.more_popular_book') });
-    BookWaterFlowCard({ books: books });
+  bookList(books: LazyDataVM<BookInfo> | undefined,recommendBooks: LazyDataVM<BookInfo> | undefined) {
+    BookListCard({ books: recommendBooks, categoryName: $r('app.string.daily_recommendation') });
+    BookViewCard({ books: books, categoryName: $r('app.string.recommend_for_you') });
+  }
+
+  @Builder
+  dailyRecommendation(books: LazyDataVM<BookInfo> | undefined){
+    BookListCard({ books: books, categoryName: $r('app.string.daily_recommendation') });
   }
 
   build() {
@@ -108,28 +109,31 @@ export struct BookListPage {
       Stack({ alignContent: Alignment.TopStart }) {
         Column() {
           NavHeaderBar({
-            title: $r('app.string.book_home'),
+            title: $r('app.string.book_case'),
             hasBackButton: false,
             hasBgColor: false,
             isMainPage: true,
+            isSearch:true
           })
 
           Scroll() {
             Column() {
-              TSearch();
-              BookSwiperCard({ books: this.books });
+              // TSearch();
               this.categoryTab();
-              this.swiperInfo();
+              // Blank().height(50)
+              BookSwiperCard({ books: this.books });
+
+              // this.swiperInfo();
 
               if (this.currentIndex === 0) {
-                this.bookList(this.books);
+                this.bookList(this.books,this.recommendBooks);
               } else if (this.currentIndex === 1) {
-                this.bookList(this.books);
+                this.bookList(this.books,this.recommendBooks);
               } else {
-                this.bookList(this.books);
+                this.bookList(this.books,this.recommendBooks);
               }
             }
-          }.scrollBar(BarState.Off)
+          }.layoutWeight(1).scrollBar(BarState.Off)
         }
       }
       .width(Constants.FULL_SIZE)

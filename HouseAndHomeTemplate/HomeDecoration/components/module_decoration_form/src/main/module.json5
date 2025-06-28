@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "module_decoration_form",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ]
+  }
+}

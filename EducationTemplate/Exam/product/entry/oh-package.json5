@@ -1,0 +1,19 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "homepage": "file:../../features/homePage",
+    "topicpage": "file:../../features/topicPage",
+    "minepage": "file:../../features/minePage",
+    "commonlib": "file:../../commons/commonLib",
+    "router_module": "file:../../commons/router_module",
+    "login_info": "file:../../components/login_info",
+    "search_question": "file:../../components/search_question",
+    "search": "file:../../components/search"
+  }
+}
+

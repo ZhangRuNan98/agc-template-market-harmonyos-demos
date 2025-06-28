@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "module_posting",
+    "type": "har",
+    "routerMap": "$profile:router_map",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "answer_questions",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ]
+  }
+}

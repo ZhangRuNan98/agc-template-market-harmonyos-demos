@@ -1,0 +1,24 @@
+{
+  "routerMap": [
+    {
+      "name": "CategoryPage",
+      "pageSourceFile": "src/main/ets/pages/CategoryPage.ets",
+      "buildFunction": "buildCategoryPage"
+    },
+    {
+      "name": "SettingPage",
+      "pageSourceFile": "src/main/ets/pages/SettingPage.ets",
+      "buildFunction": "buildSettingPage"
+    },
+    {
+      "name": "AgreementPage",
+      "pageSourceFile": "src/main/ets/pages/AgreementPage.ets",
+      "buildFunction": "buildAgreementPage"
+    },
+    {
+      "name": "EditProfilePage",
+      "pageSourceFile": "src/main/ets/pages/EditProfilePage.ets",
+      "buildFunction": "buildEditProfilePage"
+    }
+  ]
+}

@@ -3,9 +3,9 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { BusinessError, emitter } from '@kit.BasicServicesKit';
 import { promptAction } from '@kit.ArkUI';
 import { util } from '@kit.ArkTS';
-import { Constants, TCRouter, UserInfo } from 'common';
+import { Constants, TCRouter } from 'common';
 import { AvatarIcon } from '../comp/SelectAvatarCard';
-
+import { UserInfo } from 'base_common';
 @ComponentV2
 export struct LoginPage {
   logTag: string = 'LoginPage';
@@ -58,7 +58,7 @@ export struct LoginPage {
 
   // 传递页面渲染所需的数据，如匿名手机号等
   aboutToAppear(): void {
-
+    this.getQuickLoginAnonymousPhone()
   }
 
   // Toast提示
@@ -141,6 +141,7 @@ export struct LoginPage {
         // 其他提示系统或服务异常
         // 需要申请一键登录权限 降级为授权获取用户信息
         this.getQuickLoginAnonymousPhone();
+        this.mockUserLogin()
       }
       return;
     }
@@ -153,6 +154,7 @@ export struct LoginPage {
           const openID = response.openID;
           const unionID = response.unionID;
           const idToken = response.idToken;
+          this.mockUserLogin();
         }
       } else {
         this.openAgreementDialog();
@@ -213,16 +215,6 @@ export struct LoginPage {
           const avatarUri = authorizationWithHuaweiIDCredential.avatarUri as string;
           const nickName = authorizationWithHuaweiIDCredential.nickName as string;
           const openId = authorizationWithHuaweiIDResponse.data?.openID as string;
-          this.userInfo = {
-            id: openId,
-            avatarUrl: avatarUri,
-            nickName: nickName,
-            telephone: 'a1xxxx1111'
-          }
-
-          AppStorage.setOrCreate('userInfo', this.userInfo);
-          emitter.emit(Constants.LOGIN_CHANGE);
-          TCRouter.pop();
         } else {
           promptAction.showToast({ message: '账号关联失败' })
         }
@@ -336,6 +328,7 @@ export struct LoginPage {
               })
             }.width('100%')
 
+
             Row() {
               Row() {
                 Checkbox({ name: 'privacyCheckbox', group: 'privacyCheckboxGroup' })
@@ -415,6 +408,63 @@ export struct LoginPage {
     .width(Constants.FULL_SIZE)
     .height(Constants.FULL_SIZE)
   }
+
+  //两种模拟登录方式，quick为一键登录+匿名，mock为普通假登录
+  quickLogin(openId:string, avatarUri:string, nickName:string){
+    // 恢复之前保存的会员状态和书币信息
+
+    const savedMembershipStatus = AppStorage.get('membershipStatus') as boolean || false;
+    const savedBookCoins = AppStorage.get('bookCoins') as number || 100;
+
+    this.userInfo = {
+      id: openId,
+      avatarUrl: avatarUri,
+      nickName: nickName,
+      telephone: 'a11xxxx1111',
+      isMembership: savedMembershipStatus,
+      bookCoins: savedBookCoins,
+      isLogin: true,
+      totalReading: 0,
+      totalListening: 15,
+      level: 1,
+      continuousBuy: false
+    }
+    AppStorage.setOrCreate('userInfo', this.userInfo);
+    emitter.emit(Constants.LOGIN_CHANGE);
+
+    // 添加延迟，避免页面闪现
+    setTimeout(() => {
+      TCRouter.pop();
+    }, 300);
+  }
+
+  mockUserLogin() {
+    // 恢复之前保存的会员状态和书币信息
+    const savedMembershipStatus = AppStorage.get('membershipStatus') as boolean || false;
+    const savedBookCoins = AppStorage.get('bookCoins') as number || 10;
+
+    //mock登录数据
+    this.userInfo = {
+      id: '1234',
+      avatarUrl: '',
+      nickName: '华为用户',
+      telephone: 'a11xxxx1111',
+      isMembership: savedMembershipStatus,
+      bookCoins: savedBookCoins,
+      isLogin: true,
+      totalReading: 0,
+      totalListening: 15,
+      level: 1,
+      continuousBuy: false
+    }
+    AppStorage.setOrCreate('userInfo', this.userInfo);
+    emitter.emit(Constants.LOGIN_CHANGE);
+
+    // 添加延迟，避免页面闪现
+    setTimeout(() => {
+      TCRouter.pop();
+    }, 300);
+  }
 }
 
 export enum ErrorCode {
@@ -429,3 +479,4 @@ export enum ErrorCode {
   // 参数错误
   ERROR_CODE_PARAMETER_ERROR = 401
 }
+

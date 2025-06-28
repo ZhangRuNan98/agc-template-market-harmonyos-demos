@@ -9,7 +9,7 @@
     <th width="150px">文档</th>
   </tr>
   <tr>
-    <td rowspan="6"><a href="#生活服务">生活服务</a></td>
+    <td rowspan="7"><a href="#生活服务">生活服务</a></td>
     <td><a href="#政务应用模板">政务应用模板</a></td>
     <td><a href="./LifestyleAndServiceTemplate/GovernmentService/Application/README.md" target="_blank">快速开始</a></td>
   </tr>
@@ -28,6 +28,10 @@
   <tr>
     <td><a href="#停车缴费元服务模板">停车缴费元服务模板</a></td>
     <td><a href="./LifestyleAndServiceTemplate/Parking/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
+    <td><a href="#购物中心元服务模板">购物中心元服务模板</a></td>
+    <td><a href="./LifestyleAndServiceTemplate/ShoppingMall/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#日历应用模板">日历应用模板</a></td>
@@ -70,7 +74,7 @@
     <td><a href="./ShoppingTemplate/CouponsModule/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
-    <td rowspan="3"><a href="#美食">美食</a></td>
+    <td rowspan="4"><a href="#美食">美食</a></td>
     <td><a href="#点餐元服务模板">点餐元服务模板</a></td>
     <td><a href="./FoodAndDrinkTemplate/CateringOrders//README.md" target="_blank">快速开始</a></td>
   </tr>
@@ -83,6 +87,10 @@
     <td><a href="./FoodAndDrinkTemplate/Recipes/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
+    <td><a href="#餐厅排队元服务模板">餐厅排队元服务模板</a></td>
+    <td><a href="./FoodAndDrinkTemplate/ReservationQueue/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
     <td rowspan="2"><a href="#金融理财">金融理财</a></td>
     <td><a href="#理财元服务模板">理财元服务模板</a></td>
     <td><a href="./FinanceTemplate/FinancialManagement/README.md" target="_blank">快速开始</a></td>
@@ -92,13 +100,17 @@
     <td><a href="./FinanceTemplate/MoneyTrack/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
-    <td rowspan="2"><a href="#教育">教育</a></td>
+    <td rowspan="3"><a href="#教育">教育</a></td>
     <td><a href="#课程助手元服务模板">课程助手元服务模板</a></td>
     <td><a href="./EducationTemplate/SchoolLife//README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#艺术培训元服务模板">艺术培训元服务模板</a></td>
     <td><a href="./EducationTemplate/ArtTraining/Application/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
+    <td><a href="#备考应用模板">备考应用模板</a></td>
+    <td><a href="./EducationTemplate/Exam/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#医疗">医疗</a></td>
@@ -111,9 +123,13 @@
     <td><a href="./SocialTemplate/SocialDating/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
-    <td><a href="#工具">工具</a></td>
+    <td rowspan="2"><a href="#工具">工具</a></td>
     <td><a href="#智慧家居应用模板">智慧家居应用模板</a></td>
     <td><a href="./ToolsTemplate//SmartHome/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
+    <td><a href="#计算器元服务模板">计算器元服务模板</a></td>
+    <td><a href="./ToolsTemplate/Calculator/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td rowspan="2"><a href="#儿童">儿童</a></td>
@@ -138,9 +154,13 @@
     <td><a href="./BusinessTemplate/Notes/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
-    <td><a href="#汽车">汽车</a></td>
+    <td rowspan="2"><a href="#汽车">汽车</a></td>
     <td><a href="#汽车保养应用模板">汽车保养应用模板</a></td>
     <td><a href="./CarsTemplate/CarBeautyCare/README.md" target="_blank">快速开始</a></td>
+  </tr>
+   <tr>
+    <td><a href="#驾考应用模板">驾考应用模板</a></td>
+    <td><a href="./CarsTemplate/DriverLicenseExam/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#新闻">新闻</a></td>
@@ -169,6 +189,16 @@
     <td><a href="#影音娱乐">影音娱乐</a></td>
     <td><a href="#视频短剧元服务模板">视频短剧元服务模板</a></td>
     <td><a href="./MovieTVAndLivestreamingTemplate/WebShortDrama/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
+    <td><a href="#房产与装修">房产与装修</a></td>
+    <td><a href="#家居装修应用模板">家居装修应用模板</a></td>
+    <td><a href="./HouseAndHomeTemplate/HomeDecoration/README.md" target="_blank">快速开始</a></td>
+  </tr>
+  <tr>
+    <td><a href="#拍摄美化">拍摄美化</a></td>
+    <td><a href="#图像美化应用模板">图像美化应用模板</a></td>
+    <td><a href="./PhotographyTemplate/ImageProcessing/README.md" target="_blank">快速开始</a></td>
   </tr>
 </table>
 
@@ -289,6 +319,26 @@
 |--------------------------------------------------------------|---------------------------------------------------------------|--------------------------------------------------------------|
 | <img src="./LifestyleAndServiceTemplate/Parking/screenshots/pic_home.jpeg" alt="首页" width="300"> | <img src="./LifestyleAndServiceTemplate/Parking/screenshots/pic_find.jpeg" alt="找车位" width="300"> | <img src="./LifestyleAndServiceTemplate/Parking/screenshots/pic_mine.jpeg" alt="我的" width="300"> |
 
+### 购物中心元服务模板
+
+**功能介绍**
+
+本模板为商场类元服务提供了常用功能的开发样例，模板主要分首页、一码通和我的三大模块：
+
+* 首页：提供停车缴费、自助积分、贴心服务、店铺导购等功能。
+
+* 一码通：展示个人信息和会员码、提供签到功能。
+
+* 我的：提供个人信息管理、我的积分管理、我的钱包管理、我的券包管理以及设置等功能。
+
+本模板已集成华为账号、支付等服务，只需做少量配置和定制即可快速实现华为账号的登录、停车缴费等功能。
+
+<a href="./LifestyleAndServiceTemplate/ShoppingMall/README.md" target="_blank">详细说明</a>
+
+| 首页                                                    | 一码通                                                     | 我的                                                    |
+|-------------------------------------------------------|---------------------------------------------------------|-------------------------------------------------------|
+| <img src="./LifestyleAndServiceTemplate/ShoppingMall/screenshots/首页.jpg" alt="首页" width="300"> | <img src="./LifestyleAndServiceTemplate/ShoppingMall/screenshots/一码通.jpg" alt="一码通" width="300"> | <img src="./LifestyleAndServiceTemplate/ShoppingMall/screenshots/我的.jpg" alt="我的" width="300"> |
+
 ## 运动健康
 
 ### 健身房元服务模板
@@ -399,20 +449,25 @@
 
 **功能介绍**
 
-本模板为综合商城元服务提供了常用功能的开发样例，模板主要分首页、分类、购物车、和我的四大模块：
+本模板为综合商城应用提供了常用功能的开发样例，模板主要分首页、分类、购物车、和我的四大模块：
 
 - 首页：主要提供商品搜索、卡片轮播、分类选择、商品浏览等功能。
+
 - 分类：按照类别展示商品列表和购买商品。
+
 - 购物车：展示已添加的商品，支持商品数量的修改，商品删除、结算等操作。
+
 - 我的：展示个人信息、订单管理入口以及联系客服功能。
+
+本模板已集成华为账号、通话、华为支付等服务，只需做少量配置和定制即可快速实现华为账号的登录、一键拨打服务电话、商品购买等功能。
 
 <a href="./ShoppingTemplate/ComprehensiveMall/README.md" target="_blank">详细说明</a>
 
 本模板已集成华为账号、通话、华为支付等服务，只需做少量配置和定制即可快速实现华为账号的登录、一键拨打服务电话、商品购买等功能。
 
-| 首页                                                               | 分类                                                                   | 购物车                                                               | 我的                                                                  |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| ![首页](./ShoppingTemplate/ComprehensiveMall//screenshot/home.jpg) | ![分类](./ShoppingTemplate/ComprehensiveMall//screenshot/category.jpg) | ![购物车](./ShoppingTemplate/ComprehensiveMall//screenshot/cart.jpg) | ![我的](./ShoppingTemplate/ComprehensiveMall//screenshot/profile.jpg) |
+| 首页                                                   | 分类                                                       | 购物车                                                   | 我的                                                        |
+| ------------------------------------------------------ | ---------------------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------- |
+| <img src="./ShoppingTemplate/ComprehensiveMall/screenshot/home.png" alt="首页" width="300"> | <img src="./ShoppingTemplate/ComprehensiveMall/screenshot/category.png" alt="分类" width="300"> | <img src="./ShoppingTemplate/ComprehensiveMall/screenshot/cart.png" alt="购物车" width="300"> | <img src="./ShoppingTemplate/ComprehensiveMall/screenshot/profile.png" alt="购物车" width="300"> |
 
 ### 快递物流应用模板
 
@@ -510,6 +565,22 @@
 |-------------------------------------------------------------------|-----------------------------------------------------------------------|----------------------------------------------------------------------|-------------------------------------------------------------------|
 | <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_home.jpeg" alt="首页" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_category.jpeg" alt="分类" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_calorie.jpeg" alt="热量计算" width="300"> | <img src="./FoodAndDrinkTemplate/Recipes/screenshots/Screenshot_mine.jpeg" alt="我的" width="300"> |
 
+### 餐厅排队元服务模板
+
+**功能介绍**
+
+本模板为餐厅排队元服务提供了常用功能的开发样例，模板主要分首页和我的两大模块：
+
+* 首页：主要提供订座和排号的入口。
+
+* 我的：展示个人信息，提供查看全部订单的入口。
+
+<a href="./FoodAndDrinkTemplate/ReservationQueue/README.md" target="_blank">详细说明</a>
+
+| 首页                                                           | 我的                                                           |
+|--------------------------------------------------------------|--------------------------------------------------------------|
+| <img src="./FoodAndDrinkTemplate/ReservationQueue/screenshots/pic_home.jpeg" alt="首页" width="300"> | <img src="./FoodAndDrinkTemplate/ReservationQueue/screenshots/pic_mine.jpeg" alt="我的" width="300"> |
+
 ## 金融理财
 
 ### 理财元服务模板
@@ -562,6 +633,11 @@
 
 <a href="./EducationTemplate/SchoolLife//README.md" target="_blank">详细说明</a>
 
+| 首页                | 我的                |
+| ------------------- | ------------------- |
+| <img src="./EducationTemplate/SchoolLife/doc/1.jpeg" alt="首页" width="300"> | <img src="./EducationTemplate/SchoolLife/doc/2.jpeg" alt="首页" width="300">  |
+
+
 ### 艺术培训元服务模板
 
 **功能介绍**
@@ -580,6 +656,24 @@
 | 首页                                                                               | 课程中心                                                                             | 打卡活动                                                                              | 我的                                                                               |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_home.jpeg) | ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_course.jpeg) | ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_checkin.jpeg) | ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_mine.jpeg) |
+
+### 备考应用模板
+
+**功能介绍**
+
+本模板为备考类应用提供了常用功能的开发样例，模板主要分练习、课程和我的三大模块：
+
+- 练习：展示类别分栏选项、搜索课程、练习模式、刷题进度
+- 课程：按类别展示精选课程与已购课程
+- 我的：账号相关信息，展示订单、错题、收藏、浏览记录，以及设置等功能。
+
+本模板已集成华为账号服务，只需做少量配置和定制即可快速实现华为账号的登录等功能。
+
+<a href="./EducationTemplate/Exam/README.md" target="_blank">详细说明</a>
+
+| 练习                                                   | 课程                                                   | 我的                                                   |
+|------------------------------------------------------|------------------------------------------------------|------------------------------------------------------|
+| <img src="./EducationTemplate/Exam//screenshots/001.jpg" alt="首页" width="300"> | <img src="./EducationTemplate/Exam//screenshots/002.jpg" alt="课程" width="300"> | <img src="./EducationTemplate/Exam//screenshots/003.jpg" alt="我的" width="300"> |
 
 ## 医疗
 
@@ -641,6 +735,24 @@
 | 首页                                                         | 产品                                                            | 我的                                                        | 设备模拟                                                                  |
 | ------------------------------------------------------------ | --------------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
 | ![首页](./ToolsTemplate/SmartHome/screenshots/homePage.jpeg) | ![产品](./ToolsTemplate/SmartHome/screenshots/productPage.jpeg) | ![我的](./ToolsTemplate/SmartHome/screenshots/minePage.png) | ![设备模拟](./ToolsTemplate/SmartHome/screenshots/device_simulation.jpeg) |
+
+### 计算器元服务模板
+
+**功能介绍**
+
+本模板为计算器元服务提供了常用功能的开发样例，模板主要分为计算器、工具、和我的三大模块：
+
+- 计算器：主要提供标准计算器、查看历史记录等功能。
+
+- 工具：主要提供日期间隔计算、日期计算功能。
+
+- 我的：展示关于信息。
+
+<a href="./ToolsTemplate/Calculator/README.md" target="_blank">详细说明</a>
+
+| 计算器                                                   | 工具                                                   | 我的             |
+|-------------------------------------------------------|------------------------------------------------------|------------------------------ |
+| <img src="./ToolsTemplate/Calculator/screenshot/home.jpg" alt="计算器" width="300"> | <img src="./ToolsTemplate/Calculator/screenshot/tool.jpg" alt="工具" width="300"> | <img src="./ToolsTemplate/Calculator/screenshot/mine.jpg" alt="我的" width="300"> |
 
 ## 儿童
 
@@ -770,6 +882,26 @@
 | ------------------------------------------------------------------ | ---------------------------------------------------------------------- | ---------------------------------------------------------- |
 | ![homepage.jpg](./CarsTemplate/CarBeautyCare/picture/homepage.png) | ![carservice.jpg](./CarsTemplate/CarBeautyCare/picture/carservice.png) | ![mine.jpg](./CarsTemplate/CarBeautyCare/picture/mine.png) |
 
+### 驾考应用模板
+
+**功能介绍**
+
+本模板为驾考类应用提供了常用功能的开发样例，模板主要有引导页、考试和我的三大模块：
+
+* 引导页：提供定位、城市选择、驾照类型选择、学车阶段选择功能。
+
+* 考试：展示科目一、科目二、科目三、科目四各种类型的练习考试以及视频课程。包含模拟考试、专项练习、错题收藏等功能。
+
+* 我的：展示用户信息、个人设置及练习统计等功能。
+
+本模板已集成华为账号、定位服务，只需做少量配置和定制即可快速实现华为账号一键登录、定位、城市选择等功能。
+
+<a href="./CarsTemplate/DriverLicenseExam/README.md" target="_blank">详细说明</a>
+
+| 首页                                                               | 汽车服务                                                               | 我的                                                       |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------- | ---------------------------------------------------------- |
+| ![homepage.jpg](./CarsTemplate/DriverLicenseExam/picture/pratice.png) | ![carservice.jpg](./CarsTemplate/DriverLicenseExam/picture/setting.png) | ![mine.jpg](./CarsTemplate/DriverLicenseExam/picture/mine.png) |
+
 ## 新闻
 
 ### 新闻元服务模板
@@ -796,17 +928,19 @@
 
 **功能介绍**
 
-本模板为阅读听书类应用提供了常用功能的开发案例，模板主要分阅读、书架和我的三大模块：
+本模板为电子书类应用提供了常用功能实现案例，涵盖了从书籍获取、阅读体验到个性化管理的核心环节，模板主要分阅读、书架、书城、分类和我的五大模块：
 
-- 阅读：支持 epub 标准格式电子书加载、工具栏（目录跳转、字体修改、亮度与颜色修改等功能）、添加书架和听书功能。
-- 书架：支持电子书列表和浏览历史展示。
-- 我的：支持华为账号登录、修改个人信息、借阅证与借阅信息查看等功能。
+- 阅读：支持电子书阅读功能及阅读工具（目录导航、字体调整、屏幕亮度调节与深色模式等功能）。
+- 书架：提供书籍列表浏览、阅读历史追踪、阅读进度保存、搜索及书籍管理功能。
+- 书城：支持历史搜索、热门搜索，并支持“今日力荐”和“猜你喜欢”两种内容推荐功能。
+- 分类：支持按男频/女频等大类划分，并支持细分类别的探索，便于找到感兴趣的特定类型作品。
+- 我的：支持华为账号登录、个性化阅读偏好设置、账户内资产（书币、会员权益）、活动中心以及问题与反馈等功能。
 
 <a href="./BooksAndReferenceTemplate/BookRead/README.md" target="_blank">详细说明</a>
 
-| 阅读                                                                  | 书架                                                                    | 我的                                                                |
-| --------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| ![book_read](./BooksAndReferenceTemplate/BookRead/docs/book_read.jpg) | ![book_shelf](./BooksAndReferenceTemplate/BookRead/docs/book_shelf.jpg) | ![book_shelf](./BooksAndReferenceTemplate/BookRead/docs/person.jpg) |
+| 阅读                               | 书架                               | 书城                                  | 分类                              | 我的                              |
+|----------------------------------|----------------------------------|-------------------------------------|---------------------------------|---------------------------------|
+| ![book_read](./BooksAndReferenceTemplate/BookRead/docs/book_read.jpg) | ![book_shelf](./BooksAndReferenceTemplate/BookRead/docs/book_shelf.jpeg) | ![book_store](./BooksAndReferenceTemplate/BookRead/docs/book_store.jpeg) | ![category](./BooksAndReferenceTemplate/BookRead/docs/category.jpeg) | ![book_person](./BooksAndReferenceTemplate/BookRead/docs/person.jpg) |
 
 ## 出行导航
 
@@ -893,6 +1027,47 @@
 | 首页                         | 剧场                         | 我的                         | 详情                         |
 |----------------------------|----------------------------|----------------------------|----------------------------|
 | ![首页](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/首页.jpeg) | ![剧场](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/剧场.jpeg) | ![我的](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/我的.jpeg) | ![详情](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/详情.jpeg) |
+
+## 拍摄美化
+
+### 图像美化应用模板
+
+**功能介绍**
+
+本模板为图片美化应用提供了常用功能的开发样例，提供了图片美颜、裁剪、添加文字、滤镜、贴纸等功能。模板主要分首页、我的两大模块：
+
+* 首页：包含图片美化和拼图2大入口，以及图片美化的美颜、裁剪、文字、滤镜、贴纸入口。
+
+* 我的：提供账号管理、开通会员、设置、帮助与反馈等功能。
+
+本模板已集成华为账号、华为支付等服务，只需做少量配置和定制即可快速实现华为账号登录、华为支付。
+
+<a href="./PhotographyTemplate/ImageProcessing/README.md" target="_blank">详细说明</a>
+
+| 首页                                                        | 我的                                                        |
+|-----------------------------------------------------------|-----------------------------------------------------------|
+|<img src="./PhotographyTemplate/ImageProcessing/screenshots/homePage.png" alt="首页" width="300"> | <img src="./PhotographyTemplate/ImageProcessing/screenshots//minePage.png" alt="我的" width="300"> |
+
+## 房产与装修
+
+### 家居装修应用模板
+
+**功能介绍**
+
+本模板为家居装修类应用提供了常用功能的开发样例，模板主要分首页、找设计师、定制设计和我的四大模块：
+
+- 首页：展示热门装修经验贴和设计师案例，支持案例搜索和城市选择。
+- 找设计师：按筛选条件展示设计师，支持查看详情、在线预约和直接电话联系设计师。
+- 定制设计：支持根据所选条件，获取推荐装修方案。
+- 我的：展示账号相关信息，支持联系客服和意见反馈，展示收藏的家装案例以及设置等功能。
+
+本模板已集成华为账号服务，只需做少量配置和定制即可快速实现华为账号的登录等功能。
+
+<a href="./HouseAndHomeTemplate/HomeDecoration/README.md" target="_blank">详细说明</a>
+
+| 首页                                                                | 找设计师                                                                | 定制设计                                                                  | 我的                                                                |
+|-------------------------------------------------------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------|-------------------------------------------------------------------|
+| <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/Screenshot_home.jpeg" alt="首页" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/Screenshot_find.jpeg" alt="找设计师" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/Screenshot_custom.jpeg" alt="定制设计" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/Screenshot_mine.jpeg" alt="我的" width="300"> |
 
 ## 开源许可协议
 

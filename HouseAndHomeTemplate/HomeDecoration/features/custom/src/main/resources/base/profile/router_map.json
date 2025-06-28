@@ -1,0 +1,9 @@
+{
+  "routerMap": [
+    {
+      "name": "CustomResult",
+      "pageSourceFile": "src/main/ets/pages/CustomResult.ets",
+      "buildFunction": "CustomResultBuilder"
+    }
+  ]
+}

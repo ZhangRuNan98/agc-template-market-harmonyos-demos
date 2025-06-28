@@ -3,6 +3,7 @@ import { Constants } from '../constant/Constants'
 
 @ComponentV2
 export struct TSearch {
+  @Param widthLength: string = '95%';
   build() {
     Row() {
       Image($r('app.media.ic_search'))
@@ -17,15 +18,15 @@ export struct TSearch {
         .layoutWeight(1)
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-        .fontSize(13)
+        .fontSize(16)
         .fontColor($r('sys.color.mask_secondary'))
         .halfLeading(true)
     }
-    .width('95%')
+    .width(this.widthLength)
     .height(40)
-    .margin({ top: 15, bottom: 15 })
+    // .margin({ top: 15, bottom: 15 })
     .borderWidth($r('sys.float.border_small'))
-    .borderRadius(18)
+    .borderRadius(24)
     .backgroundColor('#0D000000')
     .borderColor(Color.Transparent)
     .onClick(() => {

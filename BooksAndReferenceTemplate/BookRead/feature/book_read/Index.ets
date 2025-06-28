@@ -1,1 +1,0 @@
-export { BookViewPage } from './src/main/ets/views/BookViewPage';

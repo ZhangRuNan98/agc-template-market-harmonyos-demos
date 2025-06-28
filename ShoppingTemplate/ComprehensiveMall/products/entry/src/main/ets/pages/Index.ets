@@ -1,12 +1,6 @@
-import { router } from '@common/router';
-import { Style } from '@common/const';
-import { LoadingStatus } from '@common/customtypes';
-import { iData } from '@common/data';
-import { TabSwiper } from '@components/tabswiper';
-
-import uiObserver from '@ohos.arkui.observer';
-
+import { iData, routerStack, LoadingStatus, TabSwiper, Style } from 'lib_foundation';
 import { IndexLogic } from '../logic/IndexLogic';
+import { uiObserver } from '@kit.ArkUI';
 
 @Entry
 @ComponentV2
@@ -15,16 +9,9 @@ struct Index {
   private readonly logic: IndexLogic = new IndexLogic();
 
   aboutToAppear(): void {
-    iData.global.isNavPathStackEmpty = router.size() === 0;
+    iData.global.isNavPathStackEmpty = routerStack.size() === 0;
     uiObserver.on('navDestinationUpdate', (_: NavDestinationInfo) => {
-      iData.global.isNavPathStackEmpty = router.size() === 0;
-      // if (info.index === 0 &&
-      //     info.state === uiObserver.NavDestinationState.ON_DISAPPEAR &&
-      //     router.size() === 0) {
-      //   iData.global.isNavPathStackEmpty = true;
-      // } else {
-      //   iData.global.isNavPathStackEmpty = false;
-      // }
+      iData.global.isNavPathStackEmpty = routerStack.size() === 0;
     });
   }
 
@@ -34,7 +21,7 @@ struct Index {
 
   build(): void {
     if (this.logic.loadingStatus === LoadingStatus.SUCCESS) {
-      Navigation(router) {
+      Navigation(routerStack) {
         TabSwiper({
           viewData: this.logic.tabSwiperViewData,
           disableSwipe: true,
@@ -50,7 +37,7 @@ struct Index {
           swiperInitialIndex: this.logic.initialIndex,
           swiperBackgroundColor: '#FFF1F3F5',
           swiperExpandSafeArea: true,
-          onChange: this.logic.onTabSwiperChange
+          onChange: this.logic.onTabSwiperChange,
         })
       }
       .width('100%')

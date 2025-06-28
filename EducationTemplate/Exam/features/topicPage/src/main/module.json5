@@ -1,0 +1,11 @@
+{
+  "module": {
+    "name": "topicPage",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ],
+    "routerMap": "$profile:route_map"
+
+  }
+}

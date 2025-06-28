@@ -1,46 +1,46 @@
-import { iData } from '@common/data';
-import { router } from '@common/router';
-import { LoginButton } from '@components/loginbutton';
-import { CallButton } from '@components/callbutton';
-import { ProfilePageLogic } from '../logic/ProfilePageLogic';
 import { promptAction } from '@kit.ArkUI';
+import { iData, routerStack, CallButton, RouterMap, Style } from 'lib_foundation';
+import { promptLogin } from 'module_login';
+import { AddressManage } from 'module_address_manage';
 
 @ComponentV2
 export struct ProfilePage {
-
-  private logic: ProfilePageLogic = new ProfilePageLogic();
-
   build(): void {
-    Stack({ alignContent: Alignment.TopStart }) {
-      Column()
-        .width('100%')
-        .height('40%')
-        .linearGradient({
-          colors: [['#30E64566', 0], ['#00E64566', 1.0]]
-        })
-        .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP])
-      Column() {
+    Scroll() {
+      Stack({ alignContent: Alignment.TopStart }) {
+        Column()
+          .width('100%')
+          .height('40%')
+          .linearGradient({
+            colors: [['#30E64566', 0], ['#00E64566', 1.0]],
+          })
+          .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP])
         Column() {
-          Text('个人中心')
-            .fontSize(18)
-            .fontColor('#E6000000')
-            .fontWeight(500)
-            .margin({ left: 3 })
+          Column() {
+            Text('我的')
+              .fontSize(24)
+              .fontColor('#E6000000')
+              .fontWeight(600)
+              .margin({ left: 12 })
+          }
+          .width('100%')
+          .height(56)
+          .alignItems(HorizontalAlign.Start)
+          .justifyContent(FlexAlign.Center)
+          buildUserInfoArea();
+          buildOrderInfoArea();
+          buildMenuArea();
         }
         .width('100%')
-        .height(56)
-        .alignItems(HorizontalAlign.Start)
-        .justifyContent(FlexAlign.Center)
-        buildUserInfoArea(this.logic)
-        buildOrderInfoArea()
-        buildMenuArea()
+        .padding({ left: 12, right: 12, bottom: Style.BOTTOM_NAV_HEIGHT })
       }
       .width('100%')
-      .height('100%')
-      .padding({ left: 13, right: 13 })
+      .constraintSize({ minHeight: '100%' })
     }
-    .width('100%')
     .height('100%')
+    .scrollBar(BarState.Off)
+    .edgeEffect(EdgeEffect.None)
+    .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP])
   }
 }
 
@@ -50,48 +50,82 @@ export function buildProfilePage() {
 }
 
 @Builder
-function buildUserInfoArea(logic: ProfilePageLogic) {
-  Row() {
+function buildUserInfoArea() {
+  Column() {
     Row() {
-      Image($r('app.media.default_avatar'))
-        .width(68)
-        .height(68)
+      Image(iData.global.userInfo.avatar ? iData.global.userInfo.avatar : $r('app.media.default_avatar_v2'))
+        .width(48)
+        .height(48)
+        .borderRadius(48)
         .draggable(false)
+        .margin({ right: 16 })
       Column() {
-        Text(iData.global.isLogin ? iData.global.nickname : '华为用户')
+        Text(iData.global.isLogin ?
+          iData.global.userInfo.nickname ? iData.global.userInfo.nickname : '华为用户' :
+          '未登录'
+        )
+          .width('100%')
           .fontWeight(600)
-          .fontSize(15)
+          .fontSize(18)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .textAlign(TextAlign.Start)
           .fontColor('#E6000000')
-        if (iData.global.isLogin) {
-          Text(iData.global.phone)
-            .fontSize(15)
-            .fontColor($r('sys.color.mask_secondary'))
+        Row() {
+          if (iData.global.isLogin) {
+            Image($r('app.media.ic_mobile_phone'))
+              .height(16)
+              .objectFit(ImageFit.Contain)
+              .draggable(false)
+              .margin({ right: 8 })
+            Text(iData.global.userInfo.anonymousPhone)
+              .layoutWeight(1)
+              .fontSize(12)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .fontColor($r('sys.color.mask_secondary'))
+          } else {
+            Text('登录后享受更多服务')
+              .width('100%')
+              .fontSize(12)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .fontColor('#E6000000')
+          }
         }
+        .justifyContent(FlexAlign.Start)
+        .alignItems(VerticalAlign.Center)
       }
-      .height(70)
-      .alignItems(HorizontalAlign.Start)
-      .justifyContent(FlexAlign.SpaceEvenly)
-      .margin({ left: 10 })
-    }
-    LoginButton({
-      onStart: (needWaitFinish: boolean) => logic.onLoginButtonStart(needWaitFinish)
-    }) {
-      Button() {
-        Text(iData.global.isLogin ? '取消关联' : '关联账号')
-          .fontSize(13)
-          .fontColor(Color.White)
+      .layoutWeight(1)
+      .height(48)
+      .justifyContent(FlexAlign.SpaceBetween)
+      .padding({ top: 3, bottom: 3 })
+
+      if (!iData.global.isLogin) {
+        Image($r('app.media.ic_left_arrow'))
+          .height(14)
+          .objectFit(ImageFit.Contain)
+          .rotate({ angle: 180 })
+          .fillColor($r('sys.color.mask_tertiary'))
+          .draggable(false)
       }
-      .width(80)
-      .height(30)
-      .type(ButtonType.Normal)
-      .backgroundColor('#FFE64566')
-      .borderRadius(21)
     }
+    .width('100%')
+    .height(72)
+    .backgroundColor(Color.White)
+    .borderRadius(16)
+    .padding(12)
+    .alignItems(VerticalAlign.Center)
+    .onClick(() => {
+      if (!iData.global.isLogin) {
+        promptLogin();
+      } else {
+        routerStack.pushPath({ name: RouterMap.USER_PROFILE_EDIT });
+      }
+    })
   }
-  .width('100%')
-  .padding({ left: 10, right: 13 })
-  .justifyContent(FlexAlign.SpaceBetween)
-  .alignItems(VerticalAlign.Center)
+  .margin({ top: 12 })
+  .padding({ left: 4, right: 4 })
 }
 
 @Builder
@@ -99,70 +133,79 @@ function buildOrderInfoArea() {
   Column() {
     Row() {
       Text('我的订单')
-        .fontSize(15)
+        .fontSize(14)
         .fontWeight(600)
         .fontColor('#E6000000')
-      LoginButton({
-        onStart: (needWaitFinish: boolean) => {
-          if (!needWaitFinish && iData.global.isLogin) {
-            router.pushPathByName('OrderBrowsingPage', 0)
-          }
-        },
-        onFinish: () => {
-          if (iData.global.isLogin) {
-            router.pushPathByName('OrderBrowsingPage', 0)
-          }
-        }
-      }) {
-        Row() {
-          Text('全部')
-            .fontColor($r('sys.color.mask_tertiary'))
-            .fontSize(12)
-          Image($r('app.media.ic_left_arrow'))
-            .height(13)
-            .objectFit(ImageFit.Contain)
-            .rotate({ angle: 180 })
-            .fillColor($r('sys.color.mask_tertiary'))
-            .draggable(false)
-        }
+      Row() {
+        Text('全部')
+          .fontColor($r('sys.color.mask_tertiary'))
+          .fontSize(12)
+        Image($r('app.media.ic_left_arrow'))
+          .height(12)
+          .objectFit(ImageFit.Contain)
+          .rotate({ angle: 180 })
+          .fillColor($r('sys.color.mask_tertiary'))
+          .draggable(false)
       }
+      .onClick(() => {
+        if (!iData.global.isLogin) {
+          promptLogin();
+          return;
+        }
+        routerStack.pushPathByName(RouterMap.ORDER_LIST, 0);
+      })
     }
     .width('100%')
     .height(50)
     .justifyContent(FlexAlign.SpaceBetween)
     .alignItems(VerticalAlign.Center)
-    .padding({ left: 18, right: 10 })
+    .padding({ left: 16, right: 16 })
+
     Row() {
-      buildOrderTab($r('app.media.ic_order_pending_payment'), '待付款', 1)
-      buildOrderTab($r('app.media.ic_order_pending_shipment'), '待发货', 2)
-      buildOrderTab($r('app.media.ic_order_pending_receipt'), '待收货', 3)
-      buildOrderTab($r('app.media.ic_order_pending_review'), '待评价', -1)
-      buildOrderTab($r('app.media.ic_order_refund_after_sale'), '退款/售后', 4)
+      buildOrderTab($r('app.media.ic_order_pending_payment'), '待付款', 1);
+      buildOrderTab($r('app.media.ic_order_pending_shipment'), '待发货', 2);
+      buildOrderTab($r('app.media.ic_order_pending_receipt'), '待收货', 3);
+      buildOrderTab($r('app.media.ic_order_pending_review'), '待评价', 4);
+      buildOrderTab($r('app.media.ic_order_refund_after_sale'), '退款/售后', 6);
     }
     .width('100%')
     .alignItems(VerticalAlign.Center)
     .justifyContent(FlexAlign.SpaceBetween)
-    .padding({ left: 18, right: 18, bottom: 20, top: 6 })
+    .padding({
+      left: 18,
+      right: 18,
+      bottom: 20,
+      top: 6,
+    })
   }
   .width('100%')
-  .borderRadius(18)
+  .borderRadius(8)
   .backgroundColor(Color.White)
-  .margin({ top: 24 })
+  .margin({ top: 12 })
 }
 
 @Builder
 function buildMenuArea() {
   Column() {
-    CallButton() {
+    AddressManage({
+      navPathStack: routerStack,
+      onBeforeNavigate: () => {
+        if (!iData.global.isLogin) {
+          promptLogin();
+          return false;
+        }
+        return true;
+      },
+    }) {
       Row() {
-        Image($r('app.media.ic_call_center'))
+        Image($r('app.media.ic_address_mgr'))
           .draggable(false)
           .height(18)
           .objectFit(ImageFit.Contain)
           .margin({ right: 10 })
         Row() {
-          Text('联系客服')
-            .fontSize(13)
+          Text('地址管理')
+            .fontSize(12)
             .fontColor($r('sys.color.mask_secondary'))
           Image($r('app.media.ic_left_arrow'))
             .height(18)
@@ -177,49 +220,86 @@ function buildMenuArea() {
       .width('100%')
       .height(50)
     }
+
+    CallButton() {
+      Row() {
+        Image($r('app.media.ic_call_center'))
+          .draggable(false)
+          .height(18)
+          .objectFit(ImageFit.Contain)
+          .margin({ right: 10 })
+        Row() {
+          Text('联系客服')
+            .fontSize(12)
+            .fontColor($r('sys.color.mask_secondary'))
+          Image($r('app.media.ic_left_arrow'))
+            .height(18)
+            .objectFit(ImageFit.Contain)
+            .rotate({ angle: 180 })
+            .fillColor($r('sys.color.mask_tertiary'))
+            .draggable(false)
+        }
+        .layoutWeight(1)
+        .justifyContent(FlexAlign.SpaceBetween)
+      }
+      .width('100%')
+      .height(50)
+    }
+
+    Row() {
+      Image($r('app.media.ic_setting'))
+        .draggable(false)
+        .height(18)
+        .objectFit(ImageFit.Contain)
+        .margin({ right: 10 })
+      Row() {
+        Text('设置')
+          .fontSize(12)
+          .fontColor($r('sys.color.mask_secondary'))
+        Image($r('app.media.ic_left_arrow'))
+          .height(18)
+          .objectFit(ImageFit.Contain)
+          .rotate({ angle: 180 })
+          .fillColor($r('sys.color.mask_tertiary'))
+          .draggable(false)
+      }
+      .layoutWeight(1)
+      .justifyContent(FlexAlign.SpaceBetween)
+    }
+    .width('100%')
+    .height(50)
+    .onClick(() => routerStack.pushPathByName(RouterMap.SETTING, null))
   }
   .width('100%')
-  .borderRadius(18)
+  .borderRadius(8)
   .backgroundColor(Color.White)
-  .margin({ top: 24 })
-  .padding({ left: 13, right: 13 })
+  .margin({ top: 12 })
+  .padding({ left: 12, right: 12 })
 }
 
 @Builder
 function buildOrderTab(icon: ResourceStr, label: string, type: number) {
-  LoginButton({
-    onStart: (needWaitFinish: boolean) => {
-      if (!needWaitFinish && iData.global.isLogin) {
-        if (type === -1) {
-          promptAction.showToast({ message: '您可以按照自身业务逻辑接入评论中心' });
-        } else {
-          router.pushPathByName('OrderBrowsingPage', type)
-        }
-      }
-    },
-    onFinish: () => {
-      if (iData.global.isLogin) {
-        if (type === -1) {
-          promptAction.showToast({ message: '您可以按照自身业务逻辑接入评论中心' });
-        } else {
-          router.pushPathByName('OrderBrowsingPage', type)
-        }
-      }
-    }
-  }) {
-    Column() {
-      Image(icon)
-        .width(24)
-        .height(24)
-        .objectFit(ImageFit.Cover)
-        .fillColor($r('sys.color.mask_secondary'))
-        .margin({ bottom: 7 })
-      Text(label)
-        .fontSize(11)
-        .fontWeight(FontWeight.Medium)
-        .fontColor($r('sys.color.mask_secondary'))
-    }
-    .alignItems(HorizontalAlign.Center)
-    .justifyContent(FlexAlign.Start)
+  Column() {
+    Image(icon)
+      .width(20)
+      .height(20)
+      .objectFit(ImageFit.Cover)
+      .fillColor($r('sys.color.mask_secondary'))
+      .margin({ bottom: 4 })
+    Text(label)
+      .fontSize(10)
+      .fontWeight(FontWeight.Medium)
+      .fontColor($r('sys.color.mask_secondary'))
   }
+  .alignItems(HorizontalAlign.Center)
+  .justifyContent(FlexAlign.Start)
+  .onClick(() => {
+    if (type === -1) {
+      promptAction.showToast({ message: '您可以按照自身业务逻辑接入评论中心' });
+    } else if (!iData.global.isLogin) {
+      promptLogin();
+    } else {
+      routerStack.pushPathByName(RouterMap.ORDER_LIST, type);
+    }
+  })
 }

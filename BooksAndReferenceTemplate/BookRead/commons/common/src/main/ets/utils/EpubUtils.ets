@@ -18,7 +18,8 @@ export class EpubUtils {
     return unZipPath;
   }
 
-  public static async loadEpubFileFromNetwork(epubId: string, epubUrl: string, outputPath: string): Promise<string> {
+  public static async loadEpubUnzipFileFromNetwork(epubId: string, epubUrl: string,
+    outputPath: string): Promise<string> {
     // 下载文件
     if (!fileIo.accessSync(outputPath)) {
       fileIo.mkdir(outputPath);
@@ -35,5 +36,19 @@ export class EpubUtils {
       await FileUtils.unzipFile(inputPath, unZipPath);
     }
     return unZipPath
+  }
+
+  public static async loadEpubFileFromNetwork(epubId: string, epubUrl: string, outputPath: string): Promise<string> {
+    if (!fileIo.accessSync(outputPath)) {
+      fileIo.mkdir(outputPath);
+    }
+
+    const epubPath: string = outputPath + Constants.FILE_SPLIT + epubId + Constants.EPUB_FILE_SUFFIX;
+    if (fileIo.accessSync(epubPath)) {
+      return epubPath
+    } else {
+      await FileUtils.downloadFile(epubUrl, epubPath);
+    }
+    return epubPath
   }
 }

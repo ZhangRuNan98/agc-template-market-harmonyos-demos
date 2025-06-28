@@ -1,0 +1,109 @@
+
+{
+  "routerMap": [
+    {
+      "name": "CourseHomePage",
+      "pageSourceFile": "src/main/ets/views/CourseHomePage.ets",
+      "buildFunction": "CourseHomePageBuilder",
+      "data": {
+        "description": "课程首页"
+      }
+    },
+    {
+      "name": "AnswerQuestionsPage",
+      "pageSourceFile": "src/main/ets/views/AnswerQuestionsPage.ets",
+      "buildFunction": "AnswerQuestionsPageBuilder",
+      "data": {
+        "description": "题库页面模式1"
+      }
+    },
+    {
+      "name": "AnswerQuestionsTwoPage",
+      "pageSourceFile": "src/main/ets/views/AnswerQuestionsTwoPage.ets",
+      "buildFunction": "AnswerQuestionsTwoPageBuilder",
+      "data": {
+        "description": "题库页面模式2"
+      }
+    },
+    {
+      "name": "ExamResultPage",
+      "pageSourceFile": "src/main/ets/views/ExamResultPage.ets",
+      "buildFunction": "ExamResultPageBuilder",
+      "data": {
+        "description": "评分页面"
+      }
+    },
+    {
+      "name": "TopicHomePage",
+      "pageSourceFile": "src/main/ets/views/TopicHomePage.ets",
+      "buildFunction": "TopicHomePageBuilder",
+      "data": {
+        "description": "题库分类首页"
+      }
+    },
+    {
+      "name": "SecondListPage",
+      "pageSourceFile": "src/main/ets/views/SecondListPage.ets",
+      "buildFunction": "SecondListPageBuilder",
+      "data": {
+        "description": "题库二级列表页"
+      }
+    },
+    {
+      "name": "ThirdListPage",
+      "pageSourceFile": "src/main/ets/views/ThirdListPage.ets",
+      "buildFunction": "ThirdListPageBuilder",
+      "data": {
+        "description": "题库三级列表页"
+      }
+    },
+    {
+      "name": "TestReportPage",
+      "pageSourceFile": "src/main/ets/views/TestReportPage.ets",
+      "buildFunction": "TestReportPageBuilder",
+      "data": {
+        "description": "测试报告页面"
+      }
+    },
+    {
+      "name": "GoodCourseDetailPage",
+      "pageSourceFile": "src/main/ets/views/GoodCourseDetailPage.ets",
+      "buildFunction": "GoodCourseDetailPageBuilder",
+      "data": {
+        "description": "精选课程详情页"
+      }
+    },
+    {
+      "name": "CourseIntroductionPage",
+      "pageSourceFile": "src/main/ets/views/CourseIntroductionPage.ets",
+      "buildFunction": "CourseIntroductionBuilder",
+      "data": {
+        "description": "课程详情页"
+      }
+    },
+    {
+      "name": "MyWrongPage",
+      "pageSourceFile": "src/main/ets/views/MyWrongPage.ets",
+      "buildFunction": "MyWrongPageBuilder",
+      "data": {
+        "description": "我的错题"
+      }
+    },
+    {
+      "name": "MyCollectionPage",
+      "pageSourceFile": "src/main/ets/views/MyCollectionPage.ets",
+      "buildFunction": "MyCollectionPageBuilder",
+      "data": {
+        "description": "我的收藏"
+      }
+    },
+    {
+      "name": "MockTestPage",
+      "pageSourceFile": "src/main/ets/views/MockTestPage.ets",
+      "buildFunction": "MockTestPageBuilder",
+      "data": {
+        "description": "模拟试卷/全真试卷"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "home",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "Index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "commonlib": "file:../../commons/commonlib",
+    "module_filter_list": "file:../../components/module_filter_list",
+    "module_city_select": "file:../../components/module_city_select",
+    "network": "file:../../commons/network",
+    "module_decoration_form": "file:../../components/module_decoration_form"
+  }
+}

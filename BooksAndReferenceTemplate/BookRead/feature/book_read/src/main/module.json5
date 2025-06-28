@@ -1,9 +1,0 @@
-{
-  "module": {
-    "name": "book_read",
-    "type": "har",
-    "deviceTypes": [
-      "phone"
-    ]
-  }
-}

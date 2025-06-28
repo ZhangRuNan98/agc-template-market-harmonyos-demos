@@ -3,14 +3,15 @@ import { BusinessError, emitter } from '@kit.BasicServicesKit';
 import { promptAction } from '@kit.ArkUI';
 
 import { AvatarIcon, SelectAvatarCard } from './SelectAvatarCard';
-import { Constants, TCRouter, UserInfo } from 'common';
-
+import { Constants, TCRouter, UserInfoModel, UserInfoUtil } from 'common';
+import { UserInfo } from 'base_common';
 @ComponentV2
 export struct UserMsgCard {
   @Local userName: string = ''
   @Local userTel: string = ''
   @Local isLogin: boolean = false
   @Local avatarIcon: AvatarIcon = new AvatarIcon('');
+  @Local userInfoModel: UserInfoModel = UserInfoUtil.getUserInfoModel();
 
   aboutToAppear(): void {
     this.loginPost();
@@ -23,6 +24,7 @@ export struct UserMsgCard {
   loginPost() {
     let userInfo: UserInfo = AppStorage.get('userInfo') as UserInfo;
     if (userInfo) {
+      this.userInfoModel.updateFromUserInfo(userInfo);
       this.userName = userInfo.nickName;
       this.userTel = userInfo.telephone as string;
       this.avatarIcon.avatarUrl = userInfo.avatarUrl as string;
@@ -47,7 +49,7 @@ export struct UserMsgCard {
     Row() {
       Row() {
         if (this.isLogin) {
-          SelectAvatarCard({ avatarIcon: this.avatarIcon })
+          SelectAvatarCard({ avatarIcon: this.avatarIcon, isLogin:this.isLogin })
         } else {
           Image($r('app.media.ic_default_hd'))
             .width(64)
@@ -66,12 +68,25 @@ export struct UserMsgCard {
               .fontColor($r('sys.color.font_primary'))
 
             Row() {
-              Image($r('app.media.icon_phone')).width(16)
-              Text(this.userTel)
-                .fontSize($r('sys.float.Body_M'))
-                .fontColor($r('sys.color.font_secondary'))
-                .margin({ left: 2 })
-            }.margin({ top: 12, left: 1 })
+              Image(this.userInfoModel.isMembership ? $r('app.media.ic_vip') : $r('app.media.ic_vip_off'))
+                .width(20)
+                .height(18)
+                .fillColor(this.userInfoModel.isMembership ? '#F9A01E' : '#999999')
+              Text(this.userInfoModel.isMembership ? $r('app.string.vip_member') : $r('app.string.no_member'))
+                .fontSize(12)
+                .fontColor($r('sys.color.font_primary'))
+                .margin({ left: 8 })
+            }
+            .width(90)
+            .padding({
+              top: 6,
+              bottom: 6,
+              left: 8,
+              right: 8,
+            })
+            .borderRadius(8)
+            .backgroundColor(this.userInfoModel.isMembership ? '#f8fcf2cc' : $r('sys.color.background_secondary'))
+            .margin({ top: 12, left: 1 })
           } else {
             Text($r('app.string.no_relative')).fontSize(18)
               .fontWeight(FontWeight.Medium)

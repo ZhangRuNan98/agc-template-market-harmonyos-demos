@@ -1,12 +1,6 @@
-import { TitleBar } from '@components/titlebar';
-import { IWaterFlow } from '@components/iwaterflow';
-import { LoadingStatus } from '@common/customtypes';
-import { Style } from '@common/const';
-import { buildCategoryBrowser } from '@guis/browser';
-import { buildSearchSuggestionCarousel } from '@guis/search';
-
+import { TitleBar, buildSearchSuggestionCarousel, LoadingStatus } from 'lib_foundation';
+import { HomePageContent } from '../components/HomePageContent';
 import { HomePageLogic } from '../logic/HomePageLogic';
-import { iResourceMgr } from '@common/resource';
 
 @ComponentV2
 export struct HomePage {
@@ -29,9 +23,11 @@ export struct HomePage {
        */
       TitleBar({
         hideBackButton: true,
+        barColor: Color.White,
+        barExpandSafeArea: true,
         barPadding: {
-          left: Style.MENU_BAR_MARGIN_RIGHT,
-          right: Style.MENU_BAR_MARGIN_RIGHT,
+          left: 16,
+          right: 16,
         },
       }) {
         buildSearchSuggestionCarousel(this.logic.searchSuggestionCarouselLogic);
@@ -63,7 +59,7 @@ export struct HomePage {
               .width('100%')
               .height('100%')
               .linearGradient({
-                colors: [['#FFFFFFFF', 0.6], ['#00FFFFFF', 1.0]], // 从 30% 的位置开始渐变, 到 60% 的位置渐变完毕
+                colors: [['#FFFFFFFF', 0.6], ['#00FFFFFF', 1.0]],
               });
             /**
              * 页面首次尝试加载时的显示内容
@@ -73,52 +69,20 @@ export struct HomePage {
             if (this.logic.loadingStatus === LoadingStatus.LOADING) {
               Column() {
                 LoadingProgress()
-                  .width(37)
-                  .height(37);
+                  .width(32)
+                  .height(32);
               }
               .width('100%')
               .height('45%')
               .alignItems(HorizontalAlign.Center)
               .justifyContent(FlexAlign.End);
             } else if (this.logic.loadingStatus === LoadingStatus.SUCCESS) {
-              Column() {
-                Swiper() {
-                  Image(iResourceMgr.resolveUri('app://dev/media/banner/mock_homepage_banner2.jpg'))
-                    .width('100%')
-                    .height('100%')
-                    .objectFit(ImageFit.Cover)
-                    .draggable(false);
-                  Image(iResourceMgr.resolveUri('app://dev/media/banner/mock_homepage_banner3.jpg'))
-                    .width('100%')
-                    .height('100%')
-                    .objectFit(ImageFit.Cover)
-                    .draggable(false);
-                  Image(iResourceMgr.resolveUri('app://dev/media/banner/mock_homepage_banner4.jpg'))
-                    .width('100%')
-                    .height('100%')
-                    .objectFit(ImageFit.Cover)
-                    .draggable(false);
-                }
-                .width('100%')
-                .indicator(false)
-                .autoPlay(true)
-                // .indicator(
-                //   new DotIndicator()
-                //     .selectedColor($r('sys.color.mask_fourth'))
-                //     .color('#80FFFFFF')
-                // )
-                .aspectRatio(4 / 3) // height=width/aspectRatio
-                //.borderRadius(16)
-                .clip(true);
-
-                buildCategoryBrowser(this.logic.categoryBrowserLogic);
-                IWaterFlow({
-                  logic: this.logic.iWaterFlowLogic,
-                  footerPadding: { bottom: 48, top: (170 - 48) * 0.4 },
-                })
-                  .padding({ left: 10, right: 10 });
-              };
-
+              HomePageContent({
+                categoryList: this.logic.categoryList,
+                handleClickCategory: (id) => {
+                  this.logic.jumpToCategoryPage(id);
+                },
+              });
               /**
                * 页面加载失败时的显示内容
                *
@@ -164,11 +128,7 @@ export struct HomePage {
         .scrollBar(BarState.Off)
         .backgroundColor('#FFF1F3F5')
         .borderRadius({ topLeft: 8, topRight: 8 })
-        .edgeEffect(
-          this.logic.iWaterFlowLogic.isEnd ||
-            this.logic.loadingStatus !== LoadingStatus.SUCCESS
-            ? EdgeEffect.None : EdgeEffect.Spring,
-        )
+        .edgeEffect(EdgeEffect.Spring)
         .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.BOTTOM]);
       }
       .layoutWeight(1)
@@ -180,7 +140,6 @@ export struct HomePage {
     .height('100%')
     .alignItems(HorizontalAlign.Start)
     .justifyContent(FlexAlign.Start)
-    .backgroundColor('#FFE64566')
     .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM]);
   }
 }

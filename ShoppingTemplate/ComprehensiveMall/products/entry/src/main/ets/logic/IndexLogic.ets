@@ -1,20 +1,21 @@
-import { TabSwiperViewData } from '@components/tabswiper';
-import { CartDto, ComponentEntry, LoadingStatus, UserDto } from '@common/customtypes';
-import { Config } from '@common/const';
-import { client } from '@common/network';
-import { iData } from '@common/data';
-import { buildIconTextTab, IconTextTabLogic } from '@guis/tabs';
-
-import { BusinessError } from '@ohos.base';
-import HashMap from '@ohos.util.HashMap';
-import authentication from '@hms.core.authentication';
-
-import { IndexData, TabSwiperDataItem } from '../datas/IndexData';
-import { promptAction } from '@kit.ArkUI';
+import { HashMap } from '@kit.ArkTS';
+import {
+  LoadingStatus,
+  iData,
+  UserDto,
+  CartDto,
+  ComponentEntry,
+  Config,
+  TabSwiperViewData,
+} from 'lib_foundation';
+import { client } from 'lib_network';
+import { IndexData } from '../commons/Constants';
+import { TabSwiperDataItem } from '../commons/Types';
+import { buildIconTextTab } from '../components/IconTextTab';
+import { IconTextTabLogic } from './IconTextTabLogic';
 
 @ObservedV2
 export class IndexLogic {
-
   @Trace
   public loadingStatus: LoadingStatus = LoadingStatus.LOADING;
 
@@ -36,11 +37,14 @@ export class IndexLogic {
 
   private load = (): void => {
     if (iData.local.userToken) {
-      client.user.loginByToken(iData.local.userToken)
+      client.user
+        .loginByToken(iData.local.userToken)
         .then((user: UserDto) => {
           iData.global.isLogin = true;
-          iData.global.nickname = user.nickname;
-          iData.global.phone = user.maskedPhoneNumber;
+          iData.global.userInfo.nickname = user.nickname;
+          iData.global.userInfo.anonymousPhone = user.maskedPhoneNumber;
+          iData.global.userInfo.phone = user.phone;
+          iData.global.userInfo.avatar = user.avatar;
           client.cart.getCartData().then((cartDto: CartDto) => {
             iData.global.cartVersion = cartDto.version;
             iData.global.cartTotal = cartDto.total;
@@ -52,12 +56,12 @@ export class IndexLogic {
         .finally(() => {
           this.initTabSwiper();
           this.loadingStatus = LoadingStatus.SUCCESS;
-        })
+        });
     } else {
       this.initTabSwiper();
       this.loadingStatus = LoadingStatus.SUCCESS;
     }
-  }
+  };
 
   private initTabSwiper(): void {
     let maxPriority: number = 0;
@@ -88,7 +92,7 @@ export class IndexLogic {
       this.tabSwiperViewData.push({
         id: item.id,
         tab: new ComponentEntry(wrapBuilder(buildIconTextTab), [tabLogic]),
-        tabContent: new ComponentEntry(item.contentWarpBuilder, [])
+        tabContent: new ComponentEntry(item.contentWarpBuilder, []),
       });
     }
   }
@@ -105,23 +109,9 @@ export class IndexLogic {
       this.barBackgroundColor = Color.White;
       this.barBackgroundBlurStyle = BlurStyle.NONE;
     }
-  }
+  };
 
   constructor() {
-    client.user.huaweiLogin()
-      .then((res: authentication.LoginWithHuaweiIDResponse) => {
-        const credential: authentication.LoginWithHuaweiIDCredential | undefined = res.data;
-        if (!credential) {
-          throw new Error();
-        }
-      })
-      .catch((_: BusinessError | Error) => {
-        if (Config.IS_DEV) {
-          promptAction.showToast({ message: 'error: 静默登录失败' });
-        }
-      })
-      .finally(() => {
-        this.load();
-      })
+    this.load();
   }
 }

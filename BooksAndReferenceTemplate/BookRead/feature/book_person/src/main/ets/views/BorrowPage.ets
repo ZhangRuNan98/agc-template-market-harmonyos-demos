@@ -1,13 +1,12 @@
-import { BookApi, Constants, GetUserInfoRsp, NavHeaderBar, UserInfo } from 'common';
+import { BookApi, Constants, GetUserInfoRsp, NavHeaderBar } from 'common';
 import { BorrowCard } from '../comp/BorrowCard';
-
+import { UserInfo } from 'base_common';
 @ComponentV2
 export struct BorrowPage {
   @Local userInfo: UserInfo | undefined = undefined;
 
   async aboutToAppear(): Promise<void> {
-    const rsp: GetUserInfoRsp = await BookApi.getUserInfo('123');
-    this.userInfo = rsp.user;
+    this.userInfo = AppStorage.get('userInfo') as UserInfo;
   }
 
   build() {

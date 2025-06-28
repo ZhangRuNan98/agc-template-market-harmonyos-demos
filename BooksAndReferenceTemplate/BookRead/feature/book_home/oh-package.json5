@@ -7,6 +7,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "common": "file:../../commons/common",
-    "parse": "file:../../commons/parse"
+    "swiper_card": "file:../../components/swiper_card",
+    "base_common": "file:../../components/base_common"
   }
 }

@@ -1,28 +1,33 @@
-import { BookApi, BookInfo, BookLittleCard, Constants, MathUtil, NavHeaderBar, TCRouter, UserInfo } from 'common';
+import { SearchResultCard } from 'book_home';
+import { BookApi, BookInfo, BookLittleCard, Constants, MathUtil, NavHeaderBar, TCRouter } from 'common';
 import { DeleteBottomCard } from '../comps/DeleteBottomCard';
-
+import { UserInfo } from 'base_common';
 
 @ComponentV2
 export struct BookShelfPage {
   @Local favBooks: BookInfo[] = [];
   @Local historyBooks: BookInfo[] = [];
-  @Local isHistory: boolean = false;
+  @Consumer('isHistory') isHistory: boolean = false;
   @Local test: string[] = [];
-  @Local isDeleteShelf: boolean = false;
+  @Provider('isDeleteShelf') isDeleteShelf: boolean = false;
   @Local deleteBooks: Set<string> = new Set();
-  @Local userInfo: UserInfo | undefined = undefined;
+  @Consumer('userInfo') userInfo: UserInfo | undefined = undefined;
+  @Param currentNumber: number = 0;
+  @Consumer('tabController') tabsController: TabsController = new TabsController();
+  @Consumer('currentIndexTab') currentIndexTab: number = 0;
+  @Provider('isGrid') isGrid: boolean = true;
   scroller: Scroller = new Scroller()
 
   async aboutToAppear(): Promise<void> {
     const params = TCRouter.getParams<boolean>(Constants.SHELF_ROUTER);
     this.isHistory = params === undefined ? false : params;
-    const favRsp = await BookApi.getBooksShelfList('favBooks',Constants.API_GET_BOOK_FAVOURITE_PATH,'');
-    const hisRsp = await BookApi.getBooksShelfList('historyBooks', Constants.API_GET_BOOK_HISTORY_PATH,'');
+    const favRsp = await BookApi.getBooksShelfList('favBooks', Constants.API_GET_BOOK_FAVOURITE_PATH, '');
+    const hisRsp = await BookApi.getBooksShelfList('historyBooks', Constants.API_GET_BOOK_HISTORY_PATH, '');
     const userRsp = await BookApi.getUserInfo('');
     this.isDeleteShelf = false
     this.favBooks = favRsp.books;
     this.historyBooks = hisRsp.books;
-    this.userInfo = userRsp.user;
+    this.userInfo = AppStorage.get('userInfo') as UserInfo;
   }
 
   deleteBookList(bookType: string, bookList: BookInfo[]) {
@@ -46,51 +51,32 @@ export struct BookShelfPage {
   readingInfo() {
     Column({ space: 20 }) {
       Row({ space: 5 }) {
-        Text($r('app.string.today'))
+        Image($r('app.media.icon_read'))
+          .height(24)
+          .width(24)
+        Text($r('app.string.today_read'))
           .fontSize($r('sys.float.Body_L'))
           .fontColor($r('sys.color.font_primary'))
-          .margin({ right: 5 })
-
-        Row({ space: 5 }) {
-          Image($r('app.media.ic_public_reading'))
-            .width(25)
-            .height(25)
-          Text(`${this.userInfo?.totalReading}${getContext().resourceManager.getStringByNameSync('minute')}`)
-            .fontSize($r('sys.float.Body_L'))
-            .fontColor($r('sys.color.font_primary'))
-
-        }
-        .width(80)
-
-        Row({ space: 5 }) {
-          Image($r('app.media.ic_public_headphones'))
-            .width(25)
-            .height(25)
-          Text(`${this.userInfo?.totalListening}${getContext().resourceManager.getStringByNameSync('minute')}`)
-            .fontSize($r('sys.float.Body_L'))
-            .fontColor($r('sys.color.font_primary'))
-        }
-        .width(80)
+          .margin({ left: 10 })
+        Text(`${this.userInfo ? this.userInfo.totalReading : 0}`)
+          .fontSize($r('sys.float.Body_L'))
+          .fontColor($r('app.color.free_color'))
+        Text($r('app.string.minute'))
+          .fontSize($r('sys.float.Body_L'))
+          .fontColor($r('sys.color.font_primary'))
       }
-      .margin({ top: 15 })
       .alignSelf(ItemAlign.Start)
-
-      Text($r('app.string.reading_is_perfect'))
-        .fontSize($r('sys.float.Body_M'))
-        .fontColor($r('app.color.reading_is_perfect'))
-        .alignSelf(ItemAlign.Start)
-        .width(Constants.FULL_SIZE)
-        .padding({
-          top: 5
-        })
     }
     .width(Constants.FULL_SIZE)
     .justifyContent(FlexAlign.SpaceBetween)
     .backgroundColor($r('sys.color.comp_background_list_card'))
+    .backgroundImage($r('app.media.reading_info_bg'))
+
     .borderRadius(16)
     .padding({
       left: 16,
       right: 16,
+      top: 20,
       bottom: 20,
     })
     .margin({
@@ -98,6 +84,7 @@ export struct BookShelfPage {
     })
   }
 
+  // 宫格模式
   @Builder
   bookShelfGrid(infos: BookInfo[] | undefined, isHistory: boolean) {
     Column() {
@@ -137,30 +124,28 @@ export struct BookShelfPage {
           return MathUtil.generateRandomNumber(16).toString();
         })
 
-        if (!isHistory) {
-          GridItem() {
-            Column() {
-              Image($r('app.media.ic_public_plus'))
-                .width(40)
-                .height(40)
-              Text($r('app.string.go_and_go_home'))
-                .width(104)
-                .fontSize($r('sys.float.Body_M'))
-                .fontColor($r('sys.color.font_secondary'))
-                .textAlign(TextAlign.Center)
-                .padding({ top: 8 })
-            }
+        GridItem() {
+          Column() {
+            Image($r('app.media.ic_public_plus'))
+              .width(40)
+              .height(40)
+            Text($r('app.string.go_and_go_home'))
+              .width(104)
+              .fontSize($r('sys.float.Body_M'))
+              .fontColor($r('sys.color.font_secondary'))
+              .textAlign(TextAlign.Center)
+              .padding({ top: 8 })
           }
-          .borderRadius(10)
-          .width(113)
-          .height(150)
-          .backgroundColor($r('sys.color.comp_background_list_card'))
-          .padding({ left: 5, right: 5, top: 10 })
-          .margin({ top: 10 })
-          .onClick(() => {
-            TCRouter.replace(Constants.HOME_ROUTER)
-          })
         }
+        .borderRadius(10)
+        .width(104)
+        .height(144)
+        .backgroundColor($r('sys.color.comp_background_list_card'))
+        .margin({ top: 10 })
+        .onClick(() => {
+          this.tabsController.changeIndex(this.currentIndexTab + 1)
+        })
+
       }
       .scrollBar(BarState.Off)
       .enableScrollInteraction(true)
@@ -171,10 +156,84 @@ export struct BookShelfPage {
       .columnsTemplate('1fr 1fr 1fr')
       .width(Constants.FULL_SIZE)
       .height('100%')
+      .layoutWeight(1)
       .padding({ bottom: '30%' })
     }
     .padding({ bottom: 15 })
     .layoutWeight(1)
+  }
+
+  // 列表模式
+  @Builder
+  bookShelfList(infos: BookInfo[] | undefined, isHistory: boolean) {
+    Scroll(this.scroller) {
+      Column() {
+        ForEach(infos, (info: BookInfo) => {
+          Stack() {
+            SearchResultCard({ info: info })
+              .gesture(GestureGroup(GestureMode.Parallel,
+                LongPressGesture()
+                  .onAction((event: GestureEvent) => {
+                    // 针对书架列表
+                    this.isDeleteShelf = true;
+                  })
+              ))
+            if (this.isDeleteShelf) {
+              Checkbox({ name: 'delete', group: 'deleteGroup' })
+                .select(false)
+                .selectedColor($r('app.color.slider_selected_color'))
+                .unselectedColor($r('sys.color.white'))
+                .shape(CheckBoxShape.CIRCLE)
+                .onChange((value: boolean) => {
+                  if (value) {
+                    this.deleteBooks.add(info.name);
+                  } else {
+                    this.deleteBooks.delete(info.name);
+                  }
+                })
+                .padding({ top: 70, left: 70 })
+            }
+          }
+        }, (item: BookInfo, index: number) => {
+          return MathUtil.generateRandomNumber(16).toString();
+        })
+
+        Column() {
+          Column() {
+            Image($r('app.media.ic_public_plus'))
+              .width(40)
+              .height(40)
+            Text($r('app.string.go_and_go_home'))
+              .width(104)
+              .fontSize($r('sys.float.Body_M'))
+              .fontColor($r('sys.color.font_secondary'))
+              .textAlign(TextAlign.Center)
+              .padding({ top: 8 })
+          }
+          .justifyContent(FlexAlign.Center)
+          .borderRadius(10)
+          .width(104)
+          .height(144)
+          .backgroundColor($r('sys.color.comp_background_list_card'))
+          .margin({ top: 10 })
+          .onClick(() => {
+            this.tabsController.changeIndex(this.currentIndexTab + 1)
+          })
+        }
+        .width(Constants.FULL_SIZE)
+        .alignItems(HorizontalAlign.Start)
+      }
+      .padding({ top: '20vp' })
+      .padding({ bottom: 15 })
+      .layoutWeight(1)
+      .alignItems(HorizontalAlign.Start)
+      .justifyContent(FlexAlign.Start)
+    }
+    .align(Alignment.Top)
+    .width('100%')
+    .height('66%')
+    .scrollBar(BarState.Off)
+    .edgeEffect(EdgeEffect.Spring)
   }
 
   @Builder
@@ -190,7 +249,7 @@ export struct BookShelfPage {
       }
       .onClick(() => {
         this.isHistory = false;
-        this.isDeleteShelf = false
+        this.isDeleteShelf = false;
       })
 
       Text('|')
@@ -223,27 +282,43 @@ export struct BookShelfPage {
         Column() {
           NavHeaderBar({
             title: $r('app.string.book_shelf'),
-            hasBackButton: true,
+            hasBackButton: false,
             hasBgColor: false,
             isMainPage: true,
+            isShelf: true,
           })
 
           Column() {
             this.readingInfo();
             this.shelfHeader();
-            if (this.isHistory) {
-              this.bookShelfGrid(this.historyBooks, this.isHistory);
+            if (this.isGrid) {
+              if (this.isHistory) {
+                this.bookShelfGrid(this.historyBooks, this.isHistory);
+              } else {
+                this.bookShelfGrid(this.favBooks, this.isHistory);
+              }
             } else {
-              this.bookShelfGrid(this.favBooks, this.isHistory);
+              if (this.isHistory) {
+                this.bookShelfList(this.historyBooks, this.isHistory);
+              } else {
+                this.bookShelfList(this.favBooks, this.isHistory);
+              }
             }
+
           }
           .alignItems(HorizontalAlign.Start)
           .width(Constants.FULL_SIZE)
+          .height(Constants.FULL_SIZE)
           .padding({
             left: 12,
             right: 12,
           })
         }
+        .onClick(()=>{
+          if(this.isDeleteShelf){
+            this.isDeleteShelf = false;
+          }
+        })
 
         if (this.isDeleteShelf) {
           DeleteBottomCard({
@@ -251,7 +326,7 @@ export struct BookShelfPage {
               let bookType = this.isHistory ? 'historyBooks' : 'favBooks';
               if (bookType === 'historyBooks') {
                 this.deleteBookList(bookType, this.historyBooks)
-              }else{
+              } else {
                 this.deleteBookList(bookType, this.favBooks)
               }
             }
@@ -261,6 +336,7 @@ export struct BookShelfPage {
       .width(Constants.FULL_SIZE)
       .height(Constants.FULL_SIZE)
       .backgroundColor($r('sys.color.background_secondary'))
-    }.hideTitleBar(true)
+    }
+    .hideTitleBar(true)
   }
 }

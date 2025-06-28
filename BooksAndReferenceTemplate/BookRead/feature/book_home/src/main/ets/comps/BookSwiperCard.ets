@@ -1,5 +1,5 @@
-import { BookInfo, Constants, LazyDataVM, TCRouter, TUISwiper } from 'common'
-
+import { BookInfo, Constants, TCRouter } from 'common'
+import {TUISwiper,LazyDataVM} from 'swiper_card'
 
 @Builder
 function bookSingleSwiper(info?: BookInfo) {
@@ -57,7 +57,7 @@ export struct BookSwiperCard {
         isCovered: false,
         onImageClick: (index: number) => {
           let book = this.books.getData(index);
-          TCRouter.push(Constants.READ_ROUTER, book);
+          TCRouter.pushByLogin(Constants.READ_KIT_ROUTER, book);
         }
       })
     }

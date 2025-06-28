@@ -1,0 +1,14 @@
+{
+  "name": "homepage",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "Index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "router_module": "file:../../commons/router_module",
+    "commonlib": "file:../../commons/commonLib",
+    "topicpage": "file:../topicPage",
+    "login_info": "file:../../components/login_info"
+  }
+}

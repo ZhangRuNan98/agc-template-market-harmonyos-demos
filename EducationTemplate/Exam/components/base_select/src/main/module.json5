@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "base_select",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ]
+  }
+}

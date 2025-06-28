@@ -1,10 +1,17 @@
 import { TCRouter } from '../comp/TCRouter';
 import { Constants } from '../constant/Constants';
 import { BookInfo } from '../model/Book';
+import { BookSubcategory } from '../model/BookSortInfo';
 import { BookCover } from './CommonUI';
 
+
+export interface CategoryInfo {
+  category: string;
+  isCategory: boolean
+}
+
 /**
- * 图书小卡，仅有图片+书名
+ * 图书小卡，仅有图片+书名 换行：评分+类型
  */
 @ComponentV2
 export struct BookLittleCard {
@@ -17,12 +24,26 @@ export struct BookLittleCard {
         .fontSize($r('sys.float.Body_M'))
         .fontColor($r('sys.color.font_primary'))
         .fontWeight(FontWeight.Medium)
-        .maxLines(2)
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .width(104)
+        .textAlign(TextAlign.Start)
         .padding({ top: 5 })
+      Row() {
+        Text(this.info?.rate)
+          .fontSize(12)
+          .fontColor($r('sys.color.mask_secondary'))
+        Text(this.info?.category)
+          .fontSize(12)
+          .fontColor($r('sys.color.mask_secondary'))
+      }
+      .width(104)
+      .align(Alignment.Start)
+      .margin({ top: 4 })
     }
     .onClick(() => {
       if (this.info) {
-        TCRouter.push(Constants.READ_ROUTER, this.info);
+        TCRouter.pushByLogin(Constants.READ_KIT_ROUTER, this.info);
       }
     })
   }
@@ -75,16 +96,60 @@ export struct BookBigCard {
         }
         .margin({ top: 20 })
 
-        Divider()
       }
       .width('75%')
     }
+    .padding({ left: 12, right: 12 })
     .height(150)
     .width(Constants.FULL_SIZE)
     .onClick(() => {
       if (this.info) {
-        TCRouter.push(Constants.READ_ROUTER, this.info);
+        TCRouter.pushByLogin(Constants.READ_KIT_ROUTER, this.info);
       }
     })
+  }
+}
+
+/**
+ * 图书类别，图片、类别名
+ */
+@ComponentV2
+export struct BookCategoryItem {
+  @Param categoryInfo: BookSubcategory | undefined = undefined;
+  @Local pushParam?: CategoryInfo
+
+  build() {
+    Column() {
+      if (this.categoryInfo?.imgUrl) {
+        Column() {
+          Image($r(this.categoryInfo?.imgUrl?.toString()))
+            .height(76)
+            .width(76)
+            .borderRadius(8)
+          Text(this.categoryInfo?.subcategoryName)
+            .fontSize(14)
+            .width(76)
+            .textAlign(TextAlign.Center)
+        }
+        .onClick(() => {
+          this.pushParam = { category: this.categoryInfo?.subcategoryName!, isCategory: true }
+          TCRouter.push(Constants.SEARCH_ROUTE, this.pushParam)
+        })
+      } else {
+        Row() {
+          Text(this.categoryInfo?.subcategoryName)
+            .fontSize(14)
+        }
+        .height(28)
+        .width(76)
+        .borderRadius(14)
+        .backgroundColor('#0d000000')
+        .justifyContent(FlexAlign.Center)
+        .onClick(() => {
+          this.pushParam = { category: this.categoryInfo?.subcategoryName!, isCategory: true }
+          TCRouter.push(Constants.SEARCH_ROUTE, this.pushParam)
+        })
+      }
+    }
   }
 }

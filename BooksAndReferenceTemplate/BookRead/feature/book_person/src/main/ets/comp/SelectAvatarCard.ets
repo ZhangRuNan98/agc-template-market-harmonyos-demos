@@ -1,7 +1,7 @@
 import { FunctionalButton, functionalButtonComponentManager } from '@kit.ScenarioFusionKit';
 import { BusinessError, emitter } from '@kit.BasicServicesKit';
-import { Constants, TCLogger, UserInfo } from 'common';
-
+import { Constants, TCLogger } from 'common';
+import { UserInfo } from 'base_common';
 
 @ObservedV2
 export class AvatarIcon {
@@ -27,6 +27,7 @@ export class AvatarIcon {
 @ComponentV2
 export struct SelectAvatarCard {
   @Param @Require avatarIcon: AvatarIcon;
+  @Param @Require isLogin: boolean;
   @Local avatarUrl: string = '';
 
   aboutToAppear(): void {
@@ -43,8 +44,8 @@ export struct SelectAvatarCard {
         styleOption: {
           styleConfig: new functionalButtonComponentManager.ButtonConfig()
             .type(ButtonType.Normal)
-            .backgroundImage(this.avatarUrl !== '' ? this.avatarIcon.avatarUrl :
-            $r('app.media.ic_default_hd'))
+            .backgroundImage(this.isLogin && this.avatarIcon.avatarUrl? this.avatarIcon.avatarUrl :
+            $r('app.media.ic_default_hd_png'))
             .backgroundImageSize(ImageSize.Cover)
             .width(this.avatarIcon.width)
             .height(this.avatarIcon.height)

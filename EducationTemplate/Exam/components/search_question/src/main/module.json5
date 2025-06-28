@@ -1,0 +1,20 @@
+{
+  "module": {
+    "name": "search_question",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ],
+    "requestPermissions": [{
+      "name": "ohos.permission.MICROPHONE",
+      "reason": "$string:MICROPHONE_reason",
+      "usedScene": {
+        "abilities": [
+          "EntryAbility"
+        ],
+        "when": "inuse"
+      }
+    },
+    ]
+  }
+}

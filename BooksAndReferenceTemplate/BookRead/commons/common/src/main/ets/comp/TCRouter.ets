@@ -1,6 +1,5 @@
 import { Constants } from '../constant/Constants';
-import { UserInfo } from '../model/UserInfo';
-
+import { UserInfo } from 'base_common';
 export class TCRouter {
   private static pathStack: NavPathStack;
 

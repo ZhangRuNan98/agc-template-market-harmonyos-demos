@@ -1,5 +1,6 @@
-import { BookBigCard, BookInfo, Constants, LazyDataVM, NavHeaderBar, TCRouter } from 'common';
-
+import { BookBigCard, BookInfo, Constants, NavHeaderBar, TCRouter } from 'common';
+import { SearchResultCard } from '../comps/HotRankCard';
+import { LazyDataVM } from 'swiper_card'
 export interface CategoryInfo {
   category: ResourceStr;
   books: BookInfo[]
@@ -26,24 +27,20 @@ export struct BookViewListPage {
           NavHeaderBar({
             title: this.category,
             hasBackButton: true,
-            hasBgColor: false,
-            isMainPage: true,
+            hasBgColor:  false,
+            isMainPage: false,
           })
-          List({ space: 10 }) {
-            LazyForEach(this.books, (item: BookInfo) => {
-              ListItem() {
-                BookBigCard({ info: item })
-              }
-            }, (item: string) => item)
+          Column(){
+            List({ space: 10 }) {
+              LazyForEach(this.books, (item: BookInfo) => {
+                ListItem() {
+                  BookBigCard({ info: item })
+                }
+              }, (item: string) => item)
+            }
+            .scrollBar(BarState.Off).cachedCount(3)
           }
-          .scrollBar(BarState.Off)
-          .padding({
-            top: 20,
-            left: 18,
-            right: 18,
-            bottom: 18
-          })
-          .cachedCount(3)
+
           .layoutWeight(1)
         }
       }

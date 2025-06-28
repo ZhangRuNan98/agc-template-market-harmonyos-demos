@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "minePage",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ]
+  }
+}

@@ -1,5 +1,5 @@
-import { Constants, TimeUtils, UserInfo } from 'common';
-
+import { Constants, TimeUtils } from 'common';
+import { UserInfo } from 'base_common';
 
 @ComponentV2
 export struct BorrowCard {

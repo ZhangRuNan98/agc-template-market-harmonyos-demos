@@ -1,108 +1,139 @@
-import { TitleBar } from '@components/titlebar';
-import { Style } from '@common/const';
-import { buildProductGhostSearchBar } from '@guis/search';
-import { router } from '@common/router';
-
-import { CategoryPageLogic, CategoryTabVM } from '../logic/CategoryPageLogic';
-import { IWaterFlow } from '@components/iwaterflow';
+import { TitleBar, buildProductGhostSearchBar, Category, routerStack, Style, Card, RouterMap } from 'lib_foundation';
+import { ProductWaterFlow, RequestType } from 'module_product_waterflow';
+import { CommonModifier } from '@kit.ArkUI';
+import { client } from 'lib_network';
 
 @ComponentV2
-export struct CategoryPage {
+export struct CategoryPageContent {
+  @Param
+  public pageName: string | undefined = '';
+  @Param
+  public initId: string = '';
+  @Local
+  private isSubPage: boolean = false;
+  @Local
+  isLoading: boolean = false;
+  @Local
+  categoryTabs: Category[] = [];
+  @Local
+  curIndex: number = 0;
+  @Local
+  productList: Card[] = [];
+  tabBarModifier: CommonModifier = new CommonModifier().align(Alignment.Top);
+  controller: TabsController = new TabsController();
 
-  private logic: CategoryPageLogic = new CategoryPageLogic();
-
-  aboutToAppear(): void {
-    this.logic.init();
+  @Computed
+  get curCategoryId() {
+    return this.categoryTabs[this.curIndex]?.id ?? undefined;
   }
 
-  build(): void {
-    Column() {
-      TitleBar({
-        hideBackButton: true,
-        barPadding: { right: Style.MENU_BAR_MARGIN_RIGHT },
-        barColor: Color.White
-      }) {
-        Row() {
-          buildProductGhostSearchBar('请输入搜索内容', () => router.pushPathByName('ProductSearchPage', null))
+  public aboutToAppear(): void {
+    this.isSubPage = Boolean(this.pageName);
+    this.isLoading = true;
+    client.cardList.getCategoryList()
+      .then((list: Category[]) => {
+        this.categoryTabs = list;
+        const index = this.categoryTabs.findIndex((item) => item.id === this.initId);
+        if (index >= 0) {
+          this.curIndex = index;
         }
-        .padding({ left: 8 })
+      })
+      .finally(() => {
+        this.isLoading = false;
+      })
+  }
+
+  build() {
+    NavDestination() {
+      Column() {
+        this.searchBarBuilder();
+        this.categoryBarBuilder();
       }
-      if (this.logic.isLoading) {
-        Column() {
-          LoadingProgress()
-            .width(37)
-            .height(37)
-            .offset({ y: -50 })
-        }
-        .width('100%')
-        .layoutWeight(1)
-        .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.BOTTOM])
-        .justifyContent(FlexAlign.Center)
+      .width('100%')
+      .height('100%')
+      .backgroundColor(Color.White)
+      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP]);
+    }
+    .hideTitleBar(true)
+  }
+
+  @Builder
+  searchBarBuilder() {
+    TitleBar({
+      hideBackButton: !this.isSubPage,
+      barColor: Color.White,
+      barPadding: this.isSubPage ? { right: 12 } : { left: 12, right: 12 },
+      barExpandSafeArea: true
+    }) {
+      buildProductGhostSearchBar(
+        '请输入搜索内容',
+        () => routerStack.pushPathByName(RouterMap.PRODUCT_SEARCH, null),
+      )
+    }
+  }
+
+  @Builder
+  categoryBarBuilder() {
+    Row() {
+      if (this.isLoading) {
+        LoadingProgress().width(32).height(32);
       } else {
-        Row() {
-          Scroll() {
-            Column() {
-              ForEach(this.logic.tabs, (item: CategoryTabVM, index: number) => {
-                Row() {
-                  Text(item.label)
-                    .width('100%')
-                    .fontSize(12)
-                    .fontColor(item.isSelect ? '#FFFFFFFF' : '#99000000')
-                    .fontWeight(item.isSelect ? 700 : 400)
-                    .textAlign(TextAlign.Center)
-                    .maxLines(1)
-                    .textOverflow({ overflow: TextOverflow.MARQUEE })
-                }
-                .width('100%')
-                .height(45)
-                .backgroundColor(item.isSelect ? '#FFE64566' : '#00E64566')
-                .alignItems(VerticalAlign.Center)
-                .justifyContent(FlexAlign.Center)
-                .onClick(() => this.logic.onChange(index))
-              })
-            }
-            .width(80)
-            .constraintSize({ minHeight: '100%' })
-            .justifyContent(FlexAlign.Start)
-          }
-          .height('100%')
-          .scrollBar(BarState.Off)
-          .backgroundColor('#0D979797')
-          .edgeEffect(EdgeEffect.Spring)
-          Swiper(this.logic.controller) {
-            ForEach(this.logic.tabs, (tab: CategoryTabVM) => {
-              IWaterFlow({
-                logic: tab.iWaterFlowLogic,
-                template: '1fr',
-                footerPadding: { bottom: 48, top: (170 - 48) * 0.4 },
-              })
-                .padding({ right: 10, left: 10 })
-            })
-          }
-          .layoutWeight(1)
-          .height('100%')
-          .indicator(false)
-          .loop(false)
-          .vertical(true)
-          .disableSwipe(true)
-          .effectMode(EdgeEffect.None)
+        List() {
+          ForEach(this.categoryTabs, (item: Category, index: number) => {
+            ListItem() {
+              this.tabBarItemBuilder(item, index);
+            };
+          }, (item: Category, index: number) => index + JSON.stringify(item));
         }
-        .width('100%')
-        .layoutWeight(1)
-        .alignItems(VerticalAlign.Top)
-        .justifyContent(FlexAlign.Start)
+        .width(96)
+        .height('100%')
+        .borderWidth({ right: 1 })
+        .borderColor(Style.BACKGROUND_COLOR_GREY);
+
+        Column() {
+          ProductWaterFlow({
+            bgColor: Style.BACKGROUND_COLOR,
+            requestType: RequestType.BY_CATEGORY,
+            categoryId: this.curCategoryId,
+            isVertical: true,
+            showInitLoading: true,
+            handleProductClick: (id: string) => {
+              routerStack.pushPath({ name: RouterMap.PRODUCT_INFO_NEW, param: id });
+            },
+          })
+            .layoutWeight(1);
+        }
+        .padding(16)
+        .layoutWeight(1);
       }
     }
-    .width('100%')
-    .height('100%')
-    .alignItems(HorizontalAlign.Start)
+    .layoutWeight(1)
+    .alignItems(VerticalAlign.Top)
     .justifyContent(FlexAlign.Start)
-    .backgroundColor(Color.White)
-    .padding({ bottom: Style.BOTTOM_NAV_HEIGHT })
+    .width('100%');
+  }
+
+  @Builder
+  tabBarItemBuilder(item: Category, index: number) {
+    Row() {
+      Text(item.label)
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .fontColor(index === this.curIndex ? Style.THEME_COLOR : Style.FONT_COLOR_LEVEL2)
+        .fontWeight(index === this.curIndex ? FontWeight.Medium : FontWeight.Regular)
+        .fontSize(12);
+    }
+    .width('100%')
+    .height(48)
+    .padding(16)
+    .justifyContent(FlexAlign.Center)
+    .onClick(() => {
+      this.curIndex = index;
+    });
   }
 }
 
 @Builder
-export function buildCategoryPage() {
-  CategoryPage()
+export function buildCategoryPage(pageName?: string, initId?: string) {
+  CategoryPageContent({ pageName: pageName, initId: initId })
 }

@@ -1,0 +1,36 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "家居装修模版"
+    },
+    {
+      "name": "permission_reason_location",
+      "value": "获取当前定位"
+    },
+    {
+      "name": "EntryFormAbility_desc",
+      "value": "form_description"
+    },
+    {
+      "name": "EntryFormAbility_label",
+      "value": "form_label"
+    },
+    {
+      "name": "widget_desc",
+      "value": "这是家居装修模版的服务卡片"
+    },
+    {
+      "name": "widget_display_name",
+      "value": "家居装修模版服务卡片"
+    }
+  ]
+}

@@ -1,12 +1,11 @@
-import { BookApi, Constants, GetUserInfoRsp, TCRouter, UserInfo } from 'common';
-
+import { BookApi, Constants, GetUserInfoRsp, TCRouter } from 'common';
+import { UserInfo } from 'base_common';
 @ComponentV2
 export struct CenterToolCard {
   @Local userInfo: UserInfo | undefined;
 
   async aboutToAppear(): Promise<void> {
-    const rsp: GetUserInfoRsp = await BookApi.getUserInfo('123');
-    this.userInfo = rsp.user;
+    this.userInfo = AppStorage.get('userInfo') as UserInfo;
   }
 
   @Builder
@@ -32,6 +31,7 @@ export struct CenterToolCard {
     })
 
   }
+
 
   build() {
     Column({ space: 10 }) {
@@ -70,7 +70,7 @@ export struct CenterToolCard {
         .width(Constants.FULL_SIZE)
         .justifyContent(FlexAlign.SpaceBetween)
         .onClick(() => {
-          TCRouter.pushByLogin(Constants.SETTING_ROUTE);
+          TCRouter.pushByLogin(Constants.ACCOUNT_ROUTE);
         })
       }
       .padding(16)

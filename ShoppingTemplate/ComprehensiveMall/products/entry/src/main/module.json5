@@ -6,17 +6,23 @@
     "deviceTypes": [
       "phone"
     ],
+    "routerMap": "$profile:route_map",
     "deliveryWithInstall": true,
     "installationFree": true,
     "pages": "$profile:main_pages",
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.INTERNET"
+      }
+    ],
     "abilities": [
       {
         "name": "EntryAbility",
         "srcEntry": "./ets/entryability/EntryAbility.ets",
         "description": "",
-        "icon": "$media:default_atomic_service_icon",
+        "icon": "$media:app_icon",
         "label": "$string:EntryAbility_label",
-        "startWindowIcon": "$media:default_atomic_service_icon",
+        "startWindowIcon": "$media:app_icon",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
         "skills": [
@@ -32,7 +38,7 @@
         "metadata": [
           {
             "name": "client_id",
-            "value": "XXX"
+            "value": "xxx"
           }
         ]
       }

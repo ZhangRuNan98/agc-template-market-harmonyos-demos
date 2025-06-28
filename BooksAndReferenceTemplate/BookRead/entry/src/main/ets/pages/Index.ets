@@ -1,7 +1,6 @@
 import { Constants, TCRouter } from 'common';
 import { TextReader } from '@kit.SpeechKit';
 import { BookHomePage } from './BookHomePage';
-import { BookViewPage } from 'book_read';
 import {
   AboutPage,
   BorrowDetailInfoPage,
@@ -9,10 +8,24 @@ import {
   LibraryPage,
   LoginPage,
   PrivacyPage,
-  SettingPage
+  MemberCenterPage,
+  MemberAgreementPage,
+  RechargePage,
+  RechargeRecordPage,
+  SettingPage,
+  AccountPage,
+  PreferencePage,
+  ActivityPage,
+  FeedbackPage,
+  FeedbackRecordPage,
+  IssueAndFeedbackPage,
+  PrivacyPolicyPage,
+  DataCollectionPage,
+  DataSharingPage
 } from 'book_person';
 import { BookShelfPage } from 'book_shelf';
-import { BookViewListPage, SearchPage } from 'book_home';
+import { BookListPage, BookViewListPage, SearchPage } from 'book_home';
+import { ReaderPage } from 'book_read_kit';
 
 
 @Entry
@@ -26,10 +39,12 @@ struct Index {
   routerMap(name: string) {
     if (name === Constants.HOME_ROUTER) {
       BookHomePage();
-    } else if (name === Constants.READ_ROUTER) {
-      BookViewPage();
+    } else if (name === Constants.READ_KIT_ROUTER) {
+      ReaderPage();
     } else if (name === Constants.SETTING_ROUTE) {
-      SettingPage();
+      SettingPage()
+    } else if (name === Constants.ACCOUNT_ROUTE) {
+      AccountPage();
     } else if (name === Constants.LIBARY_ROUTE) {
       LibraryPage();
     } else if (name === Constants.BORROW_DETAIL_ROUTE) {
@@ -44,10 +59,36 @@ struct Index {
       SearchPage();
     } else if (name === Constants.LOGIN_ROUTE) {
       LoginPage();
+    } else if (name === Constants.PREFERENCE_ROUTE) {
+      PreferencePage();
+    } else if (name === Constants.ACTIVITY_ROUTE) {
+      ActivityPage();
     } else if (name === Constants.ABOUT_ROUTE) {
       AboutPage();
     } else if (name === Constants.PRIVACY_ROUTE) {
       PrivacyPage();
+    } else if (name === Constants.FEEDBACK_ROUTE) {
+      FeedbackPage();
+    } else if (name === Constants.FEEDBACK_RECORD_ROUTE) {
+      FeedbackRecordPage();
+    } else if (name === Constants.ISSUE_AND_FEEDBACK_ROUTE) {
+      IssueAndFeedbackPage();
+    } else if (name === Constants.BOOK_CASE_ROUTER) {
+      BookListPage();
+    } else if (name === Constants.PRIVACY_POLICY_ROUTE) {
+      PrivacyPolicyPage();
+    } else if (name === Constants.MEMBER_CENTER_ROUTE) {
+      MemberCenterPage();
+    } else if (name === Constants.MEMBER_AGREEMENT_ROUTE) {
+      MemberAgreementPage();
+    } else if (name === Constants.RECHARGE_ROUTE) {
+      RechargePage();
+    } else if (name === Constants.RECHARGE_RECORD_ROUTE) {
+      RechargeRecordPage();
+    } else if (name === Constants.DATA_COLLECTION_ROUTE) {
+      DataCollectionPage();
+    } else if (name === Constants.DATA_SHARING_ROUTE) {
+      DataSharingPage();
     }
   }
 

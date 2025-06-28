@@ -1,5 +1,5 @@
-import { formBindingData, FormExtensionAbility, formInfo } from '@kit.FormKit';
 import { Want } from '@kit.AbilityKit';
+import { formBindingData, FormExtensionAbility, formInfo } from '@kit.FormKit';
 
 export default class EntryFormAbility extends FormExtensionAbility {
   onAddForm(want: Want) {

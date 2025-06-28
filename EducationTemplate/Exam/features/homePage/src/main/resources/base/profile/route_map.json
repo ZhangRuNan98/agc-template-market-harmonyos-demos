@@ -1,0 +1,35 @@
+{
+  "routerMap": [
+    {
+      "name": "HomePage",
+      "pageSourceFile": "src/main/ets/pages/MainPage.ets",
+      "buildFunction": "HomePageBuilder",
+      "data": {
+        "description": "首页"
+      }
+    },
+    {
+      "name": "FeaturedCourses",
+      "pageSourceFile": "src/main/ets/pages/FeaturedCourses.ets",
+      "buildFunction": "FeaturedCoursesBuilder",
+      "data": {
+        "description": "精选课程"
+      }
+    },
+    {
+      "name": "MaterialDownload",
+      "pageSourceFile": "src/main/ets/pages/MaterialDownload.ets",
+      "buildFunction": "MaterialDownloadBuilder",
+      "data": {
+        "description": "资料下载"
+      }
+    },{
+      "name": "ChapterPractice",
+      "pageSourceFile": "src/main/ets/pages/ChapterPractice.ets",
+      "buildFunction": "ChapterPracticeBuilder",
+      "data": {
+        "description": "章节练习页面"
+      }
+    }
+  ]
+}

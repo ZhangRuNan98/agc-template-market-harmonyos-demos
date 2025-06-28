@@ -1,5 +1,5 @@
-import { BookInfo, BookLittleCard, Constants, LazyDataVM, TCRouter } from 'common';
-
+import { BookInfo, BookLittleCard, Constants, TCRouter } from 'common';
+import {LazyDataVM} from 'swiper_card'
 /**
  * 书横卡
  */
@@ -39,13 +39,10 @@ export struct BookViewCard {
   build() {
     Column() {
       this.bookCategoryBar(this.categoryName)
-      List({ space: 3 }) {
+      List({ space: 8 }) {
         LazyForEach(this.books, (item: BookInfo) => {
           ListItem() {
             BookLittleCard({ info: item })
-              .width(120)
-              .height(160)
-              .padding({ left: 5, right: 5 })
           }
         }, (item: string) => new Date().toString())
       }

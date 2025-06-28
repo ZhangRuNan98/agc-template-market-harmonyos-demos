@@ -41,6 +41,26 @@
       "value": "书籍列表"
     },
     {
+      "name": "searchHistory",
+      "value": "历史搜索"
+    },
+    {
+      "name": "noSearchResult",
+      "value": "暂无搜索结果"
+    },
+    {
+      "name": "searchResult",
+      "value": "搜索结果"
+    },
+    {
+      "name": "hotSearch",
+      "value": "热门搜索"
+    },
+    {
+      "name": "clearHistory",
+      "value": "清空"
+    },
+    {
       "name": "history",
       "value": "浏览历史"
     },
@@ -67,6 +87,10 @@
     {
       "name": "person_setting",
       "value": "个人设置"
+    },
+    {
+      "name": "issue_and_feedback",
+      "value": "问题与反馈"
     },
     {
       "name": "about",
@@ -175,6 +199,10 @@
     {
       "name": "member",
       "value": "vip"
+    },
+    {
+      "name": "paid",
+      "value": "付费"
     },
     {
       "name": "more_and_more",
@@ -302,7 +330,7 @@
     },
     {
       "name": "phone_number",
-      "value": "a1xxxx1111"
+      "value": "a11xxxx1111"
     },
     {
       "name": "delete_book_flag",
@@ -321,8 +349,8 @@
       "value": "请选中删除书籍"
     },
     {
-      "name": "today",
-      "value": "今日"
+      "name": "today_read",
+      "value": "今日阅读"
     },
     {
       "name": "no_login_out",
@@ -330,15 +358,15 @@
     },
     {
       "name": "ask_for_login_out",
-      "value": "是否登出"
+      "value": "退出登录"
     },
     {
       "name": "ask_for_login_out_again",
-      "value": "你真的要登出嘛"
+      "value": "是否确定退出登录？"
     },
     {
       "name": "agreement_and_login_out",
-      "value": "同意并登出"
+      "value": "确定"
     },
     {
       "name": "modify_nickname",
@@ -351,6 +379,146 @@
     {
       "name": "modify_success",
       "value": "修改成功"
+    },
+    {
+      "name": "vip_off",
+      "value": "未开通"
+    },
+    {
+      "name": "common_services",
+      "value": "常用服务"
+    },
+    {
+      "name": "reading_history",
+      "value": "阅读记录"
+    },
+    {
+      "name": "reading_preference",
+      "value": "阅读偏好设置"
+    },
+    {
+      "name": "contact",
+      "value": "联系客服"
+    },
+    {
+      "name": "daily_recommendation",
+      "value": "今日力荐"
+    },
+    {
+      "name": "recommend_for_you",
+      "value": "猜你喜欢"
+    },
+    {
+      "name": "boys_channel",
+      "value": "男生频道"
+    },
+    {
+      "name": "girls_channel",
+      "value": "女生频道"
+    },
+    {
+      "name": "free_channel",
+      "value": "免费"
+    },
+    {
+      "name": "bookshelf",
+      "value": "书架"
+    },
+    {
+      "name": "book_case",
+      "value": "书城"
+    },
+    {
+      "name": "book_sort",
+      "value": "分类"
+    },
+    {
+      "name": "activity_center",
+      "value": "活动中心"
+    },
+    {
+      "name": "activity_description",
+      "value": "精彩活动等你来"
+    },
+    {
+      "name": "member_center",
+      "value": "会员中心"
+    },
+    {
+      "name": "vip_member",
+      "value": "VIP会员"
+    },
+    {
+      "name": "no_member",
+      "value": "未开通"
+    },
+    {
+      "name": "open_member",
+      "value": "开通会员"
+    },
+    {
+      "name": "member_privileges",
+      "value": "会员权益"
+    },
+    {
+      "name": "member_packages",
+      "value": "会员套餐"
+    },
+    {
+      "name": "enjoy_more_services",
+      "value": "开通会员享受购书折扣"
+    },
+    {
+      "name": "no_ads",
+      "value": "免广告"
+    },
+    {
+      "name": "no_ads_desc",
+      "value": "所有去除所有书籍页面广告"
+    },
+    {
+      "name": "priority_consultation",
+      "value": "优先咨询"
+    },
+    {
+      "name": "priority_consultation_desc",
+      "value": "开通私信功能"
+    },
+    {
+      "name": "exclusive_service",
+      "value": "专属客服"
+    },
+    {
+      "name": "exclusive_service_desc",
+      "value": "专属于您的私人客服"
+    },
+    {
+      "name": "member_agreement",
+      "value": "《会员服务协议》"
+    },
+    {
+      "name": "agree_member_agreement",
+      "value": "开通前请阅读并同意"
+    },
+    {
+      "name": "open_now",
+      "value": "立即开通"
+    },
+    {
+      "name": "lifetime_member",
+      "value": "终身会员"
+    },
+    {
+      "name": "lifetime_privileges",
+      "value": "终身VIP权益"
+    },
+    {
+      "name": "agree_member_agreement_tip",
+      "value": "请勾选会员服务协议"
+    },
+    {
+      "name": "payment_success",
+      "value": "支付成功"
     }
   ]
 }

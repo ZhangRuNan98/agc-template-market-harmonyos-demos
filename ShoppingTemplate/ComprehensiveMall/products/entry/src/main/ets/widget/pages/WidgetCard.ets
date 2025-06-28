@@ -24,8 +24,8 @@ struct WidgetCard {
       action: this.actionType,
       abilityName: this.abilityName,
       params: {
-        message: this.message
-      }
+        message: this.message,
+      },
     }) {
       Row() {
         Image($r('app.media.ic_logo'))

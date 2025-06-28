@@ -1,7 +1,7 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import { BookApi, GlobalContext, TCRouter, WindowUtils } from 'common';
+import { BookApi, GlobalContext, TCRouter, WindowUtils, UserInfoUtil } from 'common';
 
 
 export default class EntryAbility extends UIAbility {
@@ -10,6 +10,7 @@ export default class EntryAbility extends UIAbility {
     GlobalContext.initContext(this.context);
     TCRouter.init();
     BookApi.init('data.json');
+    UserInfoUtil.init();
   }
 
   onDestroy(): void {

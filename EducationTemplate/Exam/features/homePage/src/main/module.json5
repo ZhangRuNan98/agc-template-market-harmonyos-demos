@@ -1,0 +1,21 @@
+{
+  "module": {
+    "name": "homePage",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ],
+    "routerMap": "$profile:route_map",
+    "requestPermissions": [{
+      "name": "ohos.permission.MICROPHONE",
+      "reason": "$string:MICROPHONE_reason",
+      "usedScene": {
+        "abilities": [
+          "EntryAbility"
+        ],
+        "when": "inuse"
+      }
+    },
+    ]
+  }
+}

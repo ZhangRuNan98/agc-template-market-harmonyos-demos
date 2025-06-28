@@ -18,7 +18,7 @@
     },
     {
       "name": "reader_view_background_3",
-      "value": "#F1F3F5"
+      "value": "#000000"
     },
     {
       "name": "font_modifier_inner_color",
@@ -63,6 +63,26 @@
     {
       "name": "button_color",
       "value": "#0A59F7"
+    },
+    {
+      "name": "sign_font_color",
+      "value": "#EF6A0C"
+    },
+    {
+      "name": "sign_bg_color_on",
+      "value": "#94C424"
+    },
+    {
+      "name": "sign_bg_color_off",
+      "value": "#FFDA67"
+    },
+    {
+      "name": "sign_day_color_on",
+      "value": "#61860B"
+    },
+    {
+      "name": "sign_day_color_off",
+      "value": "#ED6F21"
     }
   ]
 }

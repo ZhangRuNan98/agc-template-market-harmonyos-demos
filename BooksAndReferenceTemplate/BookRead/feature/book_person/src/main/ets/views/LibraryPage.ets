@@ -1,6 +1,8 @@
-import { BookApi, Constants, GetBookBorrowRsp, GetUserInfoRsp, LazyDataVM, NavHeaderBar, UserInfo } from 'common';
+import { BookApi, Constants, GetBookBorrowRsp, GetUserInfoRsp, NavHeaderBar } from 'common';
 import { BorrowCard } from '../comp/BorrowCard';
 import { BorrowInfo, BorrowInfoCard } from '../comp/BorrowInfoCard';
+import { UserInfo } from 'base_common';
+import { LazyDataVM } from 'swiper_card'
 
 @ComponentV2
 export struct LibraryPage {

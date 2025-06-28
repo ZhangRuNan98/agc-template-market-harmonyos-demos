@@ -1,0 +1,12 @@
+{
+  "string": [
+    {
+      "name": "agcit_huawei_home_decoration_module_posting",
+      "value": "1.0.0"
+    },
+    {
+      "name": "agcittype_huawei_home_decoration_module_posting",
+      "value": "serviceComponent"
+    }
+  ]
+}

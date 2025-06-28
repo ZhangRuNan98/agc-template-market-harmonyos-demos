@@ -1,0 +1,12 @@
+{
+  "string": [
+    {
+      "name": "location_permission",
+      "value": "获取当前定位"
+    },
+    {
+      "name": "approximately_location_permission",
+      "value": "获取当前定位"
+    }
+  ]
+}

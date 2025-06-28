@@ -1,0 +1,34 @@
+{
+  "routerMap": [
+    {
+      "name": "CaseDetailPage",
+      "pageSourceFile": "src/main/ets/pages/CaseDetailPage.ets",
+      "buildFunction": "CaseDetailPageBuilder"
+    },
+    {
+      "name": "AllCityPage",
+      "pageSourceFile": "src/main/ets/pages/AllCityPage.ets",
+      "buildFunction": "AllCityPageBuilder"
+    },
+    {
+      "name": "SearchPage",
+      "pageSourceFile": "src/main/ets/pages/SearchPage.ets",
+      "buildFunction": "SearchPageBuilder"
+    },
+    {
+      "name": "HomeCasePage",
+      "pageSourceFile": "src/main/ets/pages/HomeCasePage.ets",
+      "buildFunction": "HomeCasePageBuilder"
+    },
+    {
+      "name": "PricePage",
+      "pageSourceFile": "src/main/ets/pages/PricePage.ets",
+      "buildFunction": "PricePageBuilder"
+    },
+    {
+      "name": "ListPage",
+      "pageSourceFile": "src/main/ets/pages/ListPage.ets",
+      "buildFunction": "ListPageBuilder"
+    }
+  ]
+}
