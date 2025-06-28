@@ -1067,7 +1067,7 @@
 
 | 首页                                                                | 找设计师                                                                | 定制设计                                                                  | 我的                                                                |
 |-------------------------------------------------------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------|-------------------------------------------------------------------|
-| <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/Screenshot_home.jpeg" alt="首页" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/Screenshot_find.jpeg" alt="找设计师" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/Screenshot_custom.jpeg" alt="定制设计" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/Screenshot_mine.jpeg" alt="我的" width="300"> |
+| <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/screenShot_home.jpeg" alt="首页" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/screenShot_custom.jpeg" alt="找设计师" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/screenShot_custom.jpeg" alt="定制设计" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/screenShot_mine.jpeg" alt="我的" width="300"> |
 
 ## 开源许可协议
 
