@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { RouterModule } from 'router_module';
+import { RouterMap, RouterModule } from 'router_module';
 
 @ComponentV2
 export struct TopTabsBuilder {
@@ -23,7 +23,7 @@ export struct TopTabsBuilder {
   @Param showBackButton: boolean = false;
   @Param type: string = '一级建造师';
   @Local index: number = 0;
-  private _topBannerHeight: number = 56;
+  private topHeight: number = 56;
 
   build() {
     Row() {
@@ -42,7 +42,7 @@ export struct TopTabsBuilder {
             .space(8)
             .arrowPosition(ArrowPosition.END)
             .onClick(() => {
-              RouterModule.push({ url: 'TopicHomePage' })
+              RouterModule.push({ url: RouterMap.Level_ONE_PAGE })
             })
         } else {
           Text(this.title)
@@ -60,7 +60,7 @@ export struct TopTabsBuilder {
             .height('24vp')
             .width('24vp')
             .onClick(() => {
-              RouterModule.push({ url: 'SearchPage', param: '' })
+              RouterModule.push({ url: RouterMap.SEARCH_PAGE, param: '' })
             })
         }
         .height('40vp')
@@ -75,7 +75,7 @@ export struct TopTabsBuilder {
       .justifyContent(FlexAlign.End)
     }
     .backgroundColor(this.bgColor)
-    .height(this._topBannerHeight)
+    .height(this.topHeight)
     .width('100%')
   }
 }

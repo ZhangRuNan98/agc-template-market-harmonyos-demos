@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -13,23 +14,41 @@
 
 <img src='./screenshot/0010.jpg' width='300'>
 
-## 使用
 
-1. 安装组件。需要将模板根目录的components下base_select目录拷贝至您的工程相应目录。
+## 约束与限制
+### 环境
+* DevEco Studio版本：DevEco Studio 5.0.0 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.0 Release SDK及以上
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.0 Release及以上
+
+## 快速入门
+
+1. 安装组件。
+
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
+
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加base_select模块。
+
    ```
-   // 在项目根目录build-profile.json5填写base_select路径
+   // 在项目根目录build-profile.json5填写base_select路径。其中XXX为组件存放的目录名。
      "modules": [
        {
          "name": "base_select",
-         "srcPath": "./base_select",
+         "srcPath": "./XXX/base_select",
        }
      ]
    ```
 
+   c. 在entry目录下oh-package.json5中添加依赖。
    ```
-   // 在entry目录下oh-package.json5填写依赖情况
+   // XXX为组件存放的目录名称
    "dependencies": {
-      "base_select": "file:../base_select"
+      "base_select": "file:./XXX/base_select"
    }
    ```
 
@@ -112,7 +131,7 @@
            // 默认tab背景色
            defaultLeftBgc: $r('sys.color.comp_background_gray'),
            // 右侧展示内容的icon
-           contentIcon: $r('app.media.icon_right')
+           contentIcon: $r('app.media.icon_right')  //todo 需要图片资源
          })
        }
        .width('100%')
@@ -132,12 +151,12 @@ BaseSelect({modelList:SelectItemModel[],contentIcon:ResourceStr,selectLeftBgc:Re
 
 **参数：**
 
-| 参数名                     | 类型                                                                                                            | 是否必填 | 说明                                                                                                                              |
-|:------------------------|:--------------------------------------------------------------------------------------------------------------|------|:--------------------------------------------------------------------------------------------------------------------------------|
-| modelList               | [SelectItemModel]((#SelectItemModel对象说明))[]                                                                                         | 是    | 一级分类下嵌套的所有数据,若只需要一级可修改类型到一级即可。                                                                     |
-| contentIcon             | [ResourceStr](https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V14/ts-types-V14#resourcestr) | 否    | 应用图标，参考[UX设计规范](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-phone-unionid-login#section2558741102912) | 是  |                                                                                                                           |
-| selectLeftBgc           | ResourceStr                                                                                                   | 否    | 左侧栏选中背景色                                                                                                                        | | 否  | 应用路由栈                                                                                                                           |
-| defaultLeftBgc          | ResourceStr                                                                                                   | 否    | 左侧栏默认背景色                                                                                                                        | | 否  | 应用路由栈                                                                                                                           |
+| 参数名                     | 类型                                                                                                                                | 是否必填 | 说明                                                                                                                              |
+|:------------------------|:----------------------------------------------------------------------------------------------------------------------------------|------|:--------------------------------------------------------------------------------------------------------------------------------|
+| modelList               | [SelectItemModel](#SelectItemModel对象说明)[]                                                                                         | 是    | 一级分类下嵌套的所有数据,若只需要一级可修改类型到一级即可。                                                                     |
+| contentIcon             | [ResourceStr](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/ts-types#resourcestr)                             | 否    | 应用图标，参考[UX设计规范](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-phone-unionid-login#section2558741102912) | 是  |                                                                                                                           |
+| selectLeftBgc           | ResourceStr                                                                                                                       | 否    | 左侧栏选中背景色                                                                                                                        | | 否  | 应用路由栈                                                                                                                           |
+| defaultLeftBgc          | ResourceStr                                                                                                                       | 否    | 左侧栏默认背景色                                                                                                                        | | 否  | 应用路由栈                                                                                                                           |
 
 ### SelectItemModel对象说明
 
@@ -268,7 +287,7 @@ struct Index {
         // 默认tab背景色
         defaultLeftBgc: $r('sys.color.comp_background_gray'),
         // 右侧展示内容的icon
-        contentIcon: $r('app.media.icon_right')
+        contentIcon: $r('app.media.icon_right')  //todo 需要图片资源
       })
     }
     .width('100%')

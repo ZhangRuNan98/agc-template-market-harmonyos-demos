@@ -16,18 +16,19 @@
 import { ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { KeyboardAvoidMode, window } from '@kit.ArkUI';
-import { PreferConstant, examPrefer, ExamPreferences } from 'commonlib';
+import { RouterTable } from '../common/TabConstants';
 
 const DOMAIN = 0x0000;
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want): void {
+    // 初始化路由表
+    RouterTable.routerInit()
     this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET);
     // 全局设置为浅色模式
     let applicationContext = this.context.getApplicationContext();
     applicationContext.setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT);
-    examPrefer.creatPreference(this.context).then(() => {
-    })
+
   }
 
   onDestroy(): void {
@@ -44,8 +45,6 @@ export default class EntryAbility extends UIAbility {
       }
       hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.');
     });
-    ExamPreferences.getPreferences(this.context, PreferConstant.TOPIC_NOTES);
-    ExamPreferences.getPreferences(this.context, PreferConstant.PRACTICE_RECORDS);
   }
 
   onWindowStageDestroy(): void {

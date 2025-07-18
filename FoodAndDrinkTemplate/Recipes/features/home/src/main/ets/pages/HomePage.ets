@@ -94,7 +94,8 @@ struct HomePage {
         }.padding({ left: 16, right: 16 });
       }.align(Alignment.Top)
       .height('calc(100% - 56vp)')
-      .scrollBar(BarState.Off);
+      .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring);
     }.hideTitleBar(true);
   }
 }

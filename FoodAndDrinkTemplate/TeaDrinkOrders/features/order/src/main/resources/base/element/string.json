@@ -355,6 +355,10 @@
     {
       "name": "select_address_err",
       "value": "请选择配送地址"
+    },
+    {
+      "name": "agcit_huawei_tea_drink_orders",
+      "value": "1.0.1"
     }
   ]
 }

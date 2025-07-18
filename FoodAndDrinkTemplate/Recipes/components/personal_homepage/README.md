@@ -1,9 +1,9 @@
 # 个人中心组件快速入门
 
 ## 目录
-
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -13,35 +13,49 @@
 
 | 博主详情                                                       | 登录状态                                                       |
 |------------------------------------------------------------|------------------------------------------------------------|
-| <img src="./screenshot/PersonalHomepage1.png" width="300"> | <img src="./screenshot/PersonalHomepage2.png" width="300"> |
+| <img src="./screenshot/PersonalHomepage1.PNG" width="300"> | <img src="./screenshot/PersonalHomepage2.PNG" width="300"> |
 
+## 约束与限制
 
-## 使用
+### 环境
 
-1. 安装组件。
-   将模板根目录的components下[base_ui](../../components/base_ui)、[featured_recipes](../../components/featured_recipes)和[personal_homepage](../../components/personal_homepage)目录拷贝至您工程根目录components/，并添加如下依赖。
+- DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+- 设备类型：华为手机（直板机）
+- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
 
+## 快速入门
+
+1. 安装组件。  
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+   如果是从生态市场下载组件，请参考以下步骤安装组件。  
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的xxx目录下。  
+   b. 在项目根目录build-profile.json5并添加base_ui、featured_recipes和personal_homepage模块。
    ```typescript
-   // 模块下的oh-package.json5
-   "dependencies": {
-     "personal_homepage": "file:../components/personal_homepage"
-   }
-   
-   // 模板根目录的build-profile.json5
+   // 在项目根目录的build-profile.json5填写base_ui、featured_recipes和personal_homepage路径。其中xxx为组件存在的目录名
    "modules": [
      {
        "name": "base_ui",
-       "srcPath": "./components/base_ui",
+       "srcPath": "./xxx/base_ui",
      },
      {
        "name": "featured_recipes",
-       "srcPath": "./components/featured_recipes",
+       "srcPath": "./xxx/featured_recipes",
      },
      {
        "name": "personal_homepage",
-       "srcPath": "./components/personal_homepage",
+       "srcPath": "./xxx/personal_homepage",
      }
    ]
+   ```
+   c. 在项目根目录oh-package.json5中添加依赖
+   ```typescript
+   // xxx为组件存放的目录名称
+   "dependencies": {
+     "base_ui": "file:../xxx/base_ui",
+     "featured_recipes": "file:../xxx/featured_recipes",
+     "personal_homepage": "file:../xxx/personal_homepage"
+   }
    ```
    
 2. 引入组件。
@@ -268,4 +282,4 @@ struct Index {
 }
 ```
 
-<img src="./screenshot/PersonalHomepage3.png" width="300">
+<img src="./screenshot/PersonalHomepage3.PNG" width="300">

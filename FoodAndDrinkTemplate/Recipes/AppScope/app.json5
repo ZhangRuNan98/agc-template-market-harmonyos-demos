@@ -1,5 +1,6 @@
 {
   "app": {
+    // todo 修改应用包名
     "bundleName": "xxx.xxx.xxx",
     "vendor": "example",
     "versionCode": 1000000,

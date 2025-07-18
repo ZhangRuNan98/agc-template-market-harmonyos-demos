@@ -26,7 +26,7 @@ export struct AboutPage {
     Column() {
       Header({ title: '关于' })
       Column() {
-        Image($r('app.media.prepare_examLOGO'))
+        Image($r('app.media.exam_icon_login'))
           .width($r('app.float.vp_72'))
           .height($r('app.float.vp_72'))
           .margin({ top: 141, bottom: $r('app.float.vp_24') })
@@ -34,7 +34,7 @@ export struct AboutPage {
           .fontSize($r('sys.float.Title_L'))
           .height($r('app.float.vp_40'))
           .fontWeight(FontWeight.Medium)
-        Text('版本: 10.1.1.100')
+        Text('版本: 1.0.1')
           .fontSize($r('sys.float.Body_M'))
           .height($r('app.float.vp_19'))
           .fontWeight(FontWeight.Regular)

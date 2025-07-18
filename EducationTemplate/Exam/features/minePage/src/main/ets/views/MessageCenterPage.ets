@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
+import { AppStorageV2 } from '@kit.ArkUI';
 import { TopBar } from 'commonlib';
 import { MessageItem, NumbObj } from '../viewModel/MessageModel';
 import { RouterModule } from 'router_module';
-import { AppStorageV2 } from '@kit.ArkUI';
 
 @ComponentV2
 export struct MessageCenterPage {
@@ -58,7 +58,7 @@ export struct MessageCenterPage {
    */
   @Builder
   deleteButtonBuilder() {
-    if (this.isSelectDelete === true) {
+    if (this.isSelectDelete) {
       Row() {
         Image($r('app.media.icon_delete'))
           .height($r('app.float.vp_24'))
@@ -92,7 +92,7 @@ export struct MessageCenterPage {
 
   // 是否全选
   isAllClick() {
-    if (this.isAll === false) {
+    if (!this.isAll) {
       this.propNumbObj.listArr.forEach((item: MessageItem) => {
         item.isDelete = true;
       })
@@ -142,7 +142,7 @@ export struct MessageCenterPage {
               // 父组件 点击右上角删除按钮显示  否则不显示
               if (this.isSelectDelete) {
                 Row() {
-                  Image(item.isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_anscommon'))
+                  Image(item.isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_ans_common'))
                     .margin({ right: $r('app.float.vp_8') })
                     .width($r('app.float.vp_20'))
                     .height($r('app.float.vp_20'))
@@ -150,7 +150,7 @@ export struct MessageCenterPage {
                 .height($r('app.float.vp_24'))
                 .onClick(() => {
                   item.isDelete = !item.isDelete
-                  if (item.isDelete === true) {
+                  if (item.isDelete) {
                     this.selectCount++;
                   } else {
                     this.selectCount--;
@@ -211,6 +211,7 @@ export struct MessageCenterPage {
         .height($r('app.float.vp_24'))
         .onClick(() => {
           this.propNumbObj.listArr.splice(index, 1)
+          this.swiperLeft = false
         })
     }.padding($r('app.float.vp_4')).justifyContent(FlexAlign.SpaceEvenly)
   }
@@ -228,23 +229,23 @@ export struct MessageCenterPage {
         title: '消息中心'
       })
       Row() {
-        Image(this.isAll === false ? $r('app.media.icon_select_all_off') : $r('app.media.icon_select_all'))
+        Image(this.isAll ? $r('app.media.icon_select_all') : $r('app.media.icon_select_all_off'))
           .onClick(() => {
             this.isAllClick()
           })
           .width($r('app.float.vp_40'))
           .height($r('app.float.vp_40'))
-          .visibility(this.isSelectDelete === true ? Visibility.Visible : Visibility.Hidden)
+          .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.Hidden)
         Image($r('app.media.ic_public_trash'))
           .margin({ left: $r('app.float.vp_8') })
           .height($r('app.float.vp_40'))
           .width($r('app.float.vp_40'))
-          .opacity(this.swiperLeft === true ? 0.4 : 1)
+          .opacity(this.swiperLeft ? 0.4 : 1)
       }
       .onClick(() => {
-        if (this.swiperLeft === false && this.propNumbObj.listArr.length > 0) {
+        if (!this.swiperLeft && this.propNumbObj.listArr.length > 0) {
           this.isSelectDelete = !this.isSelectDelete
-          if (this.isSelectDelete === false) {
+          if (!this.isSelectDelete) {
             this.isAll = false
             this.selectCount = 0
             this.propNumbObj.listArr.forEach((item: MessageItem) => {
@@ -262,7 +263,7 @@ export struct MessageCenterPage {
 }
 
 @Builder
-export function MessageCenterPageBuilder() {
+export function MessageCenterBuilder() {
   MessageCenterPage()
 }
 

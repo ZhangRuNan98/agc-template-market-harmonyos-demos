@@ -51,20 +51,20 @@ export struct CouponComp {
                   if (Number(item.stock) > 0) {
                     Column() {
                       Text() {
-                        Span($r('app.string.currency_symbol')).fontColor(Color.White).fontSize(10).lineHeight(14)
-                        Span(`${Number(item.reduce)}`).fontColor(Color.White).fontSize(18).lineHeight(20)
+                        Span($r('app.string.currency_symbol')).fontColor($r('sys.color.font_primary')).fontSize(10)
+                        Span(`${Number(item.reduce)}`).fontColor($r('sys.color.font_primary')).fontSize(18)
                       }
 
-                      Text(item.name).fontColor(Color.White).fontSize(8).lineHeight(10).margin({ top: 2 })
+                      Text(item.name).fontColor($r('sys.color.font_secondary')).fontSize(8).margin({ top: 2 })
                       Text(item.state === CouponStateEnum.NOT_PICKED_UP ? $r('app.string.claim_now') :
                       $r('app.string.collected'))
                         .height(14)
-                        .fontColor(item.state === CouponStateEnum.NOT_PICKED_UP ? '#ED6F21' :
-                          '#99ED6F21')
+                        .fontColor('#486602')
                         .fontSize(10)
                         .backgroundColor(item.state === CouponStateEnum.NOT_PICKED_UP ? '#FFFFFF' : '#99FFFFFF')
                         .margin({ top: 9 })
                         .borderRadius(7)
+                        .opacity(item.state === CouponStateEnum.NOT_PICKED_UP ? 1 : 0.4)
                         .padding({
                           left: 6,
                           right: 6,

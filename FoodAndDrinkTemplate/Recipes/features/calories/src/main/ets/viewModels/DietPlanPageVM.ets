@@ -54,7 +54,8 @@ export class DietPlanPageVM {
               this.selectText = resp.data.name
               res.data.forEach(item => {
                 item.foodList.forEach(food => {
-                  if (resp.data.foodList.some(plan => plan.name === food.name)) {
+                  if (resp.data.foodList.some(plan => plan.name === food.name) &&
+                    !this.selectFoods.some(selectFood => selectFood.id === food.id)) {
                     this.selectFoods.push(new FoodCalories(food.id, food.name, food.category, food.weight,
                       food.calories))
                   }

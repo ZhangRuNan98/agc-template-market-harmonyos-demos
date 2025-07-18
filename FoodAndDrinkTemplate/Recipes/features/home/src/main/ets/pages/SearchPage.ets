@@ -42,7 +42,12 @@ struct SearchPage {
           },
         })
 
-      }.height('100%').scrollBar(BarState.Off).align(Alignment.Top);
+      }
+      .height('100%')
+      .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring)
+      .align(Alignment.Top)
+      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM]);
     }
     .title(buildTitleBar(this.vm.title, this.vm.formPage === CommonConstants.CLASSIFICATION_PAGE),
       { paddingStart: LengthMetrics.vp(16) });

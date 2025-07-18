@@ -13,11 +13,9 @@
  * limitations under the License.
  */
 
-import { examPrefer, PreferConstant } from 'commonlib';
-import { Feedback } from 'feed_back';
-import { FeedbackItemType } from 'feed_back/src/main/ets/model/FeedbackRecordModel';
+import { PreferenceUtil, PreferConstant } from 'commonlib';
+import { Feedback, FeedbackItemType } from 'feed_back';
 import { Header } from '../components/Header';
-import { promptAction } from '@kit.ArkUI';
 import { RouterModule } from 'router_module';
 
 @ComponentV2
@@ -36,16 +34,16 @@ export struct FeedbackPage {
       Feedback({
         des: 99,
         num: 3,
-        butOnClick: async (val: FeedbackItemType) => {
+        butOnClick: (val: FeedbackItemType) => {
           this.feedList = val;
-          let info = await examPrefer.getPreferenceValue(PreferConstant.FEEDBACK_RECORD, []) as FeedbackItemType[]
+          let info = PreferenceUtil.getInstance().get(PreferConstant.FEEDBACK_RECORD, []) as FeedbackItemType[]
           let arr: FeedbackItemType[] = []
           info.forEach((model: FeedbackItemType) => {
             arr.push(model)
           })
           arr.push(this.feedList)
-          examPrefer.putPreferenceValue(PreferConstant.FEEDBACK_RECORD, arr)
-          promptAction.showToast({ message: '提交成功', duration: 2000 });
+          PreferenceUtil.getInstance().put(PreferConstant.FEEDBACK_RECORD, arr)
+          this.getUIContext().getPromptAction().showToast({ message: '提交成功', duration: 2000 });
           RouterModule.pop()
         }
       })

@@ -24,7 +24,7 @@ export struct OrderCard {
   @ObjectLink @Watch('dealState') orderItem: GetMyOrderResp;
   @StorageProp('storeType') storeType: number = 1
   @StorageLink('tableId') tableId: string = ''
-  @StorageLink('dinerNum') dinerNum: ResourceStr = ''
+  @StorageLink('dinerNum') dinerNum: string = ''
   @Consume('pageStack') pageStack: NavPathStack
   @Consume('storeInfo') storeInfo: StoreInfo
   @Consume('currentIndex') currentIndex: number

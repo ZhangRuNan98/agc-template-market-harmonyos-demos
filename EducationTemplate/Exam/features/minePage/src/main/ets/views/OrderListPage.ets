@@ -12,10 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { AppStorageV2 } from '@kit.ArkUI';
+import { pasteboard } from '@kit.BasicServicesKit';
 import { OrderInfo, OrderState, SampleOrderInfo } from 'commonlib'
 import { RouterMap, RouterModule } from 'router_module'
-import { AppStorageV2, promptAction } from '@kit.ArkUI';
-import { pasteboard } from '@kit.BasicServicesKit';
 
 export enum OrderListType {
   //全部订单
@@ -32,7 +33,7 @@ export enum OrderListType {
 export struct OrderListPage {
   @Param orderType: OrderListType = OrderListType.All
   @Local orderInfo: OrderInfo[] = []
-  @Local prop: SampleOrderInfo = AppStorageV2.connect(SampleOrderInfo, () => new SampleOrderInfo())!;
+  @Local propOrder: SampleOrderInfo = AppStorageV2.connect(SampleOrderInfo, () => new SampleOrderInfo())!;
   @Param currentIndex: number = 0;
 
   @Monitor('currentIndex')
@@ -50,13 +51,13 @@ export struct OrderListPage {
 
   refreshData() {
     if (this.orderType === OrderListType.All) {
-      this.orderInfo = this.prop.orderInfos
+      this.orderInfo = this.propOrder.orderInfos
     } else if (this.orderType === OrderListType.WaitToPay) {
-      this.orderInfo = this.prop.orderInfos.filter((item: OrderInfo) => item.orderState === OrderState.WaitToPay)
+      this.orderInfo = this.propOrder.orderInfos.filter((item: OrderInfo) => item.orderState === OrderState.WaitToPay)
     } else if (this.orderType === OrderListType.Paid) {
-      this.orderInfo = this.prop.orderInfos.filter((item: OrderInfo) => item.orderState === OrderState.Paid)
+      this.orderInfo = this.propOrder.orderInfos.filter((item: OrderInfo) => item.orderState === OrderState.Paid)
     } else if (this.orderType === OrderListType.Cancelled) {
-      this.orderInfo = this.prop.orderInfos.filter((item: OrderInfo) => item.orderState === OrderState.Cancelled)
+      this.orderInfo = this.propOrder.orderInfos.filter((item: OrderInfo) => item.orderState === OrderState.Cancelled)
     }
   }
 
@@ -95,10 +96,9 @@ export struct OrderListPage {
 
 @ComponentV2
 struct OrderItem {
-  @Param info: OrderInfo = new OrderInfo('', false, OrderState.WaitToPay, '', '',false)
+  @Param info: OrderInfo = new OrderInfo('', false, OrderState.WaitToPay, '', '', false)
   @Param refreshEvent: () => void = () => {
   }
-  @Local prop: SampleOrderInfo = AppStorageV2.connect(SampleOrderInfo, () => new SampleOrderInfo())!;
 
   build() {
     Column() {
@@ -118,10 +118,12 @@ struct OrderItem {
             let sysPaste: pasteboard.SystemPasteboard = pasteboard.getSystemPasteboard();
             sysPaste.setData(pasteData, (err) => {
               if (err) {
-                promptAction.showToast({ message: '复制失败', duration: 2000 });
+                this.getUIContext().getPromptAction().showToast({ message: '复制失败', duration: 2000 });
                 return;
               }
-              promptAction.showToast({ message: this.info.orderNo + '复制成功', duration: 2000 });
+              this.getUIContext().getPromptAction().showToast({
+                message: this.info.orderNo + '复制成功', duration: 2000
+              });
             });
           })
         Blank()
@@ -222,7 +224,7 @@ struct OrderItem {
               this.refreshEvent()
             } else if (this.info.orderState === OrderState.Paid) {
               // 跳转我的课程详情页
-              RouterModule.push({ url: RouterMap.CourseIntroductionPage });
+              RouterModule.push({ url: RouterMap.COURSE_INTRODUCTION_PAGE });
             }
           })
       }
@@ -233,10 +235,10 @@ struct OrderItem {
     .onClick(() => {
       let myInfo: MyInfo = new MyInfo()
       myInfo.info = this.info
-      myInfo.refresh = () => {
+      myInfo.refreshCallback = () => {
         this.refreshEvent()
       }
-      RouterModule.push({ url: RouterMap.OrderDetailPage, param: myInfo })
+      RouterModule.push({ url: RouterMap.Order_Detail_PAGE, param: myInfo })
     })
     .alignItems(HorizontalAlign.Start)
     .padding({
@@ -253,7 +255,7 @@ struct OrderItem {
 }
 
 export class MyInfo {
-  info: OrderInfo = new OrderInfo('', false, OrderState.WaitToPay, '','', false)
-  refresh: () => void = () => {
+  info: OrderInfo = new OrderInfo('', false, OrderState.WaitToPay, '', '', false)
+  refreshCallback: () => void = () => {
   }
 }

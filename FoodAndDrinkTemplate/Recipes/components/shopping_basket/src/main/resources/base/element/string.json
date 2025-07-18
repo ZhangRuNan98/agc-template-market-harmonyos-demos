@@ -11,10 +11,6 @@
     {
       "name": "agcittype_huawei_recipes_shopping_basket",
       "value": "serviceComponent"
-    },
-    {
-      "name": "agcitkid_huawei_recipes_shopping_basket",
-      "value": "agcit_huawei_recipes_base_ui/1.0.0"
     }
   ]
 }

@@ -1,5 +1,6 @@
 import { BaseNavTitle, BaseTextStyleModifier } from 'base_apis';
 import { ThemeState, UserInfo, UserState } from '../../model/Model';
+import { ThemeVM } from '../../viewModel/ThemeController';
 import { AvatarFunctionButton } from '../AvatarFunctionButton'
 
 @Builder
@@ -11,11 +12,11 @@ export function PersonInfoBuilder() {
 export struct PersonInfo {
   @Local userInfo: UserInfo = new UserInfo();
   @Local isEdit: boolean = false
-  @Local nickName: string = this.userInfo.userName
-  @Local avatar: string = this.userInfo.userName
-  @Event onUserNameChange: (value: string) => void = () => {
-  }
+  @Local nickName: string = this.userInfo.userName as string
+  @Local avatar: string = this.userInfo.userName as string
+  @Event onUserNameChange: (value: string) => void = () => {}
   @Local routerModule: NavPathStack = new NavPathStack()
+  @Local themeVM: ThemeVM = ThemeVM.instance;
 
   @Styles
   infoFancyStyle() {
@@ -30,7 +31,7 @@ export struct PersonInfo {
   getNavigationParams() {
     this.userInfo =
       this.routerModule.getParamByName('PersonInformation')[0] as UserInfo
-    this.nickName = this.userInfo.userName
+    this.nickName = this.userInfo.userName as string
   }
 
   build() {
@@ -38,6 +39,8 @@ export struct PersonInfo {
       BaseNavTitle({
         title: '个人信息',
         routerModule: this.routerModule,
+        titleColor: this.themeVM.titleColor,
+        currentTheme: this.themeVM.selectColor,
       })
       Column() {
         Column() {

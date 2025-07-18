@@ -33,6 +33,8 @@ export class CalendarEventVM {
     eventInfo.date.forEach((value, index) => {
       this.userEventInfo.date[index].date = value.date
       this.userEventInfo.date[index].time = value.time
+      this.userEventInfo.date[index].isLunar = value.isLunar
+      this.userEventInfo.date[index].lunarDate = value.lunarDate
     })
     this.userEventInfo.repeatType = eventInfo.repeatType
     this.userEventInfo.remindList = [...eventInfo.remindList]
@@ -90,6 +92,8 @@ export class CalendarEventVM {
         this.userEventInfo.date.forEach((value, index) => {
           item.date[index].date = value.date
           item.date[index].time = value.time
+          item.date[index].isLunar = value.isLunar
+          item.date[index].lunarDate = value.lunarDate
         })
         item.repeatType = this.userEventInfo.repeatType
         item.eventType = this.userEventInfo.eventType
@@ -132,6 +136,8 @@ export class CalendarEventVM {
   public deleteUserEventInfo(info: UserEventItem, cb?: () => void) {
     baseToast.show({
       type: 'dialog',
+      cancelColor:$r('sys.color.font_primary'),
+      confirmColor:'#E84026',
       message: '删除后将无法恢复，是否删除？',
       confirmAction: () => {
         RemindEventDispatcher.dispatchToEventDelete(this.userEventInfo)

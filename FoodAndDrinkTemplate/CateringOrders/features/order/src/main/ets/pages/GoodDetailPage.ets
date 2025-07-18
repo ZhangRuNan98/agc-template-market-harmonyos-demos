@@ -34,7 +34,6 @@ export struct GoodDetailPage {
   @State goodNum: string = '1';
   @State windowTopHeight: number = AppStorage.get('windowTopHeight') as number || 38.77;
   @State windowBottomHeight: number = AppStorage.get('windowBottomHeight') as number || 28;
-  @State goodDetails: string = '';
   @State swiperIndex: number = 0;
   @State showMore: boolean = false;
   @State expandMore: boolean = false;
@@ -82,8 +81,6 @@ export struct GoodDetailPage {
       }
 
     });
-    this.goodDetails =
-      `<meta name="viewport" content="width=device-width, initial-scale=1.0">${this.goodInfo?.details ?? ''}`;
   }
 
   getParams() {
@@ -192,6 +189,7 @@ export struct GoodDetailPage {
         }
         .backgroundColor($r('sys.color.background_secondary'))
         .layoutWeight(1)
+        .edgeEffect(EdgeEffect.Spring)
         .scrollBar(BarState.Off)
         .align(Alignment.Top);
 
@@ -274,13 +272,7 @@ export struct GoodDetailPage {
       Text($r('app.string.good_details'))
         .fontSize($r('sys.float.Body_L'))
         .fontColor($r('sys.color.font_primary'))
-      Web({ src: '', controller: this.controller }).onControllerAttached(() => {
-        this.controller.loadData(this.goodDetails, 'text/html', 'UTF-8');
-      }).nestedScroll({
-        scrollForward: NestedScrollMode.PARENT_FIRST,
-        scrollBackward: NestedScrollMode.SELF_FIRST,
-      })
-        .margin({ top: 16 }).layoutMode(WebLayoutMode.FIT_CONTENT);
+      Image(`${CommonUrl.CLOUD_STORAGE_URL}${this.goodInfo?.details}`).width(Constants.FULL_SIZE).margin({ top: 16 })
     }
     .width(Constants.FULL_SIZE)
     .padding({

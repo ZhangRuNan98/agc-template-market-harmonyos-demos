@@ -85,8 +85,13 @@ export default class EntryAbility extends UIAbility {
   async onCreate(want: Want, launchParam: AbilityConstant.LaunchParam) {
     // 获取卡片router事件中传递的targetPage参数
     if (want?.parameters?.params) {
+      let params: Record<string, string> = {}
       // want.parameters.params 对应 postCardAction() 中 params 内容
-      let params: Record<string, Object> = JSON.parse(want.parameters.params as string);
+      try {
+        params = JSON.parse(want.parameters.params as string);
+      } catch (e) {
+        console.log('want parameters params error')
+      }
       this.widgetMessage = params.message as string;
     }
     /*
@@ -132,8 +137,13 @@ export default class EntryAbility extends UIAbility {
   // 如果UIAbility已在后台运行，在收到Router事件后会触发onNewWant生命周期回调
   onNewWant(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     if (want?.parameters?.params) {
+      let params: Record<string, string> = {}
       // want.parameters.params 对应 postCardAction() 中 params 内容
-      let params: Record<string, Object> = JSON.parse(want.parameters.params as string);
+      try {
+        params = JSON.parse(want.parameters.params as string);
+      } catch (e) {
+        console.log('want parameters params error')
+      }
       this.widgetMessage = params.message as string;
       AppStorage.setOrCreate('widget_router', this.widgetMessage)
     }

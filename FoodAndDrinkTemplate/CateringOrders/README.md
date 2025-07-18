@@ -1,26 +1,28 @@
 # 美食（点餐）元服务模板快速入门
 
 ## 目录
+
 - [功能介绍](#功能介绍)
-- [环境要求](#环境要求)
+- [约束与限制](#约束与限制)
 - [快速入门](#快速入门)
 - [示例效果](#示例效果)
-- [权限要求](#权限要求)
 - [开源许可协议](#开源许可协议)
 
 ## 功能介绍
+
 本模板为餐饮点餐类元服务提供了常用功能的开发样例，模板主要分点餐、订单和我的三大模块：
+
 - 点餐：提供店铺、优惠券、商品详情、购物车的展示，支持提交订单。
 - 订单：支持对不同状态下订单的管理。
 - 我的：展示账号相关信息，支持钱包、优惠券和积分的查看，以及帮助中心。
   本模板已集成预加载、华为账号、地图、华为支付、通话等服务，只需做少量配置和定制即可快速实现页面的快速加载、华为账号的登录、商家位置定位导航、购买餐饮和联系商家等功能。
 
-| 点餐                                        | 订单                                     | 我的                                   |
-| ------------------------------------------- |----------------------------------------|--------------------------------------|
-| <img src="screenshots/Screenshot_order.png" alt="点餐" width="300"> | <img src="screenshots/Screenshot_list.png" alt="订单" width="300"> | <img src="screenshots/Screenshot_mine.png" alt="我的" width="300"> |
-
+| 点餐                                                                 | 订单                                                               | 我的                                                               |
+|--------------------------------------------------------------------|------------------------------------------------------------------|------------------------------------------------------------------|
+| <img src="screenshots/Screenshot_order.jpeg" alt="点餐" width="300"> | <img src="screenshots/Screenshot_list.png" alt="订单" width="300"> | <img src="screenshots/Screenshot_mine.png" alt="我的" width="300"> |
 
 本模板主要页面及核心功能清单如下所示：
+
 ```ts
 餐饮点餐模板
  |-- 点餐
@@ -59,6 +61,7 @@
 ```
 
 本模板工程代码结构如下所示：
+
 ```
 CateringOrders
   ├─commons/common/src/main
@@ -160,49 +163,55 @@ CateringOrders
      │         WidgetCard.ets                  // 卡片页面
      └─resources
 ```
+## 约束与限制
 
-## 环境要求
-### 软件
+### 环境
+
 * DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
 * HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
-### 硬件
 * 设备类型：华为手机（直板机）
 * HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
 
+### 权限要求
+
+- 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION、ohos.permission.LOCATION
+- 网络权限：ohos.permission.INTERNET
+
+### 调试
+
+本模板不支持使用模拟器调试，请使用真机进行调试
 
 ## 快速入门
-###  配置工程
+
+### 配置工程
+
 在运行此模板前，需要完成以下配置：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建元服务，将包名配置到模板中。
 
-2. 在AppGallery Connect创建元服务，将包名配置到模板中。
-
-   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APPID，并进行关联。
+   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APP ID，并将APP ID与元服务进行关联。
 
    b. 返回应用列表页面，查看元服务的包名。
 
    c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建元服务的包名。
 
-3. 配置服务器域名。
+2. 配置服务器域名。
 
    本模板接口均采用mock数据，由于元服务包体大小有限制，部分图片资源将从云端拉取，所以需为模板项目[配置服务器域名](https://developer.huawei.com/consumer/cn/doc/atomic-guides/agc-help-harmonyos-server-domain)，“httpRequest合法域名”需要配置为：`https://agc-storage-drcn.platform.dbankcloud.cn`
 
-4. 配置华为账号服务。
+3. 配置华为账号服务。
 
-   a. 将元服务的client ID配置到phone[entry]模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
+   a. 将元服务的client ID配置到products/phone[entry]/src/main模块的[module.json5](./products/phone/src/main/module.json5)文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+   b. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)。在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
 
-   c. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)。在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
+4. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
 
-5. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
-
-6. 配置支付服务。
+5. 配置支付服务。
 
    华为支付当前仅支持商户接入，在使用服务前，需要完成商户入网、开发服务等相关配置，本模板仅提供了端侧集成的示例。详细参考：[支付服务接入准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/payment-preparations)。
 
-7. 配置预加载服务。
+6. 配置预加载服务。
 
    a. [开通预加载](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-enable-prefetch)。
 
@@ -212,34 +221,44 @@ CateringOrders
 
    d. [创建云函数](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-create-and-config-function)。
 
-   * “函数名称”为“preload”
-   * “触发方式”为“事件调用”
-   * “触发器类型”为“HTTP触发器”，其他保持默认
-   * “代码输入类型”为“*.zip文件”，代码文件上传上一步打包的zip文件
+    * “函数名称”为“preload”
+    * “触发方式”为“事件调用”
+    * “触发器类型”为“HTTP触发器”，其他保持默认
+    * “代码输入类型”为“*.zip文件”，代码文件上传上一步打包的zip文件
 
-   e. [配置安装预加载](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-prefetch-config)：安装预加载函数名称配置为上一步创建的云函数
+   e. [配置安装预加载](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-prefetch-config)
+   ：安装预加载函数名称配置为上一步创建的云函数
 
-8. （可选）如果从应用自己服务器请求数据，需要配置服务器请求信息。
+7. 对元服务进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
+
+8. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)
+
+9. （可选）如果从应用自己服务器请求数据，需要配置服务器请求信息。
 
    a. 打开CateringOrders\commons\common\src\main\ets\constants\Common.ets文件，将BASE_URL修改为请求服务器的地址。
 
    b. 打开CateringOrders\common\src\main\ets\AxiosHttpRequest\AxiosRequest.ets文件，将config.params配置为请求中的固定参数列表。
 
-###  运行调试工程
+### 运行调试工程
 
 1. 连接调试手机和PC。
 
-2. 对元服务签名：由于模板中集成了华为账号、地图等服务，所以需要采用[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
+2. 配置多模块调试：由于本模板存在多个模块，运行时需确保所有模块安装至调试设备。
 
-3. 菜单选择“Run > Run 'phone' ”或者“Run > Debug 'phone' ”，运行或调试模板工程。
+   a. 运行模块选择“entry”。
 
+   b. 下拉框选择“Edit Configurations”，在“Run/Debug Configurations”界面，选择“Deploy Multi Hap”页签，勾选上模板中所有模块。
+  
+   <img src="screenshots/Screenshot_4.png" alt="配置多模块调试" width="800">
+
+   c. 点击"Run"，运行模板工程。
 
 ## 示例效果
-<img src="screenshots/Screenshot_1.png" alt="商品列表" width="300">  <img src="screenshots/Screenshot_2.png" alt="商品详情" width="300">  <img src="screenshots/Screenshot_3.png" alt="套餐详情" width="300">  <img src="screenshots/Screenshot_4.png" alt="确认订单" width="300">
 
-## 权限要求
-- 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION、ohos.permission.LOCATION
-- 网络权限：ohos.permission.INTERNET
+| 商品详情                                                            | 套餐详情                                                            | 确认订单                                                            |              
+|-----------------------------------------------------------------|-----------------------------------------------------------------|-----------------------------------------------------------------|
+| <img src="screenshots/Screenshot_1.png" alt="商品详情" width="300"> | <img src="screenshots/Screenshot_2.png" alt="套餐详情" width="300"> | <img src="screenshots/Screenshot_3.png" alt="确认订单" width="300"> | 
 
 ## 开源许可协议
+
 该代码经过[Apache 2.0 授权许可](http://www.apache.org/licenses/LICENSE-2.0)。

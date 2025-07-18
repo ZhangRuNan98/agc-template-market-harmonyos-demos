@@ -7,6 +7,10 @@
     {
       "name": "hot_service",
       "value": "热点查询"
+    },
+    {
+      "name": "agcit_huawei_medical_insurance",
+      "value": "1.0.1"
     }
   ]
 }

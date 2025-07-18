@@ -1,5 +1,5 @@
 import web_webview from '@ohos.web.webview';
-import { Constants, NavHeaderBar } from 'common/Index';
+import { AsWebRichText, Constants, NavHeaderBar } from 'common/Index';
 
 @Component
 export struct AnswerPage {
@@ -25,13 +25,9 @@ export struct AnswerPage {
     NavDestination() {
       NavHeaderBar({ title: '' })
       Scroll(this.scroller) {
-        Web({ src: '', controller: this.controller }).onControllerAttached(() => {
-          this.controller.loadData(this.answerDetail, 'text/html', 'UTF-8')
-        }).nestedScroll({
-          scrollForward: NestedScrollMode.PARENT_FIRST,
-          scrollBackward: NestedScrollMode.SELF_FIRST,
-        }).layoutMode(WebLayoutMode.FIT_CONTENT)
+        AsWebRichText({ url: Constants.RICH_TEXT_URI, richTextStr: this.answerDetail }).layoutWeight(1)
       }
+      .edgeEffect(EdgeEffect.Spring)
       .width(Constants.FULL_SIZE)
       .height(Constants.FULL_SIZE)
       .padding({ left: Constants.BORDER_WIDTH, right: Constants.BORDER_WIDTH })

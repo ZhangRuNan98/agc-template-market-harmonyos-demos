@@ -51,6 +51,10 @@
     {
       "name": "calendar_reason",
       "value": "应用可能需要向用户的日历中添加、修改或删除日程事件，以便帮助用户更好地管理时间"
+    },
+    {
+      "name": "agcit_huawei_medical_insurance",
+      "value": "1.0.1"
     }
   ]
 }

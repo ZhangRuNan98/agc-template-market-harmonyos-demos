@@ -261,6 +261,7 @@ export struct MerchantDetailPage {
         }
         .backgroundColor($r('sys.color.background_secondary'))
         .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring)
         .layoutWeight(1)
         .padding({ top: 12 })
         .align(Alignment.Top)

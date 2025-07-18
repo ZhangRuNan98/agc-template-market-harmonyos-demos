@@ -260,7 +260,12 @@ struct MerchantDetailPage {
             }.cardStyle()
 
           }.margin({ top: 12, bottom: 12 })
-        }.backgroundColor('#F1F3F5').scrollBar(BarState.Off).layoutWeight(1).align(Alignment.Top)
+        }
+        .backgroundColor('#F1F3F5')
+        .scrollBar(BarState.Off)
+        .layoutWeight(1)
+        .align(Alignment.Top)
+        .edgeEffect(EdgeEffect.Spring)
       }
       .bindSheet($$this.callTelSheet, CallTelSheetBuilder(this.storeModel.storeInfo.tel, () => {
         this.closeTelSheet()

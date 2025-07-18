@@ -14,9 +14,9 @@ export struct BaseDatePicker {
    */
   @Param isOperationShow: boolean = true
   /**
-   * 是否显示农历
+   * 是否显示操作栏
    */
-  @Local isLunarShow: boolean = false
+  @Param isLunarDate: boolean = false
   /**
    * 是否显示农历
    */
@@ -36,23 +36,19 @@ export struct BaseDatePicker {
   /**
    * 关闭回调
    */
-  @Event cancel: () => void = () => {
-  }
+  @Event cancel: () => void = () => {}
   /**
    * 确认选择回调
    */
-  @Event confirm: (datePicker: Date) => void = () => {
-  }
+  @Event confirm: (datePicker: Date) => void = () => {}
   /**
    * 切换选择回调
    */
-  @Event onDatePickerChange: (datePicker: Date) => void = () => {
-  }
+  @Event onDatePickerChange: (datePicker: Date) => void = () => {}
   /**
    * 切换选择回调
    */
-  @Event lunarChange: (value: boolean) => void = () => {
-  }
+  @Event onLunarChange: (value: boolean) => void = () => {}
 
   aboutToAppear(): void {
     this.datePickerLocal = this.datePicker ?? new Date()
@@ -82,7 +78,7 @@ export struct BaseDatePicker {
         end: new Date('2100-1-1'),
         selected: this.datePickerLocal,
       })
-        .lunar(this.isLunarShow)
+        .lunar(this.isLunarDate)
         .disappearTextStyle({ color: Color.Gray, font: { size: $r('sys.float.Body_M'), weight: FontWeight.Bold } })
         .textStyle({ color: '#ff182431', font: { size: $r('sys.float.Body_M'), weight: FontWeight.Normal } })
         .selectedTextStyle({
@@ -99,12 +95,11 @@ export struct BaseDatePicker {
           bottom: 20,
         })
       Row() {
-        Toggle({ type: ToggleType.Checkbox, isOn: this.isLunarShow })
+        Toggle({ type: ToggleType.Checkbox, isOn: this.isLunarDate })
           .size({ width: 16, height: 16 })
           .selectedColor('#C4272B')
           .onChange((isOn: boolean) => {
-            this.isLunarShow = !this.isLunarShow
-            this.lunarChange(isOn)
+            this.onLunarChange(isOn)
           })
         Text('显示农历')
       }

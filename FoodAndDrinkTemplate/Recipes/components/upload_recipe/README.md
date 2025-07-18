@@ -1,9 +1,9 @@
 # 上传菜谱组件快速入门
 
 ## 目录
-
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -11,26 +11,39 @@
 
 本组件提供了上传菜谱的相关功能，上传的图片目前保存在沙箱，如需上传至服务器需要自行实现。
 
-<img src="./screenshot/UploadRecipe1.png" width="300">
+<img src="./screenshot/UploadRecipe1.PNG" width="300">
 
-## 使用
+## 约束与限制
 
-1. 安装组件。
-   将模板根目录的components下[upload_recipe](../../components/upload_recipe)目录拷贝至您工程根目录components/，并添加如下依赖。
+### 环境
 
+- DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+- 设备类型：华为手机（直板机）
+- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+## 快速入门
+
+1. 安装组件。  
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+   如果是从生态市场下载组件，请参考以下步骤安装组件。  
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的xxx目录下。  
+   b. 在项目根目录build-profile.json5并添加upload_recipe模块。
    ```typescript
-   // 模块下的oh-package.json5
-   "dependencies": {
-     "upload_recipe": "file:../components/upload_recipe"
-   }
-   
-   // 模板根目录的build-profile.json5
+   // 在项目根目录的build-profile.json5填写upload_recipe路径。其中xxx为组件存在的目录名
    "modules": [
      {
        "name": "upload_recipe",
-       "srcPath": "./components/upload_recipe",
+       "srcPath": "./xxx/upload_recipe",
      }
    ]
+   ```
+   c. 在项目根目录oh-package.json5中添加依赖
+   ```typescript
+   // xxx为组件存放的目录名称
+   "dependencies": {
+     "upload_recipe": "file:../xxx/upload_recipe"
+   }
    ```
 
 2. 引入组件。
@@ -115,4 +128,4 @@ struct Index {
 }
 ```
 
-<img src="./screenshot/UploadRecipe1.png" width="300">
+<img src="./screenshot/UploadRecipe1.PNG" width="300">

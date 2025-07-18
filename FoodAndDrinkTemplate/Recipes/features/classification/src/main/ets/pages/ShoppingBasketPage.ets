@@ -24,7 +24,9 @@ struct ShoppingBasketPage {
           this.basketList.list = this.basketList.list.filter(i => i.id !== param.id)
         },
       })
-    }.title(buildTitleBar('菜篮子'), { paddingStart: LengthMetrics.vp(16) })
+    }
+    .title(buildTitleBar('菜篮子'), { paddingStart: LengthMetrics.vp(16) })
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 

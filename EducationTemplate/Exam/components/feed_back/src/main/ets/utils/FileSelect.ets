@@ -15,7 +15,6 @@
 
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { promptAction } from '@kit.ArkUI';
-import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /**
  * 获取当前时间
@@ -32,7 +31,6 @@ export function getDateStringWithTimeStamp(): string {
   const sec = date.getSeconds();
   const dayOfWeek = date.getDay();
   const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-  console.log(days[dayOfWeek]);
   return `${year}.${month}.${day}  ${days[dayOfWeek]}  ${hour}:${min}:${sec}`;
 }
 
@@ -69,7 +67,6 @@ export async function fileSelect(preselectedUris: Array<string>, num: number): P
       return [];
     }
   } catch (err) {
-    hilog.error(0, 'SelectedImage failed', JSON.stringify(err));
     return [];
   }
 }

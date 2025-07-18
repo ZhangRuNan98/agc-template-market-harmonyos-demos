@@ -88,7 +88,7 @@ export struct LoginInfo {
           Row() {
             if (this.isLogin) {
               Column({ space: 10 }) {
-                Text(this.userInfo.userName || $r('app.string.certification_nickname'))
+                Text(this.userInfo.userName as string || $r('app.string.certification_nickname'))
                   .attributeModifier(new BaseTextStyleModifier('font_primary/Subtitle_L/Medium'))
                 Row({ space: 5 }) {
                   Image(this.userInfo.vipInfo.isVip ? $r('app.media.vip_logo') : $r('app.media.svip'))

@@ -3,11 +3,23 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
-## 简介
+## 约束与限制
+### 软件
+
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release及以上
+
+### 硬件
+
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+## 快速入门
 
 本组件提供了查询开始日期到结束日期内的吉日以及忌日的相关功能。
 
@@ -15,47 +27,44 @@
 
 ## 使用
 
-1. 组件依赖
+1. 安装组件。
 
-   由于VipCenter组件依赖**base_apis**，所以需要将模板根目录的components下**base_apis** 目录拷贝至您的工程相应目录。
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
 
-   ```typescript
-   // vip_center har包依赖情况
-   "dependencies": {
-      "lunar": "^1.0.0",
-      "dayjs": "^1.11.13",
-      "base_apis": "file:../base_apis"
-   }
-   ```
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
 
-2. 安装组件。
-   ```typescript
-   // 在项目根目录build-profile.json5填写yiji_query和base_apis路径
-     "modules": [
-       {
-         "name": "yiji_query",
-         "srcPath": "./yiji_query",
-       },
-       {
-         "name": "base_apis",
-         "srcPath": "./base_apis",
-       }
-     ]
-   ```
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加yiji_query和base_apis模块。
 
    ```typescript
-   "dependencies": {
-      "yiji_query": "file:../yiji_query"
-   }
+    // 在项目根目录build-profile.json5填写yiji_query和base_apis路径。其中XXX为组件存放的目录名
+    "modules": [
+        {
+        "name": "yiji_query",
+        "srcPath": "./XXX/yiji_query",
+        },
+        {
+        "name": "base_apis",
+        "srcPath": "./XXX/base_apis",
+        }
+    ]
+    ```
+   c. 在项目根目录oh-package.json5中添加依赖。
+    ```typescript
+    // XXX为组件存放的目录名称
+    "dependencies": {
+      "yiji_query": "file:./XXX/yiji_query"
+    }
    ```
 
-3. 引入组件。
+2. 引入组件。
 
    ```typescript
    import { YiJiQuery } from 'yiji_query';
    ```
 
-4. 调用组件，详细参数配置说明参见[API参考](#API参考)。
+3. 调用组件，详细参数配置说明参见[API参考](#API参考)。
 
    ```typescript
    import { YiJiQuery } from 'yiji_query';

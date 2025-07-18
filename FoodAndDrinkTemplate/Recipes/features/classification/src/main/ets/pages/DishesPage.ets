@@ -143,7 +143,10 @@ struct DishesPage {
             }.padding({ left: 16, right: 16 });
 
           }
-        }.scrollBar(BarState.Off);
+        }
+        .edgeEffect(EdgeEffect.Spring)
+        .scrollBar(BarState.Off)
+        .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM]);
 
         Image($r('app.media.ic_basket')).width(40).height(40).onClick(() => {
           if (AccountUtil.getUserInfo().isLogin) {

@@ -78,7 +78,7 @@
 ```
 ReservationQueue
   |- components                                    
-  |   └- bookqueue/src/main/ets                    // 排号订座模块(har)
+  |   └- book_queue/src/main/ets                   // 排号订座模块(har)
   |        |- components                                   
   |        |     |- book                                   
   |        |     |     BookFilterListCom.ets       // 订座条件筛选组件                            
@@ -198,9 +198,9 @@ ReservationQueue
 
 本模板中还提供了如下组件，您可以按需选择使用，所有组件存放在工程根目录的components下。
 
-| 组件                | 描述                    | 使用指导                                     |
-|-------------------|-----------------------|------------------------------------------|
-| 订座排号组件（BookQueue） | 支持浏览门店、订座、排号、查看订单等功能。 | [使用指导](./components/bookqueue/README.md) |
+| 组件                | 描述                    | 使用指导                                      |
+|-------------------|-----------------------|-------------------------------------------|
+| 订座排号组件（BookQueue） | 支持浏览门店、订座、排号、查看订单等功能。 | [使用指导](./components/book_queue/README.md) |
 
 ## 环境要求
 
@@ -223,28 +223,28 @@ ReservationQueue
 1. 在AppGallery Connect创建元服务，将包名配置到模板中。
 
    a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)
-   为元服务创建APPID，并将APP ID与元服务进行关联。
+   为元服务创建APP ID，并将APP ID与元服务进行关联。
 
    b. 返回应用列表页面，查看元服务的包名。
 
    c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建元服务的包名。
 
-2. 配置华为账号服务。
+2. 配置华为账号服务。 将元服务的client
+   ID配置到products/phone/src/main路径下的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
 
-   a. 将元服务的client
-   ID配置到模板工程根目录下products[phone]
-   模块src/main目录下的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
+3. 对元服务进行
+   [手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
 
-   b.
-   添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+4. 添加手工签名所用证书对应的公钥指纹。 详细参考：
+   [配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)
 
 ### 运行调试工程
 
-1. 连接调试手机和PC。
+1. 用USB线连接调试手机和PC。
 
-2. 对元服务[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
+2. 运行模块选择“phone”。点击"Run"，运行模板工程。
 
-3. 运行模块选择“phone”。点击"Run"，运行模板工程。
+<img src="./screenshots/run.png" alt="运行" width="1000">
 
 ## 示例效果
 

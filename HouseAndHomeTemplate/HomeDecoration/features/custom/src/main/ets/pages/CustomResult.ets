@@ -82,7 +82,8 @@ export struct CustomResult {
       .height('100%')
       .align(Alignment.Top)
       .width('100%')
-      .padding({ left: 16, right: 16 });
+      .padding({ left: 16, right: 16 })
+      .edgeEffect(EdgeEffect.Spring)
 
     }
     .title(BuildTitleBar('定制结果'), { paddingStart: LengthMetrics.vp(16) })

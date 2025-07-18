@@ -14,11 +14,10 @@
  */
 
 import { loginComponentManager, LoginWithHuaweiIDButton } from '@kit.AccountKit';
+import { AppStorageV2 } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { hilog } from '@kit.PerformanceAnalysisKit';
 import { AccountUtil } from '../utils/AccountUtil';
 import { UserInfo } from '../model/UserInfo';
-import { AppStorageV2, promptAction } from '@kit.ArkUI';
 import { ErrorCode } from '../model/ErrorCode';
 import { AgreementDialog } from './AgreementDialog';
 
@@ -91,20 +90,19 @@ export struct QuickLogin {
   // 构造LoginWithHuaweiIDButton组件的控制器
   controller: loginComponentManager.LoginWithHuaweiIDButtonController =
     new loginComponentManager.LoginWithHuaweiIDButtonController()
-    /**
-     * 当应用使用自定义的登录页时，如果用户未同意协议，需要设置协议状态为NOT_ACCEPTED，当用户同意协议后再设置
-     * 协议状态为ACCEPTED，才可以使用华为账号一键登录功能
-     */
+      /**
+       * 当应用使用自定义的登录页时，如果用户未同意协议，需要设置协议状态为NOT_ACCEPTED，当用户同意协议后再设置
+       * 协议状态为ACCEPTED，才可以使用华为账号一键登录功能
+       */
       .setAgreementStatus(loginComponentManager.AgreementStatus.NOT_ACCEPTED)
       .onClickLoginWithHuaweiIDButton((error: BusinessError, response: loginComponentManager.HuaweiIDCredential) => {
         this.handleLoginWithHuaweiIDButton(error, response);
       })
-      .onClickEvent((error: BusinessError, clickEvent: loginComponentManager.ClickEvent) => {
+      .onClickEvent((error: BusinessError) => {
         if (error) {
           this.dealAllError(error);
           return;
         }
-        hilog.info(0x0000, 'testTag', `onClickEvent clickEvent: ${clickEvent}`);
       });
   agreementDialog: CustomDialogController = new CustomDialogController({
     builder: AgreementDialog({
@@ -130,14 +128,7 @@ export struct QuickLogin {
         }
         this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.ACCEPTED);
         // 调用此方法，同意协议与登录一并完成，无需再次点击登录按钮
-        this.controller.continueLogin((error: BusinessError) => {
-          if (error) {
-            hilog.error(this.domainId, this.logTag,
-              `Failed to login with agreementDialog. errCode is ${error.code}, errMessage is ${error.message}`);
-          } else {
-            hilog.info(this.domainId, this.logTag,
-              'Succeeded in clicking agreementDialog continueLogin.');
-          }
+        this.controller.continueLogin(() => {
         });
       },
       clickHyperlinkText: (tag) => {
@@ -156,21 +147,18 @@ export struct QuickLogin {
   });
 
   // 错误处理
-  dealAllError(error: BusinessError): void {
-    hilog.error(0x0000, 'testTag', `Failed to login, errorCode=${error.code}, errorMsg=${error.message}`);
+  dealAllError(_error: BusinessError): void {
   }
 
   // Toast提示
   showToast(resource: string) {
     try {
-      promptAction.showToast({
+      this.getUIContext().getPromptAction().showToast({
         message: resource,
         duration: 2000
       });
     } catch (error) {
-      const message = (error as BusinessError).message
-      const code = (error as BusinessError).code
-      hilog.error(this.domainId, this.logTag, `showToast args  errCode is ${code}, errMessage is ${message}`);
+      //在此处进行异常处理
     }
   }
 
@@ -194,8 +182,6 @@ export struct QuickLogin {
       return
     }
     if (error) {
-      hilog.error(this.domainId, this.logTag,
-        `Failed to login with LoginWithHuaweiIDButton. errCode is ${error.code}, errMessage is ${error.message}`);
       if (error.code === ErrorCode.ERROR_CODE_NETWORK_ERROR) {
         this.showToast('网络异常，请检查网络设置。');
       } else if (error.code === ErrorCode.ERROR_CODE_AGREEMENT_STATUS_NOT_ACCEPTED) {
@@ -219,15 +205,12 @@ export struct QuickLogin {
     try {
       if (this.isSelected) {
         if (response) {
-          hilog.info(this.domainId, this.logTag, 'Succeeded in clicking LoginWithHuaweiIDButton.');
           this.onLoginWithHuaweiID()
         }
       } else {
         this.agreementDialog.open();
       }
     } catch (err) {
-      hilog.error(this.domainId, this.logTag,
-        `Failed to login with LoginWithHuaweiIDButton, errCode: ${err.code}, errMessage: ${err.message}`);
       AlertDialog.show(
         {
           message: '服务或网络异常，请稍后重试',
@@ -265,10 +248,8 @@ export struct QuickLogin {
             .draggable(false)
             .copyOption(CopyOptions.None)
             .onComplete(() => {
-              hilog.info(0x0000, 'testTag', 'appIcon loading success');
             })
             .onError(() => {
-              hilog.error(0x0000, 'testTag', 'appIcon loading fail');
             })
           Column() {
             Text(this.quickLoginAnonymousPhone)
@@ -345,7 +326,6 @@ export struct QuickLogin {
                   this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.NOT_ACCEPTED);
                   this.isSelected = false;
                 }
-                hilog.info(0x0000, 'testTag', `agreementChecked: ${value}`);
               })
           }
 
@@ -366,7 +346,6 @@ export struct QuickLogin {
                     .focusOnTouch(true)
                     .onClick(() => {
                       // 应用需要根据item.tag实现协议页面的跳转逻辑
-                      hilog.info(0x0000, 'testTag', `click privacy text tag: ${item.tag}`);
                       if (item.tag === QuickLogin.USER_SERVICE_TAG) {
                         this.onServicePolicy()
                       }
@@ -416,10 +395,8 @@ export struct QuickLogin {
             .draggable(false)
             .copyOption(CopyOptions.None)
             .onComplete(() => {
-              hilog.info(0x0000, 'testTag', 'appIcon loading success');
             })
             .onError(() => {
-              hilog.error(0x0000, 'testTag', 'appIcon loading fail');
             })
           Column() {
             Text(this.quickLoginAnonymousPhone)
@@ -444,11 +421,9 @@ export struct QuickLogin {
                 top: 8
               })
           }.margin({ top: 48 });
-
         }.width('100%')
 
-        Column()
-          .layoutWeight(1)
+        Column().layoutWeight(1)
         Column() {
           LoginWithHuaweiIDButton({
             params: {
@@ -492,7 +467,6 @@ export struct QuickLogin {
                     this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.NOT_ACCEPTED);
                     this.isSelected = false;
                   }
-                  hilog.info(0x0000, 'testTag', `agreementChecked: ${value}`);
                 })
             }
 
@@ -513,7 +487,6 @@ export struct QuickLogin {
                       .focusOnTouch(true)
                       .onClick(() => {
                         // 应用需要根据item.tag实现协议页面的跳转逻辑
-                        hilog.info(0x0000, 'testTag', `click privacy text tag: ${item.tag}`);
                         if (item.tag === QuickLogin.USER_SERVICE_TAG) {
                           this.onServicePolicy()
                         }

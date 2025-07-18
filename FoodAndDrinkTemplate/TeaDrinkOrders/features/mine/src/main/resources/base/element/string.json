@@ -143,6 +143,10 @@
     {
       "name": "privacy",
       "value": "隐私政策"
+    },
+    {
+      "name": "agcit_huawei_tea_drink_orders",
+      "value": "1.0.1"
     }
   ]
 }

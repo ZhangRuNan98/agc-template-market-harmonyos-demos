@@ -87,6 +87,10 @@
     {
       "name": "delivery_distance",
       "value": "距你 %s分钟"
+    },
+    {
+      "name": "agcit_huawei_tea_drink_orders",
+      "value": "1.0.1"
     }
   ]
 }

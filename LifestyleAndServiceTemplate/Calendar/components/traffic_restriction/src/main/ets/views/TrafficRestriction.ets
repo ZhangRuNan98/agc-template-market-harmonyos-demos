@@ -5,6 +5,7 @@ import { getCityLimits } from '../utils/Utils'
 import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit'
 import { promptAction } from '@kit.ArkUI'
 import { geoLocationManager } from '@kit.LocationKit'
+import { BusinessError } from '@kit.BasicServicesKit'
 
 
 @ComponentV2
@@ -19,7 +20,7 @@ export struct TrafficRestriction {
   private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
   permissionRequestUtils: PermissionRequestUtils = new PermissionRequestUtils()
 
-  @Monitor('location')
+  @Monitor('location selectDate')
   getLimits() {
     this.limitsList = getCityLimits(this.location, this.selectDate)
   }
@@ -37,6 +38,8 @@ export struct TrafficRestriction {
         this.locationPermission = res
         this.permissionRequestUtils.getCurrentLocation().then((res: string) => {
           this.location = res
+        }).catch((err:BusinessError) => {
+          this.location = '北京'
         })
       } else {
         this.dealError()
@@ -235,7 +238,7 @@ export struct TrafficRestriction {
       .justifyContent(FlexAlign.Center)
     }
     .bindSheet(this.isShowSheet, this.SheetBuilder(), {
-      height: 300,
+      detents:[300,301],
       showClose: false,
       preferType: SheetType.BOTTOM,
     })

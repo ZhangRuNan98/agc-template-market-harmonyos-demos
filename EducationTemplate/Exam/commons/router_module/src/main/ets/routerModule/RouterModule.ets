@@ -13,20 +13,24 @@
  * limitations under the License.
  */
 
-import NavRouterInfo from './models/NavRouterInfo';
-import { RouterMap } from './models/RouterMap';
+import { RouterMap } from './constants/RouterMap';
 
-const TAG: string = '[RouterModule]';
+export default interface NavRouterInfo {
+  url: string; // 跳转路由名
+  mode?: NavDestinationMode; // NavDestination类型
+  param?: Object; // 传递参数
+  onPop?: Callback<PopInfo>; // 回调事件
+}
 
 class RouterModule {
   public static stack: NavPathStack = new NavPathStack();
+  static builderMap: Map<string, WrappedBuilder<[object]>> = new Map<string, WrappedBuilder<[object]>>();
 
   // 页面跳转(指定页面)
   public static push(info: NavRouterInfo, animated?: boolean) {
     try {
       RouterModule.stack.pushPathByName(info.url, info.param, info.onPop, animated);
     } catch (err) {
-      console.error(TAG, 'navigation stack push failed::' + JSON.stringify(err));
     }
   }
 
@@ -35,7 +39,6 @@ class RouterModule {
     try {
       RouterModule.stack.replacePathByName(info.url, info.param);
     } catch (err) {
-      console.error(TAG, 'navigation stack replace failed::' + JSON.stringify(err));
     }
   }
 
@@ -44,7 +47,6 @@ class RouterModule {
     try {
       RouterModule.stack.pop(result, animated);
     } catch (err) {
-      console.error(TAG, 'navigation stack pop failed::' + JSON.stringify(err));
     }
   }
 
@@ -53,7 +55,6 @@ class RouterModule {
     try {
       RouterModule.stack.pop(res, animated);
     } catch (err) {
-      console.error(TAG, 'navigation stack pop failed::' + JSON.stringify(err));
     }
   }
 
@@ -62,7 +63,6 @@ class RouterModule {
     try {
       RouterModule.stack.popToName(name, animated);
     } catch (err) {
-      console.error(TAG, 'navigation stack pop to name failed::' + JSON.stringify(err));
     }
   }
 
@@ -71,7 +71,6 @@ class RouterModule {
     try {
       RouterModule.stack.clear(animated);
     } catch (err) {
-      console.error(TAG, 'navigation stack clear failed::' + JSON.stringify(err));
     }
   }
 
@@ -86,7 +85,6 @@ class RouterModule {
       const paramsArr = RouterModule.stack.getParamByName(info.url) as T[] | undefined[];
       return paramsArr.pop();
     } catch (err) {
-      console.error(TAG, 'navigation stack get params failed::' + JSON.stringify(err));
     }
     return undefined;
   }

@@ -10,7 +10,7 @@ export class HttpCode {
 }
 
 export class RequestUrl {
-  // base url
+  // todo 网络请求base url，真实网络请求可以替换请求地址
   static readonly BASE_URL = 'https://xxxxxxxxx/catering/v1/app';
   // 1、通过APPID调用接口获取店铺storeId，再通过接口获取店铺信息
   static readonly GET_HM_SYSTEM_URL = 'getHmSystem'
@@ -88,9 +88,11 @@ export class Constants {
   // 页面边距
   static readonly BORDER_WIDTH = 16
   static readonly GOOD_TYPE_HOT = '1'
+  static readonly RICH_TEXT_URI = 'resource://rawfile/richtext.html'
 }
 
 export class CommonUrl {
+  // todo mock图片url前缀，真实图片地址可以按业务需求指定
   static readonly CLOUD_STORAGE_URL = 'https://agc-storage-drcn.platform.dbankcloud.cn/v0/'
 }
 

@@ -6,15 +6,11 @@
     },
     {
       "name": "agcit_huawei_recipes_calorie_calculation",
-      "value": "1.0.0"
+      "value": "1.0.1"
     },
     {
       "name": "agcittype_huawei_recipes_calorie_calculation",
       "value": "serviceComponent"
-    },
-    {
-      "name": "agcitkid_huawei_recipes_calorie_calculation",
-      "value": "agcit_huawei_recipes_base_ui/1.0.0"
     }
   ]
 }

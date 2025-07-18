@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 
-import { ExamPreferences, Logger, PracticeModel, TopBar } from 'commonlib';
-import { RouterMap, RouterModule } from 'router_module';
 import { util } from '@kit.ArkTS';
 import dayjs from 'dayjs';
-import { AnswerItem, TopicItemModel } from 'answer_questions/src/main/ets/viewModel/TopicItemModel';
+import { PreferenceUtil, Logger, PracticeModel, TopBar } from 'commonlib';
+import { RouterMap, RouterModule } from 'router_module';
+import { AnswerItem, TopicItemModel } from 'answer_questions';
 
 export class TestReportModel {
   // 题库
@@ -50,7 +50,7 @@ export struct TestReportPage {
 
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
-    let temp: TestReportModel | undefined = RouterModule.getNavParam({ url: RouterMap.TestReportPage })
+    let temp: TestReportModel | undefined = RouterModule.getNavParam({ url: RouterMap.ANSWER_REPORT_PAGE })
     if (temp) {
       this.quesType = temp.quesType
       // 报告
@@ -72,7 +72,7 @@ export struct TestReportPage {
         }
         this.accuracy = (this.rightCont / this.ques.length * 100).toFixed(1)
         // 将练习记录存入持久层
-        if (ExamPreferences.practiceRecordsPreferences) {
+        if (PreferenceUtil.getInstance()) {
           let practiceModel: PracticeModel = new PracticeModel();
           practiceModel.keyID = util.generateRandomUUID(true);
           practiceModel.date = dayjs().format('YYYY-MM-DD');
@@ -80,8 +80,7 @@ export struct TestReportPage {
           practiceModel.practiceDuration = temp.practiceDuration;
           practiceModel.rightCount = this.rightCont;
           practiceModel.topicCount = this.ques.length;
-          ExamPreferences.practiceRecordsPreferences.put(practiceModel.keyID, practiceModel);
-          ExamPreferences.practiceRecordsPreferences.flush();
+          PreferenceUtil.getInstance().put(practiceModel.keyID, practiceModel);
         }
       } else {
         // 结果
@@ -97,9 +96,7 @@ export struct TestReportPage {
       //顶部图片
       this.topImageBuilder()
       // 练习数据
-      if (this.quesType === 1) {
-        this.testDataBuilder()
-      }
+      this.testDataBuilder()
       // 分隔线
       Divider().color($r('app.color.topic_page_background_gray')).strokeWidth(9)
       // 题目列表
@@ -131,7 +128,7 @@ export struct TestReportPage {
                     ListItem() {
                       Row() {
                         Image(answerItem.showState === 1 ? $r('app.media.icon_wrong') :
-                          (answerItem.showState === 2 ? $r('app.media.icon_true') : $r('app.media.icon_anscommon')))
+                          (answerItem.showState === 2 ? $r('app.media.icon_true') : $r('app.media.icon_ans_common')))
                           .height($r('app.float.vp_20'))
                           .width($r('app.float.vp_20'))
                         Text(answerItem.ansTitle)
@@ -203,7 +200,7 @@ export struct TestReportPage {
                   ListItem() {
                     Row() {
                       Image(topicItemModel.rightQues.includes(answerItem.ans) ? $r('app.media.icon_true') :
-                      $r('app.media.icon_anscommon'))
+                      $r('app.media.icon_ans_common'))
                         .height($r('app.float.vp_20'))
                         .width($r('app.float.vp_20'))
                       Text(answerItem.ansTitle)
@@ -275,7 +272,7 @@ export struct TestReportPage {
                   ListItem() {
                     Row() {
                       Image(answerItem.showState === 1 ? $r('app.media.icon_wrong') :
-                        (answerItem.showState === 2 ? $r('app.media.icon_true') : $r('app.media.icon_anscommon')))
+                        (answerItem.showState === 2 ? $r('app.media.icon_true') : $r('app.media.icon_ans_common')))
                         .height($r('app.float.vp_20'))
                         .width($r('app.float.vp_20'))
                       Text(answerItem.ansTitle)
@@ -372,6 +369,7 @@ export struct TestReportPage {
     .width('100%')
     .height($r('app.float.vp_64'))
     .justifyContent(FlexAlign.Center)
+    .visibility(this.quesType === 1 ? Visibility.Visible : Visibility.None)
   }
 
   /**
@@ -414,6 +412,6 @@ export struct TestReportPage {
 }
 
 @Builder
-export function TestReportPageBuilder() {
+export function TestReportBuilder() {
   TestReportPage()
 }

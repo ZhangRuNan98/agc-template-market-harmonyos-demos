@@ -1,5 +1,4 @@
-import { webview } from '@kit.ArkWeb';
-import { BusinessError } from '@kit.BasicServicesKit';
+import { AtomicServiceWeb, AtomicServiceWebController } from '@kit.ArkUI';
 import { imagePreview } from '../imagePreview/imagePreview';
 
 class NativeShare {
@@ -23,27 +22,21 @@ class NativeShare {
   }
 }
 
-@ComponentV2
+@Component
 export struct WebCommon {
-  controller: webview.WebviewController = new webview.WebviewController();
-  @Param loadUrl: string = ''
-  @Local nativeShareObj: NativeShare = new NativeShare();
-  @Require @Param title: string
+  @State controller: AtomicServiceWebController = new AtomicServiceWebController();
+  @Prop loadUrl: string = ''
+  @State nativeShareObj: NativeShare = new NativeShare();
+  @Require @Prop title: string
 
   build() {
     NavDestination() {
       Column() {
-        Web({ src: '', controller: this.controller })
-          .onControllerAttached(() => {
+        AtomicServiceWeb({ src: '', controller: this.controller,
+          onControllerAttached:() => {
             this.controller.loadUrl($rawfile(this.loadUrl));
-            try {
-              this.controller.registerJavaScriptProxy(this.nativeShareObj, 'nativeShare', ['share', 'preview'],
-              );
-            } catch (error) {
-              console.error(`ErrorCode: ${(error as BusinessError).code},  Message: ${(error as BusinessError).message}`);
-            }
-          })
-          .geolocationAccess(false)
+          },
+        })
       }
     }.padding({ top: Number(AppStorage.get('topRectHeight')) }).title(this.title)
   }

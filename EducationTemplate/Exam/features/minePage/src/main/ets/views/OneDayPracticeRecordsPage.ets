@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
+import { HashSet } from '@kit.ArkTS';
 import { Logger, PracticeModel, PracticeRecordModel } from 'commonlib';
 import { RouterMap, RouterModule } from 'router_module';
-import { HashSet } from '@kit.ArkTS';
 
 const TAG = 'OneDayPracticeRecordsPage';
 
@@ -29,7 +29,7 @@ export struct OneDayPracticeRecordsPage {
 
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
-    this.practiceRecord = RouterModule.getNavParam({ url: RouterMap.OneDayPracticeRecordsPage })!;
+    this.practiceRecord = RouterModule.getNavParam({ url: RouterMap.DAY_PRACTICE_DETAILS_PAGE })!;
     // 初始化数据
     this.initData();
   }
@@ -236,6 +236,6 @@ export struct OneDayPracticeRecordsPage {
 }
 
 @Builder
-export function OneDayPracticeRecordsPageBuilder() {
+export function OneDayPracticeRecordsBuilder() {
   OneDayPracticeRecordsPage()
 }

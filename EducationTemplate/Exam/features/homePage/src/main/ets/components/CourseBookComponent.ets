@@ -36,56 +36,73 @@ export struct CourseBookComponent {
 
   build() {
     Column() {
-      Row() {
-        Image(this.BookImage)
-          .height('40vp')
-          .width('40vp')
-          .margin({ right: '16vp' })
-        Column() {
-          Text(this.courseBook.bookName)
-            .margin({ bottom: '2vp' })
-            .width('100%')
-            .textAlign(TextAlign.Start)
-            .fontWeight(FontWeight.Medium)
-            .fontSize($r('sys.float.Body_M'))
-          if (this.pageType !== 'MaterialDownload') {
-            Text(this.courseBook.bookTag)
-              .width('100%')
-              .textAlign(TextAlign.Start)
-              .fontWeight(FontWeight.Regular)
-              .fontSize($r('sys.float.Body_S'))
-          }
-        }.justifyContent(FlexAlign.Start)
-      }
-      .padding({ bottom: 4 })
-      .width('100%')
-
-      Row() {
-        Row() {
-          Text(`已有 ${this.courseBook.visitors}人 浏览`)
-            .fontSize($r('sys.float.Body_S'))
-            .fontWeight(FontWeight.Lighter)
-            .fontColor($r('sys.color.font_primary'))
-            .textAlign(TextAlign.Start)
-            .width('auto')
-          Text(`下载 ${this.courseBook.downloadTimes}次`)
-            .fontSize($r('sys.float.Body_S'))
-            .fontWeight(FontWeight.Lighter)
-            .fontColor($r('sys.color.font_primary'))
-            .textAlign(TextAlign.Start)
-            .margin({ left: '8vp' })
-        }
-        .justifyContent(FlexAlign.Start)
-        .width('50%')
-      }
-      .padding({ left: 4 })
-      .height('auto')
-      .width('100%')
+      // 资料简介
+      this.courseBookDescBuilder()
+      // 浏览下载人次
+      this.visitorAndDownloadBuilder()
     }
     .borderRadius(16)
     .padding({ top: 8 })
     .backgroundColor($r('sys.color.background_primary'))
     .height(68)
     .width(281)
+  }
+
+  /**
+   * 浏览下载人次
+   */
+  @Builder
+  visitorAndDownloadBuilder() {
+    Row() {
+      Row() {
+        Text(`已有 ${this.courseBook.visitors}人 浏览`)
+          .fontSize($r('sys.float.Body_S'))
+          .fontWeight(FontWeight.Lighter)
+          .fontColor($r('sys.color.font_primary'))
+          .textAlign(TextAlign.Start)
+          .width('auto')
+        Text(`下载 ${this.courseBook.downloadTimes}次`)
+          .fontSize($r('sys.float.Body_S'))
+          .fontWeight(FontWeight.Lighter)
+          .fontColor($r('sys.color.font_primary'))
+          .textAlign(TextAlign.Start)
+          .margin({ left: '8vp' })
+      }
+      .justifyContent(FlexAlign.Start)
+      .width('50%')
+    }
+    .padding({ left: 4 })
+    .height('auto')
+    .width('100%')
+  }
+
+  /**
+   * 资料简介
+   */
+  @Builder
+  courseBookDescBuilder() {
+    Row() {
+      Image(this.BookImage)
+        .height('40vp')
+        .width('40vp')
+        .margin({ right: '16vp' })
+      Column() {
+        Text(this.courseBook.bookName)
+          .margin({ bottom: '2vp' })
+          .width('100%')
+          .textAlign(TextAlign.Start)
+          .fontWeight(FontWeight.Medium)
+          .fontSize($r('sys.float.Body_M'))
+        if (this.pageType !== 'MaterialDownload') {
+          Text(this.courseBook.bookTag)
+            .width('100%')
+            .textAlign(TextAlign.Start)
+            .fontWeight(FontWeight.Regular)
+            .fontSize($r('sys.float.Body_S'))
+        }
+      }.justifyContent(FlexAlign.Start)
+    }
+    .padding({ bottom: 4 })
+    .width('100%')
   }
 }

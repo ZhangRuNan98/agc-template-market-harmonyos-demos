@@ -229,7 +229,8 @@ struct Index {
           // HUAWEI ID is not logged in, it is recommended to jump to the login guide page
           promptAction.showToast({ message: $r('app.string.login_account') })
         }
-        reject(error);
+        // todo 模板适配无法登录华为账号场景下可以正常访问，正常开发需要根据实际场景选择  reject(error);
+        resolve({ openId: '1', unionId: '1', authCode: '1' } as HuaweiIDResp);
       });
     });
 

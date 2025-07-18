@@ -36,7 +36,7 @@ export struct CalendarReminder {
               title: {
                 title: '提醒',
               },
-              height: 340,
+              detents:[340,341],
               customContent: () => {
                 this.reminderBuilder()
               },

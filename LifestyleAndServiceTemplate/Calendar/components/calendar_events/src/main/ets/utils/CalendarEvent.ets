@@ -38,6 +38,7 @@ export class CalendarManage {
       title: calendarInfo.content,
       type: calendarManager.EventType.NORMAL,
       id: calendarInfo.eventId,
+      isLunar:calendarInfo.date[0].isLunar,
       startTime: new Date(dayjs(calendarInfo.date[0].date).format('YYYY-MM-DD') + ' ' +
       calendarInfo.date[0].time).getTime(),
       endTime: new Date(dayjs(calendarInfo.date[1].date).format('YYYY-MM-DD') + ' ' +

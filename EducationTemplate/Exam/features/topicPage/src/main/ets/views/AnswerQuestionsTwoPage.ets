@@ -13,12 +13,11 @@
  * limitations under the License.
  */
 
-import { Logger, QUESTION_DATA } from 'commonlib';
+import { AlertDialog } from '@kit.ArkUI';
 import { TestReportModel } from './TestReportPage';
 import { RouterMap, RouterModule } from 'router_module'
-import { AnswerSheetDialog } from 'answer_questions/src/main/ets/dialog/AnswerSheetDialog';
-import { AnswerItem, TopicItemModel } from 'answer_questions/src/main/ets/viewModel/TopicItemModel';
-import { AlertDialog } from '@kit.ArkUI';
+import { AnswerItem, AnswerSheetDialog, QUESTION_DATA, TopicItemModel } from 'answer_questions';
+import { Logger } from 'commonlib';
 
 @ComponentV2
 export struct AnswerQuestionsTwoPage {
@@ -30,7 +29,7 @@ export struct AnswerQuestionsTwoPage {
   timerCount: number = 30 * 60 * 1000;
   practiceDuration: number = 0;
   @Local currentIndex: number = 0
-  @Local currentModel: TopicItemModel | undefined = undefined
+  @Local currentModel?: TopicItemModel
   @Local format: string = 'HH:mm:ss';
   // 退出页面弹框
   backPageDialogController: CustomDialogController = new CustomDialogController({
@@ -69,7 +68,7 @@ export struct AnswerQuestionsTwoPage {
           testReport.ques = this.ques;
           testReport.quesType = 2;
           testReport.practiceDuration = this.practiceDuration;
-          RouterModule.replace({ url: RouterMap.ExamResultPage_Page, param: testReport });
+          RouterModule.replace({ url: RouterMap.EXAM_RESULT_PAGE, param: testReport });
         }
       },
     }),
@@ -104,189 +103,245 @@ export struct AnswerQuestionsTwoPage {
 
   build() {
     Column() {
-      Scroll() {
-        Column() {
-          // 顶部
-          this.topBuilder();
-          Divider().color($r('sys.color.comp_divider'))
-          Row() {
-            Image($r('app.media.ic_public_alarm_clock'))
-              .width($r('app.float.vp_24'))
-              .height($r('app.float.vp_24'))
-            Text($r('app.string.time_remaining'))
-              .fontSize($r('sys.float.Body_S'))
-              .fontColor($r('sys.color.multi_color_09'))
-              .margin({ left: $r('app.float.vp_12') })
-            TextTimer({ isCountDown: true, count: this.timerCount, controller: this.textTimerController })
-              .format(this.format)
-              .fontColor($r('sys.color.multi_color_09'))
-              .fontSize($r('sys.float.Body_L'))
-              .fontWeight(FontWeight.Medium)
-              .margin({ left: $r('app.float.vp_4') })
-              .onTimer((utc: number, elapsedTime: number) => {
-                console.info('textTimer notCountDown utc is：' + utc + ', elapsedTime: ' + elapsedTime);
-                this.practiceDuration = elapsedTime;
-              })
-              .onAppear(() => {
-                this.textTimerController.start();
-              })
-          }
-          .height($r('app.float.vp_48'))
-
-          Divider().color($r('sys.color.comp_divider'))
-          Column() {
-            Row() {
-              Text($r('app.string.single_choice'))
-                .width($r('app.float.vp_72'))
-                .height($r('app.float.vp_28'))
-                .fontSize($r('sys.float.Body_M'))
-                .fontWeight(FontWeight.Regular)
-                .fontColor($r('sys.color.font_on_primary'))
-                .textAlign(TextAlign.Center)
-                .backgroundColor('#4B5CC4')
-                .borderRadius($r('app.float.vp_8'))
-            }
-            .width('100%')
-            .margin($r('app.float.vp_12'))
-
-            Text(`${this.currentIndex + 1}` + '、' + this.currentModel!.title)
-              .width('100%')
-              .fontSize($r('sys.float.Body_M'))
-              .fontWeight(FontWeight.Regular)
-              .fontColor($r('sys.color.font_primary'))
-              .margin({ bottom: $r('app.float.vp_15') })
-            Column() {
-              ForEach(this.currentModel!.ques, (item: AnswerItem) => {
-                Row() {
-                  Image(item.isSelect ? $r('app.media.icon_Checked') : $r('app.media.icon_anscommon'))
-                    .height($r('app.float.vp_20'))
-                    .width($r('app.float.vp_20'))
-
-                  Text(`${item.ans}` + '：' + `${item.ansTitle}`)
-                    .fontSize($r('sys.float.Body_M'))
-                    .fontWeight(FontWeight.Regular)
-                    .fontColor($r('sys.color.font_primary'))
-                    .margin({ left: $r('app.float.vp_14') })
-                }
-                .justifyContent(FlexAlign.Start)
-                .alignItems(VerticalAlign.Top)
-                .margin({ top: $r('app.float.vp_16') })
-                .padding({ right: $r('app.float.vp_12') })
-                .onClick(() => {
-                  this.answerEvent(item)
-                })
-              }, (item: AnswerItem, index: number) => item.ansID + index)
-            }
-            .alignItems(HorizontalAlign.Start)
-            .width('100%')
-          }
-          .width('92%')
-
-          Blank()
-        }
-        // 左右滑动触发该手势事件
-        .gesture(
-          PanGesture(this.panOption)
-            .onActionUpdate((event: GestureEvent) => {
-              if (event) {
-                this.offsetX = this.positionX + event.offsetX
-              }
-            })
-            .onActionStart((event: GestureEvent) => {
-              console.info('Pan start', JSON.stringify(event))
-            })
-            .onActionEnd(() => {
-              if (this.offsetX > this.positionX) {
-                Logger.info('右滑')
-                this.currentIndex -= 1
-                this.currentIndex = Math.max(this.currentIndex, 0)
-              } else {
-                Logger.info('左滑')
-                this.currentIndex += 1
-                this.currentIndex = Math.min(this.currentIndex, this.ques.length - 1)
-              }
-              this.currentModel = this.ques[this.currentIndex]
-              this.positionX = this.offsetX
-            })
-        )
-        .width('100%')
-        .height('100%')
-      }
-      .scrollBar(BarState.Off)
-      .edgeEffect(EdgeEffect.Spring)
-      .layoutWeight(1)
-
-      Row() {
-        Column() {
-          Image($r('app.media.icon_answer_sheet'))
-            .width($r('app.float.vp_26'))
-            .height($r('app.float.vp_26'))
-          Text($r('app.string.answer_sheet'))
-            .fontSize($r('sys.float.Caption_M'))
-            .fontWeight(FontWeight.Medium)
-            .fontColor($r('sys.color.icon_primary'))
-            .margin({ top: $r('app.float.vp_2') })
-        }
-        .margin({ left: $r('app.float.vp_35'), right: $r('app.float.vp_35') })
-        .onClick(() => {
-          this.dialogController?.open();
-        })
-
-        Row({ space: 12 }) {
-          Button($r('app.string.pre_question'), { type: ButtonType.Normal, stateEffect: true })
-            .backgroundColor(this.currentIndex === 0 ? $r('sys.color.comp_background_tertiary') :
-            $r('app.color.view_report_btn'))
-            .stateEffect(this.currentIndex === 0 ? false : true)
-            .fontColor($r('sys.color.font_on_primary'))
-            .fontSize($r('sys.float.Body_L'))
-            .fontWeight(FontWeight.Medium)
-            .height($r('app.float.vp_40'))
-            .width($r('app.float.vp_120'))
-            .borderRadius($r('app.float.vp_20'))
-            .onClick(() => {
-              if (this.currentIndex === 0) {
-              } else {
-                this.currentIndex -= 1
-                this.currentIndex = Math.max(this.currentIndex, 0)
-                this.currentModel = this.ques[this.currentIndex]
-              }
-            })
-          Button(this.currentIndex === this.ques.length - 1 ? $r('app.string.submit_exam') :
-          $r('app.string.next_question'),
-            { type: ButtonType.Normal, stateEffect: true })
-            .backgroundColor($r('app.color.view_report_btn'))
-            .fontSize($r('sys.float.Body_L'))
-            .fontWeight(FontWeight.Medium)
-            .fontColor($r('sys.color.font_on_primary'))
-            .borderRadius($r('app.float.vp_20'))
-            .width($r('app.float.vp_120'))
-            .height($r('app.float.vp_40'))
-            .onClick(() => {
-              if (this.currentIndex >= this.ques.length - 1) {
-                // 打开交卷弹框
-                this.submitExamDialogController.open()
-              } else {
-                this.currentIndex += 1
-                this.currentIndex = Math.min(this.currentIndex, this.ques.length - 1)
-                this.currentModel = this.ques[this.currentIndex]
-              }
-            })
-        }
-        .justifyContent(FlexAlign.SpaceBetween)
-        .margin({ right: $r('app.float.vp_16') })
-        .layoutWeight(1)
-      }
-      .width('100%')
-      .height($r('app.float.vp_48'))
-      .shadow({
-        radius: 10,
-        color: 'rgba(0, 0, 0, 0.1)',
-        offsetY: -10
-      })
+      // 顶部
+      this.topBuilder();
+      // 倒计时
+      this.countdownBuilder();
+      // 作答面板
+      this.answerPanelBuilder()
+      // 底部操作
+      this.bottomOperationBuilder();
     }
     .width('100%')
     .height('100%')
     .justifyContent(FlexAlign.SpaceBetween)
+  }
+
+  /**
+   * 作答面板
+   */
+  @Builder
+  answerPanelBuilder() {
+    Scroll() {
+      Column() {
+        // 题目
+        this.questionBuilder();
+        Blank()
+      }
+      .gesture( // 左右滑动触发该手势事件
+        PanGesture(this.panOption)
+          .onActionUpdate((event: GestureEvent) => {
+            if (event) {
+              this.offsetX = this.positionX + event.offsetX
+            }
+          })
+          .onActionStart(() => {
+          })
+          .onActionEnd(() => {
+            this.onActionEnd();
+          })
+      )
+      .width('100%')
+      .height('100%')
+    }
+    .scrollBar(BarState.Off)
+    .edgeEffect(EdgeEffect.Spring)
+    .layoutWeight(1)
+  }
+
+  /**
+   * 底部操作
+   */
+  @Builder
+  bottomOperationBuilder() {
+    Row() {
+      // 答题卡
+      this.answerSheetBuilder();
+      Row({ space: 12 }) {
+        // 上一题
+        this.preQuestionBuilder();
+        // 下一题/交卷
+        this.nextQuestionBuilder();
+      }
+      .justifyContent(FlexAlign.SpaceBetween)
+      .margin({ right: $r('app.float.vp_16') })
+      .layoutWeight(1)
+    }
+    .width('100%')
+    .height($r('app.float.vp_48'))
+    .shadow({
+      radius: 10,
+      color: 'rgba(0, 0, 0, 0.1)',
+      offsetY: -10
+    })
+  }
+
+  /**
+   * 下一题/交卷
+   */
+  @Builder
+  nextQuestionBuilder() {
+    Button(this.currentIndex === this.ques.length - 1 ? $r('app.string.submit_exam') :
+    $r('app.string.next_question'),
+      { type: ButtonType.Normal, stateEffect: true })
+      .backgroundColor($r('app.color.view_report_btn'))
+      .fontSize($r('sys.float.Body_L'))
+      .fontWeight(FontWeight.Medium)
+      .fontColor($r('sys.color.font_on_primary'))
+      .borderRadius($r('app.float.vp_20'))
+      .width($r('app.float.vp_120'))
+      .height($r('app.float.vp_40'))
+      .onClick(() => {
+        if (this.currentIndex >= this.ques.length - 1) {
+          // 打开交卷弹框
+          this.submitExamDialogController.open()
+        } else {
+          this.currentIndex += 1
+          this.currentIndex = Math.min(this.currentIndex, this.ques.length - 1)
+          this.currentModel = this.ques[this.currentIndex]
+        }
+      })
+  }
+
+  /**
+   * 上一题
+   */
+  @Builder
+  preQuestionBuilder() {
+    Button($r('app.string.pre_question'), { type: ButtonType.Normal, stateEffect: true })
+      .backgroundColor(this.currentIndex === 0 ? $r('sys.color.comp_background_tertiary') :
+      $r('app.color.view_report_btn'))
+      .stateEffect(this.currentIndex === 0 ? false : true)
+      .fontColor($r('sys.color.font_on_primary'))
+      .fontSize($r('sys.float.Body_L'))
+      .fontWeight(FontWeight.Medium)
+      .height($r('app.float.vp_40'))
+      .width($r('app.float.vp_120'))
+      .borderRadius($r('app.float.vp_20'))
+      .onClick(() => {
+        if (this.currentIndex === 0) {
+        } else {
+          this.currentIndex -= 1
+          this.currentIndex = Math.max(this.currentIndex, 0)
+          this.currentModel = this.ques[this.currentIndex]
+        }
+      })
+  }
+
+  /**
+   * 答题卡
+   */
+  @Builder
+  answerSheetBuilder() {
+    Column() {
+      Image($r('app.media.icon_answer_sheet'))
+        .width($r('app.float.vp_26'))
+        .height($r('app.float.vp_26'))
+      Text($r('app.string.answer_sheet'))
+        .fontSize($r('sys.float.Caption_M'))
+        .fontWeight(FontWeight.Medium)
+        .fontColor($r('sys.color.icon_primary'))
+        .margin({ top: $r('app.float.vp_2') })
+    }
+    .margin({ left: $r('app.float.vp_35'), right: $r('app.float.vp_35') })
+    .onClick(() => {
+      this.dialogController?.open();
+    })
+  }
+
+  /**
+   * 题目
+   */
+  @Builder
+  questionBuilder() {
+    Column() {
+      // 题目类型
+      this.questionTypeBuilder();
+
+      Text(`${this.currentIndex + 1}` + '、' + this.currentModel!.title)
+        .width('100%')
+        .fontSize($r('sys.float.Body_M'))
+        .fontWeight(FontWeight.Regular)
+        .fontColor($r('sys.color.font_primary'))
+        .margin({ bottom: $r('app.float.vp_15') })
+      Column() {
+        ForEach(this.currentModel!.ques, (item: AnswerItem) => {
+          Row() {
+            Image(item.isSelect ? $r('app.media.icon_Checked') : $r('app.media.icon_ans_common'))
+              .height($r('app.float.vp_20'))
+              .width($r('app.float.vp_20'))
+
+            Text(`${item.ans}` + '：' + `${item.ansTitle}`)
+              .fontSize($r('sys.float.Body_M'))
+              .fontWeight(FontWeight.Regular)
+              .fontColor($r('sys.color.font_primary'))
+              .margin({ left: $r('app.float.vp_14') })
+          }
+          .justifyContent(FlexAlign.Start)
+          .alignItems(VerticalAlign.Top)
+          .margin({ top: $r('app.float.vp_16') })
+          .padding({ right: $r('app.float.vp_12') })
+          .onClick(() => {
+            this.answerEvent(item)
+          })
+        }, (item: AnswerItem, index: number) => item.ansID + index)
+      }
+      .alignItems(HorizontalAlign.Start)
+      .width('100%')
+    }
+    .width('92%')
+  }
+
+  /**
+   * 题目类型
+   */
+  @Builder
+  questionTypeBuilder() {
+    Row() {
+      Text($r('app.string.single_choice'))
+        .width($r('app.float.vp_72'))
+        .height($r('app.float.vp_28'))
+        .fontSize($r('sys.float.Body_M'))
+        .fontWeight(FontWeight.Regular)
+        .fontColor($r('sys.color.font_on_primary'))
+        .textAlign(TextAlign.Center)
+        .backgroundColor('#4B5CC4')
+        .borderRadius($r('app.float.vp_8'))
+    }
+    .width('100%')
+    .margin($r('app.float.vp_12'))
+
+  }
+
+  /**
+   * 倒计时
+   */
+  @Builder
+  countdownBuilder() {
+    Row() {
+      Image($r('app.media.ic_public_alarm_clock'))
+        .width($r('app.float.vp_24'))
+        .height($r('app.float.vp_24'))
+      Text($r('app.string.time_remaining'))
+        .fontSize($r('sys.float.Body_S'))
+        .fontColor($r('sys.color.multi_color_09'))
+        .margin({ left: $r('app.float.vp_12') })
+      TextTimer({ isCountDown: true, count: this.timerCount, controller: this.textTimerController })
+        .format(this.format)
+        .fontColor($r('sys.color.multi_color_09'))
+        .fontSize($r('sys.float.Body_L'))
+        .fontWeight(FontWeight.Medium)
+        .margin({ left: $r('app.float.vp_4') })
+        .onTimer((_utc: number, elapsedTime: number) => {
+          this.practiceDuration = elapsedTime;
+        })
+        .onAppear(() => {
+          this.textTimerController.start();
+        })
+    }
+    .height($r('app.float.vp_48'))
+
+    Divider().color($r('sys.color.comp_divider'))
   }
 
   /**
@@ -323,6 +378,22 @@ export struct AnswerQuestionsTwoPage {
     .height($r('app.float.vp_56'))
     .width('100%')
     .justifyContent(FlexAlign.SpaceBetween)
+
+    Divider().color($r('sys.color.comp_divider'))
+  }
+
+  onActionEnd() {
+    if (this.offsetX > this.positionX) {
+      Logger.info('右滑')
+      this.currentIndex -= 1
+      this.currentIndex = Math.max(this.currentIndex, 0)
+    } else {
+      Logger.info('左滑')
+      this.currentIndex += 1
+      this.currentIndex = Math.min(this.currentIndex, this.ques.length - 1)
+    }
+    this.currentModel = this.ques[this.currentIndex]
+    this.positionX = this.offsetX
   }
 
   /**
@@ -390,6 +461,6 @@ export struct AnswerQuestionsTwoPage {
 }
 
 @Builder
-export function AnswerQuestionsTwoPageBuilder() {
+export function AnswerQuestionsTwoBuilder() {
   AnswerQuestionsTwoPage()
 }

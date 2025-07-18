@@ -39,7 +39,6 @@ struct GoodDetailPage {
   @Local specSheetFlag: boolean = false;
   @Local sheetGood?: Good;
   @Local windowModel: WindowModel = AppStorageV2.connect(WindowModel, () => new WindowModel())!
-  @Local goodDetails: string = '';
   @Local swiperIndex: number = 0;
   @Local showCarList: boolean = false;
   private scroller: ListScroller = new ListScroller();
@@ -74,8 +73,6 @@ struct GoodDetailPage {
         this.goodSinglePrice = Number(resp.money);
         this.sumPrice = new Decimal(this.goodSinglePrice).mul(this.goodNum).toString()
       }
-      this.goodDetails =
-        `<meta name="viewport" content="width=device-width, initial-scale=1.0">${this.goodInfo?.details ?? ''}`;
     });
   }
 
@@ -169,7 +166,6 @@ struct GoodDetailPage {
           .scrollBar(BarState.Off)
           .align(Alignment.Top)
           .width(Constants.FULL_SIZE)
-          .contentStartOffset(12)
           .contentEndOffset(12)
           .onWillScroll((scrollOffset: number, scrollState: ScrollState, scrollSource: ScrollSource) => {
             this.scrollOffset = this.scroller.currentOffset().yOffset;
@@ -554,13 +550,7 @@ struct GoodDetailPage {
         .fontSize($r('sys.float.Body_L'))
         .fontWeight(FontWeight.Medium)
         .fontColor($r('sys.color.font_primary'))
-      Web({ src: '', controller: this.controller }).onControllerAttached(() => {
-        this.controller.loadData(this.goodDetails, 'text/html', 'UTF-8');
-      }).nestedScroll({
-        scrollForward: NestedScrollMode.PARENT_FIRST,
-        scrollBackward: NestedScrollMode.SELF_FIRST,
-      })
-        .margin({ top: 16 }).layoutMode(WebLayoutMode.FIT_CONTENT);
+      Image(`${CommonUrl.CLOUD_STORAGE_URL}${this.goodInfo?.details}`).width(Constants.FULL_SIZE).margin({ top: 16 })
     }
     .width(Constants.FULL_SIZE)
     .padding({
@@ -571,7 +561,7 @@ struct GoodDetailPage {
     })
     .borderRadius(16)
     .alignItems(HorizontalAlign.Start)
-    .margin({ left: Constants.BORDER_WIDTH, right: Constants.BORDER_WIDTH})
+    .margin({ left: Constants.BORDER_WIDTH, right: Constants.BORDER_WIDTH })
     .constraintSize({ maxWidth: Constants.FULL_SIZE })
     .backgroundColor($r('sys.color.background_primary'));
   }

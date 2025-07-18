@@ -2,9 +2,11 @@ import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { BusinessError, emitter } from '@kit.BasicServicesKit';
-
+import { createNWeb, IJavaScriptConfig, IResourceConfig, WebProperties } from '@hw-agconnect/fast-web';
 import { wxApi, wxEventHandler } from 'aggregated_payment';
 import { EMITTER_TYPE } from 'common';
+import { webview } from '@kit.ArkWeb';
+import { PRIVACY_WEB } from '../pages/PrivacyPage';
 
 export default class EntryAbility extends UIAbility {
   private widgetMessage: string = '';
@@ -55,6 +57,29 @@ export default class EntryAbility extends UIAbility {
         hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
         return;
       }
+      // 包括原生Web组件的WebOptions、属性和事件
+      const webProperties = new WebProperties();
+      webProperties.defaultFontSize = 30;
+      // 预编译的JavaScript资源
+      const javaScriptConfigs: IJavaScriptConfig[] = [
+        {
+          url: '',
+          localPath: '',
+        }
+      ]
+      // 免拦截注入的离线资源如图片、样式表和脚本资源
+      const resourceConfigs: IResourceConfig[] = [
+        {
+          localPath: '',
+          urlList: [
+            '',
+          ],
+          type: webview.OfflineResourceType.IMAGE,
+        }
+      ];
+      // 预先创建一个空的ArkWeb动态组件（需传入UIContext），拉起渲染进程
+      createNWeb(PRIVACY_WEB, windowStage.getMainWindowSync().getUIContext(), webProperties, javaScriptConfigs,
+        resourceConfigs);
       this.getSafeArea(windowStage)
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
     });

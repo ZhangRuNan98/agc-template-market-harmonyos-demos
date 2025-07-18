@@ -1,6 +1,7 @@
 {
   "app": {
     "signingConfigs": [
+      // todo 补充手动签名信息,
     ],
     "products": [
       {
@@ -101,6 +102,10 @@
     {
       "name": "traffic_restriction",
       "srcPath": "./components/traffic_restriction",
+    },
+    {
+      "name": "today_history",
+      "srcPath": "./components/today_history",
     }
   ]
 }

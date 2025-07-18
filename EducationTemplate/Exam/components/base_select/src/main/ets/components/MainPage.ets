@@ -21,12 +21,11 @@ import {
   ItemDetail,
   SecondParam
 } from '../model/SelectModel'
-import { JSON } from '@kit.ArkTS';
 
 @ComponentV2
 struct BaseSelect {
   @Param @Require modelList: SelectItemModel[] = []
-  @Local modelContentList: ContentItemModel[] | undefined = []
+  @Local modelContentList: ContentItemModel[] = []
   @Local selectedLeft: number = 0;
   @Event selectIndex: (x: number) => void = () => {
   };
@@ -37,7 +36,6 @@ struct BaseSelect {
   @Param contentIcon: ResourceStr = $r('app.media.icon_right');
 
   aboutToAppear(): void {
-    console.info('BaseSelect', JSON.stringify(this.modelList))
     this.modelContentList = this.modelList[this.selectedLeft].list
   }
 
@@ -170,6 +168,8 @@ struct BaseSelect {
         bottomLeft: $r('app.float.vp_16'),
       })
       .backgroundColor($r('sys.color.background_primary'))
+      .width('auto')
+      .height('auto')
     }
   }
 

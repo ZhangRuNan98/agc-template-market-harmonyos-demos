@@ -13,16 +13,16 @@
  * limitations under the License.
  */
 
-import { SetupItem } from '../viewModel/setUpModel';
-import { RouterMap, RouterModule } from 'router_module';
+import { application, common, contextConstant } from '@kit.AbilityKit';
 import { JSON } from '@kit.ArkTS';
-import { AppStorageV2, promptAction, window } from '@kit.ArkUI';
+import { AppStorageV2, window } from '@kit.ArkUI';
 import { fileIo, storageStatistics } from '@kit.CoreFileKit';
 import { BusinessError, emitter } from '@kit.BasicServicesKit';
-import { examPrefer } from 'commonlib';
-import { application, common, contextConstant } from '@kit.AbilityKit';
+import { SetupItem } from '../viewModel/setUpModel';
+import { RouterMap, RouterModule } from 'router_module';
+import { Logger, PreferConstant, PreferenceUtil } from 'commonlib';
 import { Header } from '../components/Header';
-import { UserInfo } from 'login_info/src/main/ets/model/UserInfo';
+import { UserInfo } from 'login_info';
 
 @ComponentV2
 struct SetupComponent {
@@ -59,15 +59,15 @@ struct SetupComponent {
 }
 
 @ComponentV2
-export struct SetupPage {
+export struct SetUpPage {
   @Local bottomHeight: number = 0;
   @Local logoUser: UserInfo = AppStorageV2.connect(UserInfo, () => new UserInfo())!
   @Local setupList: SetupItem[] = [
-    new SetupItem('个人信息', $r('app.media.iconRight'), '', 'EditPersonalCenter'),
-    new SetupItem('意见反馈', $r('app.media.iconRight'), '', 'FeedbackPage'),
-    new SetupItem('反馈记录', $r('app.media.iconRight'), '', 'FeedbackRecordPage'),
+    new SetupItem('个人信息', $r('app.media.iconRight'), '', RouterMap.PERSONAL_CENTER_PAGE),
+    new SetupItem('意见反馈', $r('app.media.iconRight'), '', RouterMap.FEEDBACK_PAGE),
+    new SetupItem('反馈记录', $r('app.media.iconRight'), '', RouterMap.FEEDBACK_RECORD_PAGE),
     new SetupItem('隐私协议', $r('app.media.iconRight'), '', 'PrivacyStatementPage'),
-    new SetupItem('关于', $r('app.media.iconRight'), '', 'AboutPage'),
+    new SetupItem('关于', $r('app.media.iconRight'), '', RouterMap.ABOUT_PAGE),
     new SetupItem('清除缓存', $r('app.media.iconRight'), '0.0M', ''),
   ]
 
@@ -93,7 +93,7 @@ export struct SetupPage {
                   if (item.url && this.logoUser.isLogin) {
                     RouterModule.push({ url: item.url })
                   } else {
-                    RouterModule.push({ url: RouterMap.QuickLoginPage, param: false })
+                    RouterModule.push({ url: RouterMap.LOGIN_PAGE, param: false })
                   }
                 } else {
                   if (item.url) {
@@ -116,10 +116,10 @@ export struct SetupPage {
           .onClick(() => {
             if (this.logoUser.isLogin) {
               this.logoUser.isLogin = false
-              promptAction.showToast({ message: '退出成功', duration: 2000 });
+              this.getUIContext().getPromptAction().showToast({ message: '退出成功', duration: 2000 });
               RouterModule.pop()
             } else {
-              promptAction.showToast({ message: '您还未登录', duration: 2000 });
+              this.getUIContext().getPromptAction().showToast({ message: '您还未登录', duration: 2000 });
             }
             emitter.emit('MinePageShown')
           })
@@ -145,13 +145,14 @@ export struct SetupPage {
   getClearSize() {
     storageStatistics.getCurrentBundleStats((error: BusinessError, bundleStats: storageStatistics.BundleStats) => {
       if (error) {
-        console.error('getCurrentBundleStats failed with error:' + JSON.stringify(error));
+        Logger.error('getCurrentBundleStats failed with error:' + JSON.stringify(error));
       } else {
-        console.info('getCurrentBundleStats successfully:' + JSON.stringify(bundleStats));
+        Logger.info('getCurrentBundleStats successfully:' + JSON.stringify(bundleStats));
         this.setupList.forEach(async (eme) => {
           // 模拟缓存cache
           if (eme.msg === '清除缓存') {
-            let isClean = examPrefer.isClean()
+            let isClean = PreferenceUtil.getInstance().isClean() &&
+            PreferenceUtil.getInstance(PreferConstant.TOPIC_NOTES).isClean()
             if (isClean) {
               eme.cache = 0 + 'KB'
             } else {
@@ -192,38 +193,35 @@ export struct SetupPage {
     let moduleContext: common.Context;
     let context = getContext()
     moduleContext = await application.createModuleContext(getContext(), 'entry');
-    console.log('111moduleContext + el2: ' + moduleContext.cacheDir);
-    console.log('111UIAbilityContext + el2: ' + context.cacheDir);
     paths.push(moduleContext.cacheDir)
     paths.push(context.cacheDir)
     moduleContext.area = contextConstant.AreaMode.EL1;
-    console.log('111moduleContext + el1: ' + moduleContext.cacheDir);
     context.area = contextConstant.AreaMode.EL1;
-    console.log('111UIAbilityContext + el1: ' + context.cacheDir)
     paths.push(moduleContext.cacheDir)
     paths.push(context.cacheDir)
     paths.push(moduleContext.preferencesDir)
-    examPrefer.clear()
+    PreferenceUtil.getInstance().clear()
+    PreferenceUtil.getInstance(PreferConstant.TOPIC_NOTES).clear()
+
     for (let i = 0; i < paths.length; i++) {
       let path = paths[i]
       fileIo.listFile(path).then((filenames) => {
         for (let i = 0; i < filenames.length; i++) {
           let dirPath = path + '/' + filenames[i];
-          console.log(dirPath);
           // 判断是否为文件夹
           let isDirectory: boolean = false;
           try {
             isDirectory = fileIo.statSync(dirPath).isDirectory();
           } catch (e) {
-            console.error(JSON.stringify(e));
+            Logger.error(JSON.stringify(e));
           }
           if (isDirectory) {
             fileIo.rmdirSync(dirPath);
           } else {
             fileIo.unlink(dirPath).then(() => {
-              console.info('remove file succeed');
+              Logger.info('remove file succeed');
             }).catch((err: Error) => {
-              console.error('remove file failed with error message: ' + err.message);
+              Logger.error('remove file failed with error message: ' + err.message);
             });
           }
         }
@@ -234,6 +232,6 @@ export struct SetupPage {
 }
 
 @Builder
-export function SetupPageBuilder() {
-  SetupPage()
+export function SetUpPageBuilder() {
+  SetUpPage()
 }

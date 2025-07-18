@@ -75,7 +75,7 @@ struct SideBarPage {
     }
     .mode(NavDestinationMode.DIALOG)
     .hideTitleBar(true)
-
+    .systemTransition(NavigationSystemTransitionType.FADE)
   }
 
   jumpUrl(url: string) {

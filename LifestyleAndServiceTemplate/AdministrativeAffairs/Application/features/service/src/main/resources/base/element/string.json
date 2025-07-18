@@ -15,6 +15,10 @@
     {
       "name": "service_title",
       "value": "服务"
+    },
+    {
+      "name": "agcit_huawei_medical_insurance",
+      "value": "1.0.1"
     }
   ]
 }

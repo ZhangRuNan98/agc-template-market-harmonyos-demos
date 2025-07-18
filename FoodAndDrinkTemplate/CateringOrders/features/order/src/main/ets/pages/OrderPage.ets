@@ -23,7 +23,7 @@ export struct OrderPage {
   @StorageProp('myCar') myCar: GetMyCarResp = new GetMyCarResp()
   @StorageProp('tableList') tableList: Array<TableTitle> = [];
   @StorageLink('tableId') tableId: string = '';
-  @StorageLink('dinerNum') dinerNum: ResourceStr = '';
+  @StorageLink('dinerNum') dinerNum: string = '';
   @StorageProp('storeType') storeType: number = 1;
   @StorageLink('isRest') isRest: boolean = false;
   // 原始商品列表
@@ -105,7 +105,7 @@ export struct OrderPage {
       }.alignContent(Alignment.Bottom)
       .bindSheet($$this.dinerSheetShow,
         CustomSelectSheetBuilder($r('app.string.pick_dinner_num'), $r('app.strarray.diner_num'),
-          (select: ResourceStr) => {
+          (select: string) => {
             this.confirmDiner(select);
           }), {
           height: 408,
@@ -130,11 +130,11 @@ export struct OrderPage {
     }
   }
 
-  confirmDiner(select: ResourceStr) {
+  confirmDiner(select: string) {
     if (select) {
       this.dinerNum = select;
     } else {
-      this.dinerNum = this.dinerNum || $r('app.string.diner_num_default');
+      this.dinerNum = this.dinerNum || `1人`
     }
     this.dinerSheetShow = false
   }

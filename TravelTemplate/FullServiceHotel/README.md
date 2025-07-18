@@ -24,9 +24,9 @@
 本模板已集成华为账号、地图、支付等服务，只需做少量配置和定制即可快速实现华为账号的登录、酒店位置定位导航和购买商品等功能。
 
 
-| 首页                                                         | 会员                                                         | 我的                                                         |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![首页](./screenshots/首页.png) | ![会员](./screenshots/会员.png) | ![我的](./screenshots/我的.png) |
+| 首页                                                  | 会员                                                  | 我的                                                  |
+|-----------------------------------------------------|-----------------------------------------------------|-----------------------------------------------------|
+| <img src="screenshots/首页.png" alt="首页" width="300"> | <img src="screenshots/会员.png" alt="会员" width="300"> | <img src="screenshots/我的.png" alt="我的" width="300"> |
 
 
 
@@ -217,59 +217,55 @@ FullServiceHotel
 
 在运行此模板前，需要完成以下配置：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建元服务，将包名配置到模板中。
 
-2. 在AppGallery Connect创建元服务，将包名配置到模板中。
-
-   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APPID，并进行关联。
+   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APP ID，并将APP ID与元服务进行关联。
 
    b. 返回应用列表页面，查看元服务的包名。
 
    c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建元服务的包名。
 
-3. 配置服务器域名。
+2. 配置服务器域名。
 
-   本模板接口均采用mock数据，由于元服务包体大小有限制，部分图片资源将从云端拉取，所以需为模板项目[配置服务器域名](https://developer.huawei.com/consumer/cn/doc/atomic-guides-V5/agc-help-harmonyos-server-domain-V5)，“httpRequest合法域名”需要配置为：`https://agc-storage-drcn.platform.dbankcloud.cn`
+   本模板接口均采用mock数据，由于元服务包体大小有限制，部分图片资源将从云端拉取，所以需为模板项目[配置服务器域名](https://developer.huawei.com/consumer/cn/doc/atomic-guides/agc-help-harmonyos-server-domain)，“httpRequest合法域名”需要配置为：`https://agc-storage-drcn.platform.dbankcloud.cn`
 
-4. 配置华为账号服务。
+3. 配置华为账号服务。
 
-   a. 将元服务的client ID配置到entry模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides-V5/account-atomic-client-id-V5)。
+   a. 将元服务的client ID配置到entry/src/main路径下的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+   b. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)，并在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
 
-   c. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides-V5/account-guide-atomic-permissions-V5)，并在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides-V5/account-guide-atomic-get-phonenumber-V5)。
+4. 配置地图服务。
 
-5. 配置地图服务。
+   a. 将元服务的client ID配置到entry/src/main路径下的module.json5文件，如果华为账号服务已配置，可跳过此步骤。
 
-   a. 将元服务的client ID配置到entry模块的module.json5文件，如果华为账号服务已配置，可跳过此步骤。
+   b. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
 
-   b. 添加公钥指纹，如果华为账号服务已配置，可跳过此步骤。
+5. 配置支付服务。
 
-   c. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/map-config-agc-V5#section16133115441516)。
+   华为支付当前仅支持商户接入，在使用服务前，需要完成商户入网、开发服务等相关配置，本模板仅提供了端侧集成的示例。详细参考：[支付服务接入准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/payment-preparations)
 
-6. 配置支付服务。
+6. 对元服务进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
 
-   华为支付当前仅支持商户接入，在使用服务前，需要完成商户入网、开发服务等相关配置，本模板仅提供了端侧集成的示例。详细参考：[支付服务接入准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/payment-preparations-V5)
+7. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)
 
 ###  运行调试工程
 
-1. 连接调试手机和PC。
+1. 用USB线连接调试手机和PC。
 
-2. 对元服务签名：由于模板中集成了华为账号、地图等服务，所以需要采用[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-signing-V5#section297715173233)。
-
-3. 配置多模块调试：由于本模板存在多个模块，运行时需确保所有模块安装至调试设备。
+2. 配置多模块调试：由于本模板存在多个模块，运行时需确保所有模块安装至调试设备。
 
    a. 运行模块选择“entry”。
 
    b. 下拉框选择“Edit Configurations”，在“Run/Debug Configurations”界面，选择“Deploy Multi Hap”页签，勾选上模板中所有模块。
 
-   ![调试步骤](./screenshots/调试步骤.png)
+   ![调试步骤](screenshots/调试步骤.png)
 
    c. 点击"Run"，运行模板工程。
 
 ## 示例效果
 
-   [功能展示录屏](./screenshots/功能展示录屏.mp4)
+   <img src="screenshots/display.gif" alt="display" width="300">
 
 
 ## 权限要求

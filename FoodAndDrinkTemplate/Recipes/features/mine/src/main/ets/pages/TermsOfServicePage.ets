@@ -62,6 +62,7 @@ export struct TermsOfServicePage {
           '[App 开发者 / 公司名称]\n' +
           '[具体日期]\n');
       }
+      .edgeEffect(EdgeEffect.Spring)
       .padding(16)
       .height('100%')
       .align(Alignment.Top);

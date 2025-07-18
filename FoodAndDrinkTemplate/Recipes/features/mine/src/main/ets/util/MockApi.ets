@@ -3,7 +3,7 @@ import { OrderInfoUtil } from './OrderInfoUtil';
 
 export class MockApi {
   static isShow: boolean = false;
-
+  // todo 替换微信APP ID
   static WX_APP_ID: string = 'wx05b3e2e9fc730840';
 
   static getAliPreOrderInfo() {

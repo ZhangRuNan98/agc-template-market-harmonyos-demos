@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { BasePickerOperation } from './BasePickerOperation';
 
 @ComponentV2
@@ -6,7 +7,16 @@ export struct BaseTimerPicker {
   @Local currentSelectedTime: TimePickerResult | null = null;
   @Event onSelectTimeChange: (value: TimePickerResult) => void = () => {}
   @Event cancel: () => void = () => {}
-  @Event confirm: (time:TimePickerResult) => void = () => {}
+  @Event confirm: (time: TimePickerResult) => void = () => {}
+
+  aboutToAppear(): void {
+    this.currentSelectedTime = {
+      hour: dayjs(this.selectedTime).hour(),
+      minute: dayjs(this.selectedTime).minute(),
+      second: dayjs(this.selectedTime).second(),
+    }
+  }
+
   build() {
     Column() {
       TimePicker({

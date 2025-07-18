@@ -13,6 +13,7 @@
     'date_calculation': 'file:../../components/date_calculation',
     'festival_solar': "file:../../components/festival_solar",
     'router_module': 'file:../../commons/router_module',
-    'traffic_restriction': 'file:../../components/traffic_restriction'
+    'traffic_restriction': 'file:../../components/traffic_restriction',
+    'today_history': 'file:../../components/today_history'
   }
 }

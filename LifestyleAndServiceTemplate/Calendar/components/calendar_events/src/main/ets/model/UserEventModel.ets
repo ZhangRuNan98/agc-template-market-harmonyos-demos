@@ -1,6 +1,6 @@
 import { Type } from '@kit.ArkUI';
 import { EVENT_TYPE } from '../constants/Constants';
-import { generateId } from '../utils/Utils';
+import { generateId, solarToLunar } from '../utils/Utils';
 
 @ObservedV2
 export class LocalDate {
@@ -35,13 +35,17 @@ export class CalendarEvent {
 @ObservedV2
 export class CalendarStartDate {
   @Trace date: Date = new Date()
+  @Trace lunarDate: string = solarToLunar(new Date())
   @Trace time: string = '09:00'
+  @Trace isLunar: boolean = false
 }
 
 @ObservedV2
 export class CalendarEndDate {
   @Trace date: Date = new Date(new Date().setDate(new Date().getDate() + 1))
   @Trace time: string = '09:00'
+  @Trace lunarDate: string = solarToLunar(new Date(new Date().setDate(new Date().getDate() + 1)))
+  @Trace isLunar: boolean = false
 }
 
 @ObservedV2

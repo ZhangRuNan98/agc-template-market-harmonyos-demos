@@ -7,9 +7,7 @@
     "deviceTypes": [
       "phone",
     ],
-    /*
-      :todo
-    */
+    // todo 替换应用的client_id值,
     "metadata": [
       {
         "name": "client_id",

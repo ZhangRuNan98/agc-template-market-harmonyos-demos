@@ -7,7 +7,7 @@
     ],
     "requestPermissions": [{
       "name": "ohos.permission.MICROPHONE",
-      "reason": "$string:MICROPHONE_reason",
+      "reason": "$string:microphone_reason",
       "usedScene": {
         "abilities": [
           "EntryAbility"

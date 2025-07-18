@@ -1,5 +1,7 @@
+import { window } from '@kit.ArkUI';
 import { Channel, LoginService, LoginType } from 'module_login';
 import { AccountUtil, RouterMap, RouterModule, UserInfo, WindowUtil } from 'commonlib';
+
 
 @Builder
 export function QuickLoginPageBuilder() {
@@ -12,6 +14,10 @@ export struct QuickLoginPage {
 
   aboutToAppear(): void {
     this.getRouterParams();
+    let systemBarProperties: window.SystemBarProperties = {
+      statusBarContentColor: '#000000',
+    };
+    WindowUtil.currentWindow.setWindowSystemBarProperties(systemBarProperties);
   }
 
   getRouterParams() {
@@ -33,6 +39,7 @@ export struct QuickLoginPage {
           termOfServiceEvent: () => {
             RouterModule.push(RouterMap.TERMS_OF_SERVICE_PAGE);
           },
+          // todo: 替换微信登录配置信息
           loginTypes: [new Channel(LoginType.WECHAT, '微信登录', {
             appId: 'wxd5a474c635b8fd17',
             scope: 'snsapi_userinfo,snsapi_friend,snsapi_message,snsapi_contact',

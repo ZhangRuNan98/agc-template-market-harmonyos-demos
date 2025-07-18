@@ -41,7 +41,6 @@ class PermissionUtil {
         return
       }
       geoLocationManager.getCurrentLocation().then((location: geoLocationManager.Location) => {
-        console.info('getCurrentLocation' + JSON.stringify(location));
         resolve(location);
       }).catch((error: Error) => {
         console.error('getCurrentLocation failed', 'getCurrentLocation error: ' + JSON.stringify(error));

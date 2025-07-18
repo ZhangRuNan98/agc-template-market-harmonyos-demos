@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { EVENT_TYPE } from '../constants/Constants';
 import { UserEventItem } from '../model/UserEventModel';
 import { RemindEventDispatcher } from '../utils/EventDispatcher';
+import { solarToLunar } from '../utils/Utils';
 import CalendarEventVM from '../viewModel/ViewModel';
 import { CalendarReminder } from './CalendarReminder'
 
@@ -29,7 +30,6 @@ export struct CalendarBirRem {
     }
   }
 
-
   creatUserEventInfo() {
     this.calendarEventVM.saveEventData(this.userEventInfo)
   }
@@ -39,14 +39,19 @@ export struct CalendarBirRem {
     BaseDatePicker({
       datePicker: this.userEventInfo.date[0].date,
       isShowDateTitle: true,
-      isBottom:true,
+      isBottom: true,
       isLunar: true,
+      isLunarDate: this.userEventInfo.date[0].isLunar,
       cancel: () => {
         baseActionSheet.close('datePickerBuilder')
       },
       confirm: (date: Date) => {
+        this.userEventInfo.date[0].lunarDate = solarToLunar(date)
         this.userEventInfo.date[0].date = date
         baseActionSheet.close('datePickerBuilder')
+      },
+      onLunarChange: (value: boolean) => {
+        this.userEventInfo.date[0].isLunar = value
       },
     })
   }
@@ -84,10 +89,11 @@ export struct CalendarBirRem {
         Text(this.isBirthDay() ? '生日日期' : '日期')
           .fontWeight(FontWeight.Medium)
         Row() {
-          Text(dayjs(this.userEventInfo.date[0].date).format('YYYY年MM月DD日'))
+          Text(this.userEventInfo.date[0].isLunar ? this.userEventInfo.date[0].lunarDate :
+          dayjs(this.userEventInfo.date[0].date).format('YYYY年MM月DD日'))
             .fontSize(14)
-            .fontColor(this.readonly?$r('sys.color.font_secondary'):$r('sys.color.font_primary'))
-          Image(this.readonly?$r('app.media.chevron_up_grey'):$r('app.media.chevron_up')).width(12).height(24)
+            .fontColor(this.readonly ? $r('sys.color.font_secondary') : $r('sys.color.font_primary'))
+          Image(this.readonly ? $r('app.media.chevron_up_grey') : $r('app.media.chevron_up')).width(12).height(24)
         }
       }
       .onClick(() => {
@@ -96,7 +102,7 @@ export struct CalendarBirRem {
         }
         baseActionSheet.show({
           id: 'datePickerBuilder',
-          height: 400,
+          detents:[400,401],
           showClose: false,
           customContent: () => {
             this.datePickerBuilder()

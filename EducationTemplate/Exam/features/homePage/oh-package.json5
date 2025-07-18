@@ -8,7 +8,11 @@
   "dependencies": {
     "router_module": "file:../../commons/router_module",
     "commonlib": "file:../../commons/commonLib",
-    "topicpage": "file:../topicPage",
-    "login_info": "file:../../components/login_info"
+    "login_info": "file:../../components/login_info",
+    "search": "file:../../components/search",
+    "search_question": "file:../../components/search_question",
+    "answer_questions": "file:../../components/answer_questions",
+    "base_select": "file:../../components/base_select",
+    "select_category": "file:../../components/select_category",
   }
 }

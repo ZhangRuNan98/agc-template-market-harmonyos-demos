@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -13,9 +14,44 @@
 
 <img src="./screenshot/QuickLogin.jpeg" width="300">
 
-## 使用
+## 约束与限制
 
-1. 配置华为账号服务。
+### 环境
+
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+## 快速入门
+
+1. 安装组件。
+
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
+
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加module_login模块。
+
+    ```typescript
+    // 在项目根目录build-profile.json5填写module_login路径。其中XXX为组件存放的目录名
+    "modules": [
+        {
+        "name": "module_login",
+        "srcPath": "./XXX/module_login",
+        }
+    ]
+    ```
+   c. 在项目根目录oh-package.json5中添加依赖。
+    ```typescript
+    // XXX为组件存放的目录名称
+    "dependencies": {
+      "module_login": "file:./XXX/module_login"
+    }
+
+2. 配置华为账号服务。
 
    a. 将应用的client ID配置到entry模块的src/main/module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
@@ -36,24 +72,7 @@
 
    c. [申请scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions) 。
 
-2. 前往微信开放平台申请AppId并配置鸿蒙应用信息，详情请参考[鸿蒙接入指南](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/ohos.html)。
-
-3. 将模板根目录的components下module_login目录拷贝至您工程根目录components/，并添加依赖和module声明。
-
-    ```
-    // entry/oh-package.json5
-    "dependencies": {
-      "module_login": "file:../components/module_login"
-    }
-
-    // build-profile.json5
-    "modules": [
-      {
-        "name": "module_login",
-        "srcPath": "./components/module_login"
-      }
-    ]
-    ```
+3. 前往微信开放平台申请AppId并配置鸿蒙应用信息，详情请参考[鸿蒙接入指南](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/ohos.html)。
 
 4. 引入登录组件句柄。
 
@@ -84,6 +103,7 @@
     });
     ```
 
+
 ## API参考
 
 ### 子组件
@@ -98,21 +118,21 @@ LoginService(icon:ResourceStr,loginTypes:Channel[],loginBtnBgColor:ResourceStr,p
 
 **参数：**
 
-| 参数名             | 类型                                                                                                            | 是否必填 | 说明                                                                                                                              |
-|:----------------|:--------------------------------------------------------------------------------------------------------------|:-----|:--------------------------------------------------------------------------------------------------------------------------------|
-| icon            | [ResourceStr](https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V14/ts-types-V14#resourcestr) | 否    | 应用图标，参考[UX设计规范](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-phone-unionid-login#section2558741102912) |
-| loginTypes      | [Channel](#Channel对象说明)                                                                                       | 是    | 登录渠道信息                                                                                                                          |
-| loginBtnBgColor | string                                                                                                        | 否    | 一键登录按钮背景色                                                                                                                       |
+| 参数名             | 类型                                                                                                    | 是否必填 | 说明                                                                                                                              |
+|:----------------|:------------------------------------------------------------------------------------------------------|:-----|:--------------------------------------------------------------------------------------------------------------------------------|
+| icon            | [ResourceStr](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/ts-types#resourcestr) | 否    | 应用图标，参考[UX设计规范](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-phone-unionid-login#section2558741102912) |
+| loginTypes      | [Channel](#Channel对象说明)                                                                               | 是    | 登录渠道信息                                                                                                                          |
+| loginBtnBgColor | string                                                                                                | 否    | 一键登录按钮背景色                                                                                                                       |
 
 #### Channel对象说明
 
-| 参数名       | 类型                                                                                                            | 是否必填 | 说明       |
-|:----------|:--------------------------------------------------------------------------------------------------------------|:-----|:---------|
-| type      | [LoginType](#LoginType枚举说明)                                                                                   | 是    | 登录类型     |
-| icon      | [ResourceStr](https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V14/ts-types-V14#resourcestr) | 是    | 登录渠道图标   |
-| extraInfo | ExtraInfo                                                                                                     | 是    | 登录必须信息   |
-| click     | ()=>{}                                                                                                        | 否    | 登录图标点击方法 |
-| name      | string                                                                                                        | 是    | 登录方式名称   |
+| 参数名       | 类型                                                                                                    | 是否必填 | 说明       |
+|:----------|:------------------------------------------------------------------------------------------------------|:-----|:---------|
+| type      | [LoginType](#LoginType枚举说明)                                                                           | 是    | 登录类型     |
+| icon      | [ResourceStr](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/ts-types#resourcestr) | 是    | 登录渠道图标   |
+| extraInfo | ExtraInfo                                                                                             | 是    | 登录必须信息   |
+| click     | ()=>{}                                                                                                | 否    | 登录图标点击方法 |
+| name      | string                                                                                                | 是    | 登录方式名称   |
 
 #### LoginType枚举说明
 

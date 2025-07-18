@@ -83,6 +83,10 @@
     {
       "name": "expand_map",
       "value": "展开地图"
+    },
+    {
+      "name": "agcit_huawei_tea_drink_orders",
+      "value": "1.0.1"
     }
   ]
 }

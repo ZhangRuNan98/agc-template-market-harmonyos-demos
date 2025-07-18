@@ -41,7 +41,7 @@ export struct VipOpenCenter {
   build() {
     NavDestination() {
       VipCenter({
-        userName: this.userState.userInfo.userName,
+        userName: this.userState.userInfo.userName as string,
         avatar: this.userState.userInfo.avatar,
         isVip: this.userState.userInfo.vipInfo.isVip,
         vipType: this.userState.userInfo.vipInfo.vipType,

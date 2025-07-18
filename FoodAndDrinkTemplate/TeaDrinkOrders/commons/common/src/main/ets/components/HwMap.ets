@@ -56,7 +56,6 @@ export struct HwMap {
         mapController.setMyLocationStyle(this.style);
         if (this.isShowMyLocation) {
           this.getLocation(this.mapController).then((location: geoLocationManager.Location) => {
-            console.info('my location' + JSON.stringify(location));
             this.myLocation = location;
           });
         }
@@ -109,7 +108,6 @@ export struct HwMap {
             // 用户授权，可以继续访问目标操作
             this.isShowMyLocation = true
             this.getLocation(this.mapController).then((location: geoLocationManager.Location) => {
-              console.info('my location' + JSON.stringify(location));
               this.myLocation = location;
               this.mapController?.setMyLocationEnabled(true);
               this.mapController?.setMyLocationControlsEnabled(true);
@@ -137,7 +135,6 @@ export struct HwMap {
     console.info('getCurrentLocation' + JSON.stringify(promise));
     promise.then(async (location: geoLocationManager.Location) => {
       mapController?.setMyLocation(location);
-      console.info('getCurrentLocation' + JSON.stringify(location));
       return location;
     }).catch((error: Error) => {
       console.error('getCurrentLocation failed', 'getCurrentLocation error: ' + JSON.stringify(error));

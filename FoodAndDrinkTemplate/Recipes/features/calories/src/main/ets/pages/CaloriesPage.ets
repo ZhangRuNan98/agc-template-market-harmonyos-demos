@@ -27,27 +27,24 @@ struct CaloriesPage {
 
   build() {
     NavDestination() {
-      Scroll() {
-        Column({ space: 12 }) {
-          BaseHeader({ title: '热量计算', showRightMenu: true })
-          CalorieCalculation({
-            seriesData: this.vm.seriesData,
-            dietPlanList: this.vm.dietPlanList,
-            addMeal: (id: number, isModify?: boolean) => {
-              let data: Record<string, number> = { 'id': id }
-              if (isModify) {
-                let menuId = this.vm.dietPlanList.find(item => item.menuId === id)?.menuId
-                data = { 'menuId': menuId! }
-              }
-              RouterModule.push(RouterMap.DIET_PLAN_PAGE, data, (popInfo: PopInfo) => {
-                this.vm.init()
-              })
-            },
+      BaseHeader({ title: '热量计算', showRightMenu: true })
+
+      CalorieCalculation({
+        seriesData: this.vm.seriesData,
+        dietPlanList: this.vm.dietPlanList,
+        addMeal: (id: number, isModify?: boolean) => {
+          let data: Record<string, number> = { 'id': id }
+          if (isModify) {
+            let menuId = this.vm.dietPlanList.find(item => item.menuId === id)?.menuId
+            data = { 'menuId': menuId! }
+          }
+          RouterModule.push(RouterMap.DIET_PLAN_PAGE, data, (popInfo: PopInfo) => {
+            this.vm.init()
           })
-        }
-      }.scrollBar(BarState.Off)
+        },
+      })
+
     }
     .backgroundColor($r('sys.color.background_secondary'))
-    .padding({ left: 16, right: 16 })
   }
 }

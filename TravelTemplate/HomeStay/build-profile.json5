@@ -1,8 +1,6 @@
 {
   "app": {
-    "signingConfigs": [
-
-    ],
+    "signingConfigs": [],
     "products": [
       {
         "name": "default",
@@ -28,8 +26,8 @@
   },
   "modules": [
     {
-      "name": "main",
-      "srcPath": "./main",
+      "name": "entry",
+      "srcPath": "./products/entry",
       "targets": [
         {
           "name": "default",
@@ -40,144 +38,16 @@
       ]
     },
     {
-      "name": "personal",
-      "srcPath": "./tab/personal",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "travel_discovery",
-      "srcPath": "./components/travel_discovery",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "map",
-      "srcPath": "./tab/map",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
+      "name": "utils",
+      "srcPath": "./commons/utils",
     },
     {
       "name": "home",
-      "srcPath": "./tab/home",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
+      "srcPath": "./features/home"
     },
     {
-      "name": "shop",
-      "srcPath": "./tab/shop",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "account",
-      "srcPath": "./function/account",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "util",
-      "srcPath": "./common/util",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "network",
-      "srcPath": "./function/network",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "type",
-      "srcPath": "./common/type",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "component",
-      "srcPath": "./common/component",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "constant",
-      "srcPath": "./common/constant",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "calendar_select",
-      "srcPath": "./components/calendar_select",
-    },
-    {
-      "name": "travel_map",
-      "srcPath": "./components/travel_map",
+      "name": "mine",
+      "srcPath": "./features/mine",
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { MainEntryVM } from 'commonlib';
+import { Logger, MainEntryVM } from 'commonlib';
 import { authentication } from '@kit.AccountKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { util } from '@kit.ArkTS';
@@ -23,7 +23,7 @@ struct CustomDialogExample {
         .fontWeight(FontWeight.Bold)
       Text('请确认是否解除账号关联？')
       Row() {
-        Button('取消')
+        Text('取消')
           .fontColor($r('app.color.color_checked'))
           .backgroundColor($r('app.color.background_white'))
           .onClick(() => {
@@ -32,7 +32,7 @@ struct CustomDialogExample {
               this.controller.close();
             }
           })
-        Button('确定')
+        Text('确定')
           .onClick(() => {
             const cancelRequest = new authentication.HuaweiIDProvider().createCancelAuthorizationRequest();
             cancelRequest.state = util.generateRandomUUID(); // 建议使用generateRandomUUID生成state
@@ -163,7 +163,6 @@ export struct MineView {
               if (this.dialogController !== null) {
                 this.dialogController.open();
               }
-
             } else {
               // 创建授权请求，并设置参数
               const authRequest = new authentication.HuaweiIDProvider().createAuthorizationWithHuaweiIDRequest();
@@ -182,6 +181,7 @@ export struct MineView {
                   const authorizationWithHuaweiIDResponse = data as authentication.AuthorizationWithHuaweiIDResponse;
                   const state = authorizationWithHuaweiIDResponse.state;
                   if (state && authRequest.state !== state) {
+
                     hilog.error(0x0000, 'testTag',
                       `Failed to authorize. The state is different, response state: ${state}`);
                     return;
@@ -195,9 +195,30 @@ export struct MineView {
 
                   // 开发者处理code、unionID、openID
                 }).catch((err: BusinessError) => {
+                  AlertDialog.show({
+                    title: '提示',
+                    message: '元服务未获取phone权限或用户授权，点击确定将模拟创建关联账号？',
+                    height: 170,
+                    alignment: DialogAlignment.Center,
+                    primaryButton: {
+                      value: '取消',
+                      fontColor: '#1a1a1a',
+                      action: () => {
+                        Logger.info('[AssociateAccount]', '取消模拟创建关联账号');
+                      },
+                    },
+                    secondaryButton: {
+                      value: '确定',
+                      fontColor: $r('sys.color.brand_font'),
+                      action: () => {
+                        this.isConnected = true
+                      },
+                    },
+                  });
                   this.dealAllError(err);
                 });
               } catch (error) {
+
                 this.dealAllError(error);
               }
             }

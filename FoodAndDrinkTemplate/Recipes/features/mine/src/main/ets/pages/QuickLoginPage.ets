@@ -1,5 +1,5 @@
 import { Channel, LoginService, LoginType } from 'aggregated_login';
-import { AccountUtil, RouterMap, RouterModule, UserInfo } from 'commonlib';
+import { AccountUtil, buildTitleBar, RouterMap, RouterModule, UserInfo } from 'commonlib';
 
 @Builder
 export function QuickLoginPageBuilder() {
@@ -45,9 +45,10 @@ export struct QuickLoginPage {
             this.loginSuccess(unionID || '0')
           },
         });
-      }.backgroundColor('#F1F3F5');
+      }.backgroundColor('#F1F3F5')
+      .edgeEffect(EdgeEffect.Spring);
     }
-    .hideTitleBar(true)
+    .title(buildTitleBar(''))
     .width('100%')
     .height('100%')
     .backgroundColor('#F1F3F5');

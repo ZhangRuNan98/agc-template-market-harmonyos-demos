@@ -72,8 +72,8 @@
     ],
     "metadata": [
       {
-        // 替换应用的clientID
         "name": "client_id",
+        // todo 替换client_id值
         "value": "xxx"
       }
     ],

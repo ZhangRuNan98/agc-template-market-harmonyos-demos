@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { examPrefer, PreferConstant } from 'commonlib';
-import { FeedbackItemType } from 'feed_back/src/main/ets/model/FeedbackRecordModel';
+import { PreferenceUtil, PreferConstant } from 'commonlib';
+import { FeedbackItemType } from 'feed_back';
 import { Header } from '../components/Header';
 
 @ComponentV2
@@ -24,9 +24,9 @@ export struct FeedbackRecordPage {
   /**
    * 数据初始化
    */
-  async initData() {
+  initData() {
     let feedbackList: FeedbackItemType[] =
-      await examPrefer.getPreferenceValue(PreferConstant.FEEDBACK_RECORD, []) as FeedbackItemType[];
+      PreferenceUtil.getInstance().get(PreferConstant.FEEDBACK_RECORD, []) as FeedbackItemType[];
     this.feedbackList = feedbackList
   }
 

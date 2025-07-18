@@ -4,6 +4,8 @@
   "dependencies": {
     "dayjs": "^1.11.13",
     "lunar": "^1.0.0",
+    "@hw-agconnect/fast-web": "^1.0.0",
+    "@hw-agconnect/petal-aegis": "^1.4.11-300"
   },
   "devDependencies": {
     "@ohos/hypium": "1.0.19"

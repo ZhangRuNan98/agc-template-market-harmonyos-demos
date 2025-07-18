@@ -74,10 +74,9 @@ export struct SearchResult {
               this.goRecipeDetail(item.id);
             });
           }, (item: RecipeBriefInfo) => item.id.toString());
-        }.height('calc(100% - 49vp)').scrollBar(BarState.Off).padding({ bottom: 20 });
+        }.height('calc(100% - 49vp)').scrollBar(BarState.Off).padding({ bottom: 20 }).layoutWeight(1);
       }
-
-    }.height('calc(100% - 40vp)');
+    }
   }
 }
 

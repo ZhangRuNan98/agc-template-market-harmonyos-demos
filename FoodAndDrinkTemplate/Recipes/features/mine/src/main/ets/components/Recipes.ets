@@ -43,6 +43,7 @@ export struct Recipes {
         }.margin({ top: 72 });
       }
     }
+    .edgeEffect(EdgeEffect.Spring)
     .height('100%')
     .align(Alignment.Top)
     .scrollBar(BarState.Off)

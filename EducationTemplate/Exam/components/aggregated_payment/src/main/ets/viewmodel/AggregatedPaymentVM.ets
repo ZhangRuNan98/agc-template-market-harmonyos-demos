@@ -13,11 +13,10 @@
  * limitations under the License.
  */
 
-import { Pay } from '@cashier_alipay/cashiersdk';
-import * as wxOpenSdk from '@tencent/wechat_open_sdk';
-import { BusinessError } from '@kit.BasicServicesKit';
 import { common } from '@kit.AbilityKit';
 import { paymentService } from '@kit.PaymentKit';
+import { Pay } from '@cashier_alipay/cashiersdk';
+import * as wxOpenSdk from '@tencent/wechat_open_sdk';
 import { ChannelType, WxExtraInfo } from '../common/Constant';
 
 @ObservedV2
@@ -35,22 +34,17 @@ export class AggregatedPaymentVM {
     payFailEvent: (type: ChannelType) => void,
     orderStr: string | WxExtraInfo) {
     new Pay().pay(String(orderStr), true).then((result) => {
-      let message =
-        `resultStatus: ${result.get('resultStatus')} memo: ${result.get('memo')} result: ${result.get('result')}`;
       if (result.get('resultStatus') === '9000') {
-        message = '支付成功';
         paySuccessEvent(ChannelType.ALI_PAY);
       } else {
         payFailEvent(ChannelType.ALI_PAY);
       }
-      console.log(message);
-    }).catch((error: BusinessError) => {
-      console.log(error.message);
+    }).catch(() => {
       payFailEvent(ChannelType.ALI_PAY);
     });
   }
 
-  async weChatPay(paySuccessEvent: (type: ChannelType) => void,
+  async weChatPay(_paySuccessEvent: (type: ChannelType) => void,
     payFailEvent: (type: ChannelType) => void,
     payReq: string | WxExtraInfo, appId: string) {
     // 根据APP_ID创建支付API
@@ -69,7 +63,7 @@ export class AggregatedPaymentVM {
   }
 
   huaweiPay(paySuccessEvent: (type: ChannelType) => void,
-    payFailEvent: (type: ChannelType) => void,
+    _payFailEvent: (type: ChannelType) => void,
     context: common.UIAbilityContext, orderStr: string | WxExtraInfo) {
     paymentService.requestPayment(context, String(orderStr)).then(() => {
       paySuccessEvent(ChannelType.HUAWEI_PAY);

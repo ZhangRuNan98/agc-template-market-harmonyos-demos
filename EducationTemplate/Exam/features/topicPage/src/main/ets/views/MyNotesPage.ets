@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { TopicItemModelPreference } from 'answer_questions/src/main/ets/viewModel/TopicItemModel';
-import { ExamPreferences, Logger, TopBar } from 'commonlib';
+import { TopicItemModelPreference } from 'answer_questions';
+import { PreferenceUtil, PreferConstant, Logger, TopBar } from 'commonlib';
 import { RouterMap, RouterModule } from 'router_module';
 
 const TAG = 'MyNotesPage';
@@ -65,23 +65,23 @@ export struct MyNotesPage {
   }
 
   initData() {
-    if (ExamPreferences.notesPreferences) {
-      this.noteModels = [];
-      this.notes = [];
-      // 获取笔记全部持久化缓存数据
-      let value = ExamPreferences.notesPreferences.getAllSync();
+    this.noteModels = [];
+    this.notes = [];
+    // 获取笔记全部持久化缓存数据
+    let value = PreferenceUtil.getInstance(PreferConstant.TOPIC_NOTES).getAllSync()
+    if (value) {
       this.topicItemModelPreferences = Object.values(value) as TopicItemModelPreference[];
-      // 按照时间顺序由近及远
-      this.topicItemModelPreferences.sort((a, b) => b.addNoteTime - a.addNoteTime)
-      for (let index = 0; index < this.topicItemModelPreferences.length; index++) {
-        let element = this.topicItemModelPreferences[index]
-        let model: NoteModel = new NoteModel()
-        model.note = element.note
-        model.keyID = element.keyID
-        model.isDelete = false
-        this.noteModels.push(model)
-        this.notes.push(element.note)
-      }
+    }
+    // 按照时间顺序由近及远
+    this.topicItemModelPreferences.sort((a, b) => b.addNoteTime - a.addNoteTime)
+    for (let index = 0; index < this.topicItemModelPreferences.length; index++) {
+      let element = this.topicItemModelPreferences[index]
+      let model: NoteModel = new NoteModel()
+      model.note = element.note
+      model.keyID = element.keyID
+      model.isDelete = false
+      this.noteModels.push(model)
+      this.notes.push(element.note)
     }
   }
 
@@ -90,30 +90,29 @@ export struct MyNotesPage {
    */
   @Builder
   deleteButtonBuilder() {
-    if (this.isSelectDelete === true) {
-      Row() {
-        Image($r('app.media.icon_delete'))
-          .width($r('app.float.vp_24'))
-          .height($r('app.float.vp_24'))
-        Text('删除')
-          .fontColor($r('sys.color.font_on_primary'))
-          .fontSize($r('sys.float.Body_L'))
-          .fontWeight(FontWeight.Medium)
-          .margin({ left: $r('app.float.vp_8') })
-      }
-      .width($r('app.float.vp_312'))
-      .justifyContent(FlexAlign.Center)
-      .borderRadius(20)
-      .backgroundColor('#4c5dc4')
-      .padding({ top: $r('app.float.vp_8'), bottom: $r('app.float.vp_8') })
-      .opacity(this.selectCount > 0 ? 1 : 0.4)
-      .onClick(() => {
-        if (this.selectCount > 0) {
-          // 删除选中
-          this.deleteSelectData()
-        }
-      })
+    Row() {
+      Image($r('app.media.icon_delete'))
+        .width($r('app.float.vp_24'))
+        .height($r('app.float.vp_24'))
+      Text('删除')
+        .fontColor($r('sys.color.font_on_primary'))
+        .fontSize($r('sys.float.Body_L'))
+        .fontWeight(FontWeight.Medium)
+        .margin({ left: $r('app.float.vp_8') })
     }
+    .width($r('app.float.vp_312'))
+    .justifyContent(FlexAlign.Center)
+    .borderRadius(20)
+    .backgroundColor('#4c5dc4')
+    .padding({ top: $r('app.float.vp_8'), bottom: $r('app.float.vp_8') })
+    .opacity(this.selectCount > 0 ? 1 : 0.4)
+    .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.Hidden)
+    .onClick(() => {
+      if (this.selectCount > 0) {
+        // 删除选中
+        this.deleteSelectData()
+      }
+    })
   }
 
   // 移除所选中的
@@ -121,20 +120,19 @@ export struct MyNotesPage {
     this.noteModels.forEach((item: NoteModel) => {
       if (item.isDelete) {
         // 删除
-        ExamPreferences.notesPreferences?.deleteSync(item.keyID);
-        ExamPreferences.notesPreferences?.flush();
+        PreferenceUtil.getInstance(PreferConstant.TOPIC_NOTES).delete(item.keyID);
       }
     })
-    this.notes = this.notes.filter((_it: string, index: number) => this.noteModels[index].isDelete === false)
+    this.notes = this.notes.filter((_it: string, index: number) => !this.noteModels[index].isDelete)
     this.topicItemModelPreferences = this.topicItemModelPreferences.filter((_it: TopicItemModelPreference,
-      index: number) => this.noteModels[index].isDelete === false)
-    this.noteModels = this.noteModels.filter((it: NoteModel) => it.isDelete === false)
+      index: number) => !this.noteModels[index].isDelete)
+    this.noteModels = this.noteModels.filter((it: NoteModel) => !it.isDelete)
     this.isSelectDelete = false
   }
 
   // 是否全选
   isSelectAllClick() {
-    if (this.isSelectAll === false) {
+    if (!this.isSelectAll) {
       this.noteModels.forEach((item: NoteModel, index: number) => {
         item.isDelete = true;
         this.noteModels[index].isDelete = item.isDelete
@@ -157,58 +155,8 @@ export struct MyNotesPage {
     List({ space: 8 }) {
       ForEach(this.noteModels, ((item: NoteModel, index: number) => {
         ListItem() {
-          Column() {
-            Row() {
-              Text($r('app.string.single_choice'))
-                .width($r('app.float.vp_40'))
-                .height($r('app.float.vp_24'))
-                .fontSize($r('sys.float.Caption_L'))
-                .fontColor($r('sys.color.font_on_primary'))
-                .textAlign(TextAlign.Center)
-                .backgroundColor($r('app.color.view_report_btn'))
-                .borderRadius(8)
-              // 父组件 点击右上角删除按钮显示  否则不显示
-              if (this.isSelectDelete) {
-                Row() {
-                  Image(this.noteModels[index].isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_anscommon'))
-                    .height($r('app.float.vp_20'))
-                    .width($r('app.float.vp_20'))
-                }
-                .height($r('app.float.vp_24'))
-                .onClick(() => {
-                  this.noteModels[index].isDelete = !this.noteModels[index].isDelete
-                  if (this.noteModels[index].isDelete === true) {
-                    this.selectCount++;
-                  } else {
-                    this.selectCount--;
-                  }
-                  if (this.selectCount < this.noteModels.length) {
-                    this.isSelectAll = false
-                  } else {
-                    this.isSelectAll = true
-                  }
-                })
-              }
-            }
-            .width('100%')
-            .margin($r('app.float.vp_4'))
-            .justifyContent(FlexAlign.SpaceBetween)
-
-            Text(this.notes[index])
-              .fontSize($r('sys.float.Body_M'))
-              .fontColor($r('sys.color.font_primary'))
-              .width('100%')
-          }
-          .width('100%')
-          .padding($r('app.float.vp_12'))
-          .borderRadius(16)
-          .backgroundColor($r('sys.color.background_primary'))
-          .onClick(() => {
-            if (this.isSelectDelete === false) {
-              Logger.info(TAG, '点击事件-查看笔记')
-              RouterModule.push({ url: RouterMap.ViewNotePage, param: this.topicItemModelPreferences[index] });
-            }
-          })
+          // 笔记子项
+          this.noteItemBuilder(index)
         }
         .transition({ type: TransitionType.Delete, opacity: 0 })
         .swipeAction({
@@ -248,11 +196,63 @@ export struct MyNotesPage {
     .onVisibleAreaChange([0.0, 1.0], (isExpanding: boolean, currentRatio: number) => {
       Logger.info(TAG, 'Test Text isExpanding: ' + isExpanding + ', currentRatio:' + currentRatio)
       if (isExpanding) {
-        console.info('Test Text is fully visible. currentRatio:' + currentRatio)
         this.initData()
       }
-      if (!isExpanding && currentRatio <= 0.0) {
-        console.info(TAG, 'Test Text is completely invisible.')
+    })
+  }
+
+  @Builder
+  noteItemBuilder(index: number) {
+    Column() {
+      Row() {
+        Text($r('app.string.single_choice'))
+          .width($r('app.float.vp_40'))
+          .height($r('app.float.vp_24'))
+          .fontSize($r('sys.float.Caption_L'))
+          .fontColor($r('sys.color.font_on_primary'))
+          .textAlign(TextAlign.Center)
+          .backgroundColor($r('app.color.view_report_btn'))
+          .borderRadius(8)
+        // 父组件 点击右上角删除按钮显示  否则不显示
+        Row() {
+          Image(this.noteModels[index].isDelete ? $r('app.media.icon_Checked') :
+          $r('app.media.icon_ans_common'))
+            .height($r('app.float.vp_20'))
+            .width($r('app.float.vp_20'))
+        }
+        .height($r('app.float.vp_24'))
+        .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.None)
+        .onClick(() => {
+          this.noteModels[index].isDelete = !this.noteModels[index].isDelete
+          if (this.noteModels[index].isDelete) {
+            this.selectCount++;
+          } else {
+            this.selectCount--;
+          }
+          if (this.selectCount < this.noteModels.length) {
+            this.isSelectAll = false
+          } else {
+            this.isSelectAll = true
+          }
+        })
+      }
+      .width('100%')
+      .margin($r('app.float.vp_4'))
+      .justifyContent(FlexAlign.SpaceBetween)
+
+      Text(this.notes[index])
+        .fontSize($r('sys.float.Body_M'))
+        .fontColor($r('sys.color.font_primary'))
+        .width('100%')
+    }
+    .width('100%')
+    .padding($r('app.float.vp_12'))
+    .borderRadius(16)
+    .backgroundColor($r('sys.color.background_primary'))
+    .onClick(() => {
+      if (!this.isSelectDelete) {
+        Logger.info(TAG, '点击事件-查看笔记')
+        RouterModule.push({ url: RouterMap.View_NOTE_PAGE, param: this.topicItemModelPreferences[index] });
       }
     })
   }
@@ -265,12 +265,12 @@ export struct MyNotesPage {
         .height($r('app.float.vp_24'))
         .margin({ left: $r('app.float.vp_12') })
         .onClick(() => {
+          this.swipeDelete = false
           this.notes.splice(index, 1)
           this.topicItemModelPreferences.splice(index, 1)
           this.noteModels.splice(index, 1)
           // 更新
-          ExamPreferences.notesPreferences?.deleteSync(item.keyID);
-          ExamPreferences.notesPreferences?.flush();
+          PreferenceUtil.getInstance(PreferConstant.TOPIC_NOTES).delete(item.keyID);
         })
     }.padding($r('app.float.vp_4')).justifyContent(FlexAlign.SpaceEvenly)
   }
@@ -289,10 +289,10 @@ export struct MyNotesPage {
         title: $r('app.string.my_notes')
       })
       Row() {
-        Image(this.isSelectAll === false ? $r('app.media.icon_select_all_off') : $r('app.media.icon_select_all'))
+        Image(!this.isSelectAll ? $r('app.media.icon_select_all_off') : $r('app.media.icon_select_all'))
           .width($r('app.float.vp_40'))
           .height($r('app.float.vp_40'))
-          .visibility(this.isSelectDelete === true ? Visibility.Visible : Visibility.Hidden)
+          .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.Hidden)
           .onClick(() => {
             this.isSelectAllClick()
           })
@@ -300,12 +300,12 @@ export struct MyNotesPage {
           .width($r('app.float.vp_40'))
           .height($r('app.float.vp_40'))
           .margin({ left: $r('app.float.vp_8') })
-          .opacity(this.noteModels.length === 0 || this.swipeDelete === true ? 0.4 : 1)
+          .opacity(this.noteModels.length === 0 || this.swipeDelete ? 0.4 : 1)
       }
       .onClick(() => {
-        if (this.swipeDelete === false && this.noteModels.length > 0) {
+        if (!this.swipeDelete && this.noteModels.length > 0) {
           this.isSelectDelete = !this.isSelectDelete
-          if (this.isSelectDelete === false) {
+          if (!this.isSelectDelete) {
             this.isSelectAll = false
             this.selectCount = 0
             this.noteModels.forEach((item: NoteModel, index: number) => {

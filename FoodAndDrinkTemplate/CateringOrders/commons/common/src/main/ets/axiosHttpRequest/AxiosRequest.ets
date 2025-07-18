@@ -16,10 +16,10 @@ const axiosClient = new AxiosHttpRequest({
     requestInterceptor: async (config) => {
       axiosClient.config.showLoading = config.showLoading;
       if (config.baseURL) {
-        // 补充公共请求参数
         if (!config.params) {
           config.params = {};
         }
+        // todo 接口请求补充公共请求参数
         config.params.i = 'xxxxx';
       }
 
@@ -53,6 +53,6 @@ const axiosClient = new AxiosHttpRequest({
       return Promise.reject(error);
     },
   },
-}, true);
+}, true); // todo 这里是mock数据参数位置，真实网络请求可以删除这里的参数true
 
 export default axiosClient;

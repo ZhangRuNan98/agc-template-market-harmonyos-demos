@@ -28,6 +28,8 @@ export * from './src/main/ets/utils/CalculatorUtils'
 
 export * from './src/main/ets/utils/PreferenceUtil'
 
+export { default as AsWebRichText } from './src/main/ets/utils/AsWebRichText'
+
 export * from './src/main/ets/components/CallTelSheet'
 
 export * from './src/main/ets/components/PayTypeSheet'

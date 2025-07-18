@@ -1,9 +1,9 @@
 # 热量计算组件快速入门
 
 ## 目录
-
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -11,34 +11,46 @@
 
 本组件提供了展示卡路里计算和统计的相关功能。
 
-| 计算卡路里                                                   | 统计卡路里                                                   |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="./screenshot/CalorieCalculation1.png" width="300"> | <img src="./screenshot/CalorieCalculation2.png" width="300"> |
+| 计算卡路里                                                        | 统计卡路里                                                        |
+|--------------------------------------------------------------|--------------------------------------------------------------|
+| <img src="./screenshot/CalorieCalculation1.PNG" width="300"> | <img src="./screenshot/CalorieCalculation2.PNG" width="300"> |
 
+## 约束与限制
 
+### 环境
 
+- DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+- 设备类型：华为手机（直板机）
+- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
 
-## 使用
+## 快速入门
 
-1. 安装组件。
-   需要将模板根目录的components下[base_ui](../../components/base_ui)和[calorie_calculation](../../components/calorie_calculation)目录拷贝至您工程根目录components/，并添加如下依赖。
+1. 安装组件。  
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+   如果是从生态市场下载组件，请参考以下步骤安装组件。  
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的xxx目录下。  
+   b. 在项目根目录build-profile.json5并添加base_ui和calorie_calculation模块。
    ```typescript
-   // 模块下的oh-package.json5
-   "dependencies": {
-     "calorie_calculation": "file:../components/calorie_calculation"
-   }
-   
-   // 模板根目录的build-profile.json5
+   // 在项目根目录的build-profile.json5填写base_ui和calorie_calculation路径。其中xxx为组件存在的目录名
    "modules": [
      {
        "name": "base_ui",
-       "srcPath": "./components/base_ui",
+       "srcPath": "./xxx/base_ui",
      },
      {
        "name": "calorie_calculation",
-       "srcPath": "./components/calorie_calculation",
+       "srcPath": "./xxx/calorie_calculation",
      }
    ]
+   ```
+   c. 在项目根目录oh-package.json5中添加依赖
+   ```typescript
+   // xxx为组件存放的目录名称
+   "dependencies": {
+     "base_ui": "file:../xxx/base_ui",
+     "calorie_calculation": "file:../xxx/calorie_calculation"
+   }
    ```
 
 2. 引入组件。
@@ -123,7 +135,7 @@ import { promptAction } from '@kit.ArkUI';
 struct Index {
    @Local seriesData: number[] = [1500, 1250, 1200, 1280, 1650, 1700, 1600];
    @Local dietPlanList: DietPlans[] =
-      [new DietPlans(1, '早餐', '描述', 100, [new FoodPlanCalories(1, '面包', 100, 100)])];
+      [new DietPlans(1, 1, '早餐', '描述', 100, [new FoodPlanCalories(1, '面包', 100, 100)])];
 
    build() {
       RelativeContainer() {
@@ -141,4 +153,4 @@ struct Index {
 }
 ```
 
-<img src="./screenshot/CalorieCalculation1.png" width="300">
+<img src="./screenshot/CalorieCalculation1.PNG" width="300">

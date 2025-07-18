@@ -1,8 +1,6 @@
 {
   "app": {
-    /*
-    :todo
-    */
+    // todo 修改元服务包名
     "bundleName": "com.huawei.xxxxx",
     "vendor": "example",
     "versionCode": 1000000,

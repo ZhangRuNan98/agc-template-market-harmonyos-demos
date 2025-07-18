@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import { examPrefer, PreferConstant, QuestionsRoterModel, TopBar } from 'commonlib';
+import { QuestionsRouterModel, TopicItemType } from 'answer_questions';
+import { PreferenceUtil, PreferConstant, TopBar } from 'commonlib';
 import { RouterMap, RouterModule } from 'router_module';
-import { TopicItemType } from 'commonlib';
 
 @ComponentV2
 export struct MyCollectionItem {
@@ -28,40 +28,15 @@ export struct MyCollectionItem {
   build() {
     Column() {
       Row() {
-        Text($r('app.string.single_choice'))
-          .width($r('app.float.vp_40'))
-          .height($r('app.float.vp_24'))
-          .textAlign(TextAlign.Center)
-          .borderRadius($r('app.float.vp_8'))
-          .backgroundColor('#4c5dc5')
-          .fontColor($r('sys.color.font_on_primary'))
-          .fontSize($r('sys.float.Caption_L'))
-          .fontWeight(FontWeight.Regular)
-          .margin({ bottom: $r('app.float.vp_4') })
+        // 单选
+        this.singleChoiceBuilder()
         // 父组件 点击右上角删除按钮显示  否则不显示
-        if (this.isSelectDelete) {
-          Row() {
-            Image(this.item.isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_anscommon'))
-              .height($r('app.float.vp_20'))
-              .width($r('app.float.vp_20'))
-          }
-          .height($r('app.float.vp_24'))
-          .width($r('app.float.vp_50'))
-          .justifyContent(FlexAlign.End)
-          .onClick(() => {
-            this.changeCollectionItem(this.idx)
-          })
-        }
+        this.isDeleteButtonBuilder()
       }.width('100%')
       .justifyContent(FlexAlign.SpaceBetween)
 
-      Text(this.item.title)
-        .fontColor($r('sys.color.font_primary'))
-        .fontSize($r('sys.float.Body_M'))
-        .fontWeight(FontWeight.Regular)
-        .maxLines(2)
-        .lineHeight($r('app.float.vp_20'))
-        .textOverflow({ overflow: TextOverflow.Ellipsis })
+      // 收藏内容
+      this.contentBuilder()
     }
     .width('100%')
     .alignItems(HorizontalAlign.Start)
@@ -69,6 +44,56 @@ export struct MyCollectionItem {
     .backgroundColor(Color.White)
     .borderRadius($r('app.float.vp_16'))
     .margin({ bottom: $r('app.float.vp_8') })
+  }
+
+  /**
+   * 收藏内容
+   */
+  @Builder
+  contentBuilder() {
+    Text(this.item.title)
+      .fontColor($r('sys.color.font_primary'))
+      .fontSize($r('sys.float.Body_M'))
+      .fontWeight(FontWeight.Regular)
+      .maxLines(2)
+      .lineHeight($r('app.float.vp_20'))
+      .textOverflow({ overflow: TextOverflow.Ellipsis })
+  }
+
+  /**
+   * 是否删除按钮
+   */
+  @Builder
+  isDeleteButtonBuilder() {
+    Row() {
+      Image(this.item.isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_ans_common'))
+        .height($r('app.float.vp_20'))
+        .width($r('app.float.vp_20'))
+    }
+    .height($r('app.float.vp_24'))
+    .width($r('app.float.vp_50'))
+    .justifyContent(FlexAlign.End)
+    .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.None)
+    .onClick(() => {
+      this.changeCollectionItem(this.idx)
+    })
+  }
+
+  /**
+   * 单选
+   */
+  @Builder
+  singleChoiceBuilder() {
+    Text($r('app.string.single_choice'))
+      .width($r('app.float.vp_40'))
+      .height($r('app.float.vp_24'))
+      .textAlign(TextAlign.Center)
+      .borderRadius($r('app.float.vp_8'))
+      .backgroundColor('#4c5dc5')
+      .fontColor($r('sys.color.font_on_primary'))
+      .fontSize($r('sys.float.Caption_L'))
+      .fontWeight(FontWeight.Regular)
+      .margin({ bottom: $r('app.float.vp_4') })
   }
 }
 
@@ -100,21 +125,21 @@ export struct MyCollectionPage {
         title: $r('app.string.my_collection')
       })
       Row() {
-        Image(this.isSelectAll === false ? $r('app.media.icon_select_all_off') : $r('app.media.icon_select_all'))
+        Image(!this.isSelectAll ? $r('app.media.icon_select_all_off') : $r('app.media.icon_select_all'))
           .height($r('app.float.vp_40'))
           .width($r('app.float.vp_40'))
           .onClick(() => {
             this.isSelAll()
           })
-          .visibility(this.isSelectDelete === true ? Visibility.Visible : Visibility.Hidden)
+          .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.Hidden)
         Image($r('app.media.ic_public_trash'))
           .width($r('app.float.vp_40'))
           .height($r('app.float.vp_40'))
-          .opacity(this.swipeDelete === true ? 0.4 : 1)
+          .opacity(this.swipeDelete ? 0.4 : 1)
           .margin({ left: $r('app.float.vp_8') })
       }
       .onClick(() => {
-        if (this.swipeDelete === false && this.collectionQues.length > 0) {
+        if (!this.swipeDelete && this.collectionQues.length > 0) {
           this.isSelectDelete = !this.isSelectDelete
           this.selectCount = 0
           this.isSelectAll = false
@@ -138,6 +163,7 @@ export struct MyCollectionPage {
         .height($r('app.float.vp_24'))
         .onClick(() => {
           this.deleteData(idx)
+          this.swipeDelete = false
         })
     }
     .margin({ right: $r('app.float.vp_16') })
@@ -154,98 +180,8 @@ export struct MyCollectionPage {
           .fontColor($r('sys.color.icon_secondary'))
           .height('100%')
       } else {
-        Column() {
-          List() {
-            ForEach(this.collectionQues, (item: CollectionModel, idx: number) => {
-              ListItem() {
-                MyCollectionItem({
-                  item: item,
-                  isSelectDelete: this.isSelectDelete,
-                  changeCollectionItem: () => {
-                    item.isDelete = !item.isDelete
-                    if (item.isDelete === true) {
-                      this.selectCount++;
-                    } else {
-                      this.selectCount--;
-                    }
-                    if (this.selectCount < this.collectionQues.length) {
-                      this.isSelectAll = false
-                    } else {
-                      this.isSelectAll = true
-                    }
-                  },
-                  idx: idx
-                })
-                  .margin({
-                    left: $r('app.float.vp_16'),
-                    right: $r('app.float.vp_16'),
-                  })
-              }
-              .transition({ type: TransitionType.Delete, opacity: 0 })
-              .swipeAction({
-                edgeEffect: SwipeEdgeEffect.None,
-                end: {
-                  builder: () => {
-                    this.itemEnd(idx)
-                  },
-                  actionAreaDistance: 26,
-                  onStateChange: (state: SwipeActionState) => {
-                    if (state === SwipeActionState.EXPANDED) {
-                      this.isSelectDelete = false
-                      this.swipeDelete = true
-                    } else if (state === SwipeActionState.COLLAPSED) {
-                      this.swipeDelete = false
-                    }
-                  }
-                }
-              })
-              .onClick(() => {
-                if (this.collectionArr.length > 0) {
-                  let roterModel: QuestionsRoterModel = new QuestionsRoterModel()
-                  roterModel.sourceType = '我的收藏'
-                  roterModel.datalist = [this.collectionArr[idx]]
-                  RouterModule.push({ url: RouterMap.AnswerQuestions_Page, param: roterModel })
-                }
-              })
-            }, (item: CollectionModel, idx: number) => JSON.stringify(item.keyID + idx + ''))
-            ListItem() {
-              if (this.isSelectDelete) {
-                Row() {
-                  Row() {
-                    Image($r('app.media.icon_delete'))
-                      .width($r('app.float.vp_25'))
-                      .height($r('app.float.vp_25'))
-                      .margin($r('app.float.vp_8'))
-                    Text('删除')
-                      .fontColor($r('sys.color.font_on_primary'))
-                      .fontSize($r('sys.float.Body_L'))
-                      .fontWeight(FontWeight.Medium)
-                      .textAlign(TextAlign.Center)
-                  }
-                  .justifyContent(FlexAlign.Center)
-                  .alignItems(VerticalAlign.Center)
-                  .backgroundColor('#4c5dc4')
-                  .width('100%')
-                  .borderRadius($r('app.float.vp_20'))
-                }
-                .height($r('app.float.vp_40'))
-                .padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16'), })
-                .margin({ top: $r('app.float.vp_38') })
-                .onClick(() => {
-                  // 删除选中
-                  this.deleteSelectData()
-                })
-              }
-            }
-          }.layoutWeight(1)
-          .listDirection(Axis.Vertical)
-          .scrollBar(BarState.Off)
-        }
-        .padding({
-          top: $r('app.float.vp_12'),
-        })
-        .layoutWeight(1)
-        .backgroundColor($r('sys.color.comp_background_gray'))
+        // 收藏列表
+        this.collectionListBuilder()
       }
     }
     .layoutWeight(1)
@@ -253,12 +189,122 @@ export struct MyCollectionPage {
   }
 
   /**
+   * 收藏列表
+   */
+  @Builder
+  collectionListBuilder() {
+    Column() {
+      List() {
+        ForEach(this.collectionQues, (item: CollectionModel, idx: number) => {
+          ListItem() {
+            MyCollectionItem({
+              item: item,
+              isSelectDelete: this.isSelectDelete,
+              changeCollectionItem: () => {
+                item.isDelete = !item.isDelete
+                if (item.isDelete) {
+                  this.selectCount++;
+                } else {
+                  this.selectCount--;
+                }
+                if (this.selectCount < this.collectionQues.length) {
+                  this.isSelectAll = false
+                } else {
+                  this.isSelectAll = true
+                }
+              },
+              idx: idx
+            })
+              .margin({
+                left: $r('app.float.vp_16'),
+                right: $r('app.float.vp_16'),
+              })
+          }
+          .transition({ type: TransitionType.Delete, opacity: 0 })
+          .swipeAction({
+            edgeEffect: SwipeEdgeEffect.None,
+            end: {
+              builder: () => {
+                this.itemEnd(idx)
+              },
+              actionAreaDistance: 26,
+              onStateChange: (state: SwipeActionState) => {
+                if (state === SwipeActionState.EXPANDED) {
+                  this.isSelectDelete = false
+                  this.swipeDelete = true
+                } else if (state === SwipeActionState.COLLAPSED) {
+                  this.swipeDelete = false
+                }
+              }
+            }
+          })
+          .onClick(() => {
+            if (this.collectionArr.length > 0) {
+              let routerModel: QuestionsRouterModel = new QuestionsRouterModel()
+              routerModel.sourceType = '我的收藏'
+              routerModel.datalist = [this.collectionArr[idx]]
+              RouterModule.push({ url: RouterMap.ANSWER_QUESTIONS_PAGE, param: routerModel })
+            }
+          })
+        }, (item: CollectionModel, idx: number) => JSON.stringify(item.keyID + idx + ''))
+        // 删除按钮
+        this.deleteButtonBuilder()
+      }
+      .layoutWeight(1)
+      .width('auto')
+      .height('auto')
+      .listDirection(Axis.Vertical)
+      .scrollBar(BarState.Off)
+    }
+    .padding({
+      top: $r('app.float.vp_12'),
+    })
+    .layoutWeight(1)
+    .backgroundColor($r('sys.color.comp_background_gray'))
+  }
+
+  /**
+   * 删除按钮
+   */
+  @Builder
+  deleteButtonBuilder() {
+    ListItem() {
+      Row() {
+        Row() {
+          Image($r('app.media.icon_delete'))
+            .width($r('app.float.vp_25'))
+            .height($r('app.float.vp_25'))
+            .margin($r('app.float.vp_8'))
+          Text('删除')
+            .fontColor($r('sys.color.font_on_primary'))
+            .fontSize($r('sys.float.Body_L'))
+            .fontWeight(FontWeight.Medium)
+            .textAlign(TextAlign.Center)
+        }
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .backgroundColor('#4c5dc4')
+        .width('100%')
+        .borderRadius($r('app.float.vp_20'))
+      }
+      .height($r('app.float.vp_40'))
+      .padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16'), })
+      .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.Hidden)
+      .margin({ top: $r('app.float.vp_38') })
+      .onClick(() => {
+        // 删除选中
+        this.deleteSelectData()
+      })
+    }
+  }
+
+  /**
    * 数据初始化
    */
-  async initData() {
+  initData() {
     try {
       let arr: TopicItemType[] =
-        await examPrefer.getPreferenceValue(PreferConstant.EXAMPREFER_COLLECT, []) as TopicItemType[];
+        PreferenceUtil.getInstance().get(PreferConstant.EXAM_PREFER_COLLECT, []) as TopicItemType[];
       arr.sort((a, b) => b.jlStamp - a.jlStamp)
       this.collectionArr = arr;
       if (arr && arr.length > 0) {
@@ -284,12 +330,12 @@ export struct MyCollectionPage {
     this.swipeDelete = this.collectionQues.length === 0
     this.collectionArr.splice(idx, 1)
     // 更新
-    examPrefer.putPreferenceValue(PreferConstant.EXAMPREFER_COLLECT, this.collectionArr)
+    PreferenceUtil.getInstance().put(PreferConstant.EXAM_PREFER_COLLECT, this.collectionArr)
   }
 
   // 是否全选
   isSelAll() {
-    if (this.isSelectAll === false) {
+    if (!this.isSelectAll) {
       this.collectionQues.forEach((item: CollectionModel) => {
         item.isDelete = true;
       })
@@ -313,9 +359,9 @@ export struct MyCollectionPage {
       }
     })
     this.collectionArr = this.collectionArr.filter((it: TopicItemType) => !arr.includes(it.keyID))
-    this.collectionQues = this.collectionQues.filter((it: CollectionModel) => it.isDelete === false)
+    this.collectionQues = this.collectionQues.filter((it: CollectionModel) => !it.isDelete)
     // 更新
-    examPrefer.putPreferenceValue(PreferConstant.EXAMPREFER_COLLECT, this.collectionArr)
+    PreferenceUtil.getInstance().put(PreferConstant.EXAM_PREFER_COLLECT, this.collectionArr)
     if (this.collectionQues.length === 0) {
       this.isSelectDelete = false
     }

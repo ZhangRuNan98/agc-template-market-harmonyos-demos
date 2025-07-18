@@ -74,6 +74,15 @@ class ToastOption {
    */
   customFooter?: () => void = () => {
   }
+  /**
+   * 取消按钮颜色
+   */
+  cancelColor?:ResourceStr | Color = $r('sys.color.font_emphasize')
+
+  /**
+   * 确认按钮颜色
+   */
+  confirmColor?:ResourceStr | Color = $r('sys.color.font_emphasize')
 }
 
 /**
@@ -124,7 +133,7 @@ function dialogBuilder(option: ToastOption) {
 
     Row() {
       Text('取消')
-        .fontColor($r('sys.color.font_emphasize'))
+        .fontColor(option.cancelColor?option.cancelColor:$r('sys.color.font_emphasize'))
         .fontSize($r('sys.float.Body_L'))
         .fontWeight(FontWeight.Medium)
         .onClick(() => {
@@ -134,7 +143,7 @@ function dialogBuilder(option: ToastOption) {
         .height('100%')
         .textAlign(TextAlign.Center)
       Text('确认')
-        .fontColor($r('sys.color.font_emphasize'))
+        .fontColor(option.confirmColor?option.confirmColor:$r('sys.color.font_emphasize'))
         .fontSize($r('sys.float.Body_L'))
         .fontWeight(FontWeight.Medium)
         .onClick(() => {

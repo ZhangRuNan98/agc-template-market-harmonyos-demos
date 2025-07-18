@@ -9,7 +9,7 @@ export interface CommonReq {
   openId: string;
   // 用户UnionID。
   unionId: string;
-  // 鸿蒙应用AppId
+  // 鸿蒙元服务AppId
   hmAppid: string;
   // 订单Id
   orderId: string;
@@ -81,7 +81,7 @@ export interface AddDnOrderReq {
   formId2: number, //随便填写 1
   payType: number, //支付类型 0 华为支付
   sz: string, //购物车列表
-  tableware: number, //用餐人数
+  tableware: string, //用餐人数
   yhqMoney: string, //优惠券金额
   couponId: string, //抵扣优惠券ID
   orderType: number, //订单使用类型 填写 0 店铺堂食

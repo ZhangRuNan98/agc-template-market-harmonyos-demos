@@ -13,13 +13,15 @@
  * limitations under the License.
  */
 
-import { examPrefer, PreferConstant, QuestionsRoterModel, TopicItemType, TopTabsBuilder } from 'commonlib'
-import { AppStorageV2, promptAction } from '@kit.ArkUI';
+import { AppStorageV2 } from '@kit.ArkUI';
+import { PreferenceUtil, PreferConstant, TopTabsBuilder } from 'commonlib'
 import { PracticeDataSource, PRACTICE_LIST_DATA, PracticeView } from '../model/PracticeMode';
 import { CourseQuestions } from '../model/CourseQuestions';
 import { RouterMap, RouterModule } from 'router_module'
 import { Sample } from '../model/Course'
-import { UserInfo } from 'login_info/src/main/ets/model/UserInfo';
+import { QuestionsRouterModel } from 'answer_questions';
+import { TopicItemType } from 'answer_questions';
+import { UserInfo } from 'login_info';
 
 @ComponentV2
 export struct HomePage {
@@ -49,111 +51,15 @@ export struct HomePage {
         TopTabsBuilder({ title: '练习', type: this.prop.title }).margin({ bottom: 12 })
         Scroll() {
           Column({ space: 10 }) {
-            Swiper() {
-              Image($r('app.media.ic_questionDetail_banner'))
-                .interpolation(ImageInterpolation.High)
-                .objectFit(ImageFit.Fill)
-                .width('100%')
-                .height($r('app.float.vp_184'))
-              Image($r('app.media.ic_questionDetail_banner'))
-                .interpolation(ImageInterpolation.High)
-                .objectFit(ImageFit.Fill)
-                .width('100%')
-                .height($r('app.float.vp_184'))
-            }
-            .loop(true)
-            .autoPlay(true)
-            .interval(2000)
-
-            Row({ space: 8 }) {
-              ForEach(this.functions, (item: CourseCoreBar) => {
-                CourseCoreBuilder(item)
-              }, (item: CourseCoreBar, index: number) => item.description + index)
-            }
-            .height($r('app.float.vp_72'))
-            .width('100%')
-            .borderRadius($r('app.float.vp_16'))
-            .backgroundColor($r('sys.color.background_primary'))
-            .justifyContent(FlexAlign.Center)
-
+            // 轮播图
+            this.swiperBuilder()
+            // 功能栏
+            this.functionBarBuilder()
             Column() {
-              Text('练习模式')
-                .fontSize($r('sys.float.Subtitle_L'))
-                .fontWeight(FontWeight.Medium)
-                .fontColor($r('sys.color.font_primary'))
-                .width('100%')
-                .textAlign(TextAlign.Start)
-                .margin({ bottom: $r('app.float.vp_12') })
-              Grid() {
-                LazyForEach(this.dataSource, (practiceItem: PracticeView) => {
-                  GridItem() {
-                    ReusableFlowItem({ item: practiceItem })
-                  }.width('100%')
-                  .height($r('app.float.vp_40'))
-                  .backgroundColor(Color.White)
-                  .onClick(() => {
-                    if (!this.logoUser.isLogin) {
-                      RouterModule.push({ url: RouterMap.QuickLoginPage, param: false })
-                      return
-                    }
-                    if (practiceItem.name === '每日一练') {
-                      RouterModule.push({ url: RouterMap.AnswerQuestions_Page });
-                    } else if (practiceItem.name === '模拟考试') {
-                      RouterModule.push({ url: RouterMap.MockTestPage, param: 1 });
-                    } else if (practiceItem.name === '全真试卷') {
-                      RouterModule.push({ url: RouterMap.MockTestPage, param: 2 });
-                    } else {
-                      // 错题练习
-                      this.myWrongPracticeEvent()
-                    }
-                  })
-
-                }, (practiceItem: PracticeView, index: number) => practiceItem.name + index)
-              }
-              .cachedCount(2)
-              .padding($r('app.float.vp_12'))
-              .backgroundColor($r('sys.color.background_primary'))
-              .columnsTemplate('1fr 1fr')
-              .columnsGap($r('app.float.vp_8'))
-              .rowsGap($r('app.float.vp_8'))
-              .height($r('app.float.vp_112'))
-              .width('100%')
-              .borderRadius($r('app.float.vp_16'))
-
-              Text('科目练习')
-                .fontSize($r('sys.float.Subtitle_L'))
-                .fontWeight(FontWeight.Medium)
-                .fontColor($r('sys.color.font_primary'))
-                .width('100%')
-                .textAlign(TextAlign.Start)
-                .margin($r('app.float.vp_12'))
-
-              if (!this.logoUser.isLogin) {
-                Column() {
-                  Column() {
-                    Image($r('app.media.ic_noLogin'))
-                      .interpolation(ImageInterpolation.High)
-                      .objectFit(ImageFit.Fill)
-                      .width($r('app.float.vp_120'))
-                      .height($r('app.float.vp_120'))
-                      .clip(true)
-                    Text('登录后享受更多服务')
-                      .fontSize($r('sys.float.Body_M'))
-                      .fontColor($r('sys.color.font_tertiary'))
-                      .fontWeight(FontWeight.Regular)
-                  }
-                  .margin($r('app.float.vp_16'))
-                }
-                .width('100%')
-                .justifyContent(FlexAlign.Center)
-              } else {
-                ForEach(this.coursePractice, (item: CourseQuestions) => {
-                  Row() {
-                    CoursePracticeBuilder(item)
-                  }
-                  .margin({ bottom: $r('app.float.vp_8') })
-                }, (item: CourseQuestions, index: number) => item.courseName + index)
-              }
+              // 练习模式
+              this.practiceModeBuilder()
+              // 科目练习
+              this.subjectPracticeBuilder()
             }
             .margin({ bottom: $r('app.float.vp_12') })
           }
@@ -161,6 +67,7 @@ export struct HomePage {
         }
         .scrollBar(BarState.Off)
         .scrollable(ScrollDirection.Vertical)
+        .edgeEffect(EdgeEffect.Spring)
       }
     }
     .padding({ left: 16, right: 16 })
@@ -169,20 +76,149 @@ export struct HomePage {
     .height('100%')
   }
 
-  // 错题练习点击事件
-  async myWrongPracticeEvent() {
+  /**
+   * 科目练习
+   */
+  @Builder
+  subjectPracticeBuilder() {
+    Text('科目练习')
+      .fontSize($r('sys.float.Subtitle_L'))
+      .fontWeight(FontWeight.Medium)
+      .fontColor($r('sys.color.font_primary'))
+      .width('100%')
+      .textAlign(TextAlign.Start)
+      .margin($r('app.float.vp_12'))
 
+    if (!this.logoUser.isLogin) {
+      Column() {
+        Column() {
+          Image($r('app.media.ic_noLogin'))
+            .interpolation(ImageInterpolation.High)
+            .objectFit(ImageFit.Fill)
+            .width($r('app.float.vp_120'))
+            .height($r('app.float.vp_120'))
+            .clip(true)
+          Text('登录后享受更多服务')
+            .fontSize($r('sys.float.Body_M'))
+            .fontColor($r('sys.color.font_tertiary'))
+            .fontWeight(FontWeight.Regular)
+        }
+        .margin($r('app.float.vp_16'))
+      }
+      .width('100%')
+      .justifyContent(FlexAlign.Center)
+    } else {
+      ForEach(this.coursePractice, (item: CourseQuestions) => {
+        Row() {
+          CoursePracticeBuilder(item)
+        }
+        .margin({ bottom: $r('app.float.vp_8') })
+      }, (item: CourseQuestions, index: number) => item.courseName + index)
+    }
+  }
+
+  /**
+   * 练习模式
+   */
+  @Builder
+  practiceModeBuilder() {
+    Text('练习模式')
+      .fontSize($r('sys.float.Subtitle_L'))
+      .fontWeight(FontWeight.Medium)
+      .fontColor($r('sys.color.font_primary'))
+      .width('100%')
+      .textAlign(TextAlign.Start)
+      .margin({ bottom: $r('app.float.vp_12') })
+    Grid() {
+      LazyForEach(this.dataSource, (practiceItem: PracticeView) => {
+        GridItem() {
+          ReusableFlowItem({ item: practiceItem })
+        }.width('100%')
+        .height($r('app.float.vp_40'))
+        .backgroundColor(Color.White)
+        .onClick(() => {
+          if (!this.logoUser.isLogin) {
+            RouterModule.push({ url: RouterMap.LOGIN_PAGE, param: false })
+            return
+          }
+          if (practiceItem.name === '每日一练') {
+            RouterModule.push({ url: RouterMap.ANSWER_QUESTIONS_PAGE });
+          } else if (practiceItem.name === '模拟考试') {
+            RouterModule.push({ url: RouterMap.Mock_PAGE, param: 1 });
+          } else if (practiceItem.name === '全真试卷') {
+            RouterModule.push({ url: RouterMap.Mock_PAGE, param: 2 });
+          } else {
+            // 错题练习
+            this.myWrongPracticeEvent()
+          }
+        })
+
+      }, (practiceItem: PracticeView, index: number) => practiceItem.name + index)
+    }
+    .cachedCount(2)
+    .padding($r('app.float.vp_12'))
+    .backgroundColor($r('sys.color.background_primary'))
+    .columnsTemplate('1fr 1fr')
+    .columnsGap($r('app.float.vp_8'))
+    .rowsGap($r('app.float.vp_8'))
+    .height($r('app.float.vp_112'))
+    .width('100%')
+    .borderRadius($r('app.float.vp_16'))
+  }
+
+  /**
+   * 功能栏
+   */
+  @Builder
+  functionBarBuilder() {
+    Row({ space: 8 }) {
+      ForEach(this.functions, (item: CourseCoreBar) => {
+        CourseCoreBuilder(item)
+      }, (item: CourseCoreBar, index: number) => item.description + index)
+    }
+    .height($r('app.float.vp_72'))
+    .width('100%')
+    .borderRadius($r('app.float.vp_16'))
+    .backgroundColor($r('sys.color.background_primary'))
+    .justifyContent(FlexAlign.Center)
+
+  }
+
+  /**
+   * 轮播图
+   */
+  @Builder
+  swiperBuilder() {
+    Swiper() {
+      Image($r('app.media.ic_questionDetail_banner'))
+        .interpolation(ImageInterpolation.High)
+        .objectFit(ImageFit.Fill)
+        .width('100%')
+        .height($r('app.float.vp_184'))
+      Image($r('app.media.ic_questionDetail_banner'))
+        .interpolation(ImageInterpolation.High)
+        .objectFit(ImageFit.Fill)
+        .width('100%')
+        .height($r('app.float.vp_184'))
+    }
+    .loop(true)
+    .autoPlay(true)
+    .interval(2000)
+  }
+
+  // 错题练习点击事件
+  myWrongPracticeEvent() {
     let arr: TopicItemType[] =
-      await examPrefer.getPreferenceValue(PreferConstant.EXAMPREFER_CTJL, []) as TopicItemType[];
+      PreferenceUtil.getInstance().get(PreferConstant.ERROR_RECORDS, []) as TopicItemType[];
     if (arr.length <= 0) {
-      promptAction.showToast({ message: '无错题数据' })
+      this.getUIContext().getPromptAction().showToast({ message: '无错题数据' })
       return
     }
     arr.sort((a, b) => b.jlStamp - a.jlStamp)
-    let roterModel: QuestionsRoterModel = new QuestionsRoterModel()
-    roterModel.sourceType = '错题练习'
-    roterModel.datalist = arr
-    RouterModule.push({ url: RouterMap.AnswerQuestions_Page, param: roterModel })
+    let routerModel: QuestionsRouterModel = new QuestionsRouterModel()
+    routerModel.sourceType = '错题练习'
+    routerModel.datalist = arr
+    RouterModule.push({ url: RouterMap.ANSWER_QUESTIONS_PAGE, param: routerModel })
   }
 }
 
@@ -251,17 +287,17 @@ export function CourseCoreBuilder(mainFunctionItem: CourseCoreBar) {
   .onClick(() => {
     let userInfo: UserInfo = AppStorageV2.connect(UserInfo, () => new UserInfo())!
     if (!userInfo.isLogin) {
-      RouterModule.push({ url: RouterMap.QuickLoginPage, param: false })
+      RouterModule.push({ url: RouterMap.LOGIN_PAGE, param: false })
       return
     }
     if (mainFunctionItem.description === '搜题') {
-      RouterModule.push({ url: 'SearchQuestionPage' })
+      RouterModule.push({ url: RouterMap.SEARCH_INPUT_PAGE })
     } else if (mainFunctionItem.description === '笔记') {
-      RouterModule.push({ url: RouterMap.MyNotesPage })
+      RouterModule.push({ url: RouterMap.MY_NOTE_PAGE })
     } else if (mainFunctionItem.description === '错题') {
-      RouterModule.push({ url: RouterMap.MyWrongPage })
+      RouterModule.push({ url: RouterMap.MY_WRONG_PAGE })
     } else if (mainFunctionItem.description === '收藏') {
-      RouterModule.push({ url: RouterMap.MyCollectionPage })
+      RouterModule.push({ url: RouterMap.MY_COLLECTION_PAGE })
     }
   })
 }
@@ -302,7 +338,7 @@ export function CoursePracticeBuilder(questions: CourseQuestions) {
       .justifyContent(FlexAlign.End)
       .onClick(() => {
         // 跳转章节练习页面
-        RouterModule.push({ url: RouterMap.ChapterPractice })
+        RouterModule.push({ url: RouterMap.CHAPTER_PRACTICE_PAGE })
       })
     }
     .margin({ bottom: $r('app.float.vp_11') })
@@ -340,6 +376,6 @@ export function CoursePracticeBuilder(questions: CourseQuestions) {
   })
   .backgroundColor($r('sys.color.background_primary'))
   .onClick(() => {
-    RouterModule.push({ url: RouterMap.ChapterPractice })
+    RouterModule.push({ url: RouterMap.CHAPTER_PRACTICE_PAGE })
   })
 }

@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -13,22 +14,38 @@
 
 <img src="./screenshot/0011.jpg" width="300">
 
-## 使用
+## 约束与限制
+### 环境
+* DevEco Studio版本：DevEco Studio 5.0.0 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.0 Release SDK及以上
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.0 Release及以上
 
-1. 在项目中安装组件，需要将模板根目录的components下search_question目录拷贝至您的工程相应目录。
+## 快速入门
+
+1. 安装组件。
+
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
+
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加search_question模块。
+
    ```
-   // 在项目根目录build-profile.json5填写search_question路径
+   // 在项目根目录build-profile.json5填写search_question路径。其中XXX为组件存放的目录名。
    "modules": [
    {
    "name": "search_question",
-   "srcPath": "./search_question",
+   "srcPath": "./XXX/search_question",
    }
    ]
    ```
    ```
      // 在entry目录下oh-package.json5填写依赖情况
    "dependencies": {
-      "search_question": "file:../search_question"
+      "search_question": "file:./XXX/search_question"
      }
    ```
 

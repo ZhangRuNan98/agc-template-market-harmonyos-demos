@@ -73,7 +73,8 @@ export struct ScheduleDetails {
           onEdit: () => {
             baseActionSheet.show({
               id: 'ScheduleDetails',
-              height: '100%',
+              detents:['98%','100%'],
+              backgroundColor:$r('sys.color.background_secondary'),
               showClose: false,
               customContent: () => {
                 this.CalendarScheduleEdit()

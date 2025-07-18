@@ -235,6 +235,10 @@
     {
       "name": "reservation_tips",
       "value": "左滑可删除"
+    },
+    {
+      "name": "agcit_huawei_medical_insurance",
+      "value": "1.0.1"
     }
   ]
 }

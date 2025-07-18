@@ -13,12 +13,12 @@
  * limitations under the License.
  */
 
+import { AppStorageV2 } from '@kit.ArkUI';
 import { OrderInfo, OrderState, SampleOrderInfo, SampleCollectInfo, TopTabsBuilder } from 'commonlib'
 import { RouterMap, RouterModule } from 'router_module'
 import { MyDataSource, GoodCourse } from '../viewModel/CourseHomeModel'
-import { AppStorageV2, promptAction } from '@kit.ArkUI';
 import { AggregatedPaymentPicker, ChannelType } from 'aggregated_payment';
-import { UserInfo } from 'login_info/src/main/ets/model/UserInfo';
+import { UserInfo } from 'login_info';
 
 @ComponentV2
 export struct GoodCourseDetailPage {
@@ -43,7 +43,7 @@ export struct GoodCourseDetailPage {
     list.push('app.media.ic_questionDetail_banner')
     this.data = new MyDataSource(list);
     // 获取科目名称
-    let temp: OrderInfo | string | undefined = RouterModule.getNavParam({ url: RouterMap.GoodCourseDetailPage })
+    let temp: OrderInfo | string | undefined = RouterModule.getNavParam({ url: RouterMap.GOOD_COURSE_DETAIL_PAGE })
     if (temp) {
       if (temp instanceof OrderInfo) {
         this.courseName = temp.content
@@ -116,9 +116,6 @@ export struct GoodCourseDetailPage {
         .selectedColor(Color.Blue)
         .maxDisplayCount(9))
     .curve(Curve.Linear)
-    .onChange((index: number) => {
-      console.info(index.toString());
-    })
   }
 
   @Builder
@@ -188,9 +185,7 @@ export struct GoodCourseDetailPage {
             .fontWeight(FontWeight.Medium)
         }.margin({ right: $r('app.float.vp_8') })
         .onClick(() => {
-          promptAction.showToast({
-            message: '暂不支持分享'
-          })
+          this.showToast('暂不支持分享')
         })
 
         Column() {
@@ -204,7 +199,7 @@ export struct GoodCourseDetailPage {
             .fontWeight(FontWeight.Medium)
         }.onClick(() => {
           if (!this.logoUser.isLogin) {
-            RouterModule.push({ url: RouterMap.QuickLoginPage })
+            RouterModule.push({ url: RouterMap.LOGIN_PAGE })
             return
           }
           this.goodCourse.isCollect = !this.goodCourse.isCollect
@@ -215,18 +210,12 @@ export struct GoodCourseDetailPage {
             let orderInfo =
               new OrderInfo(this.goodCourse.id, this.goodCourse.isCollect, OrderState.All, orderNo, content, false)
             this.propCollect.orderInfos.unshift(orderInfo)
-            promptAction.showToast({
-              message: '收藏成功~',
-              duration: 2000,
-            });
+            this.showToast('收藏成功~');
           } else {
             this.propCollect.orderInfos = this.propCollect.orderInfos.filter((it: OrderInfo) => {
-              it.id !== this.goodCourse.id
+              return it.id !== this.goodCourse.id
             })
-            promptAction.showToast({
-              message: '取消收藏~',
-              duration: 2000,
-            });
+            this.showToast('取消收藏~');
           }
         })
       }.justifyContent(FlexAlign.SpaceBetween)
@@ -257,7 +246,7 @@ export struct GoodCourseDetailPage {
           if (this.logoUser.isLogin) {
             this.isShow = true
           } else {
-            RouterModule.push({ url: 'QuickLoginPage' })
+            RouterModule.push({ url: RouterMap.LOGIN_PAGE })
           }
         })
     }
@@ -274,6 +263,26 @@ export struct GoodCourseDetailPage {
     .backgroundColor($r('sys.color.background_primary'))
   }
 
+  // 课程详情
+  @Builder
+  courseDetailsBuilder() {
+    Row() {
+      Text('课程详情')
+        .fontColor($r('sys.color.font_primary'))
+        .fontSize($r('sys.float.Subtitle_L'))
+        .fontWeight(FontWeight.Medium)
+    }.width('100%')
+    .padding({ top: $r('app.float.vp_16'), bottom: $r('app.float.vp_16') })
+    .justifyContent(FlexAlign.Center)
+
+    // 课程详情图片
+    Image($r('app.media.icon_courseDetail'))
+      .interpolation(ImageInterpolation.High)
+      .width('100%')
+      .objectFit(ImageFit.Cover)
+      .margin({ bottom: $r('app.float.vp_16') })
+  }
+
   @Builder
   paymentChannelSheet() {
     AggregatedPaymentPicker({
@@ -282,7 +291,7 @@ export struct GoodCourseDetailPage {
       channelInfo: [{
         channelType: ChannelType.HUAWEI_PAY,
         name: '华为支付',
-        icon: $r('app.media.hwpay'),
+        icon: $r('app.media.hw_pay'),
         preOrderInfo: '',
       }, {
         channelType: ChannelType.WECHAT_PAY,
@@ -303,10 +312,7 @@ export struct GoodCourseDetailPage {
         let orderInfo =
           new OrderInfo(this.goodCourse.id, this.goodCourse.isCollect, OrderState.Paid, orderNo, content, false)
         sampleOrderInfo.orderInfos.unshift(orderInfo)
-        promptAction.showToast({
-          message: '支付成功~',
-          duration: 2000,
-        });
+        this.showToast('支付成功~');
         RouterModule.pop();
         this.isShow = false;
       },
@@ -319,14 +325,22 @@ export struct GoodCourseDetailPage {
         orderInfo.startTime = Date.now()
         sampleOrderInfo.orderInfos.push(orderInfo)
         AppStorageV2.connect(SampleOrderInfo, () => sampleOrderInfo)!;
-        promptAction.showToast({
-          message: '支付失败~',
-          duration: 2000,
-        });
+        this.showToast('支付失败~');
         RouterModule.pop();
         this.isShow = false;
       }
     })
+  }
+
+  showToast(message: string) {
+    try {
+      this.getUIContext().getPromptAction().showToast({
+        message: message,
+        duration: 2000
+      });
+    } catch (error) {
+      //在此处进行异常处理
+    }
   }
 
   build() {
@@ -342,21 +356,8 @@ export struct GoodCourseDetailPage {
             this.swiperBuilder()
             // 科目
             this.subjectBuilder()
-            Row() {
-              Text('课程详情')
-                .fontColor($r('sys.color.font_primary'))
-                .fontSize($r('sys.float.Subtitle_L'))
-                .fontWeight(FontWeight.Medium)
-            }.width('100%')
-            .padding({ top: $r('app.float.vp_16'), bottom: $r('app.float.vp_16') })
-            .justifyContent(FlexAlign.Center)
-
-            // 课程详情图片
-            Image($r('app.media.icon_courseDetail'))
-              .interpolation(ImageInterpolation.High)
-              .width('100%')
-              .objectFit(ImageFit.Cover)
-              .margin({ bottom: $r('app.float.vp_16') })
+            // 课程详情
+            this.courseDetailsBuilder()
           }
           .padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16'), top: $r('app.float.vp_12') })
           .justifyContent(FlexAlign.Start)
@@ -365,7 +366,7 @@ export struct GoodCourseDetailPage {
         .backgroundColor($r('sys.color.comp_background_gray'))
         .scrollBar(BarState.Off)
         .scrollable(ScrollDirection.Vertical)
-
+        .edgeEffect(EdgeEffect.Spring)
         // 收藏分享、支付
         this.selectBuilder()
       }
@@ -377,6 +378,6 @@ export struct GoodCourseDetailPage {
 }
 
 @Builder
-export function GoodCourseDetailPageBuilder() {
+export function GoodCourseDetailBuilder() {
   GoodCourseDetailPage()
 }

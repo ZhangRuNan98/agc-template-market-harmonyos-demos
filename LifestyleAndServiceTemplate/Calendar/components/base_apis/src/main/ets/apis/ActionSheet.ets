@@ -35,8 +35,7 @@ class ActionSheetOption {
   /**
    * 自定义内容
    */
-  customContent?: () => void = () => {
-  }
+  customContent?: () => void = () => {}
   /**
    * 打开回调
    */

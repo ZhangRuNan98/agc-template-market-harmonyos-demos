@@ -29,7 +29,7 @@ export class PracticeMode {
   }
 }
 
-export const PRACTICELIST_DATA: PracticeMode[] = [
+export const PRACTICE_LIST_DATA: PracticeMode[] = [
   new PracticeMode($r('app.media.ic_sequence'), '每日一练', '1/3256'),
   new PracticeMode($r('app.media.ic_practice_simulations'), '模拟考试', '仿真模拟'),
   new PracticeMode($r('app.media.ic_practice_test_paper'), '全真试卷', '深度检测备考水平'),
@@ -159,7 +159,7 @@ export class SubjectExercises {
   }
 }
 
-export const SUBEXERCISES_DATA: SubjectExercises[] = [
+export const SUB_EXERCISES_DATA: SubjectExercises[] = [
   new SubjectExercises($r('app.media.ic_public_pdf_file_textured'), '建筑工程经济', 80, 100),
   new SubjectExercises($r('app.media.ic_public_compressed_file_textured'), '建筑工程项目管理', 10, 3411),
   new SubjectExercises($r('app.media.ic_public_word_file_textured'), '建筑工程项目管理', 20, 200),

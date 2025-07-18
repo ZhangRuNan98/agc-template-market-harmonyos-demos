@@ -20,7 +20,7 @@ export struct CalorieCalculation {
   }
 
   build() {
-    Column() {
+    Scroll() {
       Column({ space: 12 }) {
         CaloriesSummary({ todayCalories: this.todayCalories, seriesData: this.seriesData })
         FoodDiary({
@@ -31,6 +31,10 @@ export struct CalorieCalculation {
         })
       }
     }
-
+    .scrollBar(BarState.Off)
+    .padding({ left: 16, right: 16 })
+    .edgeEffect(EdgeEffect.Spring)
+    .layoutWeight(1)
+    .align(Alignment.Top)
   }
 }

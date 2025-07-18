@@ -207,7 +207,7 @@ export struct UploadRecipe {
 
         }.padding({ top: 12, bottom: 20 });
 
-      }.height('calc(100% - 76vp)').align(Alignment.Top).scrollBar(BarState.Off);
+      }.height('calc(100% - 76vp)').align(Alignment.Top).scrollBar(BarState.Off).edgeEffect(EdgeEffect.Spring);
 
       Row() {
         Button('上传')

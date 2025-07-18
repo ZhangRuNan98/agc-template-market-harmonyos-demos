@@ -13,11 +13,62 @@
  * limitations under the License.
  */
 
-import { HomePageBuilder } from 'homepage'
-import { MinePageBuilder } from 'minepage'
-import { CourseHomePageBuilder } from 'topicpage'
+import { RouterMap } from 'router_module';
 
-import { TabListItem } from '../model/TabListItem'
+import {
+  ChapterPracticeBuilder,
+  FeaturedCoursesBuilder,
+  HomePageBuilder,
+  MaterialDownloadBuilder,
+  SearchInputBuilder,
+  SearchPageBuilder,
+  SecondListBuilder,
+  ThirdListBuilder,
+  TopicHomePageBuilder,
+} from 'homepage';
+
+import {
+  AnswerQuestionsBuilder,
+  AnswerQuestionsTwoBuilder,
+  CourseHomePageBuilder,
+  CourseIntroductionBuilder,
+  ExamResultBuilder,
+  GoodCourseDetailBuilder,
+  MockTestPageBuilder,
+  MyCollectionPageBuilder,
+  MyNotesPageBuilder,
+  MyWrongPageBuilder,
+  TestReportBuilder,
+  ViewNotePageBuilder
+} from 'topicpage';
+
+import {
+  AboutPageBuilder,
+  BrowsingHistoryBuilder,
+  CollectionBuilder,
+  CoursePageBuilder,
+  EditPersonalCenterBuilder,
+  FeedbackPageBuilder,
+  FeedbackRecordPageBuilder,
+  MessageCenterBuilder,
+  MinePageBuilder,
+  MyOrderBuilder,
+  OneDayPracticeRecordsBuilder,
+  OrderDetailBuilder,
+  PracticeDetailsBuilder,
+  PracticeRecordsBuilder,
+  PrivacyAgreementBuilder,
+  PrivacyStatementPageBuilder,
+  PrivacyUseAlertBuilder,
+  SetUpPageBuilder,
+  TermsOfServicePageBuilder,
+  AuthenticationPageBuilder,
+  PrivacyPageBuilder,
+} from 'minepage';
+
+import { TabListItem } from '../model/TabListItem';
+import { MainPageBuilder } from '../pages/Index';
+import { LoginPageBuilder } from '../pages/LoginPage';
 
 export const TAB_CONFIG: TabListItem[] = [
   {
@@ -45,4 +96,63 @@ export class TabStyle {
   static readonly ANIMATION_DURATION = 0;
   static readonly ICON_SIZE = 24;
 }
+
+export class RouterTable {
+  static builderMap: Map<string, WrappedBuilder<[object]>> = new Map<string, WrappedBuilder<[object]>>();
+
+  // 初始化路由表
+  public static routerInit() {
+    RouterTable.builderMap.set(RouterMap.MAIN_PAGE, wrapBuilder(MainPageBuilder));
+    RouterTable.builderMap.set(RouterMap.LOGIN_PAGE, wrapBuilder(LoginPageBuilder));
+    // --------------------------------------------------练习
+    RouterTable.builderMap.set(RouterMap.CHAPTER_PRACTICE_PAGE, wrapBuilder(ChapterPracticeBuilder));
+    RouterTable.builderMap.set(RouterMap.FEATURE_COURSE_PAGE, wrapBuilder(FeaturedCoursesBuilder));
+    RouterTable.builderMap.set(RouterMap.MATERIAL_DOWNLOAD_PAGE, wrapBuilder(MaterialDownloadBuilder));
+    RouterTable.builderMap.set(RouterMap.SEARCH_PAGE, wrapBuilder(SearchPageBuilder));
+    RouterTable.builderMap.set(RouterMap.SEARCH_INPUT_PAGE, wrapBuilder(SearchInputBuilder));
+    // --------------------------------------------------课程
+    RouterTable.builderMap.set(RouterMap.ANSWER_QUESTIONS_PAGE, wrapBuilder(AnswerQuestionsBuilder));
+    RouterTable.builderMap.set(RouterMap.ANSWER_QUESTIONS_TWO_PAGE, wrapBuilder(AnswerQuestionsTwoBuilder));
+    RouterTable.builderMap.set(RouterMap.ANSWER_REPORT_PAGE, wrapBuilder(TestReportBuilder));
+    RouterTable.builderMap.set(RouterMap.EXAM_RESULT_PAGE, wrapBuilder(ExamResultBuilder));
+    RouterTable.builderMap.set(RouterMap.GOOD_COURSE_DETAIL_PAGE, wrapBuilder(GoodCourseDetailBuilder));
+    RouterTable.builderMap.set(RouterMap.MY_WRONG_PAGE, wrapBuilder(MyWrongPageBuilder));
+    RouterTable.builderMap.set(RouterMap.MY_COLLECTION_PAGE, wrapBuilder(MyCollectionPageBuilder));
+    RouterTable.builderMap.set(RouterMap.MY_NOTE_PAGE, wrapBuilder(MyNotesPageBuilder));
+    RouterTable.builderMap.set(RouterMap.View_NOTE_PAGE, wrapBuilder(ViewNotePageBuilder));
+    RouterTable.builderMap.set(RouterMap.Mock_PAGE, wrapBuilder(MockTestPageBuilder));
+    RouterTable.builderMap.set(RouterMap.COURSE_INTRODUCTION_PAGE, wrapBuilder(CourseIntroductionBuilder));
+    RouterTable.builderMap.set(RouterMap.Level_TWO_PAGE, wrapBuilder(SecondListBuilder));
+    RouterTable.builderMap.set(RouterMap.Level_THREE_PAGE, wrapBuilder(ThirdListBuilder));
+    RouterTable.builderMap.set(RouterMap.Level_ONE_PAGE, wrapBuilder(TopicHomePageBuilder));
+    // --------------------------------------------------我的
+    RouterTable.builderMap.set(RouterMap.SET_UP_PAGE, wrapBuilder(SetUpPageBuilder));
+    RouterTable.builderMap.set(RouterMap.FEEDBACK_PAGE, wrapBuilder(FeedbackPageBuilder));
+    RouterTable.builderMap.set(RouterMap.FEEDBACK_RECORD_PAGE, wrapBuilder(FeedbackRecordPageBuilder));
+    RouterTable.builderMap.set(RouterMap.ABOUT_PAGE, wrapBuilder(AboutPageBuilder));
+    RouterTable.builderMap.set(RouterMap.PERSONAL_CENTER_PAGE, wrapBuilder(EditPersonalCenterBuilder));
+    RouterTable.builderMap.set(RouterMap.PRIVACY_STATEMENT_PAGE, wrapBuilder(PrivacyStatementPageBuilder));
+    RouterTable.builderMap.set(RouterMap.PRIVACY_AGREEMENT_PAGE, wrapBuilder(PrivacyAgreementBuilder));
+    RouterTable.builderMap.set(RouterMap.PRIVACY_USE_PAGE, wrapBuilder(PrivacyUseAlertBuilder));
+    RouterTable.builderMap.set(RouterMap.COURSE_PAGE, wrapBuilder(CoursePageBuilder));
+    RouterTable.builderMap.set(RouterMap.PRACTICE_RECORDS_PAGE, wrapBuilder(PracticeRecordsBuilder));
+    RouterTable.builderMap.set(RouterMap.PRACTICE_DETAILS_PAGE, wrapBuilder(PracticeDetailsBuilder));
+    RouterTable.builderMap.set(RouterMap.DAY_PRACTICE_DETAILS_PAGE, wrapBuilder(OneDayPracticeRecordsBuilder));
+    RouterTable.builderMap.set(RouterMap.MESSAGE_CENTER_PAGE, wrapBuilder(MessageCenterBuilder));
+    RouterTable.builderMap.set(RouterMap.COLLECTION_PAGE, wrapBuilder(CollectionBuilder));
+    RouterTable.builderMap.set(RouterMap.MY_ORDER_PAGE, wrapBuilder(MyOrderBuilder));
+    RouterTable.builderMap.set(RouterMap.Order_Detail_PAGE, wrapBuilder(OrderDetailBuilder));
+    RouterTable.builderMap.set(RouterMap.BROWSING_HISTORY_PAGE, wrapBuilder(BrowsingHistoryBuilder));
+    RouterTable.builderMap.set(RouterMap.PRIVACY_PAGE, wrapBuilder(PrivacyPageBuilder));
+    RouterTable.builderMap.set(RouterMap.AUTHENTICATION_PAGE, wrapBuilder(AuthenticationPageBuilder));
+    RouterTable.builderMap.set(RouterMap.TERMS_SERVICE_PAGE, wrapBuilder(TermsOfServicePageBuilder));
+  }
+
+  // 通过名称获取builder
+  public static getBuilder(builderName: string): WrappedBuilder<[]> {
+    let builder = RouterTable.builderMap.get(builderName);
+    return builder as WrappedBuilder<[]>;
+  }
+}
+
 

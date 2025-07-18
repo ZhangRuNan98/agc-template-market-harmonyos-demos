@@ -1,8 +1,6 @@
 {
   "app": {
-    /*
-    :todo
-    */
+    // todo 替换应用的包名,
     "bundleName": "com.huawei.xxxxxx",
     "vendor": "example",
     "versionCode": 1000000,

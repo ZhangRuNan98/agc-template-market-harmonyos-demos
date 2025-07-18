@@ -1,26 +1,55 @@
 # 支付组件
 
+## 目录
+
+- [简介](#简介)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
+- [API参考](#API参考)
+- [示例代码](#示例代码)
+
 ## 简介
 
 本组件提供了通过华为支付、支付宝支付和微信支付方式进行订单支付的能力，开发者可以根据业务需要选择实现相关支付方式。
 
 <img src='./screenshot/picture.jpg' width='300'>
 
-## 使用
+## 约束与限制
+### 环境
+* DevEco Studio版本：DevEco Studio 5.0.0 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.0 Release SDK及以上
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.0 Release及以上
 
-1. 引入包。需要将模板根目录的components下aggregated_payment目录拷贝至您的工程相应目录。
-   
+### 调试
+本模板不支持使用模拟器调试，请使用真机进行调试。
+
+## 快速入门
+
+1. 安装组件。
+
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
+
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加aggregated_payment模块。
+
     ```
-   // 1、在项目根目录build-profile.json5中的modules新增一项aggregated_payment,确保路径正确
+   // 在项目根目录build-profile.json5填写aggregated_payment路径。其中XXX为组件存放的目录名。
      "modules": [
          {
             "name": "aggregated_payment",
-            "srcPath": "./aggregated_payment",
+            "srcPath": "./XXX/aggregated_payment",
          }
       ]
-   // 2、在entry目录下oh-package.json5填写依赖，确保路径正确
+   ```
+   c. 在entry目录下oh-package.json5中添加依赖。
+   ```
+   // XXX为组件存放的目录名称
       "dependencies": {
-         "aggregated_payment": "file:../aggregated_payment"
+         "aggregated_payment": "file:./XXX/aggregated_payment"
        }
 
     ```
@@ -60,9 +89,8 @@
       new Pay().pay(orderInfo, true).then((result) => {
        let message =
        `resultStatus: ${result.get('resultStatus')} memo: ${result.get('memo')} result: ${result.get('result')}`;
-       console.log(message);
-      }).catch((error: BusinessError) => {
-        console.log(error.message);
+      }).catch(() => {
+        //在此处进行异常处理
       });
    ```
 
@@ -75,19 +103,19 @@
       channelInfo: [{
         channelType: ChannelType.HUAWEI_PAY,
         name: '华为支付',
-        icon: $r('app.media.hwpay'),
+        icon: $r('app.media.hw_pay'),  //todo 需要图片资源
         preOrderInfo:'{"app_id":"***","merc_no":"***","prepay_id":"xxx","timestamp":"1680259863114","noncestr":"1487b8a60ed9f9ecc0ba759fbec23f4f","sign":"****","auth_id":"***"}'
       }, {
         channelType: ChannelType.WECHAT_PAY,
         preOrderInfo: { partnerId: '****', appId: '****',packageValue: 'Sign=WXPay', prepayId: '****',
           nonceStr: '****', timeStamp:'****',sign : '****',extData: '****'},
         appId: '',
-        icon: $r('app.media.wechat'),
+        icon: $r('app.media.wechat'),  //todo 需要图片资源
         name: '微信支付',
       }, {
         channelType: ChannelType.ALI_PAY,
         name: '支付宝支付',
-        icon: $r('app.media.alipay'),
+        icon: $r('app.media.alipay'),  //todo 需要图片资源
         preOrderInfo: '服务端生成',
       }],
       paySuccessEvent: (type: ChannelType) => {

@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -11,48 +12,59 @@
 
 本组件提供了用户信息展示，登录，个人信息编辑，华为账号一键登录，开通会员入口的相关功能
 
-<img src="./screenshot/login_1.png" width="300" height="100">
+<img src="./screenshot/Login_1.png" width="300" />
 
-## 使用
+## 约束与限制
+### 软件
 
-1. 组件依赖
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release及以上
 
-   由于LoginInfo组件依赖**base_apis** har包，所以需要将模板根目录的components下**base_apis**目录拷贝至您的工程相应目录
+### 硬件
+
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+## 快速入门
+
+1. 安装组件。
+
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
+
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加login_info和base_apis模块。
+
    ```typescript
-   // login_info har包依赖情况
-   "dependencies": {
-       "base_apis": "file:../base_apis"
-   }
+    // 在项目根目录build-profile.json5填写login_info和base_apis路径。其中XXX为组件存放的目录名
+    "modules": [
+        {
+        "name": "base_calendar",
+        "srcPath": "./XXX/login_info",
+        },
+        {
+        "name": "base_apis",
+        "srcPath": "./XXX/base_apis",
+        }
+    ]
+    ```
+   c. 在项目根目录oh-package.json5中添加依赖。
+    ```typescript
+    // XXX为组件存放的目录名称
+    "dependencies": {
+      "login_info": "file:./XXX/login_info"
+    }
    ```
-
-2. 安装组件。
-
-   ```typescript
-   // 在项目根目录build-profile.json5填写base_apis和login_info路径
-     "modules": [
-       {
-         "name": "login_info",
-         "srcPath": "./login_info",
-       },
-       {
-         "name": "base_apis",
-         "srcPath": "./base_apis",
-       }
-     ]
-   ```
-   ```typescript
-   "dependencies": {
-     "login_info": "file:../login_info"
-   }
-   ```
-
-3. 引入组件。
+   
+2. 引入组件。
 
    ```typescript
      import { LoginInfo} from 'login_info';
    ```
 
-4. 调用组件，详细参数配置说明参见[API参考](#API参考)
+3. 调用组件，详细参数配置说明参见[API参考](#API参考)
 
    ```typescript
    import { LoginInfo, LoginParams, UserInfo } from 'login_info';
@@ -194,4 +206,4 @@ onVipClick(callback: () => void)
    }
    ```
 
-<img src="./screenshot/login_1.png" width="300" height="100">
+<img src="./screenshot/Login_1.png" width="300" height="100">

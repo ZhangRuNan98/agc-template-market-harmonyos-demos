@@ -28,11 +28,11 @@ export struct NavHeaderBar {
           .width(Constants.FULL_SIZE)
           .fontWeight(FontWeight.Medium)
           .margin({ left: 8 })
-      }.height(36).margin({ left: 16 })
+      }.height(36).margin({ left: 16, right: 16 })
     }
     .alignItems(HorizontalAlign.Start)
     .padding({
-      top: 12 + this.windowTopHeight,
+      top: 10 + this.windowTopHeight,
       bottom: 8,
     })
     .width(Constants.FULL_SIZE)

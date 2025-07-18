@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import { examPrefer, PreferConstant } from 'commonlib';
-import { RouterModule } from 'router_module';
 import { common } from '@kit.AbilityKit';
+import { PreferenceUtil, PreferConstant } from 'commonlib';
+import { RouterMap, RouterModule } from 'router_module';
 
 // 隐私协议
 @ComponentV2
@@ -24,11 +24,10 @@ export struct PrivacyAgreementPage {
   @Local information: string = 'XX'
   @Local service: string = 'XX'
   @Local business: string = 'XX业务与隐私声明'
-  @Local isFirstType: boolean = true
 
   build() {
     Column() {
-      Image($r('app.media.prepare_examLOGO'))
+      Image($r('app.media.exam_icon_login'))
         .width(72)
         .height(72)
         .margin({ bottom: 24, top: 136 })
@@ -61,13 +60,13 @@ export struct PrivacyAgreementPage {
           '服务。我们仅在您使用具体功能业务时，才会触发上述行为收集使用相关的个人信息。详情请参阅')
         Span(this.business)
           .onClick(() => {
-            RouterModule.push({ url: 'PrivacyStatementPage' })
+            RouterModule.push({ url: RouterMap.PRIVACY_STATEMENT_PAGE })
           })
           .fontColor('#4B5CC4')
         Span('、')
         Span('权限使用说明')
           .onClick(() => {
-            RouterModule.push({ url: 'PrivacyStatementPage' })
+            RouterModule.push({ url: RouterMap.PRIVACY_STATEMENT_PAGE })
           })
           .fontColor('#4B5CC4')
       }
@@ -88,8 +87,8 @@ export struct PrivacyAgreementPage {
           .backgroundColor($r('sys.color.comp_background_tertiary'))
           .onClick(() => {
             RouterModule.push({
-              url: 'DialogPage', onPop: () => {
-                RouterModule.replace({ url: 'MainPage' })
+              url: RouterMap.PRIVACY_USE_PAGE, onPop: () => {
+                RouterModule.replace({ url: RouterMap.MAIN_PAGE })
               }
             })
           })
@@ -100,8 +99,8 @@ export struct PrivacyAgreementPage {
           .fontSize($r('sys.float.Body_L'))
           .backgroundColor('#4B5CC4')
           .onClick(() => {
-            examPrefer.putPreferenceValue(PreferConstant.IS_FIRST, false)
-            RouterModule.replace({ url: 'MainPage' })
+            PreferenceUtil.getInstance().put(PreferConstant.FIRSTLAUNCH, false)
+            RouterModule.replace({ url: RouterMap.MAIN_PAGE })
           })
       }
       .justifyContent(FlexAlign.SpaceBetween)
@@ -115,11 +114,11 @@ export struct PrivacyAgreementPage {
 }
 
 @ComponentV2
-export struct DialogPage {
+export struct PrivacyUseAlert {
   @Local information: string = 'XX'
   @Local service: string = 'XX'
   @Local business: string = 'XX业务与隐私声明'
-  private context = getContext(this) as common.UIAbilityContext;
+  private context = getContext(this) as common.UIAbilityContext
 
   build() {
     Stack({ alignContent: Alignment.Center }) {
@@ -156,13 +155,13 @@ export struct DialogPage {
             Span('获取XX信息，以为您提供XX服务。我们仅在您使用具体功能业务时，才会触发上述行为收集使用相关的个人信息。详情请参阅')
             Span(this.business)
               .onClick(() => {
-                RouterModule.push({ url: 'PrivacyStatementPage' })
+                RouterModule.push({ url: RouterMap.PRIVACY_STATEMENT_PAGE })
               })
               .fontColor('#4B5CC4')
             Span('、')
             Span('权限使用说明')
               .onClick(() => {
-                RouterModule.push({ url: 'PrivacyStatementPage' })
+                RouterModule.push({ url: RouterMap.PRIVACY_STATEMENT_PAGE })
               })
               .fontColor('#4B5CC4')
           }
@@ -189,7 +188,7 @@ export struct DialogPage {
             .margin({ right: 16 })
           Button('同意并继续')
             .onClick(() => {
-              examPrefer.putPreferenceValue(PreferConstant.IS_FIRST, false)
+              PreferenceUtil.getInstance().put(PreferConstant.FIRSTLAUNCH, false)
               RouterModule.pop<string>('agree')
             })
             .width(140)
@@ -210,11 +209,11 @@ export struct DialogPage {
 }
 
 @Builder
-export function DialogPageBuilder() {
-  DialogPage()
+export function PrivacyUseAlertBuilder() {
+  PrivacyUseAlert()
 }
 
 @Builder
-export function PrivacyAgreementPageBuilder() {
+export function PrivacyAgreementBuilder() {
   PrivacyAgreementPage()
 }

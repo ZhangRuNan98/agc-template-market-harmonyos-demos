@@ -1,9 +1,9 @@
 # 分类列表组件快速入门
 
 ## 目录
-
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -11,26 +11,39 @@
 
 本组件提供了分类展示菜谱列表的相关功能。
 
-<img src="./screenshot/LinkCategory1.png" width="300">
+<img src="./screenshot/LinkCategory1.PNG" width="300">
 
-## 使用
+## 约束与限制
 
-1. 安装组件。
-   需要将模板根目录的components下[link_category](../../components/link_category)目录拷贝至您工程根目录components/，并添加如下依赖。
+### 环境
 
+- DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+- 设备类型：华为手机（直板机）
+- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+## 快速入门
+
+1. 安装组件。  
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+   如果是从生态市场下载组件，请参考以下步骤安装组件。  
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的xxx目录下。  
+   b. 在项目根目录build-profile.json5并添加link_category模块。
    ```typescript
-   // 模块下的oh-package.json5
-   "dependencies": {
-     "link_category": "file:../components/link_category"
-   }
-   
-   // 模板根目录的build-profile.json5
+   // 在项目根目录的build-profile.json5填写link_category路径。其中xxx为组件存在的目录名
    "modules": [
      {
        "name": "link_category",
-       "srcPath": "./components/link_category",
+       "srcPath": "./xxx/link_category",
      }
    ]
+   ```
+   c. 在项目根目录oh-package.json5中添加依赖
+   ```typescript
+   // xxx为组件存放的目录名称
+   "dependencies": {
+     "link_category": "file:../xxx/link_category"
+   }
    ```
    
 2. 引入组件。
@@ -156,4 +169,4 @@ struct Index {
 }
 ```
 
-<img src="./screenshot/LinkCategory1.png" width="300">
+<img src="./screenshot/LinkCategory1.PNG" width="300">

@@ -13,6 +13,7 @@
     "metadata": [
       {
         "name": "client_id",
+        // todo: 替换client_id
         "value": "xxxx"
       }
     ],

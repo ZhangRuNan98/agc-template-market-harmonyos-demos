@@ -43,21 +43,29 @@ export struct FeaturedCourses {
 
         Divider().width('100%')
         // 资料列表
-        Column() {
-          ForEach(this.courses, (item: Course, index: number) => {
-            CourseComponent({ course: item })
-              .width('100%')
-              .margin({ bottom: index === 0 ? '8vp' : '0vp' })
-          }, (item: Course, index: number) => item.courseName + index)
-        }
-        .backgroundColor($r('sys.color.background_secondary'))
-        .width('100%')
-        .height('100%')
-        .padding({ left: '16vp', right: '16vp', top: '12vp' })
+        this.courseListBuilder()
       }
       .width('100%')
       .height('100%')
     }
+  }
+
+  /**
+   * 资料列表
+   */
+  @Builder
+  courseListBuilder() {
+    Column() {
+      ForEach(this.courses, (item: Course, index: number) => {
+        CourseComponent({ course: item })
+          .width('100%')
+          .margin({ bottom: index === 0 ? '8vp' : '0vp' })
+      }, (item: Course, index: number) => item.courseName + index)
+    }
+    .backgroundColor($r('sys.color.background_secondary'))
+    .width('100%')
+    .height('100%')
+    .padding({ left: '16vp', right: '16vp', top: '12vp' })
   }
 }
 

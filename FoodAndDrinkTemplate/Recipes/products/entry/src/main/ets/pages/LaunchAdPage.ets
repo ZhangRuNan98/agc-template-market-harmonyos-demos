@@ -8,12 +8,12 @@ export function LaunchAdPageBuilder() {
 
 @ComponentV2
 struct LaunchAdPage {
-
   build() {
     NavDestination() {
       Column() {
         AdServicePage({
           channelType: ChannelType.HUAWEI_AD,
+          // todo 替换广告id
           adId: 'testq6zq98hecj',
           adType: AdType.SPLASH_AD,
           closeCallBack: () => {
@@ -27,7 +27,7 @@ struct LaunchAdPage {
   }
 
   jumpUrl() {
-    let privacyState = PreferenceUtil.getInstance().get(CommonConstants.PRIVACY_POLICY_KEY, '0')
+    let privacyState = PreferenceUtil.getInstance().get(CommonConstants.PRIVACY_POLICY_KEY, '0') as string
     if (privacyState === '1') {
       RouterModule.replace(RouterMap.MAIN_ENTRY)
     } else {

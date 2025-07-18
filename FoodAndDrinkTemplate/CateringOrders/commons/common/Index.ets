@@ -12,6 +12,8 @@ export * from './src/main/ets/constants/Common'
 
 export * from './src/main/ets/utils/Utils'
 
+export { default as AsWebRichText } from './src/main/ets/utils/AsWebRichText'
+
 export * from './src/main/ets/components/CallTelDialog'
 
 export { HwMap } from './src/main/ets/components/HwMap'

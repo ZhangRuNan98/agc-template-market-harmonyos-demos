@@ -49,7 +49,6 @@ export struct HwMap {
         mapController.setMyLocationStyle(this.style);
         if (this.isShowMyLocation) {
           this.getLocation(this.mapController).then((location: geoLocationManager.Location) => {
-            console.info('my location' + JSON.stringify(location));
             this.myLocation = location;
           });
         }
@@ -102,7 +101,6 @@ export struct HwMap {
         if (this.isShowMyLocation) {
           // 授权成功
           this.getLocation(this.mapController).then((location: geoLocationManager.Location) => {
-            console.info('my location' + JSON.stringify(location));
             this.myLocation = location;
             this.mapController?.setMyLocationEnabled(true);
             this.mapController?.setMyLocationControlsEnabled(true);

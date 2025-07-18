@@ -23,8 +23,8 @@ export struct DrugInquiry {
     monitor.dirty.forEach((path: string) => {
       console.log(`${path} changed from ${monitor.value(path)?.before} to ${monitor.value(path)?.now}`)
       if (monitor.value(path)?.now !== '') {
-        this.drugInquiryList =
-          this.drugInquiryList.filter((item: DrugInquiryItem) => item.name.includes(monitor.value(path)?.now as string))
+        this.drugInquiryList = this.originDrugInquiryList.filter((item: DrugInquiryItem) =>
+        item.name.includes(monitor.value(path)?.now as string))
         this.searchHistory.historyList.unshift(monitor.value(path)?.now as string)
         this.searchHistory.historyList = this.searchHistory.historyList.slice(0, 4)
         this.historyShow = false
@@ -204,16 +204,12 @@ export struct DrugInquiry {
           })
           .borderRadius(16)
         }
-
-      }.backgroundColor($r('sys.color.background_secondary'))
-
+        .padding({ left: 16, right: 16 })
+        .layoutWeight(1)
+        .backgroundColor($r('sys.color.background_secondary'))
+      }
     }
     .title(this.title)
-    .padding({
-      top: Number(AppStorage.get('topRectHeight')),
-      left: 12,
-      right: 12,
-      bottom: 12,
-    })
+    .padding({ top: Number(AppStorage.get('topRectHeight')), bottom: 12 })
   }
 }

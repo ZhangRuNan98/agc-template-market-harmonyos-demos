@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { RouterMap, RouterModule } from 'router_module'
-import { call } from '@kit.TelephonyKit'
 import { AppStorageV2 } from '@kit.ArkUI'
-import { UserInfo } from 'login_info/src/main/ets/model/UserInfo'
+import { call } from '@kit.TelephonyKit'
+import { UserInfo } from 'login_info'
+import { RouterMap, RouterModule } from 'router_module'
 import { NumbObj } from '../viewModel/MessageModel'
 import { MineItem } from '../viewModel/MineModel'
 
@@ -57,12 +57,12 @@ export struct MinePage {
   @Local isOpen: boolean = false
   @Local logoUser: UserInfo = AppStorageV2.connect(UserInfo, () => new UserInfo())!
   // 在AppStorageV2中创建一个key为Sample的键值对（如果存在，则返回AppStorageV2中的数据），并且和prop关联
-  @Local prop: NumbObj = AppStorageV2.connect(NumbObj, () => new NumbObj())!;
+  @Local propNumber: NumbObj = AppStorageV2.connect(NumbObj, () => new NumbObj())!;
   @Local mineArr: MineItem[] = [
-    new MineItem('练习记录', $r('app.media.icon_practice'), RouterMap.PracticeRecordsPage),
-    new MineItem('浏览记录', $r('app.media.ic_ict_configuration_history'), RouterMap.BrowsingHistoryPage),
+    new MineItem('练习记录', $r('app.media.icon_practice'), RouterMap.PRACTICE_RECORDS_PAGE),
+    new MineItem('浏览记录', $r('app.media.ic_ict_configuration_history'), RouterMap.BROWSING_HISTORY_PAGE),
     new MineItem('联系客服', $r('app.media.ic_public_headphones_mic'), ''),
-    new MineItem('设置', $r('app.media.icon_Setting'), 'SetupPage')
+    new MineItem('设置', $r('app.media.icon_Setting'), RouterMap.SET_UP_PAGE)
   ]
 
   @Builder
@@ -86,7 +86,7 @@ export struct MinePage {
             .margin({ left: 16, bottom: 2 })
             .onClick(() => {
               if (!this.logoUser.isLogin) {
-                RouterModule.push({ url: RouterMap.QuickLoginPage, param: true })
+                RouterModule.push({ url: RouterMap.LOGIN_PAGE, param: true })
               }
             })
           Row() {
@@ -110,9 +110,9 @@ export struct MinePage {
           .margin({ right: 2 })
           .onClick(() => {
             if (this.logoUser.isLogin) {
-              RouterModule.push({ url: 'EditPersonalCenter' })
+              RouterModule.push({ url: RouterMap.PERSONAL_CENTER_PAGE })
             } else {
-              RouterModule.push({ url: RouterMap.QuickLoginPage, param: false })
+              RouterModule.push({ url: RouterMap.LOGIN_PAGE })
             }
           })
       }
@@ -129,7 +129,7 @@ export struct MinePage {
   minMine() {
     Row() {
       Column() {
-        Image($r('app.media.log_management_border'))
+        Image($r('app.media.icon_order'))
           .width(24)
           .aspectRatio(1)
         Text('我的订单')
@@ -140,9 +140,9 @@ export struct MinePage {
       .width('25%')
       .onClick(() => {
         if (this.logoUser.isLogin) {
-          RouterModule.push({ url: 'MyOrderPage' })
+          RouterModule.push({ url: RouterMap.MY_ORDER_PAGE })
         } else {
-          RouterModule.push({ url: RouterMap.QuickLoginPage, param: false })
+          RouterModule.push({ url: RouterMap.LOGIN_PAGE })
         }
       })
 
@@ -158,9 +158,9 @@ export struct MinePage {
       .width('25%')
       .onClick(() => {
         if (this.logoUser.isLogin) {
-          RouterModule.push({ url: 'CoursePage' })
+          RouterModule.push({ url: RouterMap.COURSE_PAGE })
         } else {
-          RouterModule.push({ url: RouterMap.QuickLoginPage, param: false })
+          RouterModule.push({ url: RouterMap.LOGIN_PAGE })
         }
       })
 
@@ -176,16 +176,16 @@ export struct MinePage {
       .width('25%')
       .onClick(() => {
         if (this.logoUser.isLogin) {
-          RouterModule.push({ url: 'CollectionPage' })
+          RouterModule.push({ url: RouterMap.COLLECTION_PAGE })
         } else {
-          RouterModule.push({ url: RouterMap.QuickLoginPage, param: false })
+          RouterModule.push({ url: RouterMap.LOGIN_PAGE })
         }
       })
 
       Column() {
         if (this.logoUser.isLogin) {
           Badge({
-            count: this.prop.listArr.length,
+            count: this.propNumber.listArr.length,
             style: { fontSize: 10, fontWeight: 'regular', badgeSize: 14 }
           }) {
             Image($r('app.media.ic_public_message_point'))
@@ -205,9 +205,9 @@ export struct MinePage {
       .width('25%')
       .onClick(() => {
         if (this.logoUser.isLogin) {
-          RouterModule.push({ url: 'MessageCenterPage' })
+          RouterModule.push({ url: RouterMap.MESSAGE_CENTER_PAGE })
         } else {
-          RouterModule.push({ url: RouterMap.QuickLoginPage, param: false })
+          RouterModule.push({ url: RouterMap.LOGIN_PAGE })
         }
       })
     }
@@ -317,12 +317,13 @@ export struct MinePage {
           } else {
             UserItem({ title: item.titleName, image: item.icon, url: item.url })
               .onClick(() => {
-                if (this.logoUser.isLogin && item.url && (item.titleName === '浏览记录' || item.titleName === '练习记录')) {
+                if (this.logoUser.isLogin && item.url &&
+                  (item.titleName === '浏览记录' || item.titleName === '练习记录')) {
                   RouterModule.push({ url: item.url, param: this.logoUser });
                 } else if (item.url && (item.titleName === '设置')) {
                   RouterModule.push({ url: item.url });
                 } else {
-                  RouterModule.push({ url: RouterMap.QuickLoginPage, param: false })
+                  RouterModule.push({ url: RouterMap.LOGIN_PAGE })
                 }
               })
           }

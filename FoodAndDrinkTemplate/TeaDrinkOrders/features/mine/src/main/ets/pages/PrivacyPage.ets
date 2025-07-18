@@ -1,4 +1,4 @@
-import { Constants, HttpRequest, NavHeaderBar, WindowModel } from 'common/Index';
+import { AsWebRichText, Constants, HttpRequest, NavHeaderBar, WindowModel } from 'common/Index';
 import { AppStorageV2 } from '@kit.ArkUI';
 import web_webview from '@ohos.web.webview';
 
@@ -28,12 +28,7 @@ struct PrivacyPage {
     NavDestination() {
       NavHeaderBar({ title: $r('app.string.privacy') })
       Column() {
-        Web({ src: '', controller: this.controller }).onControllerAttached(() => {
-          this.controller.loadData(this.privacyInfo, 'text/html', 'UTF-8');
-        })
-          .fileAccess(false)
-          .geolocationAccess(false)
-          .layoutMode(WebLayoutMode.FIT_CONTENT);
+        AsWebRichText({ url: Constants.RICH_TEXT_URI, richTextStr: this.privacyInfo }).layoutWeight(1)
       }
       .width(Constants.FULL_SIZE)
       .constraintSize({ maxWidth: Constants.FULL_SIZE })

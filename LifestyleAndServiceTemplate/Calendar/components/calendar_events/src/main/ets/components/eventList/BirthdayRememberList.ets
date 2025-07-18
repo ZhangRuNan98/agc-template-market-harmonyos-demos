@@ -14,7 +14,8 @@ export struct BirthdayRememberList {
   @Local calendarEventVM: CalendarEventVM = CalendarEventVM.instance;
   @Local countdown: Countdown = new Countdown();
   @Param eventType: string = '';
-  @Local currentIndex:number = -1
+  @Local currentIndex: number = -1
+
   aboutToDisappear() {
     this.countdown.stopCountdown()
   }
@@ -23,9 +24,10 @@ export struct BirthdayRememberList {
   listChange() {
     this.countdown.startCountdown(this.birthdayRememberList[0])
   }
+
   aboutToAppear(): void {
     RemindEventDispatcher.eventChangeCallback = (userEventInfo: UserEventItem) => {
-      if([EVENT_TYPE.BIRTHDAY, EVENT_TYPE.ANNIVERSARIES].includes(userEventInfo.eventType)) {
+      if ([EVENT_TYPE.BIRTHDAY, EVENT_TYPE.ANNIVERSARIES].includes(userEventInfo.eventType)) {
         this.countdown.startCountdown(this.birthdayRememberList[0])
       }
     }
@@ -123,20 +125,23 @@ export struct BirthdayRememberList {
         ForEach(this.birthdayRememberList, (item: UserEventItem, index: number) => {
           ListItem() {
             Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
-              Column(){
-                Image(this.eventType === EVENT_TYPE.BIRTHDAY ? $r('app.media.ic_birthday') : $r('app.media.ic_remember'))
+              Column() {
+                Image(this.eventType === EVENT_TYPE.BIRTHDAY ? $r('app.media.ic_birthday') :
+                $r('app.media.ic_remember'))
                   .width(24)
                   .height(24)
               }
               .width(30)
               .height(30)
+
               Column({ space: 3 }) {
                 Text(item.content)
                   .fontWeight(FontWeight.Medium)
                   .fontSize(14)
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
-                Text(`${dayjs(item.date[0].date).format('YYYY年MM月DD日')} ${getWeekday(item.date[0].date)}`)
+                Text(`${item.date[0].isLunar ? item.date[0].lunarDate :
+                dayjs(item.date[0].date).format('YYYY年MM月DD日')} ${getWeekday(item.date[0].date)}`)
                   .fontSize(12)
                   .fontColor($r('sys.color.font_secondary'))
                 Text(item.remarks)

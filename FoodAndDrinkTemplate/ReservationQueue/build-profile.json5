@@ -41,7 +41,7 @@
     },
     {
       "name": "book_queue",
-      "srcPath": "./components/bookqueue"
+      "srcPath": "./components/book_queue"
     }
   ]
 }

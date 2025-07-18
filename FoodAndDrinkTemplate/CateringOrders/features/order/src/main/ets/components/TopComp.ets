@@ -98,15 +98,15 @@ export struct TopComp {
                   Column() {
                     Text() {
                       Span($r('app.string.currency_symbol'))
-                        .fontColor($r('sys.color.font_on_primary'))
+                        .fontColor(index % 2 === 0 ? $r('app.color.mainColor') : $r('sys.color.font_on_primary'))
                         .fontSize($r('sys.float.Caption_M'))
                       Span(`${Number(item.reduce)}`)
-                        .fontColor($r('sys.color.font_on_primary'))
+                        .fontColor(index % 2 === 0 ? $r('app.color.mainColor') : $r('sys.color.font_on_primary'))
                         .fontSize($r('sys.float.Subtitle_L'))
                     }
 
                     Text(item.name)
-                      .fontColor($r('sys.color.font_on_primary'))
+                      .fontColor(index % 2 === 0 ? $r('app.color.mainColor') : $r('sys.color.font_on_primary'))
                       .fontSize(8)
                       .margin({ top: 2 })
                     Column() {

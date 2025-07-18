@@ -50,7 +50,7 @@ export struct DateToggle {
       .onClick(() => {
         baseActionSheet.show({
           id: 'almanacBuilder',
-          height: 300,
+          detents:[300,301],
           showClose: false,
           customContent: () => {
             this.alDatePickerBuilder()

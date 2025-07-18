@@ -39,8 +39,7 @@ export struct PersonalCenterPage {
               MyCenter()
               HelpCenter()
             }
-          }.layoutWeight(1).scrollBar(BarState.Off).align(Alignment.Top);
-
+          }.layoutWeight(1).scrollBar(BarState.Off).align(Alignment.Top).edgeEffect(EdgeEffect.Spring);
         }
         .alignItems(HorizontalAlign.Start)
         .width(Constants.FULL_SIZE)

@@ -1,5 +1,5 @@
 import { util } from '@kit.ArkTS';
-import { LengthMetrics } from '@kit.ArkUI';
+import { LengthMetrics, promptAction } from '@kit.ArkUI';
 import fs from '@ohos.file.fs';
 import { FunctionalButton, functionalButtonComponentManager } from '@kit.ScenarioFusionKit';
 import { Logger, WindowUtil, BuildTitleBar } from 'commonlib';
@@ -52,13 +52,17 @@ struct PersonalInfo {
       };
 
       Button('确定')
-        .fontColor('#FFFFFF')
-        .backgroundColor('#E84026')
+        .fontColor($r('sys.color.font_on_primary'))
+        .backgroundColor($r('sys.color.alert'))
         .width('100%')
-        .margin({ left: 28, right: 28 })
+        .margin({ left: 28, right: 28, bottom: 20 })
         .onClick(() => {
-          this.vm.userInfo.nickname = this.nickName;
-          this.isShow = false;
+          if (this.nickName) {
+            this.vm.userInfo.nickname = this.nickName;
+            this.isShow = false;
+          } else {
+            promptAction.showToast({ message: '请填写用户昵称！' });
+          }
         });
     }.padding(16).height('100%')
     .justifyContent(FlexAlign.SpaceBetween);

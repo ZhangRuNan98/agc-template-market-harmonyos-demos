@@ -115,6 +115,10 @@
     {
       "name": "delivery_info",
       "value": "配送信息"
+    },
+    {
+      "name": "agcit_huawei_tea_drink_orders",
+      "value": "1.0.1"
     }
   ]
 }

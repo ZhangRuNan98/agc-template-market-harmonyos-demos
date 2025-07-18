@@ -30,7 +30,7 @@ struct CustomDialogExample {
           this.textValue = value;
         })
       Flex({ justifyContent: FlexAlign.SpaceAround }) {
-        Button('取消')
+        Text('取消')
           .fontColor($r('app.color.font_gray'))
           .backgroundColor($r('app.color.background_white'))
           .onClick(() => {
@@ -39,7 +39,7 @@ struct CustomDialogExample {
               this.cancel();
             }
           })
-        Button('确认')
+        Text('确认')
           .onClick(() => {
             if (this.emailRegex.test(this.textValue)) {
               AlertDialog.show(

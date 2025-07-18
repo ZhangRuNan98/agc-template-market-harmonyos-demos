@@ -90,7 +90,7 @@ struct Index {
         if (error.code === authentication.AuthenticationErrorCode.ACCOUNT_NOT_LOGGED_IN) {
           // HUAWEI ID is not logged in, it is recommended to jump to the login guide page
         }
-        // 屏蔽云测试调试reject(error);
+        // todo 屏蔽云测试调试，实际开发以应用场景调整reject(error);
         resolve({} as HuaweiIDResp);
       });
     });

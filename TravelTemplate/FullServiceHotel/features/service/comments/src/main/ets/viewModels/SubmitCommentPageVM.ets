@@ -9,6 +9,7 @@ export class SubmitCommentPageVM {
   @Trace hotelList: ShopItem[] = [];
   @Trace hotelLabelList: string[] = [];
   @Trace checkedHotel: ShopItem | null = null;
+  @Trace hotelIndex: number = 0;
   private static _instance: SubmitCommentPageVM;
 
   public static get instance() {

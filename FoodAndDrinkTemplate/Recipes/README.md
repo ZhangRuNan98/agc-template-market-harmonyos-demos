@@ -4,15 +4,14 @@
 
 - [功能介绍](#功能介绍)
 - [组件](#组件)
-- [环境要求](#环境要求)
+- [约束与限制](#约束与限制)
 - [快速入门](#快速入门)
 - [示例效果](#示例效果)
-- [权限要求](#权限要求)
 - [开源许可协议](#开源许可协议)
 
 ## 功能介绍
 
-本模板为美食菜谱类应用提供了常用功能的开发样例，模板主要分首页、分类和我的三大模块：
+本模板为美食菜谱类应用提供了常用功能的开发样例，模板主要分首页、分类、热量计算和我的四大模块：
 
 - 首页：展示菜谱信息，支持按名称、类别搜索菜谱。
 - 分类：按类别展示菜谱，支持查看详情、收藏菜谱、加入菜篮子和管理菜篮子。
@@ -346,7 +345,6 @@ Recipes
 | 广告组件（aggregated_ads）        | 展示开屏广告            | [使用指导](components/aggregated_ads/README.md)      |
 | 登录组件（aggregated_login）      | 支持华为一键登录和微信登录     | [使用指导](components/aggregated_login/README.md)    |
 | 支付组件（aggregated_payment）    | 支持华为支付，微信支付，支付宝支付 | [使用指导](components/aggregated_payment/README.md)  |
-| 基础组件（base_ui）               | 展示基础tab组件         | [使用指导](components/base_ui/README.md)             |
 | 热量计算组件（calorie_calculation） | 提供了统计饮食计划的卡路里     | [使用指导](components/calorie_calculation/README.md) |
 | 菜谱瀑布流组件（featured_recipes）   | 提供了展示菜谱列表瀑布流      | [使用指导](components/featured_recipes/README.md)    |
 | 搜索组件（home_search）           | 本组件提供了菜谱搜索的相关功能   | [使用指导](components/home_search/README.md)         |
@@ -355,17 +353,22 @@ Recipes
 | 菜篮子组件（shopping_basket）      | 本组件提供了菜篮子相关功能     | [使用指导](components/shopping_basket/README.md)     |
 | 上传菜谱组件（upload_recipe）       | 提供了上传菜谱的功能        | [使用指导](components/upload_recipe/README.md)       |
 
-## 环境要求
+## 约束与限制
 
-### 软件
+### 环境
 
-* DevEco Studio版本：DevEco Studio 5.0.0 Release及以上
-* HarmonyOS SDK版本：HarmonyOS 5.0.0 Release SDK及以上
-
-### 硬件
-
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
 * 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.0 Release及以上
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+### 权限要求
+
+- 网络权限：ohos.permission.INTERNET
+
+### 调试
+
+本模板不支持使用模拟器调试，请使用真机进行调试
 
 ## 快速入门
 
@@ -373,50 +376,40 @@ Recipes
 
 在运行此模板前，需要完成以下配置：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建应用，将包名配置到模板中。
 
-2. 在AppGallery Connect创建应用，将包名配置到模板中。
-
-   a. 参考[创建应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建APPID，并进行关联。
+   a. 参考[创建应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建APP ID，并将APP ID与应用进行关联。
 
    b. 返回应用列表页面，查看应用的包名。
 
    c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建应用的包名。
 
-3. 配置华为账号服务。
+2. 配置华为账号服务。
 
-   a. 将应用的client ID配置到entry模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
+   a. 将应用的client ID配置到products/entry/src/main路径下的[module.json5](./products/entry/src/main/module.json5)
+   文件中，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
-
-   c. 如需使用华为账号一键登录，需要申请quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions) 。在端侧使用“华为账号登录”按钮完成[用户登录](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-unionid-login-button)。
-4. 配置支付服务。
+   b.
+   申请华为账号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。
+3. 配置支付服务。
 
    华为支付当前仅支持商户接入，在使用服务前，需要完成商户入网、开发服务等相关配置，本模板仅提供了端侧集成的示例。详细参考：[支付服务接入准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/payment-preparations)。
+
+4. 对应用进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
+
+5. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+
 ### 运行调试工程
 
 1. 连接调试手机和PC。
 
-2. 对应用[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
-
-3. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
+2. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
 
 ## 示例效果
 
-1. 应用启动功能  
-   [主要功能展示](screenshots/ScreenRecord_0.mp4)
-2. 首页主要功能  
-   [主要功能展示](screenshots/ScreenRecord_1.mp4)
-3. 分类页面主要功能  
-   [主要功能展示](screenshots/ScreenRecord_2.mp4)
-4. 热量计算页面主要功能  
-   [主要功能展示](screenshots/ScreenRecord_3.mp4)
-5. 我的页面主要功能  
-   [主要功能展示](screenshots/ScreenRecord_4.mp4)
-
-## 权限要求
-
-- 网络权限：ohos.permission.INTERNET
+| 快捷搜索                                                             | 菜谱详情                                                             | 饮食计划                                                             | 服务菜单                                                             |
+|------------------------------------------------------------------|------------------------------------------------------------------|------------------------------------------------------------------|------------------------------------------------------------------|
+| <img src="screenshots/Screenshot_1.jpeg" alt="快捷搜索" width="300"> | <img src="screenshots/Screenshot_2.jpeg" alt="菜谱详情" width="300"> | <img src="screenshots/Screenshot_3.jpeg" alt="饮食计划" width="300"> | <img src="screenshots/Screenshot_4.jpeg" alt="服务菜单" width="300"> |
 
 ## 开源许可协议
 

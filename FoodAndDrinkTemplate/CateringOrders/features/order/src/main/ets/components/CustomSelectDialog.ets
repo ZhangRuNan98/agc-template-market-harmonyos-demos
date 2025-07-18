@@ -2,11 +2,11 @@ import { Constants, SheetHeaderComp } from 'common/Index'
 
 @Builder
 export function CustomSelectSheetBuilder(title: Resource, list: Array<string> | Resource,
-  confirm: (select: ResourceStr) => void, selected: ResourceStr = '') {
+  confirm: (select: string) => void, selected: ResourceStr = '') {
   CustomSelectSheet({
     title,
     list,
-    confirm: (select: ResourceStr) => {
+    confirm: (select: string) => {
       confirm(select)
     },
     selected,
@@ -18,9 +18,9 @@ struct CustomSelectSheet {
   @Prop title: Resource
   @Prop list: Array<string> | Resource = []
   @Prop selected: ResourceStr
-  @State select: ResourceStr = ''
+  @State select: string = ''
   @State windowBottomHeight: number = AppStorage.get('windowBottomHeight') as number || 28
-  confirm: (select: ResourceStr) => void = () => {
+  confirm: (select: string) => void = () => {
   }
 
   aboutToAppear(): void {

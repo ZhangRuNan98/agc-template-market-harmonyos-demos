@@ -109,7 +109,7 @@ export struct BaseCalendar {
       .onClick(() => {
         baseActionSheet.show({
           id: 'datePickerBuilder',
-          height: 300,
+          detents:[300,301],
           showClose: false,
           customContent: () => {
             this.datePickerBuilder()

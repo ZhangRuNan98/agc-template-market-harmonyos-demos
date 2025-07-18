@@ -35,7 +35,6 @@ export class MyDataSource implements IDataSource {
   }
 }
 
-
 @ObservedV2
 export class GoodCourse {
   @Trace id: string = ''
@@ -82,4 +81,11 @@ export class MockItem {
     this.text = text;
     this.num = num;
   }
+}
+
+// 数据中心
+@ObservedV2
+export class Sample {
+  @Trace id: string = '1111';
+  @Trace title: string = '一级建筑师';
 }

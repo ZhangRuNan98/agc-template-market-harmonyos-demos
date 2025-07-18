@@ -19,7 +19,7 @@ import { BtnType } from '../models/Model'
 @Component
 export struct OrderTypeComp {
   @StorageLink('tableId') tableId: string = ''
-  @StorageLink('dinerNum') dinerNum: ResourceStr = ''
+  @StorageLink('dinerNum') dinerNum: string = ''
   @StorageProp('storeType') storeType: number = 1
   @Consume('pageStack') pageStack: NavPathStack
   @Prop @Watch('dealSate') orderDetail: GetMyOrderResp

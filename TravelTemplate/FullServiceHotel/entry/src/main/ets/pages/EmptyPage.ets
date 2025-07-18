@@ -8,16 +8,18 @@ struct EmptyPage {
     AccountUtil.silentLogin().then(() => {
       if (AccountUtil.getAccountInfo().openID) {
         WindowUtil.initWindowUtil();
-        router.replaceUrl({
-          url: 'pages/MainEntry',
-        });
       } else {
         promptAction.showToast({ message: '请先登录华为账号~' });
       }
     })
       .catch(() => {
-        promptAction.showToast({ message: '华为账号登录失败，请检查工程签名配置~' });
-      });
+        promptAction.showToast({ message: '华为账号静默登录失败，请检查工程签名配置~' });
+      })
+      .finally(()=>{
+        router.replaceUrl({
+          url: 'pages/MainEntry',
+        });
+      })
   }
 
   build() {

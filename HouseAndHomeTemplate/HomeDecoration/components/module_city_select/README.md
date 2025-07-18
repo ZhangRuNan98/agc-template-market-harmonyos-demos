@@ -3,8 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
-- [权限要求](#权限要求)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -14,30 +14,47 @@
 
 <img src="screenshots/city.jpeg" width="300">
 
+## 约束与限制
 
+### 环境
 
-## 使用
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
 
-1. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)用于实现城市的定位。
+### 权限
 
-2. 安装组件。
+* 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION
 
-   需要将模板根目录的components下[module_city_select](../module_city_select)目录拷贝至您工程根目录components/，并添加依赖和module声明。
+## 快速入门
 
-    ```
-    // entry/oh-package.json5
-    "dependencies": {
-      "module_city_select": "file:../components/module_city_select"
-    }
+1. 安装组件。
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
 
-    // build-profile.json5
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加module_city_select模块。
+
+    ```typescript
+    // 在项目根目录build-profile.json5填写module_city_select路径。其中XXX为组件存放的目录名
     "modules": [
-      {
+        {
         "name": "module_city_select",
-        "srcPath": "./components/module_city_select"
-      }
+        "srcPath": "./XXX/module_city_select",
+        }
     ]
     ```
+   c. 在项目根目录oh-package.json5中添加依赖。
+    ```typescript
+    // XXX为组件存放的目录名称
+    "dependencies": {
+      "module_city_select": "file:./XXX/module_city_select"
+    }
+   ```
+
+2. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)用于实现城市的定位。
 
 3. 引入组件。
 
@@ -45,9 +62,6 @@
     import { CitySearchController, UICitySelect } from 'module_city_select'
     ```
 
-## 权限要求
-
-* 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION
 
 ## API参考
 
@@ -55,12 +69,12 @@
 
 **UICitySelectOptions对象说明**
 
-| 参数名                 | 类型                                          | 是否必填 | 说明                   |
-| :--------------------- | :-------------------------------------------- | :------- | :--------------------- |
-| currentCity            | string                                        | 否       | 当前定位城市           |
-| controller             | [CitySelectController](#CitySelectController) | 否       | 城市选择控制器         |
-| goBack                 | (city?: string) => void                       | 否       | 返回上一级页面         |
-| emitUpdateCityLocation | (city: string) => void                        | 否       | 更新当前定位城市的回调 |
+| 参数名                    | 类型                                            | 是否必填 | 说明          |
+|:-----------------------|:----------------------------------------------|:-----|:------------|
+| currentCity            | string                                        | 否    | 当前定位城市      |
+| controller             | [CitySelectController](#CitySelectController) | 否    | 城市选择控制器     |
+| goBack                 | (city?: string) => void                       | 否    | 返回上一级页面     |
+| emitUpdateCityLocation | (city: string) => void                        | 否    | 更新当前定位城市的回调 |
 
 ### CitySelectController
 

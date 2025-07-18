@@ -84,7 +84,8 @@ export struct BirthdayRememberDetails {
           onEdit: () => {
             baseActionSheet.show({
               id: 'BirthdayRememberDetails',
-              height: '100%',
+              detents:['98%','100%'],
+              backgroundColor:$r('sys.color.background_secondary'),
               showClose: false,
               onWillAppear: () => {
                 this.calendarEventVM.setEventInfo(this.userEventInfo)

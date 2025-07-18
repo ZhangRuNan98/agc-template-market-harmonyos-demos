@@ -39,17 +39,23 @@ export struct AddNotePage {
       // 标题
       this.titleBuilder()
       // 添加笔记输入框
-      TextArea({ placeholder: '输入笔记内容', text: this.note })
-        .height($r('app.float.vp_152'))
-        .maxLength(200)
-        .showCounter(true)
-        .onChange((value: string) => {
-          this.note = value;
-        })
+      this.inputBoxBuilder()
     }
     .layoutWeight(1)
     .height('100%')
     .padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16') })
+  }
+
+  // 添加笔记输入框
+  @Builder
+  inputBoxBuilder() {
+    TextArea({ placeholder: '输入笔记内容', text: this.note })
+      .height($r('app.float.vp_152'))
+      .maxLength(200)
+      .showCounter(true)
+      .onChange((value: string) => {
+        this.note = value;
+      })
   }
 
   // 答题卡手势处理

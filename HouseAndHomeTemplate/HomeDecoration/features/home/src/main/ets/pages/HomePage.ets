@@ -216,7 +216,8 @@ struct HomePage {
       .layoutWeight(1)
       .scrollBar(BarState.Off)
       .align(Alignment.Top)
-      .backgroundColor($r('sys.color.background_secondary'));
+      .backgroundColor($r('sys.color.background_secondary'))
+      .edgeEffect(EdgeEffect.Spring)
 
     }.hideTitleBar(true);
   }
@@ -228,5 +229,6 @@ function flowExtend() {
   .columnsGap(12)
   .rowsGap(12)
   .columnsTemplate('1fr 1fr')
-  .nestedScroll({ scrollForward: NestedScrollMode.SELF_FIRST, scrollBackward: NestedScrollMode.SELF_FIRST });
+  .nestedScroll({ scrollForward: NestedScrollMode.SELF_FIRST, scrollBackward: NestedScrollMode.SELF_FIRST })
+  .edgeEffect(EdgeEffect.Spring)
 }

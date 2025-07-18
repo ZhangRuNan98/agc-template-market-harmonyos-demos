@@ -189,13 +189,13 @@ Metro
 
 ### 软件
 
-- DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
-- HarmonyOS SDK版本：HarmonyOS 5.0.1 Release及以上
+- DevEco Studio版本：DevEco Studio 5.0.0 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.0 Release及以上
 
 ### 硬件
 
 * 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.1 Release及以上
+* HarmonyOS版本：HarmonyOS 5.0.0 Release及以上
 
 
 ## 快速入门
@@ -204,46 +204,43 @@ Metro
 
 在运行此模板前，需要完成以下配置：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建元服务，将包名配置到模板中。
 
-2. 在AppGallery Connect创建元服务，将包名配置到模板中。
-
-   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APPID，并进行关联。
+   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APP ID，并将APP ID与元服务进行关联。
 
    b. 返回应用列表页面，查看元服务的包名。
 
    c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建元服务的包名。
 
-3. 配置华为账号服务。
+2. 配置华为账号服务。
 
-   a. 将元服务的client ID配置到entry模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
+   a. 将元服务的client ID配置到entry/src/main路径下的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+   b. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)，并在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
 
-   c. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)，并在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
+3. 配置定位服务。
 
-4. 配置定位服务。
+   a. 将元服务的client ID配置到entry/src/main路径下的module.json5文件，如果华为账号服务已配置，可跳过此步骤。
 
-   a. 将元服务的client ID配置到entry模块的module.json5文件，如果华为账号服务已配置，可跳过此步骤。
+   b. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
 
-   b. 添加公钥指纹，如果华为账号服务已配置，可跳过此步骤。
+4. 对元服务进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
 
-   c. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
+5. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)
 
 
 ###  运行调试工程
 
 1. 连接调试手机和PC。
 
-2. 对元服务签名：由于模板中集成了华为账号、地图等服务，所以需要采用[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
-
-3. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
+2. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。</br>
+   <img src="doc\11.png" alt="首页">
 
 ## 示例效果
 
 界面展示
 
-[站点搜索录屏](doc/7.mp4)  [路线规划录屏](doc/8.mp4)  [发票功能录屏](doc/9.mp4)  [卡包功能录屏](doc/10.mp4)
+[站点搜索录屏](doc/7.jpg)  [路线规划录屏](doc/8.jpg)  [发票功能录屏](doc/9.jpg)  [卡包功能录屏](doc/10.jpg)
 
 ## 权限要求
 

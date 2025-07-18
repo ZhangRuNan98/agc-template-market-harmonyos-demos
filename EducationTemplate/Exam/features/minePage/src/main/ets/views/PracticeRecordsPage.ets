@@ -14,9 +14,8 @@
  */
 
 import { RouterMap, RouterModule } from 'router_module';
-import dayjs from 'dayjs';
 import { PracticeModel, PracticeRecordModel, PRACTICE_RECORD_DATA, TopBar } from 'commonlib';
-import { promptAction } from '@kit.ArkUI';
+import dayjs from 'dayjs';
 
 /**
  * 练习记录页面
@@ -94,9 +93,9 @@ export struct PracticeRecordsPage {
             .justifyContent(FlexAlign.SpaceBetween)
             .onClick(() => {
               if (item.practiceCount) {
-                RouterModule.push({ url: RouterMap.OneDayPracticeRecordsPage, param: item })
+                RouterModule.push({ url: RouterMap.DAY_PRACTICE_DETAILS_PAGE, param: item })
               } else {
-                promptAction.showToast({
+                this.getUIContext().getPromptAction().showToast({
                   message: item.date + '无练习记录'
                 })
               }
@@ -127,7 +126,7 @@ export struct PracticeRecordsPage {
           .margin({ left: $r('app.float.vp_4') })
       }
       .onClick(() => {
-        RouterModule.push({ url: RouterMap.PracticeDetailsPage })
+        RouterModule.push({ url: RouterMap.PRACTICE_DETAILS_PAGE })
       })
     }
     .width('100%')
@@ -210,9 +209,9 @@ export struct PracticeRecordsPage {
     .padding({ left: $r('app.float.vp_24'), right: $r('app.float.vp_24') })
     .onClick(() => {
       if (this.todayPracticeRecord.practiceCount) {
-        RouterModule.push({ url: RouterMap.OneDayPracticeRecordsPage, param: this.todayPracticeRecord })
+        RouterModule.push({ url: RouterMap.DAY_PRACTICE_DETAILS_PAGE, param: this.todayPracticeRecord })
       } else {
-        promptAction.showToast({
+        this.getUIContext().getPromptAction().showToast({
           message: this.todayPracticeRecord.date + '无练习记录'
         })
       }
@@ -280,6 +279,6 @@ export struct PracticeRecordsPage {
 }
 
 @Builder
-export function PracticeRecordsPageBuilder() {
+export function PracticeRecordsBuilder() {
   PracticeRecordsPage()
 }

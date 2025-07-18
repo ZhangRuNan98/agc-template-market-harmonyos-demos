@@ -3,6 +3,7 @@ import { map, mapCommon, MapComponent } from '@kit.MapKit';
 import { geoLocationManager } from '@kit.LocationKit';
 import { Constants } from '../constants/Common';
 import { MapLocation } from '../models/ParamsModel';
+import { logger } from '../utils/Logger';
 
 @ComponentV2
 export struct HwMapComp {
@@ -118,7 +119,11 @@ export struct HwMapComp {
 
   aboutToDisappear(): void {
     if (this.mapController) {
-      this.mapController.hide();
+      try {
+        this.mapController.hide();
+      } catch (e) {
+        logger.error(`HwMap not open, can not hide.`)
+      }
     }
   }
 
@@ -135,7 +140,6 @@ export struct HwMapComp {
     console.info('getCurrentLocation' + JSON.stringify(promise));
     promise.then(async (location: geoLocationManager.Location) => {
       mapController?.setMyLocation(location);
-      console.info('getCurrentLocation' + JSON.stringify(location));
       return location;
     }).catch((error: Error) => {
       console.error('getCurrentLocation failed', 'getCurrentLocation error: ' + JSON.stringify(error));

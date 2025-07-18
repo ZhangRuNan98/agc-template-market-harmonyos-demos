@@ -72,8 +72,7 @@ class AnswerItem {
   }
 }
 
-
-export class TopicItemModelPreference {
+class TopicItemModelPreference {
   // 类型
   type: string = ''
   // 标题
@@ -98,7 +97,7 @@ export class TopicItemModelPreference {
   isDelete: boolean = false
 }
 
-export class AnswerItemPreference {
+class AnswerItemPreference {
   // 选项标题
   ansTitle: string = ''
   // 选项ID
@@ -110,4 +109,4 @@ export class AnswerItemPreference {
   showState: number = 0
 }
 
-export { AnswerItem, TopicItemModel }
+export { AnswerItem, TopicItemModel, TopicItemModelPreference, AnswerItemPreference }

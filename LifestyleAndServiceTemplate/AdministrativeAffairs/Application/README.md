@@ -3,10 +3,9 @@
 ## 目录
 
 - [功能介绍](#功能介绍)
-- [环境要求](#环境要求)
+- [约束与限制](#约束与限制)
 - [快速入门](#快速入门)
 - [示例效果](#示例效果)
-- [权限要求](#权限要求)
 - [开源许可协议](#开源许可协议)
 
 ## 功能介绍
@@ -138,18 +137,23 @@
    │  └──widget                              // 服务卡片    
    └──phone/src/main/resources               // 资源文件目录
 ```
+## 约束与限制
 
-## 环境要求
+### 环境
 
-### 软件
-
-* DevEco Studio版本：DevEco Studio 5.0.4 release Release及以上
-* HarmonyOS SDK版本：HarmonyOS 5.0.4 release SDK及以上
-
-### 硬件
-
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
 * 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.4 release及以上
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+### 权限要求
+
+* 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION
+* 网络权限：ohos.permission.INTERNET
+
+### 调试
+
+本模板不支持使用模拟器调试，请使用真机进行调试
 
 ## 快速入门
 
@@ -157,27 +161,21 @@
 
 在运行此模板前，需要完成以下配置：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建元服务，将包名配置到模板中。
 
-2. 在AppGallery Connect创建元服务，将包名配置到模板中。
-
-   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APPID，并进行关联。
+   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APP ID，并将APP ID与元服务进行关联。
 
    b. 返回应用列表页面，查看元服务的包名。
 
    c. 将Application/AppScope/app.json5文件中的bundleName替换为创建元服务的包名。
 
-3. 配置签名。
+2. 配置地图服务。
 
    a. 参考[开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc) 依次开通地图服务、位置服务、定位服务。
 
    <img src="screenshot/img_14.png" alt="开通服务" width="600">
 
-   b. 为元服务进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
-
-   c. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
-
-4. 本模板是端云一体模版，采用云函数接口的方式mock请求数据，所以需要部署云函数以及云数据库。
+3. 本模板是端云一体模版，采用云函数接口的方式mock请求数据，所以需要部署云函数以及云数据库。
 
    a. [开通元函数服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-enable-function)和[开通云数据库服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-enable-database)
 
@@ -186,24 +184,24 @@
    <img src="screenshot/img_19.png" alt="配置信息" width="600">
    <img src="screenshot/img_18.png" alt="查询信息" width="600">
 
-   c.  部署云数据库。右击clouddb选择“deploy Cloud db”进行部署，部署成功之后可以在AGC上查看数据库状态。
+   c. 部署云数据库。右击clouddb选择“deploy Cloud db”进行部署，部署成功之后可以在AGC上查看数据库状态。
 
    <img src="screenshot/img_20.png" alt="部署数据库">
    <img src="screenshot/img_21.png" alt="查询数据库" width="600">
 
-   d. 部署云函数。右击goven-userinfo，点击Deploy 'goven-userinfo'部署云函数，类似操作部署home-service、informations-service和service-list。
+   d. 打开云函数中govn-userinfo函数的[AxiosApi.ts](../CloudProgram/cloudfunctions/govn-userinfo/AxiosApi.ts)文件，将getAccessToken方法中的client_id以及client_secret修改为你当前项目下对应应用的client_id和client_secret。
+
+   <img src="screenshot/img_24.png" alt="配置id和secret" width="600">
+   
+   e. 部署云函数。右击goven-userinfo，点击Deploy 'goven-userinfo'部署云函数，类似操作部署home-service、informations-service和service-list。
 
    <img src="screenshot/img_11.png" alt="部署云函数">
 
-   e. 云函数部署成功，可以在AGC上查看相关记录。
+   f. 云函数部署成功，可以在AGC上查看相关记录。
 
    <img src="screenshot/img_10.png" alt="查询云函数" width="600">
 
-   d.修改云函数中govn-userinfo中获取手机号的client_id以及client_secret为你当前项目中的client_id和client_secret。
-
-   <img src="screenshot/img_24.png" alt="配置id和secret" width="600">
-
-5. 配置预加载。
+4. 配置预加载。
 
    a. [开通预加载服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-enable-prefetch)。
 
@@ -213,24 +211,23 @@
 
    c. 详细预加载文档，请参考：https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-prefetch-service
 
-6. 配置华为账号服务。
+5. 配置华为账号服务。
 
-   a. 将元服务的client ID配置到Application/product/entry模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
+   a. 将元服务的client ID配置到Application/product/entry模块的[module.json5](./product/entry/src/main/module.json5)文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+   b. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)，并在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
 
-   c. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)，并在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
+6. 为元服务[配置服务器域名](https://developer.huawei.com/consumer/cn/doc/atomic-guides/agc-help-harmonyos-server-domain)，配置httpRequest合法域名即可。
+   
+7. 对元服务进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
 
-7. 为元服务[配置服务器域名](https://developer.huawei.com/consumer/cn/doc/atomic-guides/agc-help-harmonyos-server-domain)，配置httpRequest合法域名即可。
-
+8. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
 
 ### 运行调试工程
 
 1. 连接调试手机和PC。
 
-2. 对元服务[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
-
-3. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
+2. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
 
 ## 示例效果
 
@@ -241,12 +238,6 @@
 3. [资讯](https://agc-storage-drcn.platform.dbankcloud.cn/v0/zwmb-xlw7o/video%2F3.mp4?token=d1f6be36-ec66-4a4b-adec-444168512942)
 
 4. [我的](https://agc-storage-drcn.platform.dbankcloud.cn/v0/zwmb-xlw7o/video%2F4.mp4?token=a23c05d9-baa1-45f6-b082-63bd0554cbc0)
-
-
-## 权限要求
-
-* 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION
-* 网络权限：ohos.permission.INTERNET
 
 ## 开源许可协议
 

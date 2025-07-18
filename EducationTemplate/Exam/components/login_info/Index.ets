@@ -14,3 +14,5 @@
  */
 
 export { QuickLogin } from './src/main/ets/components/QuickLogin';
+
+export { UserInfo } from './src/main/ets/model/UserInfo';

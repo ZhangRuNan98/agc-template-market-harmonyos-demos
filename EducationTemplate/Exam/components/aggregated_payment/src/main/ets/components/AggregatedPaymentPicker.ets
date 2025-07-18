@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
+import { common } from '@kit.AbilityKit';
 import { ChannelType, WxExtraInfo } from '../common/Constant';
 import { OnWXResp, wxEventHandler as WXEventHandler } from '../model/WXApiWrap';
 import { AggregatedPaymentVM } from '../viewmodel/AggregatedPaymentVM';
-import { common } from '@kit.AbilityKit';
 import { ChannelInfo } from '../model/Index';
 
 @ComponentV2
@@ -56,7 +56,7 @@ export struct AggregatedPaymentPicker {
       this.channelInfo.forEach((payInfo: ChannelInfo) => {
         if (!payInfo.icon) {
           if (payInfo.channelType === ChannelType.HUAWEI_PAY) {
-            payInfo.icon = $r('app.media.hwpay')
+            payInfo.icon = $r('app.media.hw_pay')
           } else if (payInfo.channelType === ChannelType.ALI_PAY) {
             payInfo.icon = $r('app.media.alipay')
           } else {

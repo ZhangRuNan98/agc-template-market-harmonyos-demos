@@ -124,7 +124,8 @@ export struct InstitutionsCard {
               .fontSize($r('sys.float.Caption_M'))
               .fontColor($r('sys.color.font_secondary'))
               .fontWeight(FontWeight.Regular)
-          }.width(Constants.SIXTY_PERCENT_WIDTH)
+              .layoutWeight(1)
+          }.layoutWeight(1)
         }.width(Constants.FULL_PERCENT_WIDTH).margin({ top: $r('app.float.institution_margin_top') })
 
         if (!this.isHospital) {
@@ -141,10 +142,11 @@ export struct InstitutionsCard {
                 .fontSize($r('sys.float.Caption_M'))
                 .fontColor($r('sys.color.font_secondary'))
                 .fontWeight(FontWeight.Regular)
-            }.width(Constants.SIXTY_PERCENT_WIDTH)
+                .layoutWeight(1)
+            }.layoutWeight(1)
           }.width(Constants.FULL_PERCENT_WIDTH).margin({ top: $r('app.float.institution_margin_top') })
         }
-      }
+      }.layoutWeight(1)
     }
     .width(Constants.FULL_PERCENT_WIDTH)
     .alignItems(VerticalAlign.Top)

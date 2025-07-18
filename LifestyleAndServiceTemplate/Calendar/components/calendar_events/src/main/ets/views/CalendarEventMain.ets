@@ -90,8 +90,9 @@ export struct CalendarEventMain {
     .onClick(() => {
       baseActionSheet.show({
         id: 'CalendarReminder',
-        height: '100%',
+        detents:['98%','100%'],
         showClose: false,
+        backgroundColor:$r('sys.color.background_secondary'),
         customContent: () => {
           this.CalendarReminderAdd()
         },

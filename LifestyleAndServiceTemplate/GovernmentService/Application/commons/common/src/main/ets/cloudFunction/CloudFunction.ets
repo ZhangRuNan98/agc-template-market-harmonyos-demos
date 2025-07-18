@@ -4,8 +4,9 @@ import { BusinessError } from '@kit.BasicServicesKit';
 
 export class CloudFunction {
   /*
- * 调用云函数获取用户信息
- * */
+   * 调用云函数获取用户信息
+   *  todo 替换成实际业务接口
+   * */
   public static getUserInfo(authorizationCode: string): Promise<cloudFunction.FunctionResult> {
     return new Promise((resolve, reject) => {
       cloudFunction.call({
@@ -27,6 +28,7 @@ export class CloudFunction {
   }
   /*
    * 调用云函数进行推送服务
+   * todo 替换成实际业务接口
    * */
   public static pushMessage(pushToken: string): Promise<cloudFunction.FunctionResult> {
     return new Promise((resolve, reject) => {

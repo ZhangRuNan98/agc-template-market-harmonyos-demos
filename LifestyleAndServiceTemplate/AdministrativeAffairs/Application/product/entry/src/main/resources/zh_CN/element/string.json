@@ -11,6 +11,10 @@
     {
       "name": "EntryAbility_label",
       "value": "医保模板"
+    },
+    {
+      "name": "agcit_huawei_medical_insurance",
+      "value": "1.0.1"
     }
   ]
 }

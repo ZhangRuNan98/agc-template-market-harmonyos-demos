@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 
-import { RouterMap, RouterModule } from 'router_module';
 import { JSON } from '@kit.ArkTS';
+import { AppStorageV2 } from '@kit.ArkUI';
+import { RouterMap, RouterModule } from 'router_module';
 import { TopTabsBuilder } from 'commonlib';
 import { MockObj, MockItem } from '../viewModel/CourseHomeModel'
-import { AppStorageV2 } from '@kit.ArkUI';
 
 @ComponentV2
 struct MockItemComponent {
@@ -25,26 +25,8 @@ struct MockItemComponent {
 
   build() {
     Row() {
-      Row() {
-        Image(this.item.imageSrc)
-          .height($r('app.float.vp_40'))
-          .width($r('app.float.vp_40'))
-          .margin({ right: $r('app.float.vp_8') })
-        Column() {
-          Text(this.item.text)
-            .fontColor($r('sys.color.font_primary'))
-            .fontSize($r('sys.float.Subtitle_S'))
-            .fontWeight(FontWeight.Medium)
-            .maxLines(2)
-            .lineHeight($r('app.float.vp_19'))
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ bottom: $r('app.float.vp_4') })
-          Text(`已有 ${this.item.num}人 做过`)
-            .fontColor($r('sys.color.font_tertiary'))
-            .fontSize($r('sys.float.Body_S'))
-            .fontWeight(FontWeight.Regular)
-        }.width('65%').alignItems(HorizontalAlign.Start)
-      }
+      // 试卷详情
+      this.examDetailsBuilder()
 
       Image($r('app.media.chevron_right'))
         .height($r('app.float.vp_16'))
@@ -59,6 +41,33 @@ struct MockItemComponent {
     .borderRadius($r('app.float.vp_16'))
     .margin({ bottom: $r('app.float.vp_12') })
   }
+
+  /**
+   * 试卷详情
+   */
+  @Builder
+  examDetailsBuilder() {
+    Row() {
+      Image(this.item.imageSrc)
+        .height($r('app.float.vp_40'))
+        .width($r('app.float.vp_40'))
+        .margin({ right: $r('app.float.vp_8') })
+      Column() {
+        Text(this.item.text)
+          .fontColor($r('sys.color.font_primary'))
+          .fontSize($r('sys.float.Subtitle_S'))
+          .fontWeight(FontWeight.Medium)
+          .maxLines(2)
+          .lineHeight($r('app.float.vp_19'))
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .margin({ bottom: $r('app.float.vp_4') })
+        Text(`已有 ${this.item.num}人 做过`)
+          .fontColor($r('sys.color.font_tertiary'))
+          .fontSize($r('sys.float.Body_S'))
+          .fontWeight(FontWeight.Regular)
+      }.width('65%').alignItems(HorizontalAlign.Start)
+    }
+  }
 }
 
 @ComponentV2
@@ -69,7 +78,7 @@ export struct MockTestPage {
 
   aboutToAppear(): void {
     this.mockTestList = this.prop.mockList
-    this.navType = RouterModule.getNavParam({ url: RouterMap.MockTestPage }) as number
+    this.navType = RouterModule.getNavParam({ url: RouterMap.Mock_PAGE }) as number
   }
 
   build() {
@@ -78,39 +87,47 @@ export struct MockTestPage {
         title: this.navType === 1 ? '模拟试卷' : '全真试卷',
         showBackButton: true,
         bgColor: $r('sys.color.background_primary'),
-      })
-        .padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16') })
-      Column() {
-        ForEach(this.mockTestList, (item: MockItem) => {
-          //模拟试卷子项
-          MockItemComponent({ item: item })
-            .onClick(() => {
-              // 跳转项的num+1
-              this.prop = AppStorageV2.connect(MockObj, () => new MockObj())!;
-              this.prop.mockList.forEach((it: MockItem) => {
-                if (it.id === item.id) {
-                  it.num = it.num + 1
-                }
-              })
-              RouterModule.push({ url: RouterMap.AnswerQuestionsTwo_Page });
-            })
-        }, (item: MockItem) => JSON.stringify(item))
-      }
-      .width('100%')
-      .height('100%')
-      .padding({
-        left: $r('app.float.vp_16'),
-        right: $r('app.float.vp_16'),
-        top: $r('app.float.vp_12'),
-        bottom: $r('app.float.vp_12')
-      })
-      .backgroundColor($r('sys.color.comp_background_gray'))
+      }).padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16') })
+      // 试卷列表
+      this.examListBuilder()
     }
     .backgroundColor($r('sys.color.background_primary'))
     .width('100%')
     .height('100%')
     .alignItems(HorizontalAlign.Start)
     .justifyContent(FlexAlign.Start)
+  }
+
+  /**
+   * 试卷列表
+   */
+  @Builder
+  examListBuilder() {
+    Column() {
+      ForEach(this.mockTestList, (item: MockItem) => {
+        //模拟试卷子项
+        MockItemComponent({ item: item })
+          .onClick(() => {
+            // 跳转项的num+1
+            this.prop = AppStorageV2.connect(MockObj, () => new MockObj())!;
+            this.prop.mockList.forEach((it: MockItem) => {
+              if (it.id === item.id) {
+                it.num = it.num + 1
+              }
+            })
+            RouterModule.push({ url: RouterMap.ANSWER_QUESTIONS_TWO_PAGE });
+          })
+      }, (item: MockItem) => JSON.stringify(item))
+    }
+    .width('100%')
+    .height('100%')
+    .padding({
+      left: $r('app.float.vp_16'),
+      right: $r('app.float.vp_16'),
+      top: $r('app.float.vp_12'),
+      bottom: $r('app.float.vp_12')
+    })
+    .backgroundColor($r('sys.color.comp_background_gray'))
   }
 }
 

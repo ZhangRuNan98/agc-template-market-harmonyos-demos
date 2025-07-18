@@ -16,3 +16,6 @@
 export { Feedback } from './src/main/ets/components/Feedback';
 
 export { fileSelect, getDateStringWithTimeStamp } from './src/main/ets/utils/FileSelect';
+
+export { FeedbackItemType } from './src/main/ets/model/FeedbackRecordModel';
+

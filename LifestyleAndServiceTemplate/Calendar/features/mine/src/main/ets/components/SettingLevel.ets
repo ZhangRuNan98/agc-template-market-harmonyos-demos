@@ -120,7 +120,7 @@ export struct SettingLevel {
                         case 'theme':
                           baseActionSheet.show({
                             id: 'ThemeToggle',
-                            height: 300,
+                            detents:[300,301],
                             title: {
                               title: '主题切换',
                             },
@@ -132,7 +132,7 @@ export struct SettingLevel {
                         case 'weekday':
                           baseActionSheet.show({
                             id: 'WeekdayToggle',
-                            height: 300,
+                            detents:[300,301],
                             title: {
                               title: '周首日',
                             },

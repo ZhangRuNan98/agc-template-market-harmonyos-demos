@@ -1,13 +1,54 @@
 # 集成能力组件快速入门
 
+## 目录
+
+- [简介](#简介)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
+- [API参考](#API参考)
+- [示例代码](#示例代码)
+
 ## 简介
 
-本组件提供调用模态框的功能。
+本组件提供了展示当前日期日历、自定义选中颜色、选中图标形状、周首日、是否展示休息日、是否展示农历、是否显示头部、自定义头部项插槽、节日、节气展示颜色等相关的能力，可以帮助开发者快速集成日历相关的能力。
 
-<img src="./screenshot/BaseActionSheet.png" width="300">
 
-### 使用
+## 约束与限制
 
+### 环境要求
+
+### 软件
+
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release及以上
+
+### 硬件
+
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+## 快速入门
+
+1. 安装组件。 将模板根目录的components下**base_apis**目录拷贝至您的工程相应目录。如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤
+   ```typescript
+   // 在项目根目录build-profile.json5填写base_apis路径。其中XXX为组件存放的目录名
+    "modules": [
+        {
+        "name": "base_apis",
+        "srcPath": "./XXX/base_apis",
+        }
+    ]
+   ```
+   c. 在项目根目录oh-package.json5中添加依赖。
+    ```typescript
+    // XXX为组件存放的目录名称
+    "dependencies": {
+      "base_apis": "file:./XXX/base_apis"
+    }
+   ```
+
+# baseActionSheet
+1. 调用组件   
  ```typescript
    import {baseActionSheet } from 'base_apis';
    
@@ -28,7 +69,7 @@
            .onClick(() => {
              baseActionSheet.show({
                id: "ThemeToggle",
-               height: 300,
+               detents:[300,301],
                title: {
                  title: "主题切换",
                },
@@ -81,12 +122,17 @@
 ## 简介
 
 本组件提供调用弹窗的功能。
-| 对话框                                                   | 进度                                                   |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="./screenshot/BaseToast_dialog.png"> | <img src="./screenshot/BaseToast_loading.png"> |
+
+ 对话框  
+
+ <img src="./screenshot/BaseToast_dialog.png">
+
+进度
+
+<img src="./screenshot/BaseToast_loading.png"> 
 
 ### 使用
-
+1. 调用组件
  ```typescript
    import { baseToast } from 'base_apis';
    
@@ -195,7 +241,7 @@ baseToast.show({
 <img src="./screenshot/BaseDatePicker.png" width="300">
 
 ### 使用
-
+1. 调用组件
 ```typescript
    import { BaseDatePicker } from 'base_apis';
    
@@ -246,6 +292,7 @@ baseToast.show({
 <img src="./screenshot/BaseTextPicker.png" width="300">
 
 ### 使用
+1. 调用组件
 
 ```typescript
    import { BaseTextPicker } from 'base_apis';
@@ -300,6 +347,7 @@ baseToast.show({
 
 ## 使用
 
+1. 调用组件
  ```typescript
    import { BaseSliderSwitch } from 'base_apis';
    
@@ -336,6 +384,8 @@ baseToast.show({
 <img src="./screenshot/YiJiCell.png">
 
 ## 使用
+
+1. 调用组件
 
    ```typescript
    import { YiJiCell } from 'base_apis';
@@ -395,10 +445,10 @@ onYiJiCellClick(callback: () => void)
 
 本组件提供了左右标题布局组件，开发可以根据业务自定义左右标题，并支持传入自定义组件作为卡片内容，可以快速组装成完整的业务区域卡片
 
-<img src="./screenshot/BaseCell.png" >
+<img src="./screenshot/BaseCell_4.png" >
 
 ## 使用
-
+1. 调用组件
 ```typescript
    import { BaseCell } from 'base_apis';
    

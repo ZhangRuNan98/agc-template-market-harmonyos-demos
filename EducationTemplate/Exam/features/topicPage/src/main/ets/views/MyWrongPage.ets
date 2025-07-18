@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import { examPrefer, PreferConstant, QuestionsRoterModel, TopBar } from 'commonlib';
+import { QuestionsRouterModel, TopicItemType } from 'answer_questions';
+import { PreferenceUtil, PreferConstant, TopBar } from 'commonlib';
 import { RouterMap, RouterModule } from 'router_module';
-import { TopicItemType } from 'commonlib';
 
 @ComponentV2
 export struct MyWrongItem {
@@ -27,40 +27,10 @@ export struct MyWrongItem {
 
   build() {
     Column() {
-      Row() {
-        Text($r('app.string.single_choice'))
-          .textAlign(TextAlign.Center)
-          .fontColor($r('sys.color.font_on_primary'))
-          .fontSize($r('sys.float.Caption_L'))
-          .fontWeight(FontWeight.Regular)
-          .margin({ bottom: $r('app.float.vp_4') })
-          .width($r('app.float.vp_40'))
-          .height($r('app.float.vp_24'))
-          .borderRadius($r('app.float.vp_8'))
-          .backgroundColor('#4c5dc5')
-        if (this.isSelectDelete) {
-          Row() {
-            Image(this.item.isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_anscommon'))
-              .width($r('app.float.vp_20'))
-              .height($r('app.float.vp_20'))
-          }
-          .width($r('app.float.vp_50'))
-          .height($r('app.float.vp_24'))
-          .justifyContent(FlexAlign.End)
-          .onClick(() => {
-            this.changeCollectionItem(this.idx)
-          })
-        }
-      }.width('100%')
-      .justifyContent(FlexAlign.SpaceBetween)
-
-      Text(this.item.title)
-        .fontColor($r('sys.color.font_primary'))
-        .fontSize($r('sys.float.Body_M'))
-        .fontWeight(FontWeight.Regular)
-        .lineHeight($r('app.float.vp_20'))
-        .maxLines(2)
-        .textOverflow({ overflow: TextOverflow.Ellipsis })
+      // 单选
+      this.singleChoiceBuilder()
+      // 错题标题
+      this.titleBuilder()
     }
     .alignItems(HorizontalAlign.Start)
     .padding($r('app.float.vp_16'))
@@ -68,6 +38,53 @@ export struct MyWrongItem {
     .borderRadius($r('app.float.vp_16'))
     .margin({ bottom: $r('app.float.vp_8') })
     .width('100%')
+  }
+
+  /**
+   * 错题标题
+   */
+  @Builder
+  titleBuilder() {
+    Text(this.item.title)
+      .fontColor($r('sys.color.font_primary'))
+      .fontSize($r('sys.float.Body_M'))
+      .fontWeight(FontWeight.Regular)
+      .lineHeight($r('app.float.vp_20'))
+      .maxLines(2)
+      .textOverflow({ overflow: TextOverflow.Ellipsis })
+  }
+
+  /**
+   * 单选
+   */
+  @Builder
+  singleChoiceBuilder() {
+    Row() {
+      Text($r('app.string.single_choice'))
+        .textAlign(TextAlign.Center)
+        .fontColor($r('sys.color.font_on_primary'))
+        .fontSize($r('sys.float.Caption_L'))
+        .fontWeight(FontWeight.Regular)
+        .margin({ bottom: $r('app.float.vp_4') })
+        .width($r('app.float.vp_40'))
+        .height($r('app.float.vp_24'))
+        .borderRadius($r('app.float.vp_8'))
+        .backgroundColor('#4c5dc5')
+      // 是否删除按钮
+      Row() {
+        Image(this.item.isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_ans_common'))
+          .width($r('app.float.vp_20'))
+          .height($r('app.float.vp_20'))
+      }
+      .width($r('app.float.vp_50'))
+      .height($r('app.float.vp_24'))
+      .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.None)
+      .justifyContent(FlexAlign.End)
+      .onClick(() => {
+        this.changeCollectionItem(this.idx)
+      })
+    }.width('100%')
+    .justifyContent(FlexAlign.SpaceBetween)
   }
 }
 
@@ -95,21 +112,21 @@ export struct MyWrongIndexPage {
         title: $r('app.string.my_wrong')
       })
       Row() {
-        Image(this.isSelectAll === false ? $r('app.media.icon_select_all_off') : $r('app.media.icon_select_all'))
+        Image(!this.isSelectAll ? $r('app.media.icon_select_all_off') : $r('app.media.icon_select_all'))
           .height($r('app.float.vp_40'))
           .width($r('app.float.vp_40'))
           .onClick(() => {
             this.isSelAll()
           })
-          .visibility(this.isSelectDelete === true ? Visibility.Visible : Visibility.Hidden)
+          .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.Hidden)
         Image($r('app.media.ic_public_trash'))
           .width($r('app.float.vp_40'))
           .height($r('app.float.vp_40'))
-          .opacity(this.swipeDelete === true ? 0.4 : 1)
+          .opacity(this.swipeDelete ? 0.4 : 1)
           .margin({ left: $r('app.float.vp_8') })
       }
       .onClick(() => {
-        if (this.swipeDelete === false && this.wrongQues.length > 0) {
+        if (!this.swipeDelete && this.wrongQues.length > 0) {
           this.isSelectDelete = !this.isSelectDelete
           this.selectCount = 0
           this.isSelectAll = false
@@ -132,6 +149,7 @@ export struct MyWrongIndexPage {
         .width($r('app.float.vp_24'))
         .height($r('app.float.vp_24'))
         .onClick(() => {
+          this.swipeDelete = false
           this.deleteData(idx)
         })
     }.margin({ right: $r('app.float.vp_16') })
@@ -148,98 +166,117 @@ export struct MyWrongIndexPage {
           .fontColor($r('sys.color.icon_secondary'))
           .height('100%')
       } else {
-        Column() {
-          List() {
-            ForEach(this.wrongQues, (item: WrongModel, idx: number) => {
-              ListItem() {
-                MyWrongItem({
-                  isSelectDelete: this.isSelectDelete,
-                  item: item,
-                  changeCollectionItem: () => {
-                    item.isDelete = !item.isDelete
-                    if (item.isDelete === true) {
-                      this.selectCount++;
-                    } else {
-                      this.selectCount--;
-                    }
-                    if (this.selectCount < this.wrongQues.length) {
-                      this.isSelectAll = false
-                    } else {
-                      this.isSelectAll = true
-                    }
-                  },
-                  idx: idx
-                }).margin({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16'), })
-              }
-              .transition({ type: TransitionType.Delete, opacity: 0 })
-              .swipeAction({
-                edgeEffect: SwipeEdgeEffect.None,
-                end: {
-                  actionAreaDistance: 26,
-                  builder: () => {
-                    this.itemEndComponent(idx)
-                  },
-                  onStateChange: (state: SwipeActionState) => {
-                    if (state === SwipeActionState.EXPANDED) {
-                      this.isSelectDelete = false
-                      this.swipeDelete = true
-                    } else if (state === SwipeActionState.COLLAPSED) {
-                      this.swipeDelete = false
-                    }
-                  }
-                }
-              })
-              .onClick(() => {
-                if (this.wrongArr.length > 0) {
-                  let roterModel: QuestionsRoterModel = new QuestionsRoterModel()
-                  roterModel.datalist = [this.wrongArr[idx]]
-                  roterModel.sourceType = '我的错题'
-                  RouterModule.push({ url: RouterMap.AnswerQuestions_Page, param: roterModel })
-                }
-              })
-            }, (item: WrongModel, idx: number) => JSON.stringify(item.keyID + idx + ''))
-            ListItem() {
-              if (this.isSelectDelete) {
-                Row() {
-                  Row() {
-                    Image($r('app.media.icon_delete'))
-                      .width($r('app.float.vp_25'))
-                      .height($r('app.float.vp_25'))
-                      .margin($r('app.float.vp_8'))
-                    Text('删除')
-                      .fontWeight(FontWeight.Medium)
-                      .fontColor($r('sys.color.font_on_primary'))
-                      .fontSize($r('sys.float.Body_L'))
-                      .textAlign(TextAlign.Center)
-                  }
-                  .justifyContent(FlexAlign.Center)
-                  .alignItems(VerticalAlign.Center)
-                  .width('100%')
-                  .borderRadius($r('app.float.vp_20'))
-                  .backgroundColor('#4c5dc4')
-                }
-                .height($r('app.float.vp_40'))
-                .padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16'), })
-                .margin({ top: $r('app.float.vp_38') })
-                .onClick(() => {
-                  // 删除选中
-                  this.deleteSelectData()
-                })
-              }
-            }
-          }
-          .layoutWeight(1)
-          .listDirection(Axis.Vertical)
-          .scrollBar(BarState.Off)
-        }.layoutWeight(1)
-        .backgroundColor($r('sys.color.background_secondary'))
-        .padding({
-          top: $r('app.float.vp_12'),
-        })
+        // 错题列表
+        this.wrongListBuilder()
       }
     }
     .layoutWeight(1)
     .height('100%')
+  }
+
+  /**
+   * 错题列表
+   */
+  @Builder
+  wrongListBuilder() {
+    Column() {
+      List() {
+        ForEach(this.wrongQues, (item: WrongModel, idx: number) => {
+          ListItem() {
+            MyWrongItem({
+              isSelectDelete: this.isSelectDelete,
+              item: item,
+              changeCollectionItem: () => {
+                item.isDelete = !item.isDelete
+                if (item.isDelete) {
+                  this.selectCount++;
+                } else {
+                  this.selectCount--;
+                }
+                if (this.selectCount < this.wrongQues.length) {
+                  this.isSelectAll = false
+                } else {
+                  this.isSelectAll = true
+                }
+              },
+              idx: idx
+            }).margin({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16'), })
+          }
+          .transition({ type: TransitionType.Delete, opacity: 0 })
+          .swipeAction({
+            edgeEffect: SwipeEdgeEffect.None,
+            end: {
+              actionAreaDistance: 26,
+              builder: () => {
+                this.itemEndComponent(idx)
+              },
+              onStateChange: (state: SwipeActionState) => {
+                if (state === SwipeActionState.EXPANDED) {
+                  this.isSelectDelete = false
+                  this.swipeDelete = true
+                } else if (state === SwipeActionState.COLLAPSED) {
+                  this.swipeDelete = false
+                }
+              }
+            }
+          })
+          .onClick(() => {
+            if (this.wrongArr.length > 0) {
+              let routerModel: QuestionsRouterModel = new QuestionsRouterModel()
+              routerModel.datalist = [this.wrongArr[idx]]
+              routerModel.sourceType = '我的错题'
+              RouterModule.push({ url: RouterMap.ANSWER_QUESTIONS_PAGE, param: routerModel })
+            }
+          })
+        }, (item: WrongModel, idx: number) => JSON.stringify(item.keyID + idx + ''))
+        // 删除
+        this.deleteBuilder()
+      }
+      .width('auto')
+      .height('auto')
+      .layoutWeight(1)
+      .listDirection(Axis.Vertical)
+      .scrollBar(BarState.Off)
+    }.layoutWeight(1)
+    .backgroundColor($r('sys.color.background_secondary'))
+    .padding({
+      top: $r('app.float.vp_12'),
+    })
+  }
+
+  /**
+   * 删除
+   */
+  @Builder
+  deleteBuilder() {
+    ListItem() {
+      Row() {
+        Row() {
+          Image($r('app.media.icon_delete'))
+            .width($r('app.float.vp_25'))
+            .height($r('app.float.vp_25'))
+            .margin($r('app.float.vp_8'))
+          Text('删除')
+            .fontWeight(FontWeight.Medium)
+            .fontColor($r('sys.color.font_on_primary'))
+            .fontSize($r('sys.float.Body_L'))
+            .textAlign(TextAlign.Center)
+        }
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .width('100%')
+        .borderRadius($r('app.float.vp_20'))
+        .backgroundColor('#4c5dc4')
+      }
+      .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.Hidden)
+      .height($r('app.float.vp_40'))
+      .padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16'), })
+      .margin({ top: $r('app.float.vp_38') })
+      .onClick(() => {
+        // 删除选中
+        this.deleteSelectData()
+      })
+    }
   }
 
   /**
@@ -248,7 +285,7 @@ export struct MyWrongIndexPage {
   async initData() {
     try {
       let arr: TopicItemType[] =
-        await examPrefer.getPreferenceValue(PreferConstant.EXAMPREFER_CTJL, []) as TopicItemType[];
+        PreferenceUtil.getInstance().get(PreferConstant.ERROR_RECORDS, []) as TopicItemType[];
       arr.sort((a, b) => b.jlStamp - a.jlStamp)
       this.wrongArr = arr;
       if (arr && arr.length > 0) {
@@ -269,24 +306,24 @@ export struct MyWrongIndexPage {
   }
 
   // 移除
-  async deleteData(idx: number) {
+  deleteData(idx: number) {
     this.wrongQues.splice(idx, 1)
     this.swipeDelete = this.wrongQues.length === 0
     this.wrongArr.splice(idx, 1)
-    examPrefer.putPreferenceValue(PreferConstant.EXAMPREFER_CTJL, this.wrongArr)
+    PreferenceUtil.getInstance().put(PreferConstant.ERROR_RECORDS, this.wrongArr)
   }
 
   // 移除所选中的
-  async deleteSelectData() {
+  deleteSelectData() {
     let arr: string[] = []
     this.wrongQues.forEach((model: WrongModel) => {
       if (model.isDelete) {
         arr.push(model.keyID)
       }
     })
-    this.wrongQues = this.wrongQues.filter((it: WrongModel) => it.isDelete === false)
+    this.wrongQues = this.wrongQues.filter((it: WrongModel) => !it.isDelete)
     this.wrongArr = this.wrongArr.filter((it: TopicItemType) => !arr.includes(it.keyID))
-    examPrefer.putPreferenceValue(PreferConstant.EXAMPREFER_CTJL, this.wrongArr)
+    PreferenceUtil.getInstance().put(PreferConstant.ERROR_RECORDS, this.wrongArr)
     if (this.wrongQues.length === 0) {
       this.isSelectDelete = false
     }
@@ -295,7 +332,7 @@ export struct MyWrongIndexPage {
 
   // 是否全选
   isSelAll() {
-    if (this.isSelectAll === false) {
+    if (!this.isSelectAll) {
       this.wrongQues.forEach((item: WrongModel) => {
         item.isDelete = true;
       })

@@ -11,7 +11,7 @@ export struct ScheduleList {
   @Builder
   itemEnd(item: UserEventItem) {
     ListEndSwiperAction({
-      userEventInfo:item
+      userEventInfo: item,
     })
   }
 
@@ -33,25 +33,28 @@ export struct ScheduleList {
         ForEach(this.scheduleList, (item: UserEventItem, index: number) => {
           ListItem() {
             Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
-              Column(){
+              Column() {
                 Image($r('app.media.ic_schedule')).width(24).height(24)
               }
               .width(30)
               .height(30)
+
               Column({ space: 5 }) {
                 Text(item.content)
                   .fontWeight(FontWeight.Medium)
                   .fontSize(14)
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
-                Column({space:3}){
-                  Text(`开始时间：${dayjs(item.date[0].date).format('YYYY年MM月DD日')} ${item.date[0].time}`)
+                Column({ space: 3 }) {
+                  Text(`开始时间：${item.date[0].isLunar ? item.date[0].lunarDate :
+                  dayjs(item.date[0].date).format('YYYY年MM月DD日')} ${item.date[0].time}`)
                     .fontSize(12)
                     .fontColor($r('sys.color.font_secondary'))
-                  Text(`结束时间：${dayjs(item.date[1].date).format('YYYY年MM月DD日')} ${item.date[1].time}`)
+                  Text(`结束时间：${item.date[1].isLunar ? item.date[1].lunarDate :
+                  dayjs(item.date[1].date).format('YYYY年MM月DD日')} ${item.date[1].time}`)
                     .fontSize(12)
                     .fontColor($r('sys.color.font_secondary'))
-                }
+                }.alignItems(HorizontalAlign.Start)
               }
               .flexGrow(1)
               .margin({ left: 16 })
@@ -75,7 +78,7 @@ export struct ScheduleList {
             },
           })
           .visibility(this.scheduleList.length ? Visibility.Visible : Visibility.None)
-        },(item: UserEventItem ) => JSON.stringify(item))
+        }, (item: UserEventItem) => JSON.stringify(item))
       }
       .layoutWeight(1)
       .scrollBar(BarState.Off)

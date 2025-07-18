@@ -9,6 +9,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
 export struct ShoppingBasket {
   @Param basketList: BasketItem[] = []
   @Local currentIndex: number = 1
+  @Local selectItem: BasketItem = new BasketItem()
   @Local showAddSheet: boolean = false
   @Local nameTemp: string = ''
   @Local quantityTemp: string = ''
@@ -25,7 +26,7 @@ export struct ShoppingBasket {
       item.todoList.forEach(todo => {
         let existItem = todoListTemp.find(i => i.name === todo.name)
         if (existItem) {
-          if (existItem.unit) {
+          if (Number.isInteger(todo.quantity) && existItem.unit) {
             existItem.sum = new Decimal(existItem.sum).add(todo.quantity).toString()
           } else {
             existItem.sumArr.push(todo.name)
@@ -135,6 +136,7 @@ export struct ShoppingBasket {
                       .onClick(() => {
                         this.nameTemp = ''
                         this.quantityTemp = ''
+                        this.selectItem = item
                         this.showAddSheet = true
                       })
 
@@ -175,10 +177,6 @@ export struct ShoppingBasket {
                             })
                         })
                     }
-                    .bindSheet($$this.showAddSheet, this.addIngredientSheet(item), {
-                      detents: [400, 401],
-                      title: { title: '添加用料' },
-                    })
                   }.alignItems(HorizontalAlign.Start)
 
                   Column() {
@@ -199,6 +197,10 @@ export struct ShoppingBasket {
                 }.padding({ top: 12, left: 16, right: 16 }).backgroundColor($r('sys.color.background_primary'))
               }, (item: BasketItem) => JSON.stringify(item))
             }
+            .bindSheet($$this.showAddSheet, this.addIngredientSheet(), {
+              detents: ['100%', '101%'],
+              title: { title: '添加用料' },
+            })
             .visibility(this.currentIndex === TabIndexEnum.SECOND ? Visibility.Visible : Visibility.None);
           }.layoutWeight(1);
         } else {
@@ -208,12 +210,14 @@ export struct ShoppingBasket {
           }.margin({ top: 72 }).width('100%');
         }
       }
+      .edgeEffect(EdgeEffect.Spring)
       .scrollBar(BarState.Off)
       .backgroundColor(this.currentIndex === TabIndexEnum.FIRST || !this.basketList.length ?
       $r('sys.color.background_primary') :
       $r('sys.color.background_secondary'))
       .layoutWeight(1)
-      .align(Alignment.Top);
+      .align(Alignment.Top)
+      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM]);
     }
 
   }
@@ -260,7 +264,7 @@ export struct ShoppingBasket {
   }
 
   @Builder
-  addIngredientSheet(item: BasketItem) {
+  addIngredientSheet() {
     Column() {
       Column() {
         Row() {
@@ -305,7 +309,7 @@ export struct ShoppingBasket {
             promptAction.showToast({ message: '输入数目，备注等' })
             return
           }
-          item.todoList.push(new IngredientItem(this.nameTemp, this.quantityTemp, ''))
+          this.selectItem.todoList.push(new IngredientItem(this.nameTemp, this.quantityTemp, ''))
           this.showAddSheet = false
         })
     }

@@ -13,17 +13,19 @@
  * limitations under the License.
  */
 
-import { examPrefer, ExamPreferences, Logger, PreferConstant, QuestionsRoterModel } from 'commonlib';
-import { AnswerItemType, TopicItemType } from 'commonlib';
+import { AlertDialog } from '@kit.ArkUI';
+import { PreferenceUtil, Logger, PreferConstant } from 'commonlib';
 import { TestReportModel } from './TestReportPage';
 import { RouterMap, RouterModule } from 'router_module';
 import {
   AnswerItemPreference,
+  AnswerItemType,
+  QuestionsRouterModel,
   TopicItemModel,
-  TopicItemModelPreference
-} from 'answer_questions/src/main/ets/viewModel/TopicItemModel';
+  TopicItemModelPreference,
+  TopicItemType
+} from 'answer_questions';
 import { AnswerQuestionsComponent } from 'answer_questions';
-import { AlertDialog } from '@kit.ArkUI';
 
 const TAG = 'AnswerQuestionsPage';
 
@@ -33,20 +35,12 @@ export struct AnswerQuestionsPage {
   @Provider() practiceDuration: number = 0;
   @Provider() topicItemModelPref: TopicItemModelPreference = new TopicItemModelPreference();
   @Provider() currentIndex: number = 0
-  @Provider() currentModel: TopicItemModel | undefined = undefined
+  @Provider() currentModel?: TopicItemModel
   @Provider() rightCont: number = 0
   @Provider() errCont: number = 0
   @Provider() isCollection: boolean = false
   // 错题 历史 收藏
-  @Provider() sourceRoterModel: QuestionsRoterModel | undefined = undefined
-
-  @Monitor('rightCont', 'errCont')
-  onStrChange(monitor: IMonitor) {
-    monitor.dirty.forEach((path: string) => {
-      console.info(`${path} changed from ${monitor.value(path)?.before} to ${monitor.value(path)?.now}`);
-    });
-  }
-
+  @Provider() sourceRouterModel?: QuestionsRouterModel
   // 返回弹框
   backDialogController: CustomDialogController = new CustomDialogController({
     builder: AlertDialog({
@@ -69,13 +63,10 @@ export struct AnswerQuestionsPage {
 
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
-    let temp: QuestionsRoterModel =
-      RouterModule.getNavParam({ url: RouterMap.AnswerQuestions_Page }) as QuestionsRoterModel
-    this.sourceRoterModel = temp
+    let temp: QuestionsRouterModel =
+      RouterModule.getNavParam({ url: RouterMap.ANSWER_QUESTIONS_PAGE }) as QuestionsRouterModel
+    this.sourceRouterModel = temp
     Logger.info(JSON.stringify(temp))
-  }
-
-  aboutToDisappear(): void {
   }
 
   build() {
@@ -96,7 +87,7 @@ export struct AnswerQuestionsPage {
         this.viewReport()
       },
       onClickBack: () => {
-        if (this.sourceRoterModel?.sourceType === '我的错题' || this.sourceRoterModel?.sourceType === '我的收藏') {
+        if (this.sourceRouterModel?.sourceType === '我的错题' || this.sourceRouterModel?.sourceType === '我的收藏') {
           RouterModule.pop()
         } else {
           this.backDialogController.open();
@@ -105,9 +96,9 @@ export struct AnswerQuestionsPage {
     })
   }
 
-  async isCollectionEvent() {
+  isCollectionEvent() {
     let itemTypeArr: TopicItemType[] =
-      await examPrefer.getPreferenceValue(PreferConstant.EXAMPREFER_COLLECT, []) as TopicItemType[];
+      PreferenceUtil.getInstance().get(PreferConstant.EXAM_PREFER_COLLECT, []) as TopicItemType[];
     let arr: string[] = []
     itemTypeArr.forEach((model: TopicItemType) => {
       arr.push(model.keyID)
@@ -126,7 +117,7 @@ export struct AnswerQuestionsPage {
     testReport.ques = this.ques;
     testReport.quesType = 1;
     testReport.practiceDuration = this.practiceDuration;
-    RouterModule.replace({ url: RouterMap.TestReportPage, param: testReport });
+    RouterModule.replace({ url: RouterMap.ANSWER_REPORT_PAGE, param: testReport });
   }
 
   /**
@@ -134,151 +125,139 @@ export struct AnswerQuestionsPage {
    * @param note 笔记
    */
   confirmAddNote(note: string) {
+    let tempNote = note.trim()
+    if (tempNote.length === 0) {
+      this.getUIContext().getPromptAction().showToast({ message: '请输入笔记内容' })
+      return;
+    }
     this.currentModel!.note = note
-    console.info(`note is ${note}`);
-    if (ExamPreferences.notesPreferences && this.currentModel) {
-      if (note && note !== '') {
-        this.topicItemModelPref.type = this.currentModel.type
-        this.topicItemModelPref.title = this.currentModel.title
-        this.topicItemModelPref.keyID = this.currentModel.keyID
-        this.topicItemModelPref.isAnswer = this.currentModel.isAnswer
-        this.topicItemModelPref.rightQues = this.currentModel.rightQues
-        this.topicItemModelPref.parse = this.currentModel.parse
-        this.topicItemModelPref.note = this.currentModel.note
-        this.topicItemModelPref.addNoteTime = new Date().getTime();
-        let ans: AnswerItemPreference[] = []
-        for (let index = 0; index < this.currentModel.ques.length; index++) {
-          let objItem = this.currentModel.ques[index]
-          let it: AnswerItemPreference = new AnswerItemPreference()
-          it.ansTitle = objItem.ansTitle
-          it.ans = objItem.ans
-          it.ansID = objItem.ansID
-          it.isSelect = objItem.isSelect
-          it.showState = objItem.showState
-          ans.push(it)
-        }
-        this.topicItemModelPref.ques = ans
-        // 将笔记数据存入持久层
-        ExamPreferences.notesPreferences.put(this.topicItemModelPref.keyID, this.topicItemModelPref);
-        // 写入文件
-        ExamPreferences.notesPreferences.flush();
-      } else {
-        let isExist: boolean = ExamPreferences.notesPreferences.hasSync(this.topicItemModelPref.keyID);
-        if (isExist) {
-          // 删除持久层笔记数据
-          ExamPreferences.notesPreferences.deleteSync(this.topicItemModelPref.keyID);
-          // 写入文件
-          ExamPreferences.notesPreferences.flush();
-        }
+    if (this.currentModel) {
+      this.topicItemModelPref.type = this.currentModel.type
+      this.topicItemModelPref.title = this.currentModel.title
+      this.topicItemModelPref.keyID = this.currentModel.keyID
+      this.topicItemModelPref.isAnswer = this.currentModel.isAnswer
+      this.topicItemModelPref.rightQues = this.currentModel.rightQues
+      this.topicItemModelPref.parse = this.currentModel.parse
+      this.topicItemModelPref.note = this.currentModel.note
+      this.topicItemModelPref.addNoteTime = new Date().getTime();
+      let ans: AnswerItemPreference[] = []
+      for (let index = 0; index < this.currentModel.ques.length; index++) {
+        let objItem = this.currentModel.ques[index]
+        let it: AnswerItemPreference = new AnswerItemPreference()
+        it.ansTitle = objItem.ansTitle
+        it.ans = objItem.ans
+        it.ansID = objItem.ansID
+        it.isSelect = objItem.isSelect
+        it.showState = objItem.showState
+        ans.push(it)
       }
+      this.topicItemModelPref.ques = ans
+      // 将笔记数据存入持久层
+      PreferenceUtil.getInstance(PreferConstant.TOPIC_NOTES)
+        .put(this.topicItemModelPref.keyID, this.topicItemModelPref);
     }
   }
 
   // 错题记录
-  async storageWrongClick() {
-    if (this.sourceRoterModel?.sourceType === '我的错题') {
-    } else if (this.sourceRoterModel?.sourceType === '我的收藏') {
-    } else if (this.sourceRoterModel?.sourceType === '错题练习') {
+  storageWrongClick() {
+    if (this.sourceRouterModel?.sourceType === '我的错题') {
+    } else if (this.sourceRouterModel?.sourceType === '我的收藏') {
+    } else if (this.sourceRouterModel?.sourceType === '错题练习') {
     } else {
       if (this.currentModel) {
         if (this.currentModel.selectQues.toString() !== this.currentModel.rightQues.toString()) {
-          let currentItem: TopicItemType = {} as TopicItemType
-          currentItem.type = this.currentModel.type;
-          currentItem.title = this.currentModel.title;
-          currentItem.keyID = this.currentModel.keyID;
-          currentItem.rightQues = this.currentModel.rightQues;
-          currentItem.parse = this.currentModel.parse;
-          currentItem.note = '';
-          currentItem.selectQues = [];
-          currentItem.isAnswer = false;
-          let it: AnswerItemType[] = []
-          for (let index = 0; index < this.currentModel.ques.length; index++) {
-            let answerItem: AnswerItemType = {} as AnswerItemType
-            let element = this.currentModel.ques[index];
-            answerItem.ansTitle = element.ansTitle
-            answerItem.ans = element.ans
-            answerItem.ansID = element.ansID
-            it.push(answerItem)
-          }
-          currentItem.ques = it
-          currentItem.jlStamp = Date.now()
-          let arr: TopicItemType[] =
-            await examPrefer.getPreferenceValue(PreferConstant.EXAMPREFER_CTJL, []) as TopicItemType[]
-          if (arr.length === 0) {
-            arr.push(currentItem)
-          } else {
-            let isExit = false
-            arr.forEach((itemType: TopicItemType, idx: number) => {
-              if (itemType.keyID === currentItem.keyID) {
-                arr[idx] = currentItem
-                isExit = true
-              }
-            })
-            if (!isExit) {
+          let currentItem = this.transTopicItemType()
+          if (currentItem) {
+            let arr: TopicItemType[] =
+              PreferenceUtil.getInstance().get(PreferConstant.ERROR_RECORDS, []) as TopicItemType[]
+            if (arr.length === 0) {
               arr.push(currentItem)
+            } else {
+              let isExit = false
+              arr.forEach((itemType: TopicItemType, idx: number) => {
+                if (itemType.keyID === currentItem?.keyID) {
+                  arr[idx] = currentItem
+                  isExit = true
+                }
+              })
+              if (!isExit) {
+                arr.push(currentItem)
+              }
             }
+            PreferenceUtil.getInstance().put(PreferConstant.ERROR_RECORDS, arr)
+            Logger.info(TAG, JSON.stringify(currentItem))
           }
-          examPrefer.putPreferenceValue(PreferConstant.EXAMPREFER_CTJL, arr)
-          Logger.info(TAG, JSON.stringify(currentItem))
         }
       }
     }
   }
 
   // 收藏记录
-  async storageCollectClick() {
-    if (this.sourceRoterModel?.sourceType === '我的错题') {
-    } else if (this.sourceRoterModel?.sourceType === '我的收藏') {
+  storageCollectClick() {
+    if (this.sourceRouterModel?.sourceType === '我的错题') {
+    } else if (this.sourceRouterModel?.sourceType === '我的收藏') {
     } else {
       if (this.currentModel) {
-        let currentItem: TopicItemType = {} as TopicItemType
-        currentItem.type = this.currentModel.type;
-        currentItem.title = this.currentModel.title;
-        currentItem.keyID = this.currentModel.keyID;
-        currentItem.rightQues = this.currentModel.rightQues;
-        currentItem.parse = this.currentModel.parse;
-        currentItem.note = '';
-        currentItem.selectQues = [];
-        currentItem.isAnswer = false;
-        let it: AnswerItemType[] = []
-        for (let index = 0; index < this.currentModel.ques.length; index++) {
-          let answerItem: AnswerItemType = {} as AnswerItemType
-          let element = this.currentModel.ques[index];
-          answerItem.ansTitle = element.ansTitle
-          answerItem.ans = element.ans
-          answerItem.ansID = element.ansID
-          it.push(answerItem)
-        }
-        currentItem.ques = it
-        currentItem.jlStamp = Date.now()
-        let arr: TopicItemType[] =
-          await examPrefer.getPreferenceValue(PreferConstant.EXAMPREFER_COLLECT, []) as TopicItemType[]
-        if (arr.length === 0) {
-          arr.push(currentItem)
-        } else {
-          let isExit = false
-          let idx: number = 0
-          arr.forEach((itemType: TopicItemType, idx: number) => {
-            if (itemType.keyID === this.currentModel!.keyID) {
-              arr.splice(idx, 1)
-              isExit = true
-            }
-          })
-          if (isExit) {
+        let collectItem = this.transTopicItemType()
+        if (collectItem) {
+          let arr: TopicItemType[] =
+            PreferenceUtil.getInstance().get(PreferConstant.EXAM_PREFER_COLLECT, []) as TopicItemType[]
+          if (arr.length === 0) {
+            arr.push(collectItem)
           } else {
-            arr.push(currentItem)
+            let isExit = false
+            arr.forEach((itemType: TopicItemType, idx: number) => {
+              if (itemType.keyID === this.currentModel?.keyID) {
+                arr.splice(idx, 1)
+                isExit = true
+              }
+            })
+            if (isExit) {
+            } else {
+              arr.push(collectItem)
+            }
           }
+          PreferenceUtil.getInstance().put(PreferConstant.EXAM_PREFER_COLLECT, arr)
+          Logger.info(TAG, JSON.stringify(collectItem))
+          this.isCollectionEvent()
         }
-        examPrefer.putPreferenceValue(PreferConstant.EXAMPREFER_COLLECT, arr)
-        Logger.info(TAG, JSON.stringify(currentItem))
-        this.isCollectionEvent()
       }
     }
+  }
+
+  // 类型转换
+  transTopicItemType(): TopicItemType | null {
+    let currentItem: TopicItemType | null = null
+    if (this.currentModel) {
+      currentItem = {} as TopicItemType
+      currentItem.type = this.currentModel.type;
+      currentItem.title = this.currentModel.title;
+      currentItem.keyID = this.currentModel.keyID;
+      currentItem.rightQues = this.currentModel.rightQues;
+      currentItem.parse = this.currentModel.parse;
+      currentItem.note = '';
+      currentItem.selectQues = [];
+      currentItem.isAnswer = false;
+      let it: AnswerItemType[] = []
+      for (let index = 0; index < this.currentModel.ques.length; index++) {
+        let answerItem: AnswerItemType = {} as AnswerItemType
+        let element = this.currentModel.ques[index];
+        answerItem.ansTitle = element.ansTitle
+        answerItem.ans = element.ans
+        answerItem.ansID = element.ansID
+        answerItem.isSelect = element.isSelect
+        answerItem.state = element.showState
+        it.push(answerItem)
+      }
+      currentItem.ques = it
+      currentItem.jlStamp = Date.now()
+    }
+    return currentItem
   }
 }
 
 @Builder
-export function AnswerQuestionsPageBuilder() {
+export function AnswerQuestionsBuilder() {
   AnswerQuestionsPage()
 }
 

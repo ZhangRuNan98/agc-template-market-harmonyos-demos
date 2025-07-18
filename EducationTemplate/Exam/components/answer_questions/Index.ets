@@ -18,3 +18,21 @@ export * from './src/main/ets/components/AnswerQuestionsPage';
 export * from './src/main/ets/components/AddNotePage';
 
 export * from './src/main/ets/components/AnswerSheetPage';
+
+export {
+  TopicItemModel,
+  AnswerItem,
+  TopicItemModelPreference,
+  AnswerItemPreference
+} from './src/main/ets/viewModel/TopicItemModel';
+
+export {
+  TopicItemType,
+  AnswerItemType,
+  QUESTION_DATA,
+  QuestionsRouterModel
+} from './src/main/ets/viewModel/TopicPageModel';
+
+export { AnswerSheetDialog } from './src/main/ets/dialog/AnswerSheetDialog';
+
+export { AddNoteDialog } from './src/main/ets/dialog/AddNoteDialog';

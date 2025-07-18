@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -13,36 +14,67 @@
 
 <img src="./screenshot/QuickLogin.png" width="300">
 
-## 使用
+## 约束与限制
 
-1. 配置华为账号服务。
+### 环境
 
-   a. 将应用的client ID配置到entry模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
+- DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+- 设备类型：华为手机（直板机）
+- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+### 权限
+
+- 网络权限：ohos.permission.INTERNET
+
+## 快速入门
+
+1. 安装组件。    
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+   如果是从生态市场下载组件，请参考以下步骤安装组件。  
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的xxx目录下。  
+   b. 在项目根目录build-profile.json5并添加aggregated_login模块。
+   ```typescript
+   // 在项目根目录的build-profile.json5填写aggregated_login路径。其中xxx为组件存在的目录名
+   "modules": [
+     {
+       "name": "aggregated_login",
+       "srcPath": "./xxx/aggregated_login",
+     }
+   ]
    ```
-   ...
+   c. 在项目根目录oh-package.json5中添加依赖
+   ```typescript
+   // xxx为组件存放的目录名称
+   "dependencies": {
+     "aggregated_login": "file:../xxx/aggregated_login"
+   }
+   ```
+2. 配置华为账号服务。  
+   a. 将应用的client ID配置到项目入口模块（例如：entry）的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
+   ```typescript
    "requestPermissions": [],
    "metadata": [
       {
         "name": "client_id",
-        "value": "*****"
         // 配置为获取的Client ID
+        "value": "*****"
       },
     ],
     "extensionAbilities": [],
-   ...
    ```
    b. [配置签名和指纹](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-sign-fingerprints)。
 
    c. [申请scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions) 。
 
-2. 前往微信开放平台申请AppId并配置鸿蒙应用信息，详情请参考[鸿蒙接入指南](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/ohos.html)。
+3. 前往微信开放平台申请AppId并配置鸿蒙应用信息，详情请参考[鸿蒙接入指南](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/ohos.html)。
 
-3. 引入登录组件句柄。
+4. 引入登录组件句柄。
    ```typescript
    import { Channel, LoginService, LoginType } from 'aggregated_login';
    ```
 
-4. 调用组件，详细参数配置说明参见[API参考](#API参考)
+5. 调用组件，详细参数配置说明参见[API参考](#API参考)
 
    ```typescript
    // 登录使用
@@ -134,23 +166,41 @@ privacyPolicyEvent: () => void = () => {}
 ## 示例代码
 
 ```typescript
-pageInfos: NavPathStack = new NavPathStack();
+import { promptAction } from '@kit.ArkUI';
+import { Channel, LoginService, LoginType } from 'aggregated_login';
 
-LoginService({
-   icon: $r('app.media.startIcon'),
-   privacyPolicyEvent: () => {
-      // 跳转页面
-   },
-   loginBtnBgColor: '#007DFF',
-   termOfServiceEvent: () => {
-      // 跳转页面
-   },
-   loginTypes: [new Channel(LoginType.WECHAT, '微信登录', {
-      appId: 'wxd5a474c635b8fd17',
-      scope: 'snsapi_userinfo,snsapi_friend,snsapi_message,snsapi_contact',
-      transaction: 'test123',
-      state: 'none',
-   }, $r('app.media.wechat'))],
-   pathInfos: this.pageInfos,
-});
+@Entry
+@ComponentV2
+struct Index {
+   pageInfos: NavPathStack = new NavPathStack();
+   
+   build() {
+      RelativeContainer() {
+         LoginService({
+            icon: $r('app.media.startIcon'),
+            privacyPolicyEvent: () => {
+               promptAction.showToast({ message: '跳转页面' })
+            },
+            loginBtnBgColor: '#FF0000',
+            termOfServiceEvent: () => {
+               promptAction.showToast({ message: '跳转页面' })
+            },
+            loginTypes: [new Channel(LoginType.WECHAT, '微信登录', {
+               appId: 'wxd5a474c635b8fd17',
+               scope: 'snsapi_userinfo,snsapi_friend,snsapi_message,snsapi_contact',
+               transaction: 'test123',
+               state: 'none',
+            }, $r('app.media.startIcon'))],
+            pathInfos: new NavPathStack(),
+            loginFinishedCb: (flag: boolean, unionID?: string) => {
+               // 模板忽略登录失败场景
+               promptAction.showToast({ message: '登录成功回调' })
+            },
+         });
+      }
+      .height('100%')
+         .width('100%')
+   }
+}
+
 ```

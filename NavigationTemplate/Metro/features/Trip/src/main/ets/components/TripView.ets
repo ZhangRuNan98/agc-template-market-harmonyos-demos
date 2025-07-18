@@ -158,21 +158,6 @@ export struct TripView {
         }
         sceneMap.chooseLocation(getContext(this) as common.UIAbilityContext, locationChoosingOptions)
           .then(async (data) => {
-            let params: site.ReverseGeocodeParams = {
-              // 位置经纬度
-              location: {
-                latitude: this.userLatitude,
-                longitude: this.userLongitude
-              },
-              language: 'cn',
-              radius: 200
-            }
-            const result = await site.reverseGeocode(params).then((data) => {
-              this.userAddress = '' +
-                data.addressComponent.streetNumber?.streetName +
-                data.addressComponent.streetNumber?.streetNumber
-            })
-            console.log('11111111111111' + JSON.stringify(data))
             this.selectedLatitude = data.location.latitude
             this.selectedLongitude = data.location.longitude
             const uri = this.context.resourceManager.getStringSync($r('app.string.navigateAddress')) +
@@ -195,7 +180,6 @@ export struct TripView {
             `Failed to choose location, code: ${err.code},
             message: ${err.message}`);
         })
-
       })
 
       // 调用MapComponent组件初始化地图

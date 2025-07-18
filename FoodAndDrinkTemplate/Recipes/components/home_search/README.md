@@ -1,9 +1,9 @@
 # 搜索组件快速入门
 
 ## 目录
-
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -11,27 +11,41 @@
 
 本组件提供了搜索菜谱，并展示搜索结果的相关功能。
 
-| 搜索                                                   | 结果展示                                                   |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="./screenshot/HomeSearch1.png" width="300"> | <img src="./screenshot/HomeSearch2.png" width="300"> |
+| 搜索                                                   | 结果展示                                                 |
+|------------------------------------------------------|------------------------------------------------------|
+| <img src="./screenshot/HomeSearch1.PNG" width="300"> | <img src="./screenshot/HomeSearch2.PNG" width="300"> |
 
-## 使用
+## 约束与限制
 
-1. 安装组件。
-   将模板根目录的components下[home_search](../../components/home_search)目录拷贝至您工程根目录components/，并添加如下依赖。
+### 环境
+
+- DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+- 设备类型：华为手机（直板机）
+- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+## 快速入门
+
+1. 安装组件。  
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+   如果是从生态市场下载组件，请参考以下步骤安装组件。  
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的xxx目录下。  
+   b. 在项目根目录build-profile.json5并添加home_search模块。
    ```typescript
-   // 模块下的oh-package.json5
-   "dependencies": {
-     "home_search": "file:../components/home_search"
-   }
-   
-   // 模板根目录的build-profile.json5
+   // 在项目根目录的build-profile.json5填写home_search路径。其中xxx为组件存在的目录名
    "modules": [
      {
        "name": "home_search",
-       "srcPath": "./components/home_search",
+       "srcPath": "./xxx/home_search",
      }
    ]
+   ```
+   c. 在项目根目录oh-package.json5中添加依赖
+   ```typescript
+   // xxx为组件存放的目录名称
+   "dependencies": {
+     "home_search": "file:../xxx/home_search"
+   }
    ```
 
 2. 引入组件。
@@ -114,27 +128,30 @@ HomeSearch(options?: HomeSearchOptions)
 searchDishes(callback: (keyword: string) => void)
 
 调用搜索查询事件
+
 #### changeIndex
 
 changeIndex(callback: (index: number, keyword: string) => void)
 
 切换搜索排序的事件
+
 #### changeShowResult
 
 changeShowResult(callback: (flag: boolean) => void)
 
 切换展示搜索结果的事件
+
 #### goRecipeDetail
 
 goRecipeDetail(callback: (id: number) => void)
 
 跳转菜谱详情事件
+
 ## 示例代码
 
 ```typescript
 import { RecipeBriefInfo } from 'featured_recipes';
 import { HomeSearch } from 'home_search';
-
 
 @Entry
 @ComponentV2
@@ -185,4 +202,3 @@ struct Index {
    }
 }
 ```
-

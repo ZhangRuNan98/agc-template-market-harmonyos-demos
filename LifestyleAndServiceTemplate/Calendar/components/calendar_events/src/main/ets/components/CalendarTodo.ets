@@ -2,6 +2,7 @@ import { BaseDatePicker, BaseTextStyleModifier, BaseTimerPicker } from 'base_api
 import dayjs from 'dayjs'
 import { UserEventItem } from '../model/UserEventModel';
 import { RemindEventDispatcher } from '../utils/EventDispatcher';
+import { solarToLunar } from '../utils/Utils';
 import CalendarEventVM from '../viewModel/ViewModel';
 
 @ComponentV2
@@ -82,7 +83,8 @@ export struct CalendarTodo {
             .attributeModifier(new BaseTextStyleModifier(`font_primary/Subtitle_M/Medium`))
           Row({ space: 5 }) {
             Row() {
-              Text(dayjs(this.userEventInfo.date[0].date).format('YYYY年MM月DD日'))
+              Text(this.userEventInfo.date[0].isLunar ?
+              this.userEventInfo.date[0].lunarDate : dayjs(this.userEventInfo.date[0].date).format('YYYY年MM月DD日'))
                 .attributeModifier(new BaseTextStyleModifier(`${this.localDateSelected ? '#C4272B' :
                   'font_primary'}/Body_M/Regular`))
             }
@@ -134,12 +136,17 @@ export struct CalendarTodo {
           isOperationShow: true,
           isBottom: true,
           isLunar: true,
+          isLunarDate: this.userEventInfo.date[0].isLunar,
           confirm: (value: Date) => {
+            this.userEventInfo.date[0].lunarDate = solarToLunar(value)
             this.userEventInfo.date[0].date = value
             this.localDateSelected = false
           },
           cancel: () => {
             this.localDateSelected = false
+          },
+          onLunarChange: (value: boolean) => {
+            this.userEventInfo.date[0].isLunar = value
           },
         })
           .visibility(this.localDateSelected ? Visibility.Visible : Visibility.None)

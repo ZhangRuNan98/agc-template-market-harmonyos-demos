@@ -16,7 +16,6 @@
 import { RouterMap, RouterModule } from 'router_module';
 import { ChapterContent } from '../model/ChapterPractice'
 
-
 @ComponentV2
 export struct ChapterPractice {
   @Local isStrongShow: boolean = false
@@ -61,7 +60,7 @@ export struct ChapterPractice {
   }
 
   @Builder
-  MList(item: ChapterContent) {
+  practiseListBuilder(item: ChapterContent) {
     Row() {
       Row() {
         Text(item.text).margin({ right: $r('app.float.vp_8') })
@@ -92,7 +91,7 @@ export struct ChapterPractice {
     .width('100%')
     .backgroundColor($r('sys.color.comp_background_gray'))
     .onClick(() => {
-      RouterModule.push({ url: RouterMap.AnswerQuestions_Page })
+      RouterModule.push({ url: RouterMap.ANSWER_QUESTIONS_PAGE })
     })
   }
 
@@ -101,66 +100,10 @@ export struct ChapterPractice {
       this.topBuilder('章节练习')
       Divider().color($r('sys.color.comp_divider'))
       Column() {
-        Row() {
-          Row() {
-            Text('基础练习题')
-              .fontSize($r('sys.float.Body_L'))
-              .fontWeight(FontWeight.Medium)
-              .fontColor($r('sys.color.font_primary')).margin({ right: $r('app.float.vp_10') })
-            if (!this.isBasicShow) {
-              Text(`(共${this.basicAllNum}题)`)
-                .fontSize($r('sys.float.Caption_L'))
-                .fontWeight(FontWeight.Regular)
-                .fontColor($r('sys.color.font_secondary'))
-            }
-          }
-
-          Image(this.isBasicShow ? $r('app.media.chevron_Upward') : $r('app.media.chevron_Downward'))
-            .width($r('app.float.vp_24'))
-            .height($r('app.float.vp_24'))
-            .onClick(() => {
-              this.isBasicShow = !this.isBasicShow
-            })
-        }.width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
-        .alignItems(VerticalAlign.Center)
-        .padding({ top: $r('app.float.vp_12'), bottom: $r('app.float.vp_12') })
-
-        if (this.isBasicShow) {
-          ForEach(this.basicList, (item: ChapterContent) => {
-            this.MList(item)
-          }, (item: ChapterContent, index: number) => item.text + index)
-        }
-        Row() {
-          Row() {
-            Text('强化练习题')
-              .fontSize($r('sys.float.Body_L'))
-              .fontWeight(FontWeight.Medium)
-              .fontColor($r('sys.color.font_primary')).margin({ right: $r('app.float.vp_10') })
-            if (!this.isStrongShow) {
-              Text(`(共${this.strongAllNum}题)`)
-                .fontSize($r('sys.float.Caption_L'))
-                .fontWeight(FontWeight.Regular)
-                .fontColor($r('sys.color.font_secondary'))
-            }
-          }
-
-          Image(this.isStrongShow ? $r('app.media.chevron_Upward') : $r('app.media.chevron_Downward'))
-            .width($r('app.float.vp_24'))
-            .height($r('app.float.vp_24'))
-            .onClick(() => {
-              this.isStrongShow = !this.isStrongShow
-            })
-        }.width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
-        .alignItems(VerticalAlign.Center)
-        .padding({ top: $r('app.float.vp_12'), bottom: $r('app.float.vp_12') })
-
-        if (this.isStrongShow) {
-          ForEach(this.strongList, (item: ChapterContent) => {
-            this.MList(item)
-          }, (item: ChapterContent, index: number) => item.text + index)
-        }
+        // 基础练习题
+        this.basePractiseBuilder()
+        // 强化练习题
+        this.strengthenPractiseBuilder()
       }.padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16') })
     }
     .width('100%')
@@ -168,6 +111,82 @@ export struct ChapterPractice {
     .backgroundColor($r('sys.color.background_primary'))
     .alignItems(HorizontalAlign.Start)
     .justifyContent(FlexAlign.Start)
+  }
+
+  /**
+   * 强化练习题
+   */
+  @Builder
+  strengthenPractiseBuilder() {
+    Row() {
+      Row() {
+        Text('强化练习题')
+          .fontSize($r('sys.float.Body_L'))
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r('sys.color.font_primary')).margin({ right: $r('app.float.vp_10') })
+        if (!this.isStrongShow) {
+          Text(`(共${this.strongAllNum}题)`)
+            .fontSize($r('sys.float.Caption_L'))
+            .fontWeight(FontWeight.Regular)
+            .fontColor($r('sys.color.font_secondary'))
+        }
+      }
+
+      Image(this.isStrongShow ? $r('app.media.chevron_Upward') : $r('app.media.chevron_Downward'))
+        .width($r('app.float.vp_24'))
+        .height($r('app.float.vp_24'))
+        .onClick(() => {
+          this.isStrongShow = !this.isStrongShow
+        })
+    }.width('100%')
+    .justifyContent(FlexAlign.SpaceBetween)
+    .alignItems(VerticalAlign.Center)
+    .padding({ top: $r('app.float.vp_12'), bottom: $r('app.float.vp_12') })
+
+    Column() {
+      ForEach(this.strongList, (item: ChapterContent) => {
+        this.practiseListBuilder(item)
+      }, (item: ChapterContent, index: number) => item.text + index)
+    }
+    .visibility(this.isStrongShow ? Visibility.Visible : Visibility.None)
+  }
+
+  /**
+   * 基础练习题
+   */
+  @Builder
+  basePractiseBuilder() {
+    Row() {
+      Row() {
+        Text('基础练习题')
+          .fontSize($r('sys.float.Body_L'))
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r('sys.color.font_primary')).margin({ right: $r('app.float.vp_10') })
+        if (!this.isBasicShow) {
+          Text(`(共${this.basicAllNum}题)`)
+            .fontSize($r('sys.float.Caption_L'))
+            .fontWeight(FontWeight.Regular)
+            .fontColor($r('sys.color.font_secondary'))
+        }
+      }
+
+      Image(this.isBasicShow ? $r('app.media.chevron_Upward') : $r('app.media.chevron_Downward'))
+        .width($r('app.float.vp_24'))
+        .height($r('app.float.vp_24'))
+        .onClick(() => {
+          this.isBasicShow = !this.isBasicShow
+        })
+    }.width('100%')
+    .justifyContent(FlexAlign.SpaceBetween)
+    .alignItems(VerticalAlign.Center)
+    .padding({ top: $r('app.float.vp_12'), bottom: $r('app.float.vp_12') })
+
+    Column() {
+      ForEach(this.basicList, (item: ChapterContent) => {
+        this.practiseListBuilder(item)
+      }, (item: ChapterContent, index: number) => item.text + index)
+    }
+    .visibility(this.isBasicShow ? Visibility.Visible : Visibility.None)
   }
 }
 

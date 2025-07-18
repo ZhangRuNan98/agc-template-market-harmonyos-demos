@@ -297,7 +297,8 @@ struct DesignerPage {
         .height('100%')
         .scrollBar(BarState.Off)
         .align(Alignment.Top)
-        .padding({ bottom: 140 });
+        .padding({ bottom: 140 })
+        .edgeEffect(EdgeEffect.Spring)
 
         Row({ space: 16 }) {
           Button() {

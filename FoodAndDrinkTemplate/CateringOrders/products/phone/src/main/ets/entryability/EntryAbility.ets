@@ -11,7 +11,7 @@ export default class EntryAbility extends UIAbility {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
     // 在应用启动时调用函数获取应用数据
     this.functionPreload();
-    // 获取应用id
+    // 获取APP id
     let bundleInfo = await bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_HAP_MODULE |
     bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_ABILITY |
     bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_REQUESTED_PERMISSION);

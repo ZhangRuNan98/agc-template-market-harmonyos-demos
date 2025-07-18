@@ -17,10 +17,6 @@ struct CaseDetailPage {
   aboutToAppear(): void {
     this.vm.getCaseInfo();
     this.vm.getCollectionList();
-    let systemBarProperties: window.SystemBarProperties = {
-      statusBarContentColor: '#FFFFFF',
-    };
-    WindowUtil.currentWindow.setWindowSystemBarProperties(systemBarProperties);
   }
 
   aboutToDisappear(): void {
@@ -253,7 +249,13 @@ struct CaseDetailPage {
     }
     .hideTitleBar(true)
     .padding({ top: WindowUtil.avoidAreaSize.top, bottom: WindowUtil.avoidAreaSize.bottom })
-    .backgroundColor('#000000');
+    .backgroundColor('#000000')
+    .onShown(()=>{
+      let systemBarProperties: window.SystemBarProperties = {
+        statusBarContentColor: '#FFFFFF',
+      };
+      WindowUtil.currentWindow.setWindowSystemBarProperties(systemBarProperties);
+    })
 
   }
 }

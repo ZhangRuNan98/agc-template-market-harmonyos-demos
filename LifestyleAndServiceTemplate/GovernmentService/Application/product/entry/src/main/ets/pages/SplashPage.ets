@@ -94,7 +94,7 @@ struct SplashPage {
       onAdLoadFailure: (errorCode: number, errorMsg: string) => {
         hilog.error(0x0000, TAG, '%{public}s', `request ad errorCode is: ${errorCode}, errorMsg is: ${errorMsg}`);
         router.replaceUrl({
-          url: 'pages/Index',
+          url: 'pages/MainPage',
         })
       },
       // 广告请求成功回调
@@ -109,7 +109,7 @@ struct SplashPage {
           }
         } else {
           router.replaceUrl({
-            url: 'pages/Index',
+            url: 'pages/MainPage',
           })
         }
       },

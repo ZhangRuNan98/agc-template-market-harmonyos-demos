@@ -266,7 +266,7 @@ export function addDnOrderUtil(list: Array<CarGoodInfo>, params: AddDnOrderReq):
       formId2: 1,
       payType: 0,
       sz: JSON.stringify(sz),
-      tableware: AppStorage.get('dinerNum') as number,
+      tableware: params.tableware,
       yhqMoney: params.yhqMoney ?? '0',
       couponId: params.couponId,
       orderType: params.orderType,

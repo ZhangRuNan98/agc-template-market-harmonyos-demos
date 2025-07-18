@@ -1,7 +1,7 @@
 {
   "forms": [
     {
-      "name": "widget_1",
+      "name": "widget",
       "displayName": "$string:widget_display_name",
       "description": "$string:widget_desc",
       "src": "./ets/widget/pages/HotelCard.ets",

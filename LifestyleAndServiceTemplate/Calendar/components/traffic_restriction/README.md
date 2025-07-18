@@ -3,9 +3,11 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
+
 
 ## 简介
 
@@ -13,28 +15,49 @@
 
 <img src="./screenshot/TrafficRestriction.png" width="300">
 
-## 使用
+## 约束与限制
+### 软件
+
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release及以上
+
+### 硬件
+
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+### 权限
+* 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION，ohos.permission.LOCATION。
+* 网络权限：ohos.permission.INTERNET
+
+## 快速入门
 
 1. 安装组件。
-   ```typescript
-   // 在项目根目录build-profile.json5填写base_apis和traffic_restriction路径
-     "modules": [
-       {
-         "name": "traffic_restriction",
-         "srcPath": "./traffic_restriction",
-       },
-       {
-         "name": "base_apis",
-         "srcPath": "./base_apis",
-       }
-     ]
-   ```
-   ```typescript
-   "dependencies": {
-     "traffic_restriction": "file:../traffic_restriction"
-   }
-   ```
 
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
+
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加traffic_restriction模块。
+
+    ```typescript
+    // 在项目根目录build-profile.json5填写traffic_restriction路径。其中XXX为组件存放的目录名
+    "modules": [
+        {
+        "name": "traffic_restriction",
+        "srcPath": "./XXX/traffic_restriction",
+        }
+    ]
+    ```
+   c. 在项目根目录oh-package.json5中添加依赖。
+    ```typescript
+    // XXX为组件存放的目录名称
+    "dependencies": {
+      "traffic_restriction": "file:./XXX/traffic_restriction"
+    }
+   ```
 2. 引入组件。
 
    ```typescript
@@ -101,7 +124,7 @@ struct Index {
 }		
 ```
 
-<img src="./screenshot/TrafficRestriction_1.png" width="300" height="100">
+<img src="./screenshot/TrafficRestriction_1.png" width="300">
 
 ```
 

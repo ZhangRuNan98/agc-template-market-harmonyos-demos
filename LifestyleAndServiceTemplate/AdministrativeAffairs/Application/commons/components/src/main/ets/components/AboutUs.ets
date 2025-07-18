@@ -88,7 +88,7 @@ export struct AboutUsPage {
             .padding({ left: $r('app.float.about_padding'), right: $r('app.float.about_padding') })
           }
         }
-      }.scrollBar(BarState.Off)
+      }.scrollBar(BarState.Off).edgeEffect(EdgeEffect.Spring)
     }
     .title('关于我们')
     .padding({ top: Number(AppStorage.get('topRectHeight')) })

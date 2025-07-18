@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { AppStorageV2, LengthMetrics } from '@kit.ArkUI'
 
 @ComponentV2
@@ -75,116 +76,137 @@ export struct SearchPage {
 
   build() {
     Column() {
-      Row() {
-        Image($r('app.media.ic_backward')).height('40vp').width('40vp').margin({ right: '8vp' })
-          .onClick(() => {
-            this.back()
-          })
-        // 搜索文本框
-        Search({ placeholder: '搜索', value: this.searchValue })
-          .layoutWeight(1)
-          .height('40vp')
-          .backgroundColor($r('sys.color.comp_background_tertiary'))
-          .enterKeyType(this.enterTypes[this.index])
-          .margin({ right: '8vp' })
-          .onChange((value: string) => {
-            if (value === '') {
-              this.searchData = [];
-              this.searchValue = value
-            }
-          })
-          .onSubmit((value: string) => {
-            this.searchValue = value.replace(/^\s+|\s+$/g, '');
-            this.searchText()
-          })
-      }
-      .backgroundColor($r('sys.color.background_primary'))
-      .height(56)
-      .width('100%')
-
+      // 顶部搜索框
+      this.topSearchBuilder()
       if (this.searchValue) {
-        if (this.searchData.length) {
-          ForEach(this.searchData, (item: string) => {
-            Row() {
-              Image($r('app.media.ic_search_01'))
-                .height('13vp')
-                .width('13vp')
-                .margin({ right: 16 })
-              Column() {
-                Text() {
-                  Span(item.substring(0, item.indexOf(this.searchValue)))
-                  // 红色高亮文字
-                  Span(this.searchValue).fontColor('#F17F31')
-                  Span(item.substring(item.indexOf(this.searchValue) + this.searchValue.length, item.length))
-                }
-                .onClick(() => {
-                  this.clickSearchItem(item)
-                })
-                .height('100%')
-                .width('100%')
-
-                Divider().width('00%')
-              }
-              .width('296vp')
-            }.width('100%').height('48vp')
-          }, (item: string, index: number) => item + index)
-        } else {
-          Column() {
-            Image($r('app.media.ic_no_data'))
-              .margin({ bottom: 24 })
-              .width(160)
-              .height(160)
-              .margin({ top: 197 })
-            Text('未找到相关课程')
-              .fontColor($r('sys.color.font_secondary'))
-              .fontSize($r('sys.float.Caption_L'))
-          }
-          .layoutWeight(1)
-        }
+        // 搜索结果
+        this.searchResultBuilder()
       } else {
-        Row() {
-          Text('历史搜索')
-          Row() {
-            Image($r('app.media.ic_delete'))
-              .height('19vp')
-              .margin({ right: '2vp' })
-            Text('清空')
-          }.onClick(() => {
-            this.historySearch = []
-            AppStorageV2.connect(HistoryClass, () => new HistoryClass())!.historySearch = this.historySearch
-          })
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
-        .margin({ bottom: '12vp', top: '24vp' })
-
-        if (this.historySearch.length !== 0) {
-          Flex({
-            direction: FlexDirection.Row,
-            wrap: FlexWrap.Wrap,
-            justifyContent: FlexAlign.Start
-          ,
-            space: { cross: new LengthMetrics(12), main: new LengthMetrics(10) }
-          }) {
-            ForEach(this.historySearch, (item: string) => {
-              // 历史搜索需要请求后端
-              Button(item)
-                .fontSize($r('sys.float.Body_M'))
-                .fontColor($r('sys.color.font_primary'))
-                .backgroundColor($r('sys.color.comp_background_tertiary'))
-                .onClick(() => {
-                  this.searchValue = item
-                  this.searchText()
-                })
-            }, (item: string, index) => item + index)
-          }
-          .width('100%')
-        }
+        // 未搜索状态
+        this.notSearchBuilder()
       }
     }
     .padding({ left: '16vp', right: '16vp' })
     .width('100%')
     .height('100%')
+  }
+
+  // 未搜索状态
+  @Builder
+  notSearchBuilder() {
+    Row() {
+      Text('历史搜索')
+      Row() {
+        Image($r('app.media.ic_delete'))
+          .height('19vp')
+          .margin({ right: '2vp' })
+        Text('清空')
+      }.onClick(() => {
+        this.historySearch = []
+        AppStorageV2.connect(HistoryClass, () => new HistoryClass())!.historySearch = this.historySearch
+      })
+    }
+    .width('100%')
+    .justifyContent(FlexAlign.SpaceBetween)
+    .margin({ bottom: '12vp', top: '24vp' })
+
+    if (this.historySearch.length !== 0) {
+      Flex({
+        direction: FlexDirection.Row,
+        wrap: FlexWrap.Wrap,
+        justifyContent: FlexAlign.Start,
+        space: { cross: new LengthMetrics(12), main: new LengthMetrics(10) }
+      }) {
+        ForEach(this.historySearch, (item: string) => {
+          // 历史搜索需要请求后端
+          Button(item)
+            .fontSize($r('sys.float.Body_M'))
+            .fontColor($r('sys.color.font_primary'))
+            .backgroundColor($r('sys.color.comp_background_tertiary'))
+            .onClick(() => {
+              this.searchValue = item
+              this.searchText()
+            })
+        }, (item: string, index) => item + index)
+      }
+      .width('100%')
+    }
+  }
+
+  // 搜索结果
+  @Builder
+  searchResultBuilder() {
+    if (this.searchData.length) {
+      // 搜索结果 ---有数据
+      ForEach(this.searchData, (item: string) => {
+        Row() {
+          Image($r('app.media.ic_search_01'))
+            .height('13vp')
+            .width('13vp')
+            .margin({ right: 16 })
+          Column() {
+            Text() {
+              Span(item.substring(0, item.indexOf(this.searchValue)))
+              // 红色高亮文字
+              Span(this.searchValue).fontColor('#F17F31')
+              Span(item.substring(item.indexOf(this.searchValue) + this.searchValue.length, item.length))
+            }
+            .onClick(() => {
+              this.clickSearchItem(item)
+            })
+            .height('100%')
+            .width('100%')
+
+            Divider().width('00%')
+          }
+          .width('296vp')
+        }.width('100%').height('48vp')
+      }, (item: string, index: number) => item + index)
+    } else {
+      // 搜索结果 ---无数据
+      Column() {
+        Image($r('app.media.ic_no_data'))
+          .margin({ bottom: 24 })
+          .width(160)
+          .height(160)
+          .margin({ top: 197 })
+        Text('未找到相关课程')
+          .fontColor($r('sys.color.font_secondary'))
+          .fontSize($r('sys.float.Caption_L'))
+      }
+      .layoutWeight(1)
+    }
+  }
+
+  // 顶部搜索框
+  @Builder
+  topSearchBuilder() {
+    Row() {
+      Image($r('app.media.ic_backward')).height('40vp').width('40vp').margin({ right: '8vp' })
+        .onClick(() => {
+          this.back()
+        })
+      // 搜索文本框
+      Search({ placeholder: '搜索', value: this.searchValue })
+        .layoutWeight(1)
+        .height('40vp')
+        .backgroundColor($r('sys.color.comp_background_tertiary'))
+        .enterKeyType(this.enterTypes[this.index])
+        .margin({ right: '8vp' })
+        .onChange((value: string) => {
+          if (value === '') {
+            this.searchData = [];
+            this.searchValue = value
+          }
+        })
+        .onSubmit((value: string) => {
+          this.searchValue = value.replace(/^\s+|\s+$/g, '');
+          this.searchText()
+        })
+    }
+    .backgroundColor($r('sys.color.background_primary'))
+    .height(56)
+    .width('100%')
   }
 }
 

@@ -170,6 +170,7 @@ struct OrderDetailPage {
           DetailMoreCard({ orderInfo: this.orderDetailInfo })
         }
       }.layoutWeight(1)
+      .edgeEffect(EdgeEffect.Spring)
       .padding({ bottom: this.windowModel.getWindowBottomHeight() })
     }
     .hideTitleBar(true)

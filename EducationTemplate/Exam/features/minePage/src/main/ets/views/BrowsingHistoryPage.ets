@@ -14,7 +14,7 @@
  */
 
 import { BROWSING_HISTORY_DATA, BrowsingHistoryModel, Logger, TopBar } from 'commonlib';
-import { UserInfo } from 'login_info/src/main/ets/model/UserInfo';
+import { UserInfo } from 'login_info';
 import { RouterMap, RouterModule } from 'router_module';
 
 const TAG = 'BrowsingHistoryPage';
@@ -28,7 +28,7 @@ export struct BrowsingHistoryPage {
   @Local isSelectAll: boolean = false
   @Local selectCount: number = 0
   // 获取用户信息
-  private userInfo: UserInfo | undefined = RouterModule.getNavParam({ url: RouterMap.BrowsingHistoryPage })
+  private userInfo?: UserInfo = RouterModule.getNavParam({ url: RouterMap.BROWSING_HISTORY_PAGE })
 
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
@@ -81,7 +81,7 @@ export struct BrowsingHistoryPage {
    */
   @Builder
   deleteButtonBuilder() {
-    if (this.isSelectDelete === true) {
+    if (this.isSelectDelete) {
       Row() {
         Image($r('app.media.icon_delete'))
           .width($r('app.float.vp_24'))
@@ -115,7 +115,7 @@ export struct BrowsingHistoryPage {
 
   // 是否全选
   isSelectAllClick() {
-    if (this.isSelectAll === false) {
+    if (!this.isSelectAll) {
       this.historyModels.forEach((item: HistoryModel) => {
         item.isDelete = true;
       })
@@ -156,14 +156,14 @@ export struct BrowsingHistoryPage {
               // 父组件 点击右上角删除按钮显示  否则不显示
               if (this.isSelectDelete) {
                 Row() {
-                  Image(item.isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_anscommon'))
+                  Image(item.isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_ans_common'))
                     .width($r('app.float.vp_20'))
                     .height($r('app.float.vp_20'))
                 }
                 .height($r('app.float.vp_24'))
                 .onClick(() => {
                   item.isDelete = !item.isDelete
-                  if (item.isDelete === true) {
+                  if (item.isDelete) {
                     this.selectCount++;
                   } else {
                     this.selectCount--;
@@ -192,7 +192,7 @@ export struct BrowsingHistoryPage {
           .borderRadius(16)
           .backgroundColor($r('sys.color.background_primary'))
           .onClick(() => {
-            if (this.isSelectDelete === false) {
+            if (!this.isSelectDelete) {
               RouterModule.push({ url: item.routerRouter, param: item.courseName })
             }
           })
@@ -242,6 +242,7 @@ export struct BrowsingHistoryPage {
         .margin({ left: $r('app.float.vp_12') })
         .onClick(() => {
           this.historyModels.splice(index, 1)
+          this.swipeDelete = false
         })
     }.padding($r('app.float.vp_4')).justifyContent(FlexAlign.SpaceEvenly)
   }
@@ -260,23 +261,23 @@ export struct BrowsingHistoryPage {
         title: $r('app.string.browsing_history')
       })
       Row() {
-        Image(this.isSelectAll === false ? $r('app.media.icon_select_all_off') : $r('app.media.icon_select_all'))
+        Image(this.isSelectAll ? $r('app.media.icon_select_all') : $r('app.media.icon_select_all_off'))
           .height($r('app.float.vp_40'))
           .width($r('app.float.vp_40'))
           .onClick(() => {
             this.isSelectAllClick()
           })
-          .visibility(this.isSelectDelete === true ? Visibility.Visible : Visibility.Hidden)
+          .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.Hidden)
         Image($r('app.media.ic_public_trash'))
           .height($r('app.float.vp_40'))
           .width($r('app.float.vp_40'))
-          .opacity(this.historyModels.length === 0 || this.swipeDelete === true ? 0.4 : 1)
+          .opacity(this.historyModels.length === 0 || this.swipeDelete ? 0.4 : 1)
           .margin({ left: $r('app.float.vp_8') })
       }
       .onClick(() => {
-        if (this.swipeDelete === false && this.historyModels.length > 0) {
+        if (!this.swipeDelete && this.historyModels.length > 0) {
           this.isSelectDelete = !this.isSelectDelete
-          if (this.isSelectDelete === false) {
+          if (!this.isSelectDelete) {
             this.selectCount = 0
             this.isSelectAll = false
             this.historyModels.forEach((item: HistoryModel) => {
@@ -294,7 +295,7 @@ export struct BrowsingHistoryPage {
 }
 
 @Builder
-export function BrowsingHistoryPageBuilder() {
+export function BrowsingHistoryBuilder() {
   BrowsingHistoryPage()
 }
 

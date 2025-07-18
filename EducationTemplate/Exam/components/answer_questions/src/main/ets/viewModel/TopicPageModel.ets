@@ -372,7 +372,7 @@ const QUESTION_DATA: TopicItemType[] = [
     title: '关于关系型数据库模块提供的能力，说法错误的是',
     type: '1',
     rightQues: ['D'],
-    parse: '已提供insertsync、updateSync、querySync、等同步接口',
+    parse: '已提供insertSync、updateSync、querySync、等同步接口',
     note: '',
     selectQues: [],
     isAnswer: false,
@@ -504,10 +504,10 @@ const QUESTION_DATA: TopicItemType[] = [
   },
 ]
 
-export class QuestionsRoterModel {
+class QuestionsRouterModel {
   // 错题 历史 收藏
   sourceType: string = '错题'
   datalist: TopicItemType[] = []
 }
 
-export { TopicItemType, AnswerItemType, QUESTION_DATA }
+export { TopicItemType, AnswerItemType, QUESTION_DATA, QuestionsRouterModel }

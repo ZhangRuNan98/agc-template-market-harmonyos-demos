@@ -187,7 +187,7 @@ export struct SuggestionPage {
               this.pageInfos.pop()
             })
         }
-      }.scrollBar(BarState.Off)
+      }.scrollBar(BarState.Off) .edgeEffect(EdgeEffect.Spring)
     }
     .title('意见建议')
     .padding({ top: Number(AppStorage.get('topRectHeight')) })

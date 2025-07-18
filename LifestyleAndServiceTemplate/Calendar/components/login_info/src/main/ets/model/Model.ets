@@ -12,15 +12,15 @@ export class UserInfo {
   openID?: string = ''
   @Trace vipInfo: VipInfo = new VipInfo()
   @Trace phoneNumber: string = ''
-  @Trace userName: string = ''
+  @Trace userName: string | Uint8Array = ''
 
-  constructor(userInfo?: UserInfo | Record<string, string>) {
-    this.authCode = userInfo?.authCode || ''
-    this.avatar = userInfo?.avatar || ''
-    this.idToken = userInfo?.idToken || ''
-    this.phoneNumber = userInfo?.phoneNumber || ''
+  constructor(userInfo?: UserInfo | Record<string, string | Uint8Array >) {
+    this.authCode = userInfo?.authCode as string || ''
+    this.avatar = userInfo?.avatar as string || ''
+    this.idToken = userInfo?.idToken as string || ''
+    this.phoneNumber = userInfo?.phoneNumber as string || ''
     this.userName = userInfo?.userName || ''
-    this.openID = userInfo?.openID || ''
+    this.openID = userInfo?.openID as string || ''
   }
 }
 

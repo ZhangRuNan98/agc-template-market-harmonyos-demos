@@ -1,6 +1,7 @@
 # 餐饮（茶饮）行业模板快速入门
 
 ## 目录
+
 - [功能介绍](#功能介绍)
 - [环境要求](#环境要求)
 - [快速入门](#快速入门)
@@ -9,7 +10,9 @@
 - [开源许可协议](#开源许可协议)
 
 ## 功能介绍
+
 本模板为餐饮茶饮类元服务提供了常用功能的开发样例，模板主要分首页、点单、我的订单和我的四大模块：
+
 - 首页：展示账号相关信息、选择点单方式、选择店铺、展示优惠活动和会员活动。
 - 点单：提供店铺、优惠券、商品详情、购物车的展示，支持提交订单。
 - 我的订单：支持对不同状态下订单的管理。
@@ -17,12 +20,12 @@
 
 本模板已集成华为账号、地图、华为支付、通话等服务，只需做少量配置和定制即可快速实现华为账号的登录、商家位置定位导航、购买茶饮和联系商家等功能。
 
-| 首页                                     | 点单                                      | 我的订单                                         | 我的                                   |
-|----------------------------------------|-----------------------------------------|----------------------------------------------|--------------------------------------|
-| ![首页](screenshots/Screenshot_home.png) | ![点单](screenshots/Screenshot_order.png) | ![我的订单](screenshots/Screenshot_orderList.png) | ![我的](screenshots/Screenshot_mine.png) |
-
+| 首页                                                               | 点单                                                                | 我的订单                                                                    | 我的                                                               |
+|------------------------------------------------------------------|-------------------------------------------------------------------|-------------------------------------------------------------------------|------------------------------------------------------------------|
+| <img src="screenshots/Screenshot_home.png" alt="首页" width="300"> | <img src="screenshots/Screenshot_order.png" alt="点单" width="300"> | <img src="screenshots/Screenshot_orderList.png" alt="我的订单" width="300"> | <img src="screenshots/Screenshot_mine.png" alt="我的" width="300"> |
 
 本模板主要页面及核心功能清单如下所示：
+
 ```ts
 餐饮茶饮点单模板
  |-- 首页
@@ -69,6 +72,7 @@
 ```
 
 本模板工程代码结构如下所示：
+
 ```
 TeaDrinkOrders
   ├─commons/common/src/main
@@ -111,6 +115,7 @@ TeaDrinkOrders
   │  │  │      StorageModel.ets               // AppStorage参数对象
   │  │  │      TabBarModel.ets                // 底部导航栏对象
   │  │  └─utils
+  │  │         AsWebRichText.ets              // asweb富文本展示
   │  │         CalculatorUtils.ets            // 计算方法
   │  │         Logger.ets                     // 日志方法
   │  │         PermissionUtil.ets             // 权限申请方法
@@ -183,79 +188,87 @@ TeaDrinkOrders
 ```
 
 ## 环境要求
-### 软件
-* DevEco Studio版本：DevEco Studio 5.0.0 Release及以上
-* HarmonyOS SDK版本：HarmonyOS 5.0.0 Release SDK及以上
-### 硬件
-* 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.0 Release及以上
 
+### 软件
+
+* DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.1 Release SDK及以上
+
+### 硬件
+
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.1 Release及以上
 
 ## 快速入门
-###  配置工程
+
+### 配置工程
+
 在运行此模板前，需要完成以下配置：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建元服务，将包名配置到模板中。
 
-2. 在AppGallery Connect创建元服务，将包名配置到模板中。
-
-   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APPID，并进行关联。
+   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APP ID，并将APP ID与元服务进行关联。
 
    b. 返回应用列表页面，查看元服务的包名。
 
    c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建元服务的包名。
 
-3. 配置服务器域名。
+2. 配置服务器域名。
 
-   本模板接口均采用mock数据，由于元服务包体大小有限制，部分图片资源将从云端拉取，所以需为模板项目[配置服务器域名](https://developer.huawei.com/consumer/cn/doc/atomic-guides/agc-help-harmonyos-server-domain)，“httpRequest合法域名”需要配置为：`https://agc-storage-drcn.platform.dbankcloud.cn`
+   本模板接口均采用mock数据，由于元服务包体大小有限制，部分图片资源将从云端拉取，所以需为模板项目[配置服务器域名](https://developer.huawei.com/consumer/cn/doc/atomic-guides/agc-help-harmonyos-server-domain)
+   ，“httpRequest合法域名”需要配置为：`https://agc-storage-drcn.platform.dbankcloud.cn`
 
-4. 配置华为账号服务。
+3. 配置华为账号服务。
 
-   a. 将元服务的client ID配置到phone[entry]模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
+   a. 将元服务的client ID配置到phone[entry]/src/main路径下的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+   b. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)
+   。在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
 
-   c. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)。在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
+4. 配置地图服务。
 
-5. 配置地图服务。
-
-   a. 将元服务的client ID配置到phone[entry]模块的module.json5文件，如果华为账号服务已配置，可跳过此步骤。
-
-   b. 添加公钥指纹，如果华为账号服务已配置，可跳过此步骤。
-
-   c. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
-6. 配置支付服务。
+   a. 将元服务的client ID配置到phone[entry]/src/main路径下的module.json5文件，如果华为账号服务已配置，可跳过此步骤。
+   
+   b. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
+5. 配置支付服务。
 
    华为支付当前仅支持商户接入，在使用服务前，需要完成商户入网、开发服务等相关配置，本模板仅提供了端侧集成的示例。详细参考：[支付服务接入准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/payment-preparations)。
 
-7.  （可选）如果从应用自己服务器请求数据，需要配置服务器请求信息。
+6. （可选）如果从应用自己服务器请求数据，需要配置服务器请求信息。
 
-a. 打开TeaDrinkOrders\commons\common\src\main\ets\constants\Common.ets文件，将BASE_URL修改为请求服务器的地址。
+   a. 打开TeaDrinkOrders\commons\common\src\main\ets\constants\Common.ets文件，将BASE_URL修改为请求服务器的地址。
 
-b. 打开TeaDrinkOrders\common\src\main\ets\AxiosHttpRequest\AxiosRequest.ets文件，将config.params配置为请求中的固定参数列表。
+   b. 打开TeaDrinkOrders\common\src\main\ets\AxiosHttpRequest\AxiosRequest.ets文件，将config.params配置为请求中的固定参数列表。
+
+7. 对元服务进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
+
+8. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
 
 ### 运行调试工程
 
 1. 连接调试手机和PC。
 
-2. 对元服务[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
+2. 配置多模块调试：由于本模板存在多个模块，运行时需确保所有模块安装至调试设备。
 
-3. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
+   a. 在DevEco Studio菜单选择“Run > Edit Configurations”，进入“Run/Debug Configurations”界面。
+   
+   b. 左侧导航选择“entry”模块，选择“Deploy Multi Hap”页签，勾选上模板中所有模块。
 
+   <img src="screenshots/Screenshot_4.PNG" alt="配置多模块调试" width="800">
+   
+   c. 点击"Run"，运行模板工程。
 
 ## 示例效果
-1. 主要功能  
-[主要功能展示](screenshots/ScreenRecord_1.mp4) 
 
-2. 到店自取流程   
-[到店自取流程展示](screenshots/ScreenRecord_2.mp4) 
-
-3. 外卖配送流程  
-[外卖配送流程展示](screenshots/ScreenRecord_3.mp4) 
+| 门店列表                                                             | 确认订单                                                             | 确认订单                                                             |
+|------------------------------------------------------------------|------------------------------------------------------------------|------------------------------------------------------------------|
+| <img src="screenshots/Screenshot_1.jpeg" alt="门店列表" width="300"> | <img src="screenshots/Screenshot_2.jpeg" alt="确认订单" width="300"> | <img src="screenshots/Screenshot_3.jpeg" alt="确认订单" width="300"> |
 
 ## 权限要求
+
 - 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION、ohos.permission.LOCATION
 - 网络权限：ohos.permission.INTERNET
 
 ## 开源许可协议
+
 该代码经过[Apache 2.0 授权许可](http://www.apache.org/licenses/LICENSE-2.0)。

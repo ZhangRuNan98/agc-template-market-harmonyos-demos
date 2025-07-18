@@ -182,29 +182,31 @@ CloudProgram
 
 在运行此模板前，需要完成以下配置：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建应用，将包名配置到模板中。
 
-2. 在AppGallery Connect创建应用，将包名配置到模板中。
-
-   a. 参考[创建HarmonyOS应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建APPID，并进行关联。
+   a. 参考[创建HarmonyOS应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297) 为应用创建APP ID，并将APP ID与应用进行关联。
 
    b. 返回应用列表页面，查看应用的包名。
 
-   c. 将Application/AppScope/app.json5文件中的bundleName替换为创建应用的包名。
+   c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建应用的包名。
 
-3. 配置签名。
+2. 配置华为账号服务。
 
-   a. 参考[开通推送服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/push-config-setting) ，依次在“API管理”处开通位置服务、定位服务。
+   a. 将应用的client ID配置到product/entry/src/main模块的[module.json5](./product/entry/src/main/module.json5)文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
-   ![截图](screenshot/img.png)
+   b. 申请华为账号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。
 
-   b. 为应用进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
+   c.在cloudfunctions/govn-template-userinfo/AxiosApi.ts文件中配置client_id、client_secret。client_id、client_secret信息的查询请参考[查看应用基本信息](https://developer.huawei.com/consumer/cn/doc/app/agc-help-appinfo-0000001100014694)。
 
-   c. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+   ![截图](screenshot/img_7.png)
+
+   ![截图](screenshot/img_8.png)
+
+3. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
 
 4. 本模板是端云一体模版，采用云函数接口的方式mock请求数据，所以需要部署云函数以及云数据库。
 
-   a. [开通元函数服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-enable-function)和[开通云数据库服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-enable-database)。
+   a. [开通云函数服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-enable-function)和[开通云数据库服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cloudfoundation-enable-database)。
 
    b. 在CloudProgram/cloud-config.json文件中配置相关信息，依次填写当前项目的appId、appName、projectId、teamId、projectName，相关信息查询参考[查看应用基本信息](https://developer.huawei.com/consumer/cn/doc/app/agc-help-appinfo-0000001100014694) 。
 
@@ -226,40 +228,27 @@ CloudProgram
 
    ![截图](screenshot/img_6.png)
 
-5. 配置华为账号服务。
+5. 配置推送服务。
 
-   a. 将应用的client ID配置到Application/product/entry模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
+   a. [开发准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/push-preparations),请先确认您已按照指导文档完成推送相关的准备工作
+   
+   b. [推送场景化消息](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/push-send-alert)
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+   c. [端云调试](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/push-server)
 
-   c. 配置scope权限：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。
-
-   d.在cloudfunctions/govn-template-userinfo/AxiosApi.ts文件中配置client_id、client_secret。client_id、client_secret信息的查询请参考[查看应用基本信息](https://developer.huawei.com/consumer/cn/doc/app/agc-help-appinfo-0000001100014694)。
-
-   ![截图](screenshot/img_7.png)
-
-   ![截图](screenshot/img_8.png)
-
-6. 配置推送服务。
-   a. 参考API Console操作指南的[“服务账号密钥”](https://developer.huawei.com/consumer/cn/doc/start/api-0000001062522591#section14931730144919)获取推送服务API的服务账号秘钥（项目级凭证）。
-
-   ![截图](screenshot/img_10.png)
-
-   ![截图](screenshot/img_11.png)
-
-   b. 获取JWT，根据获取的服务账号密钥信息，填入JWT文件中的对应位置
-   ![截图](screenshot/img_14.png)
-   c. 推送成功
+   d. 推送成功
 
    ![截图](screenshot/img_13.png)
+
+6. 对应用进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
+
+7. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)
 
 ### 运行调试工程
 
 1. 连接调试手机和PC。
 
-2. 对应用[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
-
-3. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
+2. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
 
 ## 示例效果
 

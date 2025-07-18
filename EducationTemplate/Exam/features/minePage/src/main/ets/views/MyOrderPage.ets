@@ -17,7 +17,7 @@ import { Header } from '../components/Header';
 import { OrderListPage, OrderListType } from './OrderListPage';
 
 @Builder
-export function MyOrderPageBuilder() {
+export function MyOrderBuilder() {
   MyOrderPage();
 }
 

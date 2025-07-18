@@ -31,6 +31,10 @@
     {
       "name": "information_title",
       "value": "资讯"
+    },
+    {
+      "name": "agcit_huawei_medical_insurance",
+      "value": "1.0.1"
     }
   ]
 }

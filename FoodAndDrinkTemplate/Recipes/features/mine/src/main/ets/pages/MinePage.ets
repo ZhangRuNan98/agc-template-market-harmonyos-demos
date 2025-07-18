@@ -2,7 +2,6 @@ import { AccountUtil, BaseHeader, RouterMap, RouterModule } from 'commonlib';
 import { MinePageVM } from '../viewModels/MinePageVM';
 import { PersonalHomepage } from 'personal_homepage';
 import { emitter } from '@kit.BasicServicesKit';
-import { TabIndexEnum } from 'base_ui';
 
 @Builder
 export function MinePageBuilder() {
@@ -75,13 +74,17 @@ struct MinePage {
           jumpFollowers: () => {
             RouterModule.push(RouterMap.FOLLOWERS_PAGE, { 'id': this.vm.bloggerInfo.id } as Record<string, number>)
           },
-          deleteRecipes: (ids:number[]) => {
+          deleteRecipes: (ids: number[]) => {
             this.vm.deleteMyRecipe(ids)
           },
           changeDeleteState: (isToDelete: boolean) => {
             this.vm.isToDelete = isToDelete
           },
-        }).layoutWeight(1)
+        }).layoutWeight(1).onClick(() => {
+          if (this.vm.isToDelete) {
+            this.vm.isToDelete = false
+          }
+        })
       }
     }.hideTitleBar(true);
   }
@@ -110,25 +113,22 @@ struct MinePage {
 
   @Builder
   membershipBuilder() {
-    Column() {
-      Text('开通会员享受更多服务').fontSize(18).fontWeight(FontWeight.Medium).fontColor('#D17E18')
-      Button(this.vm.userInfo.isMembership ? '会员中心' : '开通会员', { controlSize: ControlSize.SMALL })
-        .fontSize(14)
-        .fontWeight(FontWeight.Medium)
-        .fontColor($r('sys.color.font_on_primary'))
-        .backgroundColor('#E3922F')
-        .margin({ top: 4 })
-        .onClick(() => {
-          RouterModule.push(RouterMap.MEMBER_CENTER_PAGE);
-        })
+    Stack() {
+      Image($r('app.media.bg_membership')).width('100%')
+      Row() {
+        Button(this.vm.userInfo.isMembership ? '会员中心' : '开通会员', { controlSize: ControlSize.SMALL })
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r('sys.color.font_on_primary'))
+          .backgroundColor('#E3922F')
+          .onClick(() => {
+            RouterModule.push(RouterMap.MEMBER_CENTER_PAGE);
+          })
+      }.padding(12)
+
     }
     .width('100%')
-    .height(80)
-    .alignItems(HorizontalAlign.End)
-    .justifyContent(FlexAlign.SpaceBetween)
-    .padding(8)
-    .backgroundImage($r('app.media.bg_membership'))
-    .backgroundImageSize({ width: '100%', height: 80 })
+    .alignContent(Alignment.BottomEnd)
     .visibility(this.vm.userInfo.isLogin ? Visibility.Visible : Visibility.None)
   }
 

@@ -85,7 +85,7 @@ export struct YinYangConversion {
             this.datePicker = new Date(this.startDate)
             baseActionSheet.show({
               id: 'datePickerBuilder',
-              height: 300,
+              detents:[300,301],
               showClose: false,
               customContent: () => {
                 this.datePickerBuilder('start')

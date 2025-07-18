@@ -33,14 +33,6 @@
       "value": "查看报告"
     },
     {
-      "name": "exam_result_cpsj",
-      "value": "测评试卷："
-    },
-    {
-      "name": "exam_result_tjsj",
-      "value": "提交时间："
-    },
-    {
       "name": "correct_answer",
       "value": "正确答案"
     },

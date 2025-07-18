@@ -27,6 +27,10 @@
     {
       "name": "enter_service",
       "value": "请输入服务事项"
+    },
+    {
+      "name": "agcit_huawei_medical_insurance",
+      "value": "1.0.1"
     }
   ]
 }

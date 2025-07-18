@@ -116,8 +116,6 @@ export struct AddAddressComp {
               .layoutWeight(1)
               .margin({ left: 4 })
           }.layoutWeight(1)
-
-          Image($r('app.media.ic_right2')).width(16).margin({ left: 8 })
         }.width(Constants.FULL_SIZE).justifyContent(FlexAlign.SpaceBetween)
 
         Divider().margin({ top: 10, bottom: 10 })

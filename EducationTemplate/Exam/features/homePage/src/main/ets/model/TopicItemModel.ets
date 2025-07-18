@@ -31,6 +31,7 @@ class TopicItemModel {
   selectQues: string[]
   // 0原始状态 1错误 2正确
   showState: number = 0
+  // 是否已经答过
   @Trace isAnswer: boolean = false
 
   constructor(keyID: string, type: string, title: string, ques: AnswerItem[], rightQues: string[],

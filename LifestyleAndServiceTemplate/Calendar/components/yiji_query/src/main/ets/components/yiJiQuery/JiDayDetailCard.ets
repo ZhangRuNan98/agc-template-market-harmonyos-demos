@@ -207,7 +207,7 @@ export struct YiJiDayQuery {
           this.datePicker = new Date(dayjs(this.localStartDate.split(' ')[0]).format('YYYY-MM-DD'))
           baseActionSheet.show({
             id: 'datePickerBuilder',
-            height: 300,
+            detents:[300,301],
             showClose: false,
             customContent: () => {
               this.datePickerBuilder('start')
@@ -232,7 +232,7 @@ export struct YiJiDayQuery {
           this.datePicker = new Date(dayjs(this.localEndDate.split(' ')[0]).format('YYYY-MM-DD'))
           baseActionSheet.show({
             id: 'datePickerBuilder',
-            height: 300,
+            detents:[300,301],
             showClose: false,
             customContent: () => {
               this.datePickerBuilder('end')

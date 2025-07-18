@@ -55,6 +55,8 @@ export struct OlderModel {
           })
         }
       }
+      .align(Alignment.Top)
+      .edgeEffect(EdgeEffect.Spring)
       .height(Constants.FULL_PERCENT_HEIGHT)
       .scrollBar(BarState.Off)
     }

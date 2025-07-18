@@ -104,7 +104,7 @@ export struct MinePage {
       .height(Constants.FULL_PERCENT_HEIGHT)
       .scrollable(ScrollDirection.Vertical)
       .scrollBar(BarState.Auto)
-      .edgeEffect(EdgeEffect.None)
+      .edgeEffect(EdgeEffect.Spring)
       .backgroundColor($r('app.color.mine_bg'))
       .linearGradient({
         angle: 180,

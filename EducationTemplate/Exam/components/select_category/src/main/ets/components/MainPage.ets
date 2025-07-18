@@ -13,14 +13,14 @@
  * limitations under the License.
  */
 
-import { SecondParam, ThirdItemModel, ThirdParam } from '../model/SelectCateModel'
 import { JSON } from '@kit.ArkTS';
+import { SecondParam, ThirdItemModel, ThirdParam } from '../model/SelectCateModel'
 
 @ComponentV2
 export struct SelectCategory {
   @Param @Require secondParamObj: SecondParam
   @Local secondDataList: string[] = [];
-  @Local contentData: ThirdItemModel[] | undefined = undefined;
+  @Local contentData?: ThirdItemModel[];
   @Param currentColor: ResourceStr = '#4B5CC4'
   @Param contentIcon: ResourceStr = $r('app.media.icon_right');
   @Event goPage: (x: string) => void = () => {
@@ -39,79 +39,96 @@ export struct SelectCategory {
 
   build() {
     Column() {
-      List() {
-        ForEach(this.secondDataList, (item: string) => {
-          ListItem() {
-            Row() {
-              Text(item)
-                .fontColor(this.secondDataList[this.secondDataList.length-1] === item ? this.currentColor :
-                $r('sys.color.font_primary'))
-                .fontSize($r('sys.float.Body_M'))
-                .fontWeight(this.secondDataList[this.secondDataList.length-1] === item ? FontWeight.Medium :
-                FontWeight.Regular)
-                .textAlign(TextAlign.Start)
-                .margin({ right: $r('app.float.vp_6') })
-                .wordBreak(WordBreak.BREAK_ALL)
-                .textOverflow({ overflow: TextOverflow.Ellipsis })
-                .constraintSize({ maxWidth: '30%' })
-                .maxLines(1)
-                .textOverflow({ overflow: TextOverflow.Ellipsis })
-                .onClick(() => {
-                  this.goPage(item)
-                })
-              if (this.secondDataList[this.secondDataList?.length-1] !== item) {
-                Image($r('app.media.icon_right'))
-                  .objectFit(ImageFit.Cover)
-                  .width($r('app.float.vp_14'))
-                  .height($r('app.float.vp_14'))
-              }
-            }.margin({ right: $r('app.float.vp_5') })
-          }
-        }, (item: string, idx: number) => JSON.stringify(item) + idx);
-      }
-      .padding({ top: $r('app.float.vp_12'), left: $r('app.float.vp_16'), right: $r('app.float.vp_16') })
-      .edgeEffect(EdgeEffect.Spring)
-      .listDirection(Axis.Horizontal)
-      .scrollBar(BarState.Off)
-      .height($r('app.float.vp_40'))
-      .width('100%')
-
-      Column() {
-        ForEach(this.contentData, (item: ThirdItemModel) => {
-          Row() {
-            Text(item.title)
-              .fontColor($r('sys.color.font_primary'))
-              .textAlign(TextAlign.Start)
-              .fontSize($r('sys.float.Caption_L'))
-              .fontWeight(FontWeight.Regular)
-              .maxLines(2)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .wordBreak(WordBreak.BREAK_ALL)
-              .layoutWeight(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-            Image(this.contentIcon)
-              .objectFit(ImageFit.Cover)
-              .width($r('app.float.vp_16'))
-              .height($r('app.float.vp_16'))
-              .margin({ left: $r('app.float.vp_4'), right: $r('app.float.vp_12') });
-          }
-          .backgroundColor($r('sys.color.comp_background_gray'))
-          .padding($r('app.float.vp_12'))
-          .borderRadius(10)
-          .justifyContent(FlexAlign.SpaceBetween)
-          .width('100%')
-          .margin({ top: $r('app.float.vp_12') })
-          .onClick(() => {
-            // 跳转三级列表页
-            this.goThird(item)
-          })
-        }, (item: string) => JSON.stringify(item))
-      }.padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16') })
+      // 二级导航标题栏
+      this.titleBarBuilder()
+      // 二级导航内容
+      this.contentBuilder()
     }
     .height('100%')
     .justifyContent(FlexAlign.Start)
     .width('100%')
     .alignItems(HorizontalAlign.Start)
+  }
+
+  /**
+   * 内容
+   */
+  @Builder
+  contentBuilder() {
+    Column() {
+      ForEach(this.contentData, (item: ThirdItemModel) => {
+        Row() {
+          Text(item.title)
+            .fontColor($r('sys.color.font_primary'))
+            .textAlign(TextAlign.Start)
+            .fontSize($r('sys.float.Caption_L'))
+            .fontWeight(FontWeight.Regular)
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .wordBreak(WordBreak.BREAK_ALL)
+            .layoutWeight(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+          Image(this.contentIcon)
+            .objectFit(ImageFit.Cover)
+            .width($r('app.float.vp_16'))
+            .height($r('app.float.vp_16'))
+            .margin({ left: $r('app.float.vp_4'), right: $r('app.float.vp_12') });
+        }
+        .backgroundColor($r('sys.color.comp_background_gray'))
+        .padding($r('app.float.vp_12'))
+        .borderRadius(10)
+        .justifyContent(FlexAlign.SpaceBetween)
+        .width('100%')
+        .margin({ top: $r('app.float.vp_12') })
+        .onClick(() => {
+          // 跳转三级列表页
+          this.goThird(item)
+        })
+      }, (item: string) => JSON.stringify(item))
+    }.padding({ left: $r('app.float.vp_16'), right: $r('app.float.vp_16') })
+  }
+
+  /**
+   * 二级导航标题栏
+   */
+  @Builder
+  titleBarBuilder() {
+    List() {
+      ForEach(this.secondDataList, (item: string) => {
+        ListItem() {
+          Row() {
+            Text(item)
+              .fontColor(this.secondDataList[this.secondDataList.length-1] === item ? this.currentColor :
+              $r('sys.color.font_primary'))
+              .fontSize($r('sys.float.Body_M'))
+              .fontWeight(this.secondDataList[this.secondDataList.length-1] === item ? FontWeight.Medium :
+              FontWeight.Regular)
+              .textAlign(TextAlign.Start)
+              .margin({ right: $r('app.float.vp_6') })
+              .wordBreak(WordBreak.BREAK_ALL)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .constraintSize({ maxWidth: '30%' })
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .onClick(() => {
+                this.goPage(item)
+              })
+            if (this.secondDataList[this.secondDataList?.length-1] !== item) {
+              Image($r('app.media.icon_right'))
+                .objectFit(ImageFit.Cover)
+                .width($r('app.float.vp_14'))
+                .height($r('app.float.vp_14'))
+            }
+          }.margin({ right: $r('app.float.vp_5') })
+        }
+      }, (item: string, idx: number) => JSON.stringify(item) + idx);
+    }
+    .padding({ top: $r('app.float.vp_12'), left: $r('app.float.vp_16'), right: $r('app.float.vp_16') })
+    .edgeEffect(EdgeEffect.Spring)
+    .listDirection(Axis.Horizontal)
+    .scrollBar(BarState.Off)
+    .height($r('app.float.vp_40'))
+    .width('100%')
   }
 }
 

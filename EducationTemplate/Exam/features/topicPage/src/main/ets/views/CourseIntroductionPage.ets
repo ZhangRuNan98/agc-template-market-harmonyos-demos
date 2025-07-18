@@ -13,26 +13,25 @@
  * limitations under the License.
  */
 
-import { promptAction } from '@kit.ArkUI'
-import { examPrefer, PreferConstant, QuestionsRoterModel, TopTabsBuilder } from 'commonlib'
+import { PreferenceUtil, PreferConstant, TopTabsBuilder } from 'commonlib'
 import { RouterModule, RouterMap } from 'router_module';
 import {
   PracticeDataSource,
-  PRACTICELIST_DATA,
+  PRACTICE_LIST_DATA,
   PracticeMode,
-  SUBEXERCISES_DATA,
+  SUB_EXERCISES_DATA,
   SubjectExercises
 } from '../viewModel/PracticeMode';
-import { TopicItemType } from 'commonlib';
 import { MyDataSource } from '../viewModel/CourseHomeModel'
+import { QuestionsRouterModel, TopicItemType } from 'answer_questions';
 
 @ComponentV2
 export struct CourseIntroductionPage {
   private swiperController: SwiperController = new SwiperController();
   private data: MyDataSource = new MyDataSource([]);
-  private listData: PracticeMode[] = PRACTICELIST_DATA;
+  private listData: PracticeMode[] = PRACTICE_LIST_DATA;
   private dataSource: PracticeDataSource = new PracticeDataSource(this.listData);
-  private subExercisesListData: SubjectExercises[] = SUBEXERCISES_DATA;
+  private subExercisesListData: SubjectExercises[] = SUB_EXERCISES_DATA;
   @Local currentIndex: number = 0;
 
   aboutToAppear(): void {
@@ -52,11 +51,11 @@ export struct CourseIntroductionPage {
       Scroll() {
         Column() {
           // banner
-          this.BannerBuilder()
+          this.bannerBuilder()
           // 业务栏
-          this.ToolBuilder()
-          // tab
-          this.CustomTabBuilder()
+          this.toolBuilder()
+          // 练习模式/学习资料
+          this.customTabBuilder()
         }
         .padding({ left: $r('app.float.vp_12'), right: $r('app.float.vp_12') })
         .layoutWeight(1)
@@ -71,7 +70,7 @@ export struct CourseIntroductionPage {
   }
 
   @Builder
-  BannerBuilder() {
+  bannerBuilder() {
     Swiper(this.swiperController) {
       LazyForEach(this.data, (item: string) => {
         Image($r(item)).width('100%').height(190)
@@ -96,14 +95,11 @@ export struct CourseIntroductionPage {
         .selectedColor(Color.Blue)
         .maxDisplayCount(9))
     .curve(Curve.Linear)
-    .onChange((index: number) => {
-      console.info(index.toString());
-    })
   }
 
   // 业务选项
   @Builder
-  ToolBuilder() {
+  toolBuilder() {
     Row({ space: 5 }) {
       Column() {
         Image($r('app.media.ic__practice_wrong_question'))
@@ -127,7 +123,7 @@ export struct CourseIntroductionPage {
       .justifyContent(FlexAlign.Center)
       .alignItems(HorizontalAlign.Center)
       .onClick(() => {
-        RouterModule.push({ url: RouterMap.MyWrongPage })
+        RouterModule.push({ url: RouterMap.MY_WRONG_PAGE })
       })
 
       Column() {
@@ -152,7 +148,7 @@ export struct CourseIntroductionPage {
       .alignItems(HorizontalAlign.Center)
       .margin({ left: $r('app.float.vp_44'), right: $r('app.float.vp_44') })
       .onClick(() => {
-        RouterModule.push({ url: RouterMap.MyCollectionPage })
+        RouterModule.push({ url: RouterMap.MY_COLLECTION_PAGE })
       })
 
       Column() {
@@ -176,7 +172,7 @@ export struct CourseIntroductionPage {
       .justifyContent(FlexAlign.Center)
       .alignItems(HorizontalAlign.Center)
       .onClick(() => {
-        RouterModule.push({ url: RouterMap.MyNotesPage });
+        RouterModule.push({ url: RouterMap.MY_NOTE_PAGE });
       })
     }
     .justifyContent(FlexAlign.Center)
@@ -201,11 +197,11 @@ export struct CourseIntroductionPage {
           .backgroundColor(Color.White)
           .onClick(() => {
             if (item.name === '每日一练') {
-              RouterModule.push({ url: RouterMap.AnswerQuestions_Page });
+              RouterModule.push({ url: RouterMap.ANSWER_QUESTIONS_PAGE });
             } else if (item.name === '模拟考试') {
-              RouterModule.push({ url: RouterMap.MockTestPage, param: 1 });
+              RouterModule.push({ url: RouterMap.Mock_PAGE, param: 1 });
             } else if (item.name === '全真试卷') {
-              RouterModule.push({ url: RouterMap.MockTestPage, param: 2 });
+              RouterModule.push({ url: RouterMap.Mock_PAGE, param: 2 });
             } else {
               // 错题练习
               this.myWrongPracticeEvent()
@@ -236,7 +232,7 @@ export struct CourseIntroductionPage {
             SubjectItem({ subjectItem: subjectItem })
           }
           .onClick(() => {
-            RouterModule.push({ url: RouterMap.AnswerQuestions_Page });
+            RouterModule.push({ url: RouterMap.ANSWER_QUESTIONS_PAGE });
           })
         }, (item: SubjectExercises, index: number) => item.name + index)
       }
@@ -258,7 +254,7 @@ export struct CourseIntroductionPage {
 
   // 学习资料
   @Builder
-  InforBuilder() {
+  studyMaterialsBuilder() {
     Column() {
       List({ space: 8 }) {
         ForEach(this.subExercisesListData, (subItem: SubjectExercises) => {
@@ -267,6 +263,8 @@ export struct CourseIntroductionPage {
           }
         }, (item: SubjectExercises, index: number) => item.name + index)
       }
+      .height('auto')
+      .width('auto')
       .scrollBar(BarState.Off)
       .layoutWeight(1)
       .margin({ bottom: $r('app.float.vp_8') })
@@ -297,7 +295,7 @@ export struct CourseIntroductionPage {
       .margin({ top: $r('app.float.vp_16'), bottom: $r('app.float.vp_16') })
       .backgroundColor($r('sys.color.comp_background_tertiary'))
       .onClick(() => {
-        RouterModule.push({ url: RouterMap.MaterialDownload });
+        RouterModule.push({ url: RouterMap.MATERIAL_DOWNLOAD_PAGE });
       })
 
       Blank()
@@ -330,7 +328,7 @@ export struct CourseIntroductionPage {
 
   // Tab
   @Builder
-  CustomTabBuilder() {
+  customTabBuilder() {
     Row() {
       Row() {
         Text('练习模式')
@@ -372,25 +370,27 @@ export struct CourseIntroductionPage {
     .margin({ top: $r('app.float.vp_12'), bottom: $r('app.float.vp_12') })
 
     if (this.currentIndex === 0) {
+      // 练习模式
       this.PracticeBuilder()
     } else {
-      this.InforBuilder()
+      // 学习资料
+      this.studyMaterialsBuilder()
     }
   }
 
   // 错题练习点击事件
-  async myWrongPracticeEvent() {
+  myWrongPracticeEvent() {
     let arr: TopicItemType[] =
-      await examPrefer.getPreferenceValue(PreferConstant.EXAMPREFER_CTJL, []) as TopicItemType[];
+      PreferenceUtil.getInstance().get(PreferConstant.ERROR_RECORDS, []) as TopicItemType[];
     if (arr.length <= 0) {
-      promptAction.showToast({ message: '无错题数据' })
+      this.getUIContext().getPromptAction().showToast({ message: '无错题数据' })
       return
     }
     arr.sort((a, b) => b.jlStamp - a.jlStamp)
-    let roterModel: QuestionsRoterModel = new QuestionsRoterModel()
-    roterModel.sourceType = '错题练习'
-    roterModel.datalist = arr
-    RouterModule.push({ url: RouterMap.AnswerQuestions_Page, param: roterModel })
+    let routerModel: QuestionsRouterModel = new QuestionsRouterModel()
+    routerModel.sourceType = '错题练习'
+    routerModel.datalist = arr
+    RouterModule.push({ url: RouterMap.ANSWER_QUESTIONS_PAGE, param: routerModel })
   }
 }
 
@@ -562,9 +562,7 @@ struct InfoItem {
           .justifyContent(FlexAlign.Center)
           .backgroundColor($r('sys.color.comp_background_tertiary'))
           .onClick(() => {
-            promptAction.showToast({
-              message: '暂不支持分享'
-            })
+            this.getUIContext().getPromptAction().showToast({ message: '暂不支持分享' })
           })
         }
         .stateEffect(false)
@@ -572,7 +570,6 @@ struct InfoItem {
         .backgroundColor(Color.White)
         .borderRadius($r('app.float.vp_14'))
         .onClick(() => {
-          console.info('message')
         })
 
         Button({ type: ButtonType.Normal, stateEffect: true }) {
@@ -598,7 +595,7 @@ struct InfoItem {
         .backgroundColor(Color.White)
         .borderRadius($r('app.float.vp_14'))
         .onClick(() => {
-          RouterModule.push({ url: RouterMap.MaterialDownload })
+          RouterModule.push({ url: RouterMap.MATERIAL_DOWNLOAD_PAGE })
         })
       }
       .margin({ top: $r('app.float.vp_16') })

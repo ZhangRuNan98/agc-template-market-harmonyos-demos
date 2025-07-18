@@ -149,6 +149,7 @@ struct MemberCenterPage {
                   promptAction.showToast({ message: '请勾选会员服务协议' });
                   return
                 }
+                // todo 替换后台接口生成支付字符串
                 this.vm.wxOrderReq = MockApi.getWxPreOrderInfo();
                 this.vm.hwOrderStr = MockApi.getHuaweiOrderInfo();
                 MockApi.getAliPreOrderInfo().then((res) => {

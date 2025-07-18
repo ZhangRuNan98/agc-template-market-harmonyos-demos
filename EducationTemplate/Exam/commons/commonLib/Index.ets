@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-export * from './src/main/ets/Logger';
+export { Logger } from './src/main/ets/utils/Logger';
 
-export * from './src/main/ets/PreferUtil';
+export { PreferenceUtil, PreferConstant } from './src/main/ets/utils/PreferenceUtil';
 
 export * from './src/main/ets/components/CommonHeader';
 
@@ -26,5 +26,3 @@ export * from './src/main/ets/viewModel/PracticeRecordModel';
 export * from './src/main/ets/viewModel/BrowsingHistoryModel';
 
 export * from './src/main/ets/viewModel/OrderInfo';
-
-export * from 'answer_questions/src/main/ets/viewModel/TopicPageModel';

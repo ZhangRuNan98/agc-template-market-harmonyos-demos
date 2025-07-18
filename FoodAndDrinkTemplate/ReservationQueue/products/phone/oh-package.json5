@@ -7,6 +7,6 @@
   "license": "",
   "dependencies": {
     "@ohos/axios": "^2.2.4",
-    "book_queue": "file:../../components/bookqueue"
+    "book_queue": "file:../../components/book_queue"
   }
 }

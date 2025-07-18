@@ -9,6 +9,7 @@ import {
   UserEventItem,
 } from '../model/UserEventModel';
 import { RemindEventDispatcher } from '../utils/EventDispatcher';
+import { solarToLunar } from '../utils/Utils';
 import CalendarEventVM from '../viewModel/ViewModel';
 import { CalendarReminder } from './CalendarReminder'
 
@@ -59,6 +60,11 @@ export struct CalendarSchedule {
     return `${hour}:${minute}`
   }
 
+  setDateLunar(isOn:boolean) {
+
+    this.userEventInfo.date.forEach(item => item.isLunar = isOn)
+  }
+
   @Builder
   calendarEventTime() {
     List({ space: 16 }) {
@@ -70,7 +76,7 @@ export struct CalendarSchedule {
                 .attributeModifier(new BaseTextStyleModifier(`font_primary/Subtitle_M/Medium`))
               Row({ space: 5 }) {
                 Row() {
-                  Text(dayjs(item.date).format('YYYY年MM月DD日'))
+                  Text(item.isLunar ? item.lunarDate : dayjs(item.date).format('YYYY年MM月DD日'))
                     .attributeModifier(new BaseTextStyleModifier(`${this.readonly ? 'font_secondary' :
                       this.calendarEventList.calendarEventList[index].localDateSelected ? '#C4272B' :
                         'font_primary'}/Body_M/Regular`))
@@ -125,12 +131,17 @@ export struct CalendarSchedule {
               isOperationShow: true,
               isBottom: true,
               isLunar: true,
+              isLunarDate: item.isLunar,
               confirm: (value: Date) => {
+                item.lunarDate = solarToLunar(value)
                 item.date = value
                 this.calendarEventList.calendarEventList[index].localDateSelected = false
               },
               cancel: () => {
                 this.calendarEventList.calendarEventList[index].localDateSelected = false
+              },
+              onLunarChange: (value: boolean) => {
+                this.setDateLunar(value)
               },
             })
               .visibility(
@@ -140,7 +151,7 @@ export struct CalendarSchedule {
               selectedTime: new Date(`${dayjs(this.userEventInfo.date[index].date)
                 .format('YYYY-MM-DD')}T${this.userEventInfo.date[index].time}`),
               confirm: (value: TimePickerResult) => {
-                if(value) {
+                if (value) {
                   item.time = this.dateTimeFormat(value)
                 }
                 this.calendarEventList.calendarEventList[index].localDateTimeSelected = false

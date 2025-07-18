@@ -51,6 +51,10 @@
     {
       "name": "mine_title",
       "value": "我的"
+    },
+    {
+      "name": "agcit_huawei_medical_insurance",
+      "value": "1.0.1"
     }
   ]
 }

@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import { SampleCollectInfo, OrderInfo, Logger, TopBar } from 'commonlib';
-import { RouterModule } from 'router_module';
 import { AppStorageV2, } from '@kit.ArkUI';
+import { SampleCollectInfo, OrderInfo, Logger, TopBar } from 'commonlib';
+import { RouterMap, RouterModule } from 'router_module';
 
 const TAG = 'CollectionPage';
 
@@ -62,7 +62,7 @@ export struct CollectionPage {
    */
   @Builder
   deleteButtonBuilder() {
-    if (this.isSelectDelete === true) {
+    if (this.isSelectDelete) {
       Row() {
         Image($r('app.media.icon_delete'))
           .width($r('app.float.vp_24'))
@@ -96,7 +96,7 @@ export struct CollectionPage {
 
   // 是否全选
   isSelectAllClick() {
-    if (this.isSelectAll === false) {
+    if (!this.isSelectAll) {
       this.propCollect.orderInfos.forEach((item: OrderInfo) => {
         item.isDelete = true;
       })
@@ -132,7 +132,7 @@ export struct CollectionPage {
               // 父组件 点击右上角删除按钮显示  否则不显示
               if (this.isSelectDelete) {
                 Row() {
-                  Image(item.isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_anscommon'))
+                  Image(item.isDelete ? $r('app.media.icon_Checked') : $r('app.media.icon_ans_common'))
                     .width($r('app.float.vp_20'))
                     .margin({ right: $r('app.float.vp_8') })
                     .height($r('app.float.vp_20'))
@@ -140,7 +140,7 @@ export struct CollectionPage {
                 .height($r('app.float.vp_24'))
                 .onClick(() => {
                   item.isDelete = !item.isDelete
-                  if (item.isDelete === true) {
+                  if (item.isDelete) {
                     this.selectCount++;
                   } else {
                     this.selectCount--;
@@ -195,7 +195,7 @@ export struct CollectionPage {
                       .backgroundColor('#4B5CC4')
                       .fontWeight(FontWeight.Bold)
                       .onClick(() => {
-                        RouterModule.push({ url: 'GoodCourseDetailPage', param: item })
+                        RouterModule.push({ url: RouterMap.GOOD_COURSE_DETAIL_PAGE, param: item })
                       })
                   }.width('100%')
                   .justifyContent(FlexAlign.End)
@@ -220,7 +220,7 @@ export struct CollectionPage {
           edgeEffect: SwipeEdgeEffect.None,
           end: {
             builder: () => {
-              this.collctItemEnd(index)
+              this.collectItemEnd(index)
             },
             actionAreaDistance: 26,
             onStateChange: (state: SwipeActionState) => {
@@ -244,7 +244,7 @@ export struct CollectionPage {
   }
 
   @Builder
-  collctItemEnd(index: number) {
+  collectItemEnd(index: number) {
     Row() {
       Image($r('app.media.ic_public_trash_red'))
         .margin({ left: $r('app.float.vp_12') })
@@ -252,6 +252,7 @@ export struct CollectionPage {
         .width($r('app.float.vp_24'))
         .onClick(() => {
           this.propCollect.orderInfos.splice(index, 1)
+          this.swiperDelete = false
         })
     }
     .justifyContent(FlexAlign.SpaceEvenly)
@@ -271,23 +272,23 @@ export struct CollectionPage {
         title: '我的收藏'
       })
       Row() {
-        Image(this.isSelectAll === false ? $r('app.media.icon_select_all_off') : $r('app.media.icon_select_all'))
+        Image(this.isSelectAll ? $r('app.media.icon_select_all') : $r('app.media.icon_select_all_off'))
           .height($r('app.float.vp_40'))
           .width($r('app.float.vp_40'))
           .onClick(() => {
             this.isSelectAllClick()
           })
-          .visibility(this.isSelectDelete === true ? Visibility.Visible : Visibility.Hidden)
+          .visibility(this.isSelectDelete ? Visibility.Visible : Visibility.Hidden)
         Image($r('app.media.ic_public_trash'))
           .height($r('app.float.vp_40'))
-          .opacity(this.swiperDelete === true ? 0.4 : 1)
+          .opacity(this.propCollect.orderInfos.length === 0 || this.swiperDelete ? 0.4 : 1)
           .margin({ left: $r('app.float.vp_8') })
           .width($r('app.float.vp_40'))
       }
       .onClick(() => {
-        if (this.swiperDelete === false && this.propCollect.orderInfos.length > 0) {
+        if (!this.swiperDelete && this.propCollect.orderInfos.length > 0) {
           this.isSelectDelete = !this.isSelectDelete
-          if (this.isSelectDelete === false) {
+          if (!this.isSelectDelete) {
             this.selectCount = 0
             this.isSelectAll = false
             this.propCollect.orderInfos.forEach((item: OrderInfo) => {
@@ -305,7 +306,7 @@ export struct CollectionPage {
 }
 
 @Builder
-export function CollectionPageBuilder() {
+export function CollectionBuilder() {
   CollectionPage()
 }
 

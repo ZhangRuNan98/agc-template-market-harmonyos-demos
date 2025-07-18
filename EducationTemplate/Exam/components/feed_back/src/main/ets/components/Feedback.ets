@@ -12,13 +12,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { FeedbackItemType } from '../model/FeedbackRecordModel';
 import { fileSelect, getDateStringWithTimeStamp } from '../utils/FileSelect';
-import { promptAction } from '@kit.ArkUI';
 
 @ComponentV2
 export struct Feedback {
-  text: ResourceStr | undefined;
+  text?: ResourceStr;
   //传入问题描述的最大字数
   @Param des: number = 100
   //传入问题截图需要的最大数量
@@ -40,36 +40,15 @@ export struct Feedback {
   @Event butOnClick: (feedList: FeedbackItemType) => void;
 
   build() {
-
     Column() {
-      this.FeedDes()
-      this.FeedPic()
-      this.FeedPhone()
-      Button('提交')
-        .borderRadius(20)
-        .fontColor($r('sys.color.font_on_primary'))
-        .backgroundColor('#4c5dc4')
-        .fontSize($r('sys.float.Body_L'))
-        .fontWeight(FontWeight.Medium)
-        .width(304)
-        .height(40)
-        .padding({ top: 12, bottom: 12 })
-        .margin({ top: 214 })
-        .onClick(async () => {
-          if (this.feedList.description.length > 0) {
-            if (this.phoneLength === 0 || this.phoneLength === 11) {
-              //获取当前时间
-              this.feedList.time = getDateStringWithTimeStamp()
-              this.butOnClick(this.feedList)
-            } else {
-              promptAction.showToast({ message: '请输入11位正确的电话号码', duration: 2000 });
-            }
-
-          } else {
-            promptAction.showToast({ message: '请填写问题描述', duration: 2000 });
-          }
-
-        })
+      // 问题描述
+      this.feedDes()
+      // 问题截图
+      this.feedPic()
+      // 联系方式
+      this.feedPhone()
+      // 提交按钮
+      this.submitButton()
     }
     .width('100%')
     .height('100%')
@@ -87,12 +66,39 @@ export struct Feedback {
     let uris = await fileSelect(this.stageImageUris, this.num - this.feedList.stageImageUris.length)
     this.imageUris.push(...uris)
     this.feedList.stageImageUris = this.imageUris
-    console.info('textTimer notCountDown utc is：' + this.imageUris + ', elapsedTime: ' + this.feedList.stageImageUris);
   }
 
-  //问题描述
+  // 提交按钮
   @Builder
-  FeedDes() {
+  submitButton() {
+    Button('提交')
+      .borderRadius(20)
+      .fontColor($r('sys.color.font_on_primary'))
+      .backgroundColor('#4c5dc4')
+      .fontSize($r('sys.float.Body_L'))
+      .fontWeight(FontWeight.Medium)
+      .width(304)
+      .height(40)
+      .padding({ top: 12, bottom: 12 })
+      .margin({ top: 214 })
+      .onClick(async () => {
+        if (this.feedList.description.length > 0) {
+          if (this.phoneLength === 0 || this.phoneLength === 11) {
+            //获取当前时间
+            this.feedList.time = getDateStringWithTimeStamp()
+            this.butOnClick(this.feedList)
+          } else {
+            this.getUIContext().getPromptAction().showToast({ message: '请输入11位正确的电话号码', duration: 2000 });
+          }
+        } else {
+          this.getUIContext().getPromptAction().showToast({ message: '请填写问题描述', duration: 2000 });
+        }
+      })
+  }
+
+  // 问题描述
+  @Builder
+  feedDes() {
     Row() {
       Text('问题描述')
         .fontSize($r('sys.float.Body_M'))
@@ -121,9 +127,9 @@ export struct Feedback {
       })
   }
 
-  //问题截图
+  // 问题截图
   @Builder
-  FeedPic() {
+  feedPic() {
     Row() {
       Text('问题截图（选填）')
         .fontSize($r('sys.float.Body_M'))
@@ -181,9 +187,9 @@ export struct Feedback {
     .justifyContent(FlexAlign.Start)
   }
 
-  //电话
+  // 联系方式
   @Builder
-  FeedPhone() {
+  feedPhone() {
     Row() {
       Text('联系方式（选填）')
         .fontSize($r('sys.float.Body_M'))
@@ -213,7 +219,7 @@ export struct Feedback {
         if (this.phoneLength === 11 || this.phoneLength === 0) {
           this.feedList.phone = this.phoneValue
         } else {
-          promptAction.showToast({ message: '请输入11位正确的电话号码', duration: 2000 });
+          this.getUIContext().getPromptAction().showToast({ message: '请输入11位正确的电话号码', duration: 2000 });
         }
       })
       .onWillInsert((info: InsertValue) => {

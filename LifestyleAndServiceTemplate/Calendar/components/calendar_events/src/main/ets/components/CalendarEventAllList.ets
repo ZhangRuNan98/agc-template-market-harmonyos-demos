@@ -45,7 +45,7 @@ export struct CalendarEventList {
                     .fontSize(14)
                     .maxLines(1)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
-                  Text(dayjs(item.date[0].date).format('YYYY年MM月DD日'))
+                  Text(item.date[0].isLunar?item.date[0].lunarDate:dayjs(item.date[0].date).format('YYYY年MM月DD日'))
                     .fontSize(12)
                     .fontColor($r('sys.color.font_secondary'))
                 }
@@ -57,7 +57,7 @@ export struct CalendarEventList {
                 DistanceToday({
                   endDate: item.date[0].date,
                 })
-              }.width(80)
+              }
             }
             .onClick(() => {
               if([EVENT_TYPE.BIRTHDAY,EVENT_TYPE.ANNIVERSARIES].includes(item.eventType) ){

@@ -17,34 +17,39 @@ export { MinePageBuilder } from './src/main/ets/views/MinePage';
 
 export { EditPersonalCenterBuilder } from './src/main/ets/views/EditPersonalCenterPage';
 
-export { SetupPageBuilder } from './src/main/ets/views/SetupPage';
+export { SetUpPageBuilder } from './src/main/ets/views/SetupPage';
 
 export { FeedbackPageBuilder } from './src/main/ets/views/FeedbackPage';
 
-export { PracticeRecordsPageBuilder } from './src/main/ets/views/PracticeRecordsPage';
+export { PracticeRecordsBuilder } from './src/main/ets/views/PracticeRecordsPage';
 
-export { PracticeDetailsPageBuilder } from './src/main/ets/views/PracticeDetailsPage';
+export { PracticeDetailsBuilder } from './src/main/ets/views/PracticeDetailsPage';
 
-export { OneDayPracticeRecordsPageBuilder } from './src/main/ets/views/OneDayPracticeRecordsPage';
+export { OneDayPracticeRecordsBuilder } from './src/main/ets/views/OneDayPracticeRecordsPage';
 
-export { BrowsingHistoryPageBuilder } from './src/main/ets/views/BrowsingHistoryPage';
+export { BrowsingHistoryBuilder } from './src/main/ets/views/BrowsingHistoryPage';
 
-export { MyOrderPageBuilder } from './src/main/ets/views/MyOrderPage';
+export { MyOrderBuilder } from './src/main/ets/views/MyOrderPage';
 
-export { OrderDetailPageBuilder } from './src/main/ets/views/OrderDetailPage';
+export { OrderDetailBuilder } from './src/main/ets/views/OrderDetailPage';
 
 export { PrivacyStatementPageBuilder } from './src/main/ets/views/PrivacyStatementPage';
 
-export { PrivacyAgreementPageBuilder, DialogPageBuilder } from './src/main/ets/views/PrivacyAgreementPage';
+export { PrivacyAgreementBuilder, PrivacyUseAlertBuilder } from './src/main/ets/views/PrivacyAgreementPage';
 
-export { MessageCenterPageBuilder } from './src/main/ets/views/MessageCenterPage';
+export { MessageCenterBuilder } from './src/main/ets/views/MessageCenterPage';
 
 export { FeedbackRecordPageBuilder } from './src/main/ets/views/FeedbackRecordPage';
 
 export { AboutPageBuilder } from './src/main/ets/views/AboutPage';
 
-export { CollectionPageBuilder } from './src/main/ets/views/CollectionPage';
+export { CollectionBuilder } from './src/main/ets/views/CollectionPage';
 
 export { CoursePageBuilder } from './src/main/ets/views/CoursePage';
 
+export { AuthenticationPageBuilder } from './src/main/ets/views/AuthenticationPage';
+
+export { PrivacyPageBuilder } from './src/main/ets/views/PrivacyPage';
+
+export { TermsOfServicePageBuilder } from './src/main/ets/views/TermsOfServicePage';
 

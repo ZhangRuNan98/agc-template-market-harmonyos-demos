@@ -214,6 +214,7 @@ struct HomePage {
         }
 
       }.layoutWeight(1)
+      .edgeEffect(EdgeEffect.Spring)
       .scrollBar(BarState.Off)
       .padding({ top: 220 });
 

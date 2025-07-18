@@ -19,15 +19,15 @@ export * from './src/main/ets/views/CourseIntroductionPage';
 
 export * from './src/main/ets/views/AnswerQuestionsPage';
 
-export * from './src/main/ets/views/TestReportPage';
+export { TestReportBuilder } from './src/main/ets/views/TestReportPage';
 
-export { AnswerQuestionsPageBuilder } from './src/main/ets/views/AnswerQuestionsPage';
+export { AnswerQuestionsBuilder } from './src/main/ets/views/AnswerQuestionsPage';
 
-export { AnswerQuestionsTwoPageBuilder } from './src/main/ets/views/AnswerQuestionsTwoPage';
+export { AnswerQuestionsTwoBuilder } from './src/main/ets/views/AnswerQuestionsTwoPage';
 
-export { ExamResultPageBuilder } from './src/main/ets/views/ExamResultPage';
+export { ExamResultBuilder } from './src/main/ets/views/ExamResultPage';
 
-export { GoodCourseDetailPageBuilder } from './src/main/ets/views/GoodCourseDetailPage';
+export { GoodCourseDetailBuilder } from './src/main/ets/views/GoodCourseDetailPage';
 
 export { MyNotesPageBuilder } from './src/main/ets/views/MyNotesPage';
 
@@ -37,10 +37,7 @@ export { MyWrongPageBuilder } from './src/main/ets/views/MyWrongPage';
 
 export { MyCollectionPageBuilder } from './src/main/ets/views/MyCollectionPage';
 
-export { SecondListPageBuilder } from './src/main/ets/views/SecondListPage';
-
-export { ThirdListPageBuilder } from './src/main/ets/views/ThirdListPage';
-
 export { MockTestPageBuilder } from './src/main/ets/views/MockTestPage';
 
 export { CourseHomePageBuilder } from './src/main/ets/views/CourseHomePage'
+

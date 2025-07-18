@@ -6,7 +6,7 @@
     },
     {
       "name": "agcit_huawei_home_decoration",
-      "value": "1.0.0"
+      "value": "1.0.1"
     },
     {
       "name": "agcittype_huawei_home_decoration",
@@ -14,7 +14,7 @@
     },
     {
       "name": "agcitkid_huawei_home_decoration",
-      "value": "agcit_huawei_home_decoration_module_login/1.0.0,agcit_huawei_home_decoration_module_city_select/1.0.0,agcit_huawei_home_decoration_module_filter_list/1.0.0,agcit_huawei_home_decoration_module_posting/1.0.0,agcit_huawei_home_decoration_module_decoration_form/1.0.0"
+      "value": "agcit_huawei_home_decoration_module_login/1.0.1,agcit_huawei_home_decoration_module_city_select/1.0.1,agcit_huawei_home_decoration_module_filter_list/1.0.1,agcit_huawei_home_decoration_module_posting/1.0.1,agcit_huawei_home_decoration_module_decoration_form/1.0.1"
     }
   ]
 }

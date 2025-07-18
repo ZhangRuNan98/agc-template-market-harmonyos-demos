@@ -9,16 +9,8 @@
       "value": "需要知道您所在的城市位置，以便提供相应服务。"
     },
     {
-      "name": "agcit_huawei_household_module_city_select",
-      "value": "1.0.0"
-    },
-    {
-      "name": "agcittype_huawei_household_module_city_select",
-      "value": "serviceComponent"
-    },
-    {
       "name": "agcit_huawei_home_decoration_module_city_select",
-      "value": "1.0.0"
+      "value": "1.0.1"
     },
     {
       "name": "agcittype_huawei_home_decoration_module_city_select",

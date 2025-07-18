@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -13,49 +14,61 @@
 
 <img src="./screenshot/CalendarEventMain.png">
 
-## 使用
+## 约束与限制
+### 软件
 
-1. 组件依赖
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release及以上
 
-   由于CalendarEventMain组件依赖**base_apis** har包以及**dayjs**三方库，所以需要将模板根目录的components下**base_apis** 目录拷贝至您的工程相应目录。
+### 硬件
 
-   ```typescript
-   // calendar_events har包依赖情况
-   "dependencies": {
-       "dayjs": "^1.11.13",
-       "base_apis": "file:../base_apis",
-   }
-   ```
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
 
-2. 安装组件。
+### 权限
+* 获取位置权限：ohos.permission.WRITE_CALENDAR，ohos.permission.READ_CALENDAR。
+* 网络权限：ohos.permission.INTERNET
+
+## 快速入门
+
+1. 安装组件。
+
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
+
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加calendar_events和base_apis模块。
 
     ```typescript
-   // 在项目根目录build-profile.json5填写calendar_events和base_apis路径
-     "modules": [
-       {
-         "name": "calendar_events",
-         "srcPath": "./calendar_events",
-       },
-       {
-         "name": "base_apis",
-         "srcPath": "./base_apis",
-       }
-     ]
+    // 在项目根目录build-profile.json5填写base_calendar和base_apis路径。其中XXX为组件存放的目录名
+    "modules": [
+        {
+        "name": "calendar_events",
+        "srcPath": "./XXX/calendar_events",
+        },
+        {
+        "name": "base_apis",
+        "srcPath": "./XXX/base_apis",
+        }
+    ]
+    ```
+   c. 在项目根目录oh-package.json5中添加依赖。
+    ```typescript
+    // XXX为组件存放的目录名称
+    "dependencies": {
+      "calendar_events": "file:./XXX/calendar_events"
+    }
    ```
 
-   ```typescript
-   "dependencies": {
-     "calendar_events": "file:../calendar_events"
-   }
-   ```
-
-3. 引入组件。
+2. 引入组件。
 
    ```typescript
     import { CalendarEventMain } from 'calendar_events';
    ```
 
-4. 调用组件，详细参数配置说明参见[API参考](#API参考)。
+3. 调用组件，详细参数配置说明参见[API参考](#API参考)。
 
       ```typescript
    // 引入组件

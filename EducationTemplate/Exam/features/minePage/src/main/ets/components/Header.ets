@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { RouterModule } from 'router_module';
 
 @ComponentV2
@@ -33,7 +34,7 @@ export struct Header {
         .fontWeight(FontWeight.Medium)
         .fontColor($r('sys.color.font_primary'))
       Blank()
-      if (this.rightImageRes !== undefined) {
+      if (this.rightImageRes) {
         Image(this.rightImageRes).size({ width: 40, height: 40 })
           .margin({ right: 16 })
           .onClick(this.rightOnClick)

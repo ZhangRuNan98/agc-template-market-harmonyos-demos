@@ -394,6 +394,7 @@ export struct LoginWithHuaweiID {
       }
       .width('100%')
       .height('100%')
+      .edgeEffect(EdgeEffect.Spring)
       .padding({
         top: Number(AppStorage.get('topRectHeight')),
       })

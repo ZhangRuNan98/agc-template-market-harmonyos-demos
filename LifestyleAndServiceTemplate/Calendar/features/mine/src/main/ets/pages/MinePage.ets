@@ -4,6 +4,7 @@ import { LoginInfo, LoginParams } from 'login_info';
 import { CalendarEventMain, UserEventItem } from 'calendar_events';
 import { getDataFromJSON } from 'base_apis';
 import { RouterModule } from 'router_module';
+import { aesDecName, aesEncName } from '../utils/Utils';
 
 @ComponentV2
 export struct MinePage {
@@ -18,14 +19,19 @@ export struct MinePage {
     PersistenceV2.save(UserState);
   }
 
-  mockUserLogin() {
+  /*
+   * mock使用aes加密算法保证用户信息安全
+   * */
+
+  async mockUserLogin() {
     this.userState.isLogin = true;
     let mockUserInfo: UserInfo = new UserInfo({
       'idToken': '',
-      'userName': '华为用户',
+      'userName': await aesEncName('华为用户'),
       'avatar': '',
       'phoneNumber': '123xxxxx789',
     })
+    mockUserInfo.userName = await aesDecName(mockUserInfo.userName as Uint8Array)
     this.userState.userInfo = mockUserInfo
     RouterModule.pop();
   }
@@ -34,12 +40,12 @@ export struct MinePage {
     Stack({ alignContent: Alignment.TopStart }) {
       List({ space: 12 }) {
         ListItem() {
-          Column(){
+          Column() {
             LoginInfo({
               userInfo: this.userState.userInfo,
               isLogin: this.userState.isLogin,
-              selectColor:this.theme.themeState.current,
-              titleColor:this.theme.themeState.titleColor,
+              selectColor: this.theme.themeState.current,
+              titleColor: this.theme.themeState.titleColor,
               routerModule: RouterModule.getStack(),
               onLogin: (loginParams: LoginParams) => {
                 this.mockUserLogin()
@@ -79,8 +85,8 @@ export struct MinePage {
         ListItem() {
           CalendarEventMain({
             pathStack: RouterModule.getStack(),
-            selectColor:this.theme.themeState.current,
-            titleColor:this.theme.themeState.titleColor,
+            selectColor: this.theme.themeState.current,
+            titleColor: this.theme.themeState.titleColor,
             onCalendarEventChange: (userEventInfo: UserEventItem) => {
               console.log('change userEventInfo', JSON.stringify(userEventInfo))
             },

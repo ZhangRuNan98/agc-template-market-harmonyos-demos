@@ -27,8 +27,8 @@
     ],
     "metadata": [
       {
-        // 配置为获取的Client ID,
         "name": "client_id",
+        // todo 替换client_id值,
         "value": "xxxx"
       },
     ],

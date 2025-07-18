@@ -86,6 +86,7 @@ export struct Home {
           })
         }
       }
+      .edgeEffect(EdgeEffect.Spring)
       .layoutWeight(1)
       .height(Constants.FULL_PERCENT_WIDTH)
       .scrollBar(BarState.Off)

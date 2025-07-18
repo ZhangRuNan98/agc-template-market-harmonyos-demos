@@ -13,11 +13,10 @@
  * limitations under the License.
  */
 
-import { AppStorageV2, promptAction, window } from '@kit.ArkUI';
+import { AppStorageV2, window } from '@kit.ArkUI';
 import { Header } from '../components/Header';
-
 import { fileSelect } from 'feed_back';
-import { UserInfo } from 'login_info/src/main/ets/model/UserInfo';
+import { UserInfo } from 'login_info';
 
 @Builder
 export function EditPersonalCenterBuilder() {
@@ -28,10 +27,10 @@ export function EditPersonalCenterBuilder() {
 export struct EditPersonalCenter {
   @Local textName: string = '';
   @Param message: string = 'Hello World';
-  @Param sheetHeight: number = 287;
-  @Param sheetHeight2: number = 744;
-  @Local isShow: boolean = false;
-  @Local isShow2: boolean = false;
+  @Param iconSheetHeight: number = 287;
+  @Param nicknameSheetHeight: number = 744;
+  @Local isShowIcon: boolean = false;
+  @Local isShowNickname: boolean = false;
   @Local keyboardHeight: number = 0;
   @Local logoUser: UserInfo = AppStorageV2.connect(UserInfo, () => new UserInfo())!
   @Local imageUri: Array<string> = [];
@@ -54,7 +53,7 @@ export struct EditPersonalCenter {
       Row() {
         Image($r('app.media.close_btn')).size({ width: $r('app.float.vp_40'), height: $r('app.float.vp_40') })
           .onClick(() => {
-            this.isShow = false
+            this.isShowIcon = false
           })
       }.size({ width: '100%', height: $r('app.float.vp_56') })
       .padding({ top: $r('app.float.vp_8'), bottom: $r('app.float.vp_8') })
@@ -72,8 +71,8 @@ export struct EditPersonalCenter {
         .padding({ left: $r('app.float.vp_12'), right: $r('app.float.vp_12') })
         .onClick(() => {
           this.logoUser.avatar = $r('app.media.Mask')
-          this.isShow = false
-          promptAction.showToast({ message: '头像修改成功', duration: 2000 });
+          this.isShowIcon = false
+          this.showToast('头像修改成功');
         })
 
         Divider()
@@ -93,9 +92,8 @@ export struct EditPersonalCenter {
           let arr = await fileSelect(this.imageUri, 1)
           if (arr.length === 1) {
             this.logoUser.avatar = arr[arr.length-1]
-            // AppStorageV2.(UserInfo)
-            this.isShow = false
-            promptAction.showToast({ message: '头像修改成功', duration: 2000 });
+            this.isShowIcon = false
+            this.showToast('头像修改成功');
           }
         })
 
@@ -130,7 +128,7 @@ export struct EditPersonalCenter {
         Row() {
           Image($r('app.media.close_btn')).size({ width: $r('app.float.vp_40'), height: $r('app.float.vp_40') })
             .onClick(() => {
-              this.isShow2 = false
+              this.isShowNickname = false
             })
         }.size({ width: '100%', height: $r('app.float.vp_56') })
         .padding({ top: $r('app.float.vp_8'), bottom: $r('app.float.vp_8') })
@@ -169,19 +167,29 @@ export struct EditPersonalCenter {
         .padding({ top: $r('app.float.vp_12'), bottom: $r('app.float.vp_12') })
         .margin({ top: this.keyboardHeight ? 208 : 480 })
         .onClick(() => {
-          if (this.textName !== '' && this.textName.length <= 12) {
+          if (this.textName.trim() !== '' && this.textName.length <= 12) {
             this.logoUser.name = this.textName
-            promptAction.showToast({ message: '昵称修改成功', duration: 2000 });
-            this.isShow2 = false
-          } else if (this.textName === '') {
-            promptAction.showToast({ message: '您还未填写', duration: 2000 });
+            this.showToast('昵称修改成功');
+            this.isShowNickname = false
+          } else if (this.textName.trim() === '') {
+            this.showToast('您还未填写');
           } else {
-            promptAction.showToast({ message: '昵称禁止超过12位', duration: 2000 });
+            this.showToast('昵称禁止超过12位');
           }
         })
     }
     .height('100%')
     .padding({ top: $r('app.float.vp_8'), left: $r('app.float.vp_16'), right: $r('app.float.vp_16') })
+  }
+
+  showToast(message: string) {
+    try {
+      this.getUIContext().getPromptAction().showToast({
+        message: message,
+        duration: 2000
+      });
+    } catch (error) {
+    }
   }
 
   build() {
@@ -200,15 +208,15 @@ export struct EditPersonalCenter {
             .size({ width: $r('app.float.vp_24'), height: $r('app.float.vp_24') })
         }
         .onClick(() => {
-          this.isShow = true;
+          this.isShowIcon = true;
         })
         .size({ width: 328, height: 64 })
         .margin({ top: '8vp' })
         .backgroundColor($r('sys.color.font_on_primary'))
         .padding($r('app.float.vp_12'))
         .borderRadius(16)
-        .bindSheet($$this.isShow, this.myBuilder(), {
-          height: this.sheetHeight,
+        .bindSheet($$this.isShowIcon, this.myBuilder(), {
+          height: this.iconSheetHeight,
           backgroundColor: $r('sys.color.background_secondary'),
           showClose: false,
           maskColor: $r('sys.color.mask_fourth'),
@@ -230,14 +238,13 @@ export struct EditPersonalCenter {
           }.size({ width: 328, height: 58 })
           .padding({ left: $r('app.float.vp_12'), right: $r('app.float.vp_12') })
           .onClick(() => {
-            this.isShow2 = true;
+            this.isShowNickname = true;
           })
-          .bindSheet($$this.isShow2, this.myBuilder2(), {
-            height: this.sheetHeight2,
+          .bindSheet($$this.isShowNickname, this.myBuilder2(), {
+            height: this.nicknameSheetHeight,
             backgroundColor: $r('sys.color.background_secondary'),
             showClose: false,
             maskColor: $r('sys.color.mask_fourth'),
-            keyboardAvoidMode: SheetKeyboardAvoidMode.TRANSLATE_AND_RESIZE
           })
 
           Divider().strokeWidth(0.5).width(304).color($r('sys.color.comp_divider'))

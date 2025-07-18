@@ -32,7 +32,7 @@ import { Decimal } from '@kit.ArkTS';
 export struct ConfirmOrderPage {
   @StorageProp('myCar') myCar: GetMyCarResp = new GetMyCarResp()
   @StorageLink('tableId') tableId: string = ''
-  @StorageLink('dinerNum') dinerNum: ResourceStr = ''
+  @StorageLink('dinerNum') dinerNum: string = ''
   @StorageLink('storeType') storeType: number = 1
   @StorageProp('tableList') tableList: Array<TableTitle> = []
   @Consume('pageStack') pageStack: NavPathStack
@@ -137,11 +137,11 @@ export struct ConfirmOrderPage {
     this.tableSheetShow = false
   }
 
-  confirmDiner(select: ResourceStr) {
+  confirmDiner(select: string) {
     if (select) {
       this.dinerNum = select;
     } else {
-      this.dinerNum = this.dinerNum || $r('app.string.diner_num_default');
+      this.dinerNum = this.dinerNum || `1人`
     }
     this.dinerSheetShow = false
   }
@@ -174,6 +174,7 @@ export struct ConfirmOrderPage {
       yhqMoney: this.selectCouponMoney,
       couponId: this.selectCouponId,
       orderType: this.orderType,
+      tableware: this.dinerNum,
       mjMoney: this.isNew ? '0' : `${this.reduction}`,
       xyhMoney: this.isNew ? `${this.reduction}` : '0',
       note: this.remarks ? this.remarks : '', // 清除默认备注
@@ -504,7 +505,7 @@ export struct ConfirmOrderPage {
               })
               .bindSheet($$this.dinerSheetShow,
                 CustomSelectSheetBuilder($r('app.string.pick_dinner_num'), $r('app.strarray.diner_num'),
-                  (select: ResourceStr) => {
+                  (select: string) => {
                     this.confirmDiner(select);
                   }, this.dinerNum), {
                   height: 408,

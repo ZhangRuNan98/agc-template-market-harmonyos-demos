@@ -16,18 +16,14 @@
 import { BusinessError } from '@kit.BasicServicesKit';
 import { authentication, shippingAddress } from '@kit.AccountKit';
 import { util } from '@kit.ArkTS';
-import { hilog } from '@kit.PerformanceAnalysisKit';
-
-const TAG = '[AccountUtil]';
 
 @ObservedV2
 export class AccountUtil {
   // 华为收货地址
   public static chooseAddress() {
     try {
-      shippingAddress.chooseAddress(getContext()).then((data: shippingAddress.AddressInfo) => {
+      shippingAddress.chooseAddress(getContext()).then(() => {
         // 开发者处理获取的收货地址信息
-        console.log(JSON.stringify(data))
       }).catch((error: BusinessError) => {
         AccountUtil._dealAllError(error);
       })
@@ -37,7 +33,6 @@ export class AccountUtil {
   }
 
   private static _dealAllError(error: BusinessError): string {
-    console.error(TAG, `Failed to login, errorCode: ${error.code}, errorMsg: ${error.message}`);
     return error.message;
   }
 
@@ -57,11 +52,9 @@ export class AccountUtil {
         // 获取到匿名手机号
         const anonymousPhone = response.data?.extraInfo?.quickLoginAnonymousPhone as string;
         if (anonymousPhone) {
-          hilog.info(0x0000, 'testTag', 'Succeeded in authentication.');
           const quickLoginAnonymousPhone: string = anonymousPhone;
           return quickLoginAnonymousPhone;
         }
-        hilog.info(0x0000, 'testTag', 'Succeeded in authentication. AnonymousPhone is empty.');
         return anonymousPhone;
         // 未获取到匿名手机号需要跳转到应用自定义的登录页面
       }).catch((error: BusinessError) => {

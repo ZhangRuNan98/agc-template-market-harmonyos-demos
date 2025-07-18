@@ -1,5 +1,6 @@
 {
   "app": {
+    // todo 修改元服务包名,
     "bundleName": "com.atomicservice.xxxxxxxxxxx",
     "bundleType": "atomicService",
     "vendor": "example",

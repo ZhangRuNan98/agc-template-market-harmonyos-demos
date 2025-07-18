@@ -21,8 +21,12 @@ export { MaterialDownloadBuilder } from './src/main/ets/pages/MaterialDownload';
 
 export { ChapterPracticeBuilder } from './src/main/ets/pages/ChapterPractice';
 
-export { PrivacyPageBuilder } from './src/main/ets/pages/PrivacyPage';
+export { SearchPageBuilder } from './src/main/ets/pages/SearchIndexPage'
 
-export { TermsOfServicePageBuilder } from './src/main/ets/pages/TermsOfServicePage';
+export { SearchInputBuilder } from './src/main/ets/pages/SearchInputPage'
 
-export { AuthenticationPageBuilder } from './src/main/ets/pages/AuthenticationPage';
+export { SecondListBuilder } from './src/main/ets/pages/SecondListPage';
+
+export { ThirdListBuilder } from './src/main/ets/pages/ThirdListPage';
+
+export { TopicHomePageBuilder } from './src/main/ets/pages/TopicHomePage';

@@ -8,7 +8,7 @@
     "routerMap": "$profile:route_map",
     "requestPermissions": [{
       "name": "ohos.permission.MICROPHONE",
-      "reason": "$string:MICROPHONE_reason",
+      "reason": "$string:microphone_reason",
       "usedScene": {
         "abilities": [
           "EntryAbility"

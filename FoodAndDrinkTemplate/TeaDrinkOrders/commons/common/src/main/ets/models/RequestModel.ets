@@ -24,7 +24,7 @@ export interface CommonReq {
   // 用户UnionID。
   unionId: string;
 
-  // 鸿蒙应用AppId
+  // 鸿蒙APP Id
   hmAppid: string;
 
   // 订单Id

@@ -3,18 +3,19 @@ import { FestivalSolar } from '../components/festivalSolarCard/FestivalSolar';
 import { PersistenceV2 } from '@kit.ArkUI';
 import { CalendarTools } from '../components/calendarTools/CalendarTools';
 import { BaseCalendar } from 'base_calendar';
+import { RouterModule } from 'router_module';
 import dayjs from 'dayjs';
 
 import { BaseCell, YiJiCell } from 'base_apis';
 import { TrafficRestriction } from 'traffic_restriction';
+import { TodayHistory } from 'today_history';
 
 @ComponentV2
 export struct PerpetualCalendar {
   @Local theme: ThemeModel = PersistenceV2.connect(ThemeModel, () => new ThemeModel())!;
   @Local week: WeekStart = PersistenceV2.connect(WeekStart, () => new WeekStart())!;
   calendarVM: CalendarVM = CalendarVM.instance;
-  @Param @Require jumpToAlmanac: () => void = () => {
-  };
+  @Param @Require jumpToAlmanac: () => void = () => {};
 
   aboutToAppear(): void {
     this.calendarVM.getTodayYiJi()
@@ -70,13 +71,6 @@ export struct PerpetualCalendar {
         .padding({ left: 16, right: 16 })
 
         ListItem() {
-          TrafficRestriction({
-            selectDate:new Date(this.calendarVM.selectDate.format('YYYY-MM-DD'))
-          })
-        }
-        .padding({ left: 16, right: 16 })
-
-        ListItem() {
           BaseCell({
             cellTitle: '实用工具',
             customBuilderParam: (): void => this.calendarToolsBuilder(),
@@ -88,8 +82,26 @@ export struct PerpetualCalendar {
           FestivalSolar()
         }
         .padding({ left: 16, right: 16 })
+
+        ListItem() {
+          TrafficRestriction({
+            selectDate:new Date(this.calendarVM.selectDate.format('YYYY-MM-DD'))
+          })
+        }
+        .padding({ left: 16, right: 16 })
+
+        ListItem() {
+          TodayHistory({
+            selectDate:new Date(this.calendarVM.selectDate.format('YYYY-MM-DD')),
+            selectColor:this.theme.themeState.current,
+            titleColor:this.theme.themeState.titleColor,
+            routerModule: RouterModule.getStack(),
+          })
+        }
+        .padding({ left: 16, right: 16 })
+
       }
-      .edgeEffect(EdgeEffect.None)
+      .edgeEffect(EdgeEffect.Spring)
       .scrollBar(BarState.Off)
       .layoutWeight(1)
       .backgroundImage($r('app.media.calender_bg'))
