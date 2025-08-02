@@ -1,3 +1,4 @@
+import { Logger } from '../logger'
 import { RouterModule } from './commonRouter';
 
 @ObservedV2
@@ -20,7 +21,7 @@ export class RouteDetailVM {
     let params: Array<ESObject> | undefined = RouterModule.getNavParam({
       url: ''
     })
-    console.log('test', JSON.stringify(params))
+    Logger.info('test', JSON.stringify(params))
   }
 }
 

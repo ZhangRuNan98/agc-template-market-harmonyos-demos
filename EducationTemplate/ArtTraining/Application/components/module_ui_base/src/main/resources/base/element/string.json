@@ -1,0 +1,12 @@
+{
+  "string": [
+    {
+      "name": "agcit_huawei_art_training_module_ui_base",
+      "value": "1.0.0"
+    },
+    {
+      "name": "agcittype_huawei_art_training_module_ui_base",
+      "value": "serviceComponent"
+    }
+  ]
+}

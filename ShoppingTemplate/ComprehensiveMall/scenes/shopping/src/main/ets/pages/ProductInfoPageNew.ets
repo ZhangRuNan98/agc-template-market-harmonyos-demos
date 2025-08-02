@@ -1,8 +1,8 @@
-import { PersistenceV2, promptAction } from '@kit.ArkUI';
-import { TitleBar, iData, CartDto, PreOrderRequest, routerStack, RouterMap } from 'lib_foundation';
+import { promptAction } from '@kit.ArkUI';
+import { TitleBar, iData, CartDto, PreOrderRequest, routerStack, RouterMap, Style } from 'lib_foundation';
 import { client } from 'lib_network';
-import { MockCart } from 'lib_network/src/main/ets/mock/MockDataMgr';
 import { ProductDetail } from 'module_product_detail';
+import { ProductResource, ProductShare } from 'module_product_share';
 
 @ComponentV2
 export struct ProductInfoNewPage {
@@ -12,16 +12,43 @@ export struct ProductInfoNewPage {
   isLogin: boolean = iData.global.isLogin;
   @Local
   cartNum: number = iData.global.cartTotal;
+  @Local
+  productResource: ProductResource | undefined = undefined;
 
   build() {
     NavDestination() {
-      TitleBar();
+      TitleBar() {
+        Row() {
+          Text('商品详情')
+            .fontSize(Style.FONT_SIZE_20)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(Style.FONT_COLOR_LEVEL1);
+
+          if (this.productResource) {
+            ProductShare({
+              customUI: this.shareIconBuilder,
+              productResource: this.productResource,
+            });
+          }
+        }
+        .justifyContent(FlexAlign.SpaceBetween)
+        .width('100%')
+        .padding({ right: 16 });
+      };
 
       if (this.productId) {
         ProductDetail({
           isLogin: this.isLogin,
           productId: this.productId,
           cartProdNum: this.cartNum,
+          getProductInfo: (data) => {
+            this.productResource = {
+              image: data.banners[0],
+              title: data.title,
+              price: Number(data.price),
+              url: `http://test/${data.id}/${data.title}`,
+            };
+          },
           clickCart: () => {
             routerStack.pushPath({ name: RouterMap.PRODUCT_CART });
           },
@@ -63,6 +90,13 @@ export struct ProductInfoNewPage {
     .onShown(() => {
       this.getCartNum();
     });
+  }
+
+  @Builder
+  shareIconBuilder() {
+    Image($r('app.media.ic_share'))
+      .width(40)
+      .height(40);
   }
 
   async getCartNum() {

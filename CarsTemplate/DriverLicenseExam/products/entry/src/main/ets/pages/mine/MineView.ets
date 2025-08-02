@@ -26,7 +26,6 @@ class DividerTmp {
   }
 }
 
-@Entry
 @ComponentV2
 export struct MineView {
   @Param didCount: number = 0;
@@ -173,7 +172,7 @@ export struct MineView {
       }
       if (AccountUtil.getAccountInfo().idToken === '') {
         // 真实登录，mock场景先注释
-        // AccountUtil.quickLogin();
+        AccountUtil.quickLogin();
         // this.jumpLoginPage(AccountUtil.getAccountInfo().quickLoginAnonymousPhone);
         // mock登录，真实使用场景需删除
         this.jumpLoginPage('a000******00');

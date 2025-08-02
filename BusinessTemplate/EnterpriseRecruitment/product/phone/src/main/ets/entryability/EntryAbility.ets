@@ -1,11 +1,24 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import { AppStorageV2, window } from '@kit.ArkUI';
+import { AppStorageV2, display, window } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { AvoidArea } from '@ohos_agcit/common_component';
+import { AvoidArea, BreakPoint, BreakPointController } from '@ohos_agcit/common_component';
 
 
 export default class EntryAbility extends UIAbility {
+  private breakPointController: BreakPointController = BreakPointController.instance;
+  private updateBreakpoint(windowWidth: number): void {
+    let windowWidthVp = windowWidth / display.getDefaultDisplaySync().densityPixels;
+    if (windowWidthVp < 600) {
+      this.breakPointController.currentBreakPoint = BreakPoint.SM
+    } else if (windowWidthVp < 840) {
+      this.breakPointController.currentBreakPoint = BreakPoint.MD
+    }
+    // else {
+    //   this.breakPointController.currentBreakPoint = 'lg';
+    // }
+  }
+
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     // 获取UIAbility实例的上下文
     let context = this.context;
@@ -16,18 +29,18 @@ export default class EntryAbility extends UIAbility {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
   }
 
+  private windowObj?: window.Window;
   onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
-    // 获取eventHub
-    let eventhub = this.context.eventHub;
-    // 执行订阅操作
-    eventhub.on('event1', this.eventFunc);
-    eventhub.on('event1', (data: string) => {
-      // 触发事件，完成相应的业务操作
+    windowStage.getMainWindow().then((windowObj) => {
+      this.windowObj = windowObj;
+      this.updateBreakpoint(windowObj.getWindowProperties().windowRect.width);
+      windowObj.on('windowSizeChange', (windowSize) => {
+        this.updateBreakpoint(windowSize.width);
+      })
     });
-
 
     let windowClass: window.Window | undefined = undefined;
     windowStage.getMainWindow((err: BusinessError, data) => {
@@ -98,11 +111,6 @@ export default class EntryAbility extends UIAbility {
   onBackground(): void {
     // Ability has back to background
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
-  }
-
-  eventFunc(argOne: Context, argTwo: Context): void {
-    hilog.info(0x0000, 'testTag', '1. ' + `${argOne}, ${argTwo}`);
-    return;
   }
 }
 

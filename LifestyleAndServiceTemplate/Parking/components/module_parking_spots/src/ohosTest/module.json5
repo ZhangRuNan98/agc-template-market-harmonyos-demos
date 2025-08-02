@@ -1,0 +1,11 @@
+{
+  "module": {
+    "name": "module_parking_spots_test",
+    "type": "feature",
+    "deviceTypes": [
+      "default"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": true
+  }
+}

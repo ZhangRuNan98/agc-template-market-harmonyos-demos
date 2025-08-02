@@ -1,4 +1,6 @@
-import { AccountUtil, FormCardRouteInfo, RouterMap, RouterModule, WindowConfig } from 'commonlib';
+import { AccountUtil, FormCardRouteInfo, RouterMap, RouterModule,
+  ScheduleConfigUtil,
+  WindowConfig } from 'commonlib';
 import { CardWrapper, ComponentConst, LoadingComponentWrapper, SegmentButtonAdapter, NavigateBar,
   SimpleCapsuleButton } from 'componentlib';
 import { ClassSignInButton } from '../component/ClassSignInButton';
@@ -7,7 +9,7 @@ import { ItemRestriction, SegmentButtonOptions, SegmentButtonTextItem } from '@o
 import { SimpleCourseInfo } from 'network/src/main/ets/models/response/QueryDayCourseResp';
 import { DayCourseInfoCard } from '../component/DayCourseInfoCard';
 import { AppStorageV2, promptAction } from '@kit.ArkUI';
-
+import { goToCheckinPage } from 'module_secure_checkin';
 
 @Builder
 export function homePageBuilder() {
@@ -25,24 +27,16 @@ struct HomePage {
   @Monitor('formCardRouteInfo.path')
   formRoute(monitor: IMonitor) {
     const routePath = monitor.value()?.now as string ?? '';
+    this.formCardRouteInfo.path = '';
     if (routePath === '') {
       return;
     }
     if (routePath === RouterMap.HOME) {
       RouterModule.clear();
       this.mainTabController.changeIndex(0);
-      return;
+    } else if (routePath === RouterMap.CLASS_SIGN_IN) {
+      this.doCheckin();
     }
-    if (!AccountUtil.getUserInfo().avatar) {
-      RouterModule.clear();
-      this.mainTabController.changeIndex(1);
-      promptAction.showToast({
-        message: '签到功能需关联华为账号',
-      });
-    } else {
-      RouterModule.updateFormStack(routePath);
-    }
-    this.formCardRouteInfo.path = '';
   }
 
   courseTabOptions: SegmentButtonOptions = SegmentButtonOptions.tab({
@@ -105,16 +99,7 @@ struct HomePage {
 
             // 签到按钮
             ClassSignInButton()
-              .onClick(() => {
-                if (AccountUtil.getUserInfo().avatar) {
-                  RouterModule.push({ url: RouterMap.CLASS_SIGN_IN });
-                } else {
-                  this.mainTabController.changeIndex(1);
-                  promptAction.showToast({
-                    message: '签到功能需关联华为账号',
-                  });
-                }
-              })
+              .onClick(() => this.doCheckin())
           }
           .alignItems(HorizontalAlign.Start)
           .width(ComponentConst.FULL_PARENT)
@@ -149,6 +134,7 @@ struct HomePage {
     .alignItems(HorizontalAlign.Start)
     .width(ComponentConst.FULL_PARENT)
     .height(ComponentConst.FULL_PARENT)
+    .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
   @Builder courseTabBuilder() {
@@ -310,5 +296,36 @@ struct HomePage {
     this.courseTabIndex = index;
     const curCourseList = index === 0 ? this.vm.todayCourseList : this.vm.tomorrowCourseList;
     this.courseInfoList = curCourseList ?? [];
+  }
+
+  private doCheckin(): void {
+    if (AccountUtil.getUserInfo().avatar) {
+      let currentCourse: SimpleCourseInfo | null = null;
+      if (this.vm.todayCourseList && this.vm.todayCourseList.length > 0) {
+        const now = new Date();
+        for (const course of this.vm.todayCourseList) {
+          const range = ScheduleConfigUtil.getDayScheduleDate(course.daySchedule, now);
+          const startTime = range.first.getTime();
+          const endTime = range.second.getTime();
+          if (startTime <= now.getTime() && endTime > now.getTime()) {
+            currentCourse = course;
+            break;
+          }
+        }
+      }
+      if (currentCourse) {
+        goToCheckinPage(RouterModule.getStack(), {
+          courseId: '',
+          courseName: currentCourse.courseName,
+          studentId: ''
+        });
+      } else {
+        promptAction.showToast({ message: '当前无课程安排' });
+      }
+    } else {
+      RouterModule.clear();
+      this.mainTabController.changeIndex(1);
+      promptAction.showToast({ message: '签到功能需关联华为账号' });
+    }
   }
 }

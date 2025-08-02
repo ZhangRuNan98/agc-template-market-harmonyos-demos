@@ -26,7 +26,10 @@ export class Constants {
   public static readonly SPEECH_ROUTE = 'speech'
   public static readonly PERSON_ROUTE = 'person';
   public static readonly SEARCH_ROUTE = 'search';
+  public static readonly MESSAGE_PAGE_ROUTE = 'message_page';
   public static readonly LOGIN_ROUTE = 'login';
+  public static readonly WELFARE_CENTER = 'WelfareCenter';
+  public static readonly GROUP_ROUTE = 'group_detail';
   public static readonly MEMBER_CENTER_ROUTE = 'member_center';
   public static readonly MEMBER_AGREEMENT_ROUTE = 'member_agreement';
   public static readonly RECHARGE_ROUTE = 'recharge';
@@ -36,6 +39,12 @@ export class Constants {
   public static readonly ISSUE_AND_FEEDBACK_ROUTE = 'issue_and_feedback';
   public static readonly DATA_COLLECTION_ROUTE = 'data_collection';
   public static readonly DATA_SHARING_ROUTE = 'data_sharing';
+  public static readonly READ_SETTING_ROUTE = 'read_setting';
+  public static readonly WRITE_REVIEW_ROUTE = 'write_review';
+  public static readonly ALL_REVIEW_ROUTE = 'all_review';
+  public static readonly WRITE_COMMENT_ROUTE = 'write_comment';
+  public static readonly WONDERFUL_REVIEW_ROUTE = 'wonderful_review';
+  public static readonly MY_EVALUATION_ROUTE = 'my_evaluation';
   public static readonly HTTP_GET = 'GET';
   public static readonly HTTP_POST = 'POST';
   public static readonly HTTP_PUT = 'PUT';
@@ -49,11 +58,18 @@ export class Constants {
   public static readonly API_GET_USER_INFO_PATH: string = '/user/info';
   public static readonly API_GET_BOOK_HISTORY_PATH: string = '/book/history';
   public static readonly API_GET_BOOK_CATEGORY_PATH: string = '/book/categoryList';
+  public static readonly API_GET_BOOK_LIKE_PATH: string = '/book/like';
+  public static readonly API_GET_BOOK_GROUP_PATH: string = '/book/group';
   public static readonly MIN_SCREEN_BRIGHT = 0;
   public static readonly MAX_SCREEN_BRIGHT = 1;
   public static readonly MIN_FONT_SIZE = 50;
   public static readonly MAX_FONT_SIZE = 80;
   public static readonly MIN_PAGE_NUM = 0;
+  public static readonly FULL_WIDTH: string = '100%';
+  public static readonly FULL_HEIGHT: string = '100%';
+  public static readonly CUSTOM_SLIDER_WIDTH: string = '15%';
+  public static readonly CUSTOM_SLIDER_HEIGHT: string = '10%';
+  public static readonly DATE: string = '今天';
   public static readonly SWIPER_CHANGE: emitter.InnerEvent = {
     eventId: 10
   };
@@ -65,6 +81,12 @@ export class Constants {
   }
   public static readonly LOGIN_CHANGE: emitter.InnerEvent = {
     eventId: 13
+  }
+  public static readonly COINS_CHANGE: emitter.InnerEvent = {
+    eventId: 14
+  }
+  public static readonly COINS_AD: emitter.InnerEvent = {
+    eventId: 15
   }
   public static readonly TAB_INDEX_ZERO: number = 0;
   public static readonly TAB_INDEX_ONE: number = 1;

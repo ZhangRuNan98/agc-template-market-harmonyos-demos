@@ -7,5 +7,7 @@
   "license": "Apache-2.0",
   "packageType": "InterfaceHar",
   "dependencies": {
+    "file_management": "file:../../components/file_management",
+    "ui_steps": "file:../../components/ui_steps"
   }
 }

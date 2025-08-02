@@ -2,7 +2,6 @@ import { CourseExpireTypeMap, CoursePaymentMap, CourseStatusMap, CourseTypeMap }
 import { CourseInfo } from '../types/Index';
 import { FormatUtil } from './FormatUtil';
 
-
 export class CourseUtil {
   public static getExpireLabel(courseInfo: CourseInfo | undefined | null) {
     if (courseInfo?.expireType === CourseExpireTypeMap.LONG_TERM) {

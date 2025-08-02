@@ -1,6 +1,6 @@
-import { SearchSet } from 'common';
-import { getDataFromJSON } from 'common';
+import { getDataFromJSON } from 'common'
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
+import { SearchSet } from 'route_detail'
 
 export function generateRandomNumber(minNum: number, maxNum: number): number {
   let rand = cryptoFramework.createRandom();
@@ -10,7 +10,6 @@ export function generateRandomNumber(minNum: number, maxNum: number): number {
     let randomValue = randBuffer[0] / 0xFFFFFFFF;
     return Math.floor(randomValue * (maxNum - minNum + 1)) + minNum
   } else{
-    console.log('生成随机数失败');
     return 0;
   }
 }

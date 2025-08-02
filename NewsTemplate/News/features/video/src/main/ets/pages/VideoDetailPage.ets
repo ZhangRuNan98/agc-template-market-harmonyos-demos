@@ -1,8 +1,6 @@
+import { AppStorageV2, promptAction, window } from '@kit.ArkUI';
+import { LoginModel } from 'commonlib';
 import { VideoViewVm } from '../viewModels/VideoViewVm';
-import { mediaquery, promptAction, window } from '@kit.ArkUI';
-import { BusinessError } from '@kit.BasicServicesKit';
-import { BaseTitle } from 'componentlib';
-import { RouterModule } from 'commonlib';
 
 @Builder
 export function videoDetailPageBuilder() {
@@ -21,12 +19,7 @@ export struct VideoDetailPage {
     'https://agc-storage-drcn.platform.dbankcloud.cn/v0/default-bucket-nkths/videoTest.mp4?token=b7c7a44b-894f-45ee-9c56-33c41350c570';
   controller: VideoController = new VideoController()
   @Local isFullScreen: boolean = false
-
-  aboutToAppear(): void {
-  }
-
-  aboutToDisappear(): void {
-  }
+  loginInfo: LoginModel = AppStorageV2.connect(LoginModel, () => new LoginModel())!
 
   handlerOrientation(type: number) {
     window.getLastWindow(getContext(this), (err, win) => {
@@ -40,6 +33,7 @@ export struct VideoDetailPage {
     Row() {
       CommentItemView({
         img: this.collectFlag ? $r('app.media.heart_collect') : $r('app.media.collect'),
+        actived: this.collectFlag,
         label: '收藏',
         onClickEvent: () => {
           this.collectFlag = !this.collectFlag
@@ -64,7 +58,7 @@ export struct VideoDetailPage {
       })
     }
     .width('100%')
-    .backgroundColor(Color.White)
+    .backgroundColor($r('app.color.bgc'))
     .padding({
       left: 16, top: 10, bottom: 10, right: 16,
     })
@@ -102,11 +96,11 @@ export struct VideoDetailPage {
           Text('xx新闻')
             .fontSize(`${12 + this.vm.changeFontSize}`)
             .fontWeight('regular')
-            .fontColor('#66000000')
+            .fontColor('#FF989898')
           Text('2025-04-06 21.00.00')
             .fontSize(`${12 + this.vm.changeFontSize}`)
             .fontWeight('regular')
-            .fontColor('#66000000')
+            .fontColor('#FF989898')
         }
 
         Image($r('app.media.ic_fengjing_01'))
@@ -137,6 +131,7 @@ export struct VideoDetailPage {
         .width('100%')
         .align(Alignment.Top)
         .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring)
 
         this.Comment()
       }
@@ -155,6 +150,7 @@ struct CommentItemView {
   vm: VideoViewVm = VideoViewVm.instance;
   @Param label: string = ''
   @Param img: ResourceStr = ''
+  @Param actived: boolean = false
   @Event onClickEvent: () => void = () => {}
 
   build() {
@@ -162,12 +158,14 @@ struct CommentItemView {
       Image(this.img)
         .width(24)
         .height(24)
+        .fillColor(this.actived ? $r('app.color.collect_icon_active') : $r('sys.color.icon_primary'))
         .onClick(() => {
           this.onClickEvent && this.onClickEvent()
         })
       Text(this.label)
         .fontSize(`${10 + this.vm.changeFontSize}`)
         .fontWeight(FontWeight.Regular)
+        .fontColor($r('sys.color.font_primary'))
     }
   }
 }

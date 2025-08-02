@@ -8,6 +8,9 @@
   "dependencies": {
     "utils": "file:../../commons/utils",
     "external_interactions": "file:../../commons/external_interactions",
-    "uicomponents": "file:../../commons/uicomponents"
+    "uicomponents": "file:../../commons/uicomponents",
+    "category_list": "file:../../components/category_list",
+    "bluetooth_scan": "file:../../components/bluetooth_scan",
+    "wifi_scan": "file:../../components/wifi_scan"
   }
 }

@@ -1,24 +1,24 @@
 export class JobListItem {
-  jobId: string
+  id: string
   recruitmentTag: number
-  jobName: string
+  name: string
   address: number
   jobType: string
   publishTime: string
   recruitmentType: number
-  responsibility: string
+  responsibilities: string
   requirements: string
 
-  constructor(jobId: string, recruitmentTag: number, jobName: string, address: number, jobType: string,
-    publishTime: string, recruitmentType: number, responsibility: string, requirements: string) {
-    this.jobId = jobId
-    this.recruitmentTag = recruitmentTag
-    this.jobName = jobName
-    this.address = address
-    this.jobType = jobType
-    this.publishTime = publishTime
-    this.recruitmentType = recruitmentType
-    this.responsibility = responsibility
-    this.requirements = requirements
+  constructor(id: string, recruitmentTag: number, name: string, address: number, jobType: string,
+    publishTime: string, recruitmentType: number, responsibilities: string, requirements: string) {
+    this.id = id;
+    this.recruitmentTag = recruitmentTag;
+    this.name = name;
+    this.address = address;
+    this.jobType = jobType;
+    this.publishTime = publishTime;
+    this.recruitmentType = recruitmentType;
+    this.responsibilities = responsibilities;
+    this.requirements = requirements;
   }
 }

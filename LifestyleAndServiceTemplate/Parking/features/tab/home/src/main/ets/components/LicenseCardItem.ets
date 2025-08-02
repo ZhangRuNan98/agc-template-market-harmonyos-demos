@@ -1,9 +1,9 @@
-import { CommonConstants, FormatUtil, IOrder, OrderStatus, RouterMap, RouterModule } from 'commonlib';
-import { AssociateUtil } from 'componentlib';
+import { CommonConstants, FormatUtil, IOrder, OrderStatus, RouterMap, RouterModule } from 'common';
 import { HomePageVM } from '../viewmodels/HomePageVM';
 import { emitter } from '@kit.BasicServicesKit';
-import { MenuItem } from '../types';
-import { MENU_LIST } from '../constants';
+import { MenuItem } from '../types/Types';
+import { MENU_LIST } from '../constants/Constants';
+import { AssociateUtil } from 'network';
 
 @ComponentV2
 export struct LicenseCardItem {
@@ -132,15 +132,14 @@ export struct LicenseCardItem {
         'left': { 'anchor': '__container__', 'align': HorizontalAlign.Start },
       })
 
-      Button() {
-        Row({ space: 4 }) {
-          Image($r('app.media.ic_query')).width(16)
-          Text(this.order?.status === OrderStatus.PENDING ? '等待出场' : '查询缴费')
-            .fontSize($r('sys.float.Body_M'))
-            .fontColor($r('sys.color.background_primary'))
-        }
+      Row({ space: 4 }) {
+        Image($r('app.media.ic_query')).width(16)
+        Text(this.order?.status === OrderStatus.PENDING ? '等待出场' : '查询缴费')
+          .fontSize($r('sys.float.Body_M'))
+          .fontColor($r('sys.color.background_primary'))
       }
       .backgroundColor($r('app.color.btn_blue1'))
+      .borderRadius('50%')
       .padding({
         left: 9,
         right: 9,

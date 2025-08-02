@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance } from '@ohos/axios';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { HttpRequestConfig, InterceptorHooks } from '../types/HttpRequestConfig';
 import { replaceMockData } from '../mocks/MockRequestMap';
-import { Logger } from 'commonlib';
+import { Logger } from 'common';
 
 /**
  * 网络请求构造

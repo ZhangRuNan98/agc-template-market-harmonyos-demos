@@ -1,12 +1,20 @@
 {
   "string": [
     {
+      "name": "app_name",
+      "value": "企业直招"
+    },
+    {
       "name": "agcit_huawei_enterprise_recruitment",
-      "value": "1.0.0"
+      "value": "2.0.0"
     },
     {
       "name": "agcittype_huawei_enterprise_recruitment",
       "value": "industryTemplate"
+    },
+    {
+      "name": "agcitkid_huawei_enterprise_recruitment",
+      "value": "agcit_huawei_enterprise_recruitment_file_management/1.0.0,agcit_huawei_enterprise_recruitment_message_manager/1.0.0,agcit_huawei_enterprise_recruitment_check_app_update/1.0.0"
     }
   ]
 }

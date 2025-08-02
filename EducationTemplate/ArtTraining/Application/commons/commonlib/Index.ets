@@ -38,9 +38,6 @@ export { TelUtil } from './src/main/ets/utils/TelUtil';
 // 格式化工具
 export { FormatUtil } from './src/main/ets/utils/FormatUtil';
 
-// 多媒体选择工具
-export { PickerUtil, PickerResourceType, PickerPreviewItem } from './src/main/ets/utils/PickerUtil';
-
 // 窗口工具
 export { WindowUtil } from './src/main/ets/utils/WindowUtil';
 

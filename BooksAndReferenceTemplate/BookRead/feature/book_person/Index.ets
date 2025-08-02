@@ -16,16 +16,6 @@ export { AboutPage } from './src/main/ets/views/AboutPage';
 
 export { PrivacyPage } from './src/main/ets/views/PrivacyPage';
 
-export { MemberCenterPage } from './src/main/ets/views/MemberCenterPage';
-
-export { MemberAgreementPage } from './src/main/ets/views/MemberAgreementPage';
-
-export { RechargePage } from './src/main/ets/views/RechargePage';
-
-export { RechargeRecordPage } from './src/main/ets/views/RechargeRecordPage';
-
-export { MembershipCard } from './src/main/ets/comp/MembershipCard';
-
 export { ActivityPage } from './src/main/ets/views/ActivityPage';
 
 export { PreferencePage } from './src/main/ets/views/PreferencePage';
@@ -41,3 +31,19 @@ export { PrivacyPolicyPage } from './src/main/ets/views/PrivacyPolicyPage';
 export { DataCollectionPage } from './src/main/ets/views/DataCollectionPage';
 
 export { DataSharingPage } from './src/main/ets/views/DataSharingPage';
+
+export { WelfareCenter } from './src/main/ets/views/WelfareCenter'
+
+export { ReadSettingPage } from './src/main/ets/views/ReadSettingPage';
+
+export { messagePage } from './src/main/ets/views/messagePage'
+
+export { RechargePage } from './src/main/ets/views/RechargePage';
+
+export { RechargeRecordPage } from './src/main/ets/views/RechargeRecordPage';
+
+export { MemberCenterPage } from './src/main/ets/views/MemberCenterPage';
+
+export { MemberAgreementPage } from './src/main/ets/views/MemberAgreementPage';
+
+export { MembershipCard } from './src/main/ets/comp/MembershipCard';

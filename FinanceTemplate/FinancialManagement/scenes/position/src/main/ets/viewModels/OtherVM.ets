@@ -1,9 +1,6 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, UserInfoModel, } from 'commonlib';
-import { IUserAccount } from 'network/src/main/ets/types/responseTypes/GetUserAccountResp';
-import { MockStorageMap } from 'network/src/main/ets/mocks/Constants';
-
-const TAG = '[OtherVM]';
+import { https, IUserAccount, MockStorageMap } from 'lib_foundation';
+import { AccountUtil, RouterModule, UserInfoModel, } from 'module_base';
+import { emitter } from '@kit.BasicServicesKit';
 
 @ObservedV2
 export class OtherVM {
@@ -54,5 +51,17 @@ export class OtherVM {
       accumulatedEarnings: 0,
     }
     AppStorage.setOrCreate<IUserAccount>(MockStorageMap.USER_ACCOUNT, account);
+  }
+
+  public async logout() {
+    await https.userLogout();
+    AppStorage.set<boolean>('isLogin', false)
+    let data: emitter.EventData = {
+      data: {
+        isLogin: false,
+      }
+    };
+    emitter.emit('isLogin', data);
+    RouterModule.pop()
   }
 }

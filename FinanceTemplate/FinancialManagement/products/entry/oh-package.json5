@@ -1,0 +1,17 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "business_home": "file:../../scenes/business_home",
+    "business_mine": "file:../../scenes/business_mine",
+    "@ohos/axios": "^2.2.4",
+    "lib_foundation": "file:../../commons/lib_foundation",
+    "@hw-agconnect/ui-base": "^1.0.0",
+    "module_base": "file:../../components/module_base"
+  }
+}
+

@@ -1,6 +1,6 @@
-import { CommonConstants, EmitterConstants, WidgetUtil, RouterModule } from 'commonlib';
-import { TabStyle } from '../constants';
-import { TabListItem } from '../types/index';
+import { CommonConstants, EmitterConstants, RouterModule, WidgetUtil } from 'common';
+import { TabStyle } from '../constants/Constatns';
+import { TabListItem } from '../types/Types';
 import { MainEntryVM } from '../viewmodels/MainEntryVM';
 import { emitter } from '@kit.BasicServicesKit';
 
@@ -15,6 +15,7 @@ struct MainEntry {
     });
     WidgetUtil.subscribeFormId(getContext());
     await this.vm.init(this.getUIContext());
+    this.vm.pageJump();
   }
 
   build() {

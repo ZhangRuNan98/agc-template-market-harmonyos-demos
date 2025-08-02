@@ -35,7 +35,9 @@ export struct OrderDetailPage {
           .layoutWeight(1)
           .backgroundColor($r('app.color.system_color_background_auxiliary'));
         }
-        .layoutWeight(1);
+        .layoutWeight(1)
+        .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring)
 
         this.bottomButtonBuilder();
       }
@@ -109,7 +111,7 @@ export struct OrderDetailPage {
   @Builder
   studentCardBuilder() {
     Column() {
-      Text('学员信息').cardTitleStyle();
+      Text('预订信息').cardTitleStyle();
       CommonDivider();
       if (this.vm.orderInfo) {
         Row() {
@@ -121,6 +123,13 @@ export struct OrderDetailPage {
           Text('手机号码').cardLabelStyle();
           Text(this.vm.orderInfo.phone).cardContentStyle();
         }.cardFormRowStyle();
+
+        Row() {
+          Text('备注').cardLabelStyle();
+          Text(this.vm.orderInfo.remark).cardContentStyle();
+        }
+        .cardFormRowStyle()
+
       }
 
     }.cardContainerStyle();
@@ -216,6 +225,7 @@ function cardTitleStyle() {
 function cardFormRowStyle() {
   .width($r('app.string.width_percent_full'))
   .justifyContent(FlexAlign.Start)
+  .alignItems(VerticalAlign.Top)
   .margin({
     top: $r('app.string.margin_xs'),
     bottom: $r('app.string.margin_xs'),
@@ -226,7 +236,8 @@ function cardFormRowStyle() {
 function cardLabelStyle() {
   .fontSize($r('app.string.font_size_12'))
   .fontColor($r('app.color.font_color_level1'))
-  .margin({ right: $r('app.string.margin_l') });
+  .margin({ right: $r('app.string.margin_l') })
+  .width(50)
 }
 
 @Extend(Text)

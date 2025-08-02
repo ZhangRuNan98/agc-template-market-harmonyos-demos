@@ -6,11 +6,15 @@
     },
     {
       "name": "agcit_huawei_smart_home",
-      "value": "1.0.0"
+      "value": "2.0.0"
     },
     {
       "name": "agcittype_huawei_smart_home",
       "value": "industryTemplate"
+    },
+    {
+      "name": "agcitkid_huawei_smart_home",
+      "value": "agcit_huawei_smart_home_bluetooth_scan/1.0.0,agcit_huawei_smart_home_category_list/1.0.0,agcit_huawei_smart_home_form_bar/1.0.0,agcit_huawei_smart_home_message_list/1.0.0,agcit_huawei_smart_home_wifi_scan/1.0.0"
     }
   ]
 }

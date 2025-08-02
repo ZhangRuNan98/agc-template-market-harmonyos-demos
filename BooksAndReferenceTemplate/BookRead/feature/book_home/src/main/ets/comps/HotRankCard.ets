@@ -81,6 +81,7 @@ export struct HotRankCard {
       }
       .listDirection(Axis.Vertical) // 排列方向
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring)
       .cachedCount(3)
       .layoutWeight(1)
       .backgroundColor('#FFF5F5')

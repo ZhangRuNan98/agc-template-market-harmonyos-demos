@@ -20,7 +20,6 @@
         "startWindowIcon": "$media:app_icon",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
-        "supportWindowMode": ["fullscreen"],
         "skills": [
           {
             "entities": [
@@ -75,6 +74,7 @@
     ],
     "metadata": [
       {
+        // todo
         "name": "client_id",
         "value": "xxxxx"
         // Client ID

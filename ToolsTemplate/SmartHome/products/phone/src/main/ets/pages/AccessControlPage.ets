@@ -1,4 +1,4 @@
-import { AccessSettingBarView } from 'uicomponents';
+import { FormBar, FormType } from 'form_bar';
 import { Constants } from 'utils';
 import { AccessControlViewModel } from '../viewmodel/AccessControlViewModel';
 
@@ -20,7 +20,8 @@ export struct AccessControlPage {
 
   @Builder
   BuildBluetooth() {
-    AccessSettingBarView({
+    FormBar({
+      formType: FormType.ACCESS_SETTING,
       startImage: $r('app.media.bluetooth'),
       name: '蓝牙',
       value: this.accessControlViewModel.bluetoothAccess ? '已授权' : '未授权',

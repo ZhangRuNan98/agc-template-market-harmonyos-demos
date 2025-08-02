@@ -65,6 +65,7 @@ export interface OrderInfo {
   student: string;
   phone: string;
   courseInfo: CourseInfo;
+  remark?: string
 }
 
 export interface TaskRequirement {

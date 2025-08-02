@@ -1,10 +1,10 @@
 import { Permissions } from '@kit.AbilityKit';
-import { PermissionUtil } from './PermissionUtil';
-import { calendarManager } from '@kit.CalendarKit';
-import { WindowUtil } from './WindowUtil';
-import { Logger } from './Logger';
-import { BusinessError } from '@kit.BasicServicesKit';
 import { promptAction } from '@kit.ArkUI';
+import { BusinessError } from '@kit.BasicServicesKit';
+import { calendarManager } from '@kit.CalendarKit';
+import { Logger } from './Logger';
+import { PermissionUtil } from './PermissionUtil';
+import { WindowUtil } from './WindowUtil';
 
 const TAG = '[CalendarUtil]';
 
@@ -42,12 +42,15 @@ export class CalendarUtil {
     };
 
     const calendar = await calendarMgr.getCalendar();
-    return calendar.addEvent(event).then((data: number) => {
-      Logger.info(TAG, `Succeeded in adding event, id -> ${data}`);
-      return true;
-    }).catch((err: BusinessError) => {
-      Logger.error(TAG, `Failed to addEvent. Code: ${err.code}, message: ${err.message}`);
-      return false;
-    });
+    return calendar
+      .addEvent(event)
+      .then((data: number) => {
+        Logger.info(TAG, `Succeeded in adding event, id -> ${data}`);
+        return true;
+      })
+      .catch((err: BusinessError) => {
+        Logger.error(TAG, `Failed to addEvent. Code: ${err.code}, message: ${err.message}`);
+        return false;
+      });
   }
 }

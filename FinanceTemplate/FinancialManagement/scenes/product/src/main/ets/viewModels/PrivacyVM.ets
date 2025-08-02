@@ -1,7 +1,5 @@
-import { RouterMap, RouterModule } from 'commonlib';
+import { RouterMap, RouterModule } from 'module_base';
 import { privacyProduct } from '../constants';
-
-const TAG = '[PrivacyVM]';
 
 @ObservedV2
 export class PrivacyVM {

@@ -2,15 +2,15 @@ import {
   AddressModel,
   AddressType,
   AddressUtil,
-  AppStorageMap,
   CommonConstants,
   EmitterConstants,
   RouterMap,
   RouterModule,
-} from 'commonlib';
-import { AssociateUtil } from 'componentlib';
+} from 'common';
 import { HomePageVM } from '../viewmodels/HomePageVM';
 import { emitter } from '@kit.BasicServicesKit';
+import { AssociateUtil } from 'network';
+import { MapController } from 'module_parking_map';
 
 @ComponentV2
 export struct CommonAddress {
@@ -69,8 +69,8 @@ export struct CommonAddress {
     .onClick(() => {
       AssociateUtil.checkBindPhone(() => {
         if (address.siteId) {
-          AppStorage.setOrCreate(AppStorageMap.SELECTED_ADDRESS, address);
           emitter.emit(EmitterConstants.TO_FIND);
+          MapController.move(address.location);
         } else {
           RouterModule.push({ url: RouterMap.COMMON_ADDRESS });
         }

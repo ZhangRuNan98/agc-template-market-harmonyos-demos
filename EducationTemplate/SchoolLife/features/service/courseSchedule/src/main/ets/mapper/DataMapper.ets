@@ -1,4 +1,4 @@
-import { ScheduleInfo } from '@hw-agconnect/ui-schedule-flow';
+import { ScheduleInfo } from 'module_course_schedule';
 import { CourseDetail } from 'commonlib';
 
 

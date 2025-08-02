@@ -1,6 +1,4 @@
-import image from '@ohos.multimedia.image';
-import { RouteEntryVM } from 'common'
-import { CardInfoList } from 'common'
+import { CardInfoList, RouteEntryVM, RouterModule,Common } from 'common'
 
 @Builder
 export function CodeScanPageBuilder() {
@@ -8,10 +6,20 @@ export function CodeScanPageBuilder() {
 }
 
 @Component
-export struct CodeScanPage {
+export struct CodeScanPage{
+  build() {
+    NavDestination(){
+      CodeScanComp()
+    }
+    .title('乘车码')
+  }
+}
+@Component
+export struct CodeScanComp {
   @State cardInfo: CardInfoList = new CardInfoList()
   @State message: string = ''
   @State inputText: string = '请输入网址'
+  @State isSecondLevel: boolean = false
   @State private refreshInterval: number = 30000; // 30s刷新
   @StorageLink('isLogin') isLogin: boolean = AppStorage.get('isLogin') ?? false;
   @StorageLink('cloudCard') cloudCard: boolean = AppStorage.get('cloudCard') ?? false;
@@ -51,28 +59,35 @@ export struct CodeScanPage {
   }
 
   build() {
-    NavDestination() {
+    Scroll() {
       Column() {
-        this.buildTitle()
+        if(!this.isSecondLevel){
+          this.buildTitle()
+        }
         this.buildCard()
         this.buildScan()
+        Blank()
+          .layoutWeight(1)
       }
       .backgroundColor('#F1F3F5')
-      .height('100%')
+      .width('100%')
     }
-    .hideTitleBar(true)
+    .scrollable(ScrollDirection.Vertical)
+    .scrollBar(BarState.Auto)
+    .edgeEffect(EdgeEffect.Spring)
+    .scrollBarWidth('0vp')
   }
 
   @Builder
   buildTitle() {
-    Row(){
+    Row() {
       Text('乘车码')
         .fontSize(24)
         .fontWeight(FontWeight.Medium)
     }
     .width('100%')
     .height(70)
-    .padding({left:24})
+    .padding({ left: 24 })
     .justifyContent(FlexAlign.Start)
   }
 

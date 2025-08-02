@@ -1,5 +1,5 @@
 import { Style } from '../constants/Style';
-import { routerStack } from '../utils/routerstack/Index';
+import { routerStack } from '../utils/RouterStack';
 
 
 @ComponentV2

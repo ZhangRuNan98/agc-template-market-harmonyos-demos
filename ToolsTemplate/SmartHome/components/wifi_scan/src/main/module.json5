@@ -1,0 +1,21 @@
+{
+  "module": {
+    "name": "wifi_scan",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.GET_WIFI_INFO",
+        "reason": "$string:wifi_access",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
+      }
+    ]
+  }
+}

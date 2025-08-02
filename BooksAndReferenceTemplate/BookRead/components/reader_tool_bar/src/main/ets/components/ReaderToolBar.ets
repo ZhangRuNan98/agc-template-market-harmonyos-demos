@@ -2,7 +2,8 @@ import { bookParser, readerCore } from '@kit.ReaderKit';
 import { AppStorageV2, promptAction } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { common, ConfigurationConstant } from '@kit.AbilityKit';
-import {baseActionSheet} from 'base_common'
+import { emitter } from '@kit.BasicServicesKit';
+import { baseActionSheet } from 'base_common';
 import { UserInfo } from 'base_common';
 import { SelectState } from './SelectState';
 
@@ -48,7 +49,14 @@ export struct ReaderToolBar {
     const domPos: string = this.bookParserHandler?.getDomPosByCatalogHref(catalogItem.href || '') || '';
     return domPos;
   }
-
+  // 处理书币扣费和更新
+  private updateBookCoinsAndSave(price: number): void {
+    if (this.userInfo) {
+      this.userInfo.bookCoins -= price;
+      AppStorage.set('userInfo', this.userInfo);
+      emitter.emit({ eventId: 14 });
+    }
+  }
   /**
    * 获取书籍目录对应的资源条目
    *
@@ -100,7 +108,7 @@ export struct ReaderToolBar {
               duration: 2000
             });
           } else {
-            this.userInfo!.bookCoins -= this.price
+            this.updateBookCoinsAndSave(this.price)
             this.lockedStatus[ri.index] = false
             baseActionSheet.close('buyChapter')
             baseActionSheet.close('catalog')
@@ -174,8 +182,8 @@ export struct ReaderToolBar {
         Text('字体')
 
         Row({ space: 10 }) {
-          this.fontChoice('系统','fonts/HarmonyOS_Sans_Regular.ttf', 0)
-          this.fontChoice('鸿蒙黑体','fonts/HarmonyOS_Sans_Black.ttf', 1)
+          this.fontChoice('系统', 'fonts/HarmonyOS_Sans_Regular.ttf', 0)
+          this.fontChoice('鸿蒙黑体', 'fonts/HarmonyOS_Sans_Black.ttf', 1)
         }
       }
 
@@ -383,6 +391,7 @@ export struct ReaderToolBar {
             })
           })
       }
+      .edgeEffect(EdgeEffect.Spring)
       .padding({ left: 28, right: 28, bottom: 15 })
       .divider({ strokeWidth: 1, color: $r('sys.color.ohos_id_color_list_separator') })
     }

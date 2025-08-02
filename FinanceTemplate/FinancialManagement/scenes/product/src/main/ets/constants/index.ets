@@ -1,4 +1,4 @@
-import { IBuyRule, IProductInfo } from 'network/src/main/ets/types/responseTypes/GetProductResp'
+import { IProductInfo } from 'lib_foundation'
 import { IButtonMoney } from '../types'
 
 export interface IDateButton {

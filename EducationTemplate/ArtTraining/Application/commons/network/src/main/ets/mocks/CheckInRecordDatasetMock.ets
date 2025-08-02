@@ -4,13 +4,10 @@ const pianoTask1: CheckInRecord = {
   taskId: 101, // 热身练习
   activityId: 1,
   textDetail: '今天的热身练习完成了10分钟的音阶，手指的灵活性有了明显提升。感觉每个音符都能更加精准地弹奏。',
-  videoDetail:[],
-  audioDetail:[],
+  videoDetail: [],
+  audioDetail: [],
   createTime: '1675246500000', // 时间戳表示
 };
-
-
-
 
 export class CheckInRecordDatasetMock {
   private static _recordList: CheckInRecord[] = [pianoTask1];

@@ -1,6 +1,6 @@
-// VM
-import { homeTabInfo } from '../dataModel/HomeTab'
 import { TabInfo, RouterModule } from 'common'
+import { homeTabInfo } from '../dataModel/HomeTab'
+
 
 @ObservedV2
 export class EntryVM {
@@ -15,9 +15,5 @@ export class EntryVM {
       EntryVM._instance = new EntryVM();
     }
     return EntryVM._instance;
-  }
-
-  public init() {
-    console.info('初始化数据操作')
   }
 }

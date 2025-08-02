@@ -1,7 +1,4 @@
-import { https } from 'network';
-import { IRegularInvestmentItem } from 'network/src/main/ets/types/responseTypes/GetRegularInvestmentResp';
-
-const TAG = '[MyRegularChoiceVM]';
+import { https, IRegularInvestmentItem } from 'lib_foundation';
 
 @ObservedV2
 export class MyRegularInvestmentVM {

@@ -1,8 +1,9 @@
-import { Constants, NavHeaderBar, TCRouter, UserInfoUtil,
-  AggregatedPaymentPicker, ChannelType, MockApi, MemberPackage } from 'common';
+import { Constants, NavHeaderBar, TCRouter, UserInfoUtil } from 'common';
+import { AggregatedPaymentPicker, ChannelType, MockApi } from 'aggregated_payment'
+import { MemberPackage } from 'common/src/main/ets/model/Member'
 import { promptAction } from '@kit.ArkUI';
 import { emitter } from '@kit.BasicServicesKit';
-import { MemberCenterVM } from '../viewmodel/MemberCenterVM';
+import { MemberCenterVM } from 'common/src/main/ets/viewmodel/MemberCenterVM';
 
 @Preview
 @ComponentV2
@@ -267,4 +268,4 @@ export struct MemberCenterPage {
       },
     });
   }
-}
+} 

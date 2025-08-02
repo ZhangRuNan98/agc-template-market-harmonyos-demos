@@ -35,13 +35,4 @@ export interface SearchSet {
   sequence: number
 }
 
-export interface LineSet {
-  lineName: string;
-  startStation: string;
-  endStation: string;
-  lon: number;
-  lat: number;
-  orders: number
-}
-
 

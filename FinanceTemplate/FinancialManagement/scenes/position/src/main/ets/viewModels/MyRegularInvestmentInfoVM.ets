@@ -1,12 +1,6 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, } from 'commonlib';
-import {
-  IInvestmentRecordItem,
-  IRegularInvestmentInfo,
-  IRegularInvestmentItem
-} from 'network/src/main/ets/types/responseTypes/GetRegularInvestmentResp';
+import { https, IInvestmentRecordItem, IRegularInvestmentInfo } from 'lib_foundation';
+import { RouterMap, RouterModule, } from 'module_base';
 
-const TAG = '[MyRegularInvestmentInfoVM]';
 
 @ObservedV2
 export class MyRegularInvestmentInfoVM {

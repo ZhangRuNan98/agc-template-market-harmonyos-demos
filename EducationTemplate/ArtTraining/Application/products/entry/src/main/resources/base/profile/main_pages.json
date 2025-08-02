@@ -1,6 +1,3 @@
 {
-  "src": [
-    "pages/MainEntry",
-    "pages/EmptyPage"
-  ]
+  "src": ["pages/MainEntry", "pages/EmptyPage"]
 }

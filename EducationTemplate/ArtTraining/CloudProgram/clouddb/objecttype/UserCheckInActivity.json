@@ -3,11 +3,11 @@
   "permissions": [
     {
       "role": "World",
-      "rights": ["Read"]
+      "rights": []
     },
     {
       "role": "Authenticated",
-      "rights": ["Read"]
+      "rights": []
     },
     {
       "role": "Creator",
@@ -18,7 +18,7 @@
       "rights": ["Read", "Upsert", "Delete"]
     }
   ],
-  "objectTypeName": "UserCheckInActivity",
+  "objectTypeName": "CloudUserCheckInActivity",
   "fields": [
     {
       "isNeedEncrypt": false,

@@ -1,17 +1,17 @@
 import { iResourceMgr, routerStack, Style, TitleBar } from 'lib_foundation';
 import { OrderSearchPageVM } from '../viewModels/OrderSearchPageVM';
-import { OrderCardVM, OrderSkuDto } from '../http/Type'
+import { OrderCardVM, OrderSkuDto } from '../http/Type';
 import { buildSkuCard } from '../common';
 
 @ComponentV2
 struct OrderSearchPage {
-  vm: OrderSearchPageVM = OrderSearchPageVM.instance
+  vm: OrderSearchPageVM = OrderSearchPageVM.instance;
 
   build() {
     NavDestination() {
       Column() {
         TitleBar({ barPadding: { right: Style.MENU_BAR_MARGIN_RIGHT } }) {
-          this.buildSearch()
+          this.buildSearch();
         }
 
         Stack() {
@@ -43,7 +43,7 @@ struct OrderSearchPage {
             } else {
               Column() {
                 ForEach(this.vm.orderCards, (card: OrderCardVM, index: number) => {
-                  this.buildOrderCard(card, index)
+                  this.buildOrderCard(card, index);
                 }, (item: OrderCardVM[]) => JSON.stringify(item))
               }
               .width('100%')
@@ -97,11 +97,11 @@ struct OrderSearchPage {
 
       Column() {
         ForEach(card.skuList, (sku: OrderSkuDto) => {
-          buildSkuCard(sku)
+          buildSkuCard(sku);
         }, (item: OrderSkuDto[]) => JSON.stringify(item))
       }
       .onClick(() => {
-        routerStack.pushPathByName('OrderInfoPage', card)
+        routerStack.pushPathByName('OrderInfoPage', card);
       })
 
       Row() {
@@ -134,7 +134,7 @@ struct OrderSearchPage {
     Search({
       value: this.vm.submit,
       controller: this.vm.controller,
-      placeholder: this.vm.placeholder
+      placeholder: this.vm.placeholder,
     })
       .width('100%')
       .height(Style.MENU_BAR_HEIGHT)
@@ -144,20 +144,20 @@ struct OrderSearchPage {
       .borderColor($r('sys.color.font_fourth'))
       .searchButton('搜索', {
         fontSize: 13,
-        fontColor: '#FFE64566'
+        fontColor: '#FFE64566',
       })
       .defaultFocus(true)
       .searchIcon({ size: 0 })
       .textFont({
-        size: 13
+        size: 13,
       })
       .placeholderFont({
-        size: 13
+        size: 13,
       })
       .placeholderColor($r('sys.color.mask_secondary'))
       .caretStyle({ color: '#FFE64566' })
       .onSubmit((value) => {
-        this.vm.onSubmit(value)
+        this.vm.onSubmit(value);
       })
   }
 }

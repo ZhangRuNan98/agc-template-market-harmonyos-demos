@@ -3,35 +3,52 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
 ## 简介
 
 本组件提供了展示滑动卡片的相关功能。
+
 <img src="./screenshot/swiper_card.PNG" width="300">
 
+## 约束与限制
 
-## 使用
+### 环境
+
+- DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+- 设备类型：华为手机（直板机）
+- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+## 快速入门
 
 1. 安装组件。
-   将模板根目录的components下swiper_card目录拷贝至您工程根目录components/，并添加如下依赖。
 
-   ```typescript
-   // 模块下的oh-package.json5
-   "dependencies": {
-     "swiper_card": "file:../components/swiper_card",
-     "@hw-agconnect/ui-base": "^1.0.1"
-   }
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
    
-   // 模板根目录的build-profile.json5
-   "modules": [
+   如果是从生态市场下载组件，请参考以下步骤安装组件。 
+   
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的xxx目录下。 
+   
+   b. 在项目根目录build-profile.json5中添加swiper_card。
+   ```typescript
+   // 在项目根目录的build-profile.json5填写swiper_card路径。其中xxx为组件存在的目录名
+      "modules": [
      {
        "name": "swiper_card",
-       "srcPath": "./components/swiper_card"
+       "srcPath": "./xxx/swiper_card"
      }
    ]
+   ```
+   c. 在项目根目录oh-package.json5中添加依赖
+   ```typescript
+   // xxx为组件存放的目录名称
+     "dependencies": {
+     "swiper_card": "file:../xxx/swiper_card"
+   }
    ```
 
 2. 引入组件。

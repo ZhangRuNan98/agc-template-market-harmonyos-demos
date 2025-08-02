@@ -1,7 +1,8 @@
-import { BookApi, Constants, GetUserInfoRsp, NavHeaderBar, ReturnButton, TCRouter} from 'common';
-import { AvatarIcon, SelectAvatarCard } from '../comp/SelectAvatarCard';
 import { emitter } from '@kit.BasicServicesKit';
 import { UserInfo } from 'base_common';
+import { BookApi, Constants, GetUserInfoRsp, NavHeaderBar, ReturnButton, TCRouter} from 'common';
+import { AvatarIcon, SelectAvatarCard } from '../comp/SelectAvatarCard';
+
 @ComponentV2
 export struct AccountPage {
   @Local userInfo: UserInfo | undefined = undefined;
@@ -200,7 +201,7 @@ export struct AccountPage {
           if (data.index === 1) {
             // 保留会员状态和书币信息，只清除登录状态
             const savedMembershipStatus = this.userInfo?.isMembership || false;
-            const savedBookCoins = this.userInfo?.bookCoins || 100;
+            const savedBookCoins = typeof this.userInfo?.bookCoins === 'number' ? this.userInfo.bookCoins : 100;
             
             // 保存会员状态和书币信息到本地存储
             AppStorage.setOrCreate('membershipStatus', savedMembershipStatus);
@@ -271,12 +272,14 @@ export struct AccountPage {
             }
           }.layoutWeight(1)
           .scrollBar(BarState.Off)
+          .edgeEffect(EdgeEffect.Spring)
           .align(Alignment.Top)
           .padding({
             left: 12,
             right: 12,
             top: 20
           })
+          .edgeEffect(EdgeEffect.Spring)
         }
         .bindSheet($$this.isShowModifyBind, this.modify(), {
           detents: [SheetSize.MEDIUM, SheetSize.LARGE, 800],

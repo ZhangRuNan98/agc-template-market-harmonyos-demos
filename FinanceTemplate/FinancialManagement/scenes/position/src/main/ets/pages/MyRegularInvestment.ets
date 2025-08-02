@@ -1,5 +1,5 @@
-import { FormatUtil, RouterMap } from 'commonlib'
-import { IRegularInvestmentItem } from 'network/src/main/ets/types/responseTypes/GetRegularInvestmentResp'
+import { FormatUtil, RouterMap } from 'module_base'
+import { IRegularInvestmentItem } from 'lib_foundation'
 import { MyRegularInvestmentVM } from '../viewModels/MyRegularInvestmentVM'
 
 @Builder
@@ -43,7 +43,7 @@ struct MyRegularInvestment {
                       top: 1,
                       bottom: 1,
                       left: 4,
-                      right: 4
+                      right: 4,
                     })
                     .backgroundColor('rgba(193,95,47,0.10)')
                     .borderRadius(4)
@@ -77,7 +77,7 @@ struct MyRegularInvestment {
                   top: 16,
                   bottom: 16,
                   left: 12,
-                  right: 12
+                  right: 12,
                 })
                 .backgroundColor($r('sys.color.comp_background_list_card'))
                 .borderRadius(16)
@@ -86,9 +86,10 @@ struct MyRegularInvestment {
               .onClick(() => {
                 FormatUtil.jumpToNext(RouterMap.MY_REGULAR_INVESTMENT_INFO, item.id)
               })
-            }, (item: IRegularInvestmentItem[]) => JSON.stringify(item))
+            }, (item: IRegularInvestmentItem) => JSON.stringify(item))
           }
           .layoutWeight(1)
+          .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
         }
       }
       .margin({ top: 8 })

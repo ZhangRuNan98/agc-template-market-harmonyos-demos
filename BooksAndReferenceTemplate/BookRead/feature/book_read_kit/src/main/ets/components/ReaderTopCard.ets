@@ -1,12 +1,12 @@
 import { promptAction } from '@kit.ArkUI';
-import { BookApi, BookInfo, Constants, TCRouter } from 'common';
+import { BookApi, BookInfo, Constants, GroupBook, TCRouter } from 'common';
 import { ShareBookCard } from './ShareBookCard';
 import { uniformTypeDescriptor as utd } from '@kit.ArkData';
 import { systemShare } from '@kit.ShareKit';
 import { fileUri } from '@kit.CoreFileKit';
 import { common } from '@kit.AbilityKit';
 import { Logger } from '@hw-agconnect/ui-base';
-import { BusinessError } from '@kit.BasicServicesKit';
+import { BusinessError, emitter } from '@kit.BasicServicesKit';
 import { UserInfo } from 'base_common';
 @ComponentV2
 export struct ReaderTopCard {
@@ -42,10 +42,10 @@ export struct ReaderTopCard {
 
   async aboutToAppear(): Promise<void> {
     this.isLogin = AppStorage.get<UserInfo>('userInfo') !== undefined;
-    const rsp = await BookApi.getBooksShelfList('favBooks', Constants.API_GET_BOOK_FAVOURITE_PATH, '');
-    let books: BookInfo[] = rsp.books;
+    const rsp = await BookApi.getBooksShelfGroup('favBooks', Constants.API_GET_BOOK_FAVOURITE_PATH, '');
+    let books: GroupBook[] = rsp.books;
     books.forEach((book) => {
-      if (book.id === this.book.id && this.isLogin) {
+      if (book.singleBook?.id === this.book.id && this.isLogin) {
         this.isAddSuccess = true;
         return;
       }
@@ -53,19 +53,39 @@ export struct ReaderTopCard {
   }
 
   async addBook2Shelf(isAdd: boolean, toast: ResourceStr) {
-    const rsp = await BookApi.getBooksShelfList('favBooks', Constants.API_GET_BOOK_FAVOURITE_PATH, '');
-    let books: BookInfo[] = rsp.books;
+    const favRsp = await BookApi.getBooksShelfGroup('favBooks', Constants.API_GET_BOOK_FAVOURITE_PATH, '');
+    const hisRsp = await BookApi.getBooksShelfList('favBooks', Constants.API_GET_BOOK_FAVOURITE_PATH, '')
+    let favBooks: GroupBook[] = favRsp.books;
+    let hisBooks: BookInfo[] = hisRsp.books
     if (isAdd) {
-      books.push(this.book);
-      AppStorage.set('favBooks', books);
+      let temp: GroupBook = new GroupBook()
+      temp.isSelect = false;
+      temp.groupName = this.book.groupName
+      temp.bookName = this.book.name
+      temp.singleBook = this.book
+      favBooks.push(temp);
+      AppStorage.set('favBooks', favBooks);
       this.isAddSuccess = true;
     } else {
-      let index = books.findIndex(book => this.book.id === book.id)
+      let index = hisBooks.findIndex(book => this.book.id === book.id)
+      let fIndex = favBooks.findIndex(book => this.book.id === book.singleBook?.id)
+      for (let i = 0; i < favBooks.length; i++) {
+        let tmp = favBooks[i].groupBooks?.findIndex(book => this.book.id === book.id) || 0
+        if (tmp !== -1) {
+          this.isAddSuccess = false;
+          favBooks[i].groupBooks?.splice(tmp, 1)
+        }
+      }
       if (index !== -1) {
-        books.splice(index, 1);
+        hisBooks.splice(index, 1);
         this.isAddSuccess = false;
       }
-      AppStorage.set('historyBooks', books)
+      if (fIndex !== -1) {
+        favBooks.splice(fIndex, 1);
+        this.isAddSuccess = false;
+      }
+      AppStorage.set('favBooks', favBooks);
+      AppStorage.set('historyBooks', hisBooks)
     }
     promptAction.showToast({
       message: toast,

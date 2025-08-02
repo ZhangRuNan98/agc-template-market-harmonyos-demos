@@ -82,8 +82,6 @@ export struct ContactCustomerServiceDialog {
             topRight: $r('app.string.border_radius_16'),
           })
           .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
-
-
         }
         .width($r('app.string.width_percent_full'))
         .backgroundColor($r('app.color.system_color_background_auxiliary'))
@@ -115,7 +113,7 @@ export struct ContactCustomerServiceDialog {
       return false;
     })
     .backgroundColor('rgba(0, 0, 0, 0.3)')
-    // .systemTransition(NavigationSystemTransitionType.NONE)
+    .systemTransition(NavigationSystemTransitionType.NONE)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
     .hideTitleBar(true);
   }

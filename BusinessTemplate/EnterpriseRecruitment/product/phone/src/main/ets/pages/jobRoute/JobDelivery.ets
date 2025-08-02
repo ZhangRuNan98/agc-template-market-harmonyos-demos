@@ -1,23 +1,21 @@
 import { AppStorageV2, PersistenceV2, promptAction, router } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
 import {
-  AttachmentDatabase,
   AvoidArea,
   UserContactInfo,
   CommonConstants,
   DeliveryDatabase,
   DeliveryRecord,
-  getCurrentLocalDate,
   JobListItem,
   LeftReturnComponent,
   Logger,
-  MyDataSource,
   promptFun,
-  ResumeEntity,
   SearchType,
-  TitleBar
+  TitleBar,
+  BreakPointController,
 } from '@ohos_agcit/common_component';
 import { picker } from '@kit.CoreFileKit';
+import { AttachmentDatabase, getCurrentLocalDate, FileDataSource, ResumeEntity } from 'file_management';
 
 const TAG: string = 'AttachUpload';
 let addressList: SearchType[] = CommonConstants.ADDRESS_COLLECTION;
@@ -28,7 +26,8 @@ let addressMap: Map<number, SearchType> = new Map<number, SearchType>(
 @Entry
 @ComponentV2
 export struct JobDelivery {
-  @Local jobInfo: JobListItem = router.getParams() as JobListItem;
+  private breakPointController: BreakPointController = BreakPointController.instance
+  @Local jobInfo: ESObject = router.getParams();
   @Local name: string = '';
   @Local email: string = '';
   @Local telephoneNumber: string = '';
@@ -39,12 +38,12 @@ export struct JobDelivery {
     PersistenceV2.connect(DeliveryDatabase, () => new DeliveryDatabase())!;
   @Local attachmentDatabase: AttachmentDatabase =
     PersistenceV2.connect(AttachmentDatabase, () => new AttachmentDatabase())!;
-  @Local attachmentLazyList: MyDataSource<ResumeEntity> = new MyDataSource();
+  @Local attachmentLazyList: FileDataSource<ResumeEntity> = new FileDataSource();
   @Local isHalfShow: boolean = false;
   @Local isFullShow: boolean = false;
   @Local resumeUri: string = '';
   @Local resumeName: string = '';
-  @Local isDelivery: boolean = this.deliveryDatabase.deliveryList.some(record => record.jobId === this.jobInfo.jobId)
+  @Local isDelivery: boolean = this.deliveryDatabase.deliveryList.some(record => record.jobId === this.jobInfo.id)
 
   aboutToAppear(): void {
     this.attachmentLazyList.clear()
@@ -55,119 +54,162 @@ export struct JobDelivery {
 
   build() {
     Column() {
-      Column() {
-        Row() {
-          LeftReturnComponent()
-            .onClick(() => {
-              router.back();
+      Column(){
+        Scroll(){
+          Column(){
+            Row() {
+              LeftReturnComponent()
+                .onClick(() => {
+                  router.back();
+                });
+              TitleBar({ text: '简历投递' });
+            }
+            .height(56)
+            .alignItems(VerticalAlign.Center)
+            .width(CommonConstants.FULL_WIDTH)
+            .alignItems(VerticalAlign.Center)
+            .padding({
+              bottom: 8
             })
-          TitleBar({ text: '简历投递' })
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.Start)
-        .alignItems(VerticalAlign.Center)
-      }
-      .height('7%')
-      .width('100%')
-      .justifyContent(FlexAlign.Start)
 
-      Column() {
-        Text(this.jobInfo.jobName)
-          .fontSize($r('app.float.font_size_18'))
-          .fontColor(Color.Black)
-          .fontWeight(CommonConstants.FONT_WEIGHT_600)
-        Text(addressMap.get(this.jobInfo.address)?.title + ' · ' + this.jobInfo.jobType)
-          .fontSize($r('app.float.font_size_16'))
-          .fontColor($r('app.color.common_gray'))
-          .margin({ top: '3%' })
-      }
-      .borderRadius(CommonConstants.COMMON_RADIUS)
-      .backgroundColor(Color.White)
-      .width('100%')
-      .height('10%')
-      .alignItems(HorizontalAlign.Start)
-      .padding('5%')
+            Column() {
+              Text(this.jobInfo.name)
+                .fontSize(16)
+                .fontColor('rgba(0,0,0,0.90)')
+                .fontWeight(FontWeight.Medium)
+              if (this.jobInfo.address) {
+                Text(addressMap.get(this.jobInfo.address)?.title + ' · ' + this.jobInfo.jobType)
+                  .fontSize(14)
+                  .fontColor('rgba(0,0,0,0.60)')
+                  .margin({ top: 5 })
+              } else {
+                Text(this.jobInfo.jobType)
+                  .fontSize($r('app.float.font_size_16'))
+                  .fontColor($r('app.color.common_gray'))
+                  .margin({ top: 5 })
+              }
+            }
+            .borderRadius(16)
+            .backgroundColor(Color.White)
+            .width('100%')
+            .height(64)
+            .alignItems(HorizontalAlign.Start)
+            .padding({
+              top: 11,
+              bottom: 11,
+              left: 12,
+              right: 12
+            })
 
-      Text('应聘者信息')
-        .fontSize($r('app.float.font_size_14'))
-        .fontColor($r('app.color.common_gray'))
-        .fontWeight(CommonConstants.FONT_WEIGHT_600)
-        .alignSelf(ItemAlign.Start)
-        .height('8%')
-        .width('100%')
-        // .margin({ top: '2%' })
+            Text('应聘者信息')
+              .fontSize($r('app.float.font_size_14'))
+              .fontColor($r('app.color.common_gray'))
+              .fontWeight(CommonConstants.FONT_WEIGHT_600)
+              .alignSelf(ItemAlign.Start)
+              .height(64)
+              .width('100%')
 
-      // message input
-      Column() {
-        this.MessageInput('姓名', ContentType.USER_NAME, this.userContactInfo.realName, (val: string) => {
-          this.name = val;
-          this.userContactInfo.realName = val
-        })
-        Divider().strokeWidth(1).color(Color.Gray).opacity(0.2).margin({ bottom: '2.5%' });
+            // message input
+            Column() {
+              this.MessageInput('姓名', ContentType.USER_NAME, this.userContactInfo.realName, (val: string) => {
+                this.name = val;
+                this.userContactInfo.realName = val
+              })
+              Divider().strokeWidth(1).color(Color.Gray).opacity(0.2)
 
-        this.MessageInput('手机号码', ContentType.PHONE_NUMBER, this.userContactInfo.phoneNumber, (val: string) => {
-          this.telephoneNumber = val;
-          this.userContactInfo.phoneNumber = val
-        })
-        Divider().strokeWidth(1).color(Color.Gray).opacity(0.2).margin({ bottom: '2.5%' });
+              this.MessageInput('手机号码', ContentType.PHONE_NUMBER, this.userContactInfo.phoneNumber, (val: string) => {
+                this.telephoneNumber = val;
+                this.userContactInfo.phoneNumber = val
+              })
+              Divider().strokeWidth(1).color(Color.Gray).opacity(0.2)
 
-        this.MessageInput('邮箱', ContentType.EMAIL_ADDRESS, this.userContactInfo.email, (val: string) => {
-          this.email = val;
-          this.userContactInfo.email = val
-        })
-        Divider().strokeWidth(1).color(Color.Gray).opacity(0.2);
-      }
-      .padding({top:'2%', bottom: '5%', left: '5%', right: '5%'})
-      .borderRadius(CommonConstants.COMMON_RADIUS)
-      .backgroundColor(Color.White)
-      .width('100%')
-      .height('25%')
+              this.MessageInput('邮箱', ContentType.EMAIL_ADDRESS, this.userContactInfo.email, (val: string) => {
+                this.email = val;
+                this.userContactInfo.email = val
+              })
+            }
+            .padding({top: 4, bottom: 4, left: '5%', right: '5%'})
+            .borderRadius(16)
+            .backgroundColor(Color.White)
+            .width('100%')
+            .height(152)
 
-      // resume
-      Column() {
-        Row() {
-          Text() {
-            Span('简历')
-              .fontColor(Color.Black)
-            Span('*')
-              .fontColor(Color.Red)
+            // resume
+            Column() {
+              Row() {
+                Text() {
+                  Span('简历')
+                    .fontColor(Color.Black)
+                  Span('*')
+                    .fontColor(Color.Red)
+                }
+                .fontWeight(FontWeight.Medium)
+                .fontSize(16)
+
+                Blank()
+
+                Text($r('app.string.upload_attachment'))
+                  .fontColor($r('app.color.common_blue'))
+                  .fontSize(14)
+                  .onClick(() => {
+                    this.isHalfShow = !this.isHalfShow
+                  })
+              }
+              .width('100%')
+
+              Text('文件大小不超过50M; 支持格式为pdf')
+                .fontColor($r('app.color.common_gray'))
+                .fontSize($r('app.float.font_size_13'))
+                .opacity(0.6)
+                .margin({ top: 13 })
+                .width('100%')
+
+              if (this.resumeName !== '') {
+                Row(){
+                  Text(this.resumeName)
+                    .fontColor('rgba(0,0,0,0.90)')
+                    .fontSize(14)
+
+                  Blank()
+
+                  Image($r('app.media.trash'))
+                    .width(16)
+                    .height(16)
+                    .onClick(() => {
+                      let record = this.deliveryDatabase.deliveryList.
+                      find((record) => record.jobId === this.jobInfo.id);
+                      if (record) {
+                        this.deliveryDatabase.deliveryList.splice(
+                          this.deliveryDatabase.deliveryList.indexOf(record), 1)
+                      }
+                      this.resumeUri = '';
+                      this.resumeName = '';
+                      this.isDelivery = false;
+                    })
+                }
+                .width('100%')
+                .margin({ top: 15 })
+              }
+            }
+            .alignItems(HorizontalAlign.Start)
+            .width('100%')
+            .height(this.resumeName === '' ? 75 : 105)
+            .borderRadius(16)
+            .backgroundColor(Color.White)
+            .margin({ top: 12 })
+            .padding({
+              top: 14,
+              left: 12,
+              right: 12,
+              bottom: 14
+            })
           }
-          .fontWeight(CommonConstants.FONT_WEIGHT_600)
-          .fontSize($r('app.float.font_size_18'))
-
-          Blank()
-
-          Text($r('app.string.upload_attachment'))
-            .fontColor($r('app.color.common_blue'))
-            .fontSize($r('app.float.font_size_16'))
-            .onClick(() => {
-              this.isHalfShow = !this.isHalfShow
-            })
         }
-        .width('100%')
-
-        if (this.resumeName !== '') {
-          Text(this.resumeName)
-            .fontColor($r('app.color.common_blue'))
-            .fontSize($r('app.float.font_size_16'))
-            .fontWeight(CommonConstants.FONT_WEIGHT_500)
-            .margin({ top: '2.5%' })
-        }
-
-        Text('文件大小不超过50M; 支持格式为pdf')
-          .fontColor($r('app.color.common_gray'))
-          .fontSize($r('app.float.font_size_13'))
-          .opacity(0.6)
-          .margin({ top: '3%' })
-          .width('100%')
+        .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring)
       }
-      .alignItems(HorizontalAlign.Start)
       .width('100%')
-      .height('10%')
-      .borderRadius(CommonConstants.COMMON_RADIUS)
-      .backgroundColor(Color.White)
-      .margin({ top: '5%' })
-      .padding('5%')
+      .layoutWeight(1)
 
       Blank()
 
@@ -175,7 +217,7 @@ export struct JobDelivery {
         .fontSize($r('app.float.font_size_17'))
         .backgroundColor($r('app.color.common_blue'))
         .width('100%')
-        .height('6%')
+        .height(39)
         .onClick(() => {
           if (this.isDelivery) {
             promptFun('您已投递，请勿重复投递', 1000)
@@ -184,13 +226,12 @@ export struct JobDelivery {
               promptFun('请填写个人信息以及上传简历附件', 1000)
             } else {
               let deliveryRecord: DeliveryRecord = new DeliveryRecord()
-              deliveryRecord.jobId = this.jobInfo.jobId
+              deliveryRecord.jobId = this.jobInfo.id
               deliveryRecord.submitTime = getCurrentLocalDate()
-              deliveryRecord.status = 0
-
               this.deliveryDatabase.deliveryList.push(deliveryRecord)
-              this.isDelivery = this.deliveryDatabase.deliveryList.some(record => record.jobId === this.jobInfo.jobId)
+              this.isDelivery = this.deliveryDatabase.deliveryList.some(record => record.jobId === this.jobInfo.id)
               promptFun('投递简历成功', 1000)
+              router.back();
             }
           }
         })
@@ -203,10 +244,10 @@ export struct JobDelivery {
     })
     .bindContentCover($$this.isFullShow, this.AttachmentFullSheetBuilder(), {})
     .padding({
-      top: px2vp(this.avoidArea.topRectHeight) + 10,
+      top: px2vp(this.avoidArea.topRectHeight),
       bottom: px2vp(this.avoidArea.bottomRectHeight),
-      left: '6%',
-      right: '6%'
+      left: '4%',
+      right: '4%'
     })
   }
 
@@ -219,8 +260,8 @@ export struct JobDelivery {
         Span('*')
           .fontColor(Color.Red)
       }
-      .fontWeight(CommonConstants.FONT_WEIGHT_600)
-      .fontSize($r('app.float.font_size_18'))
+      .fontWeight(FontWeight.Medium)
+      .fontSize(16)
       .width('28%')
       .height('100%')
 
@@ -228,10 +269,13 @@ export struct JobDelivery {
 
       Column() {
         TextInput({ placeholder: '请输入（必填）', text:content})
+          .placeholderFont({ size: 14 })
+          .placeholderColor('rgba(0,0,0,0.40)')
           .layoutWeight(1)
           .contentType(contentType)
           .backgroundColor(Color.Transparent)
           .fontSize($r('app.float.font_size_16'))
+          .textAlign(TextAlign.End)
           .width('100%')
           .onChange((val: string) => {
             invoke(val)
@@ -258,7 +302,7 @@ export struct JobDelivery {
       .width('66%');
     }
     .alignItems(VerticalAlign.Center)
-    .height('30%')
+    .height(48)
     .width('100%')
   }
 
@@ -314,7 +358,7 @@ export struct JobDelivery {
         this.isHalfShow = !this.isHalfShow
       })
     }
-    .justifyContent(FlexAlign.SpaceBetween)
+    .justifyContent(FlexAlign.SpaceAround)
   }
 
   @Builder
@@ -324,16 +368,17 @@ export struct JobDelivery {
         Row() {
           LeftReturnComponent()
             .onClick(() => {
-              this.isFullShow = !this.isFullShow
-            })
-          TitleBar({ text: '简历管理' })
+              router.back();
+            });
+          TitleBar({ text: '简历管理' });
         }
-        .width('100%')
-        .justifyContent(FlexAlign.Start)
+        .height(56)
         .alignItems(VerticalAlign.Center)
+        .width(CommonConstants.FULL_WIDTH)
+        .alignItems(VerticalAlign.Center);
       }
       .padding({
-        top: px2vp(this.avoidArea.topRectHeight) + 10,
+        top: px2vp(this.avoidArea.topRectHeight),
         left: '6%',
         right: '6%'
       })
@@ -344,7 +389,7 @@ export struct JobDelivery {
       Column() {
         LazyForEach(this.attachmentLazyList, (item: ResumeEntity, index: number) => {
           Row() {
-            Image($r('app.media.ic_resume'))
+            Image($r('app.media.file_pdf'))
               .height(70)
               .width(70)
 

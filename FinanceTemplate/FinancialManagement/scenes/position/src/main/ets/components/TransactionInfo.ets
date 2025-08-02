@@ -1,4 +1,4 @@
-import { FormatUtil } from 'commonlib'
+import { FormatUtil } from 'module_base'
 
 @ComponentV2
 export struct TransactionInfo {

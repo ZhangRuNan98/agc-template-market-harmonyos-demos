@@ -1,15 +1,19 @@
-import { BaseResponse, https, IDollarCostAveragingRequest, IPrepayRequest } from 'network';
-import { Logger, RouterMap, RouterModule, } from 'commonlib';
-import { IBuyRule, IProductInfo } from 'network/src/main/ets/types/responseTypes/GetProductResp';
-import { IUserAccount } from 'network/src/main/ets/types/responseTypes/GetUserAccountResp';
 import { promptAction } from '@kit.ArkUI';
 import { paymentService } from '@kit.PaymentKit';
 import { common } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
+import {
+  BaseResponse,
+  https,
+  IDollarCostAveragingRequest,
+  IPrepayRequest,
+  IBuyRule,
+  IProductInfo,
+  IUserAccount,
+} from 'lib_foundation';
+import { Logger, RouterMap, RouterModule } from 'module_base';
 import { IButtonMoney, IRouterPurchase } from '../types';
 import { buttonMoneyData, cycleData, dateDataDay, dateDataWeek, initProductInfoData } from '../constants';
-
-const TAG = '[PurchaseVM]';
 
 @ObservedV2
 export class PurchaseVM {
@@ -96,28 +100,26 @@ export class PurchaseVM {
     }
   }
 
+  public getLimitMoney(value: number): string {
+    if (this.account.bankAmount < value) {
+      return this.productInfo!.remainingPurchaseAmount < this.account.bankAmount ?
+      this.productInfo!.remainingPurchaseAmount.toString() : this.account.bankAmount.toString()
+    } else {
+      return this.productInfo!.remainingPurchaseAmount < value ?
+      this.productInfo!.remainingPurchaseAmount.toString() : value.toString()
+    }
+  }
+
   public getButtonMoney(index: number) {
     switch (index) {
       case 0:
-        if (this.account && this.account.bankAmount < 10000) {
-          this.money = this.account.bankAmount.toString()
-        } else {
-          this.money = '10000'
-        }
+        this.money = this.getLimitMoney(10000)
         break
       case 1:
-        if (this.account && this.account.bankAmount < 50000) {
-          this.money = this.account.bankAmount.toString()
-        } else {
-          this.money = '50000'
-        }
+        this.money = this.getLimitMoney(50000)
         break
       case 2:
-        if (this.account && this.account.bankAmount < 100000) {
-          this.money = this.account.bankAmount.toString()
-        } else {
-          this.money = '100000'
-        }
+        this.money = this.getLimitMoney(100000)
         break
       case 3:
         if (this.account) {

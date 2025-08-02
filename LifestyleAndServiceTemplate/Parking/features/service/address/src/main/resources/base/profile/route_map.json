@@ -3,7 +3,7 @@
     {
       "name": "CommonAddress",
       "pageSourceFile": "src/main/ets/pages/CommonAddressPage.ets",
-      "buildFunction": "CommonAddressPageBuilder",
+      "buildFunction": "commonAddressPageBuilder",
       "data": {
         "description": "常用地址列表页面"
       }

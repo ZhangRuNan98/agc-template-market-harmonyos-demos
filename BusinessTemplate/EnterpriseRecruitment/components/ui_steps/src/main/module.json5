@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "ui_steps",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

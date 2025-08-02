@@ -1,3 +1,8 @@
+import { util } from '@kit.ArkTS';
+import { promptAction } from '@kit.ArkUI';
+import { BusinessError } from '@kit.BasicServicesKit';
+import { functionalButtonComponentManager } from '@kit.ScenarioFusionKit';
+import fs from '@ohos.file.fs';
 import {
   AccountUtil,
   CloudStorageUtil,
@@ -8,11 +13,6 @@ import {
   UserInfo,
   UserInfoModel,
 } from 'commonlib';
-import { BusinessError } from '@kit.BasicServicesKit';
-import { functionalButtonComponentManager } from '@kit.ScenarioFusionKit';
-import { promptAction } from '@kit.ArkUI';
-import fs from '@ohos.file.fs';
-import { util } from '@kit.ArkTS';
 import { https } from 'network';
 
 const TAG = '[UserInfoEditVM]';

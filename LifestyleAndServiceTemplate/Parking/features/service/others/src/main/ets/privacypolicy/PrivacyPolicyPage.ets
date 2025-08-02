@@ -1,5 +1,5 @@
-import { CommonHeader } from 'componentlib';
 import { AtomicServiceWeb, AtomicServiceWebController } from '@kit.ArkUI';
+import { CommonHeader } from 'common';
 
 @Component
 export struct PrivacyPolicyPage {
@@ -42,6 +42,6 @@ export struct PrivacyPolicyPage {
 }
 
 @Builder
-export function PrivacyPolicyPageBuilder() {
+export function privacyPolicyPageBuilder() {
   PrivacyPolicyPage()
 }

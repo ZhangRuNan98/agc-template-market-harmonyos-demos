@@ -59,11 +59,8 @@
     ],
     "metadata": [
       {
-        "name": "app_id",
-        "value": "xxx"
-      },
-      {
         "name": "client_id",
+        // todo
         "value": "xxx"
       }
     ],

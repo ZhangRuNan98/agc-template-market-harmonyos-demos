@@ -1,4 +1,4 @@
-import { FormatUtil } from 'commonlib'
+import { FormatUtil } from 'module_base'
 import { InvestmentRecordInfoVM } from '../viewModels/InvestmentRecordInfoVM';
 import { TransactionInfo } from '../components/TransactionInfo';
 
@@ -59,6 +59,7 @@ struct InvestmentRecordInfo {
         .padding({ left: 16, right: 16 })
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
     }
     .title('记录详情')
     .backgroundColor($r('sys.color.background_secondary'))

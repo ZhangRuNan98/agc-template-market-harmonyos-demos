@@ -16,7 +16,7 @@
 import { geoLocationManager } from '@kit.LocationKit';
 import { map } from '@kit.MapKit';
 import { CommonConstants } from '../constants/CommonConstants';
-import { Logger } from './Logger';
+import { Logger } from '../logger'
 
 export class LocationUtil {
   async getLocation(mapController?: map.MapComponentController): Promise<geoLocationManager.Location> {

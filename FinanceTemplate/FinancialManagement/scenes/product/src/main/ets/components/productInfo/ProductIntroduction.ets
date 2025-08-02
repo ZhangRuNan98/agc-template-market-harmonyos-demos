@@ -1,5 +1,5 @@
+import { CommonTextVisibility } from 'module_base';
 import { ProductInfoVM } from '../../viewModels/ProductInfoVM'
-import { CommonTextVisibility } from 'componentlib';
 
 @ComponentV2
 export struct ProductIntroduction {

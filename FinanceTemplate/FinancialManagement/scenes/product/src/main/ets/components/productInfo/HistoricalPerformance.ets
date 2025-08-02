@@ -1,5 +1,4 @@
-import { FormatUtil, RouterMap } from 'commonlib'
-import { IHistoricalPerformance } from 'network/src/main/ets/types/responseTypes/GetProductResp'
+import { FormatUtil, RouterMap } from 'module_base'
 import { ProductInfoVM } from '../../viewModels/ProductInfoVM'
 import { CommonHeaderRule } from './CommonHeaderRule'
 import { HistoricalPerformanceList } from './HistoricalPerformanceList'

@@ -1,4 +1,4 @@
-import { IHistoricalPerformance } from 'network/src/main/ets/types/responseTypes/GetProductResp'
+import { IHistoricalPerformance } from 'lib_foundation'
 
 @ComponentV2
 export struct HistoricalPerformanceList {
@@ -86,7 +86,7 @@ export struct HistoricalPerformanceList {
           }
         }
         .padding({ top: 6 })
-      }, (item: IHistoricalPerformance[]) => JSON.stringify(item))
+      }, (item: IHistoricalPerformance) => JSON.stringify(item))
     }
     .margin({ bottom: 8 })
   }

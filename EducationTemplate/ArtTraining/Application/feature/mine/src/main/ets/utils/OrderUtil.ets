@@ -1,3 +1,7 @@
+import { common } from '@kit.AbilityKit';
+import { promptAction } from '@kit.ArkUI';
+import { BusinessError, Callback, pasteboard } from '@kit.BasicServicesKit';
+import { paymentService } from '@kit.PaymentKit';
 import {
   AppStorageMap,
   CoursePaymentMap,
@@ -10,14 +14,10 @@ import {
   RouterModule,
   WindowUtil,
 } from 'commonlib';
+import { ConfirmParam } from 'componentlib';
+import { https } from 'network';
 import { ORDER_ACTION_BUTTON_LIST } from '../constants/Constants';
 import { OrderActionMap } from '../constants/Enums';
-import { paymentService } from '@kit.PaymentKit';
-import { common } from '@kit.AbilityKit';
-import { promptAction } from '@kit.ArkUI';
-import { BusinessError, Callback, pasteboard } from '@kit.BasicServicesKit';
-import { https } from 'network';
-import { ConfirmParam } from 'componentlib';
 
 const TAG = '[OrderUtil]';
 
@@ -74,7 +74,9 @@ export class OrderUtil {
             param: phone,
           });
         } else {
-          promptAction.showToast({ message: '暂时无法联系客服，请前往首页查看商家号码' });
+          promptAction.showToast({
+            message: '暂时无法联系客服，请前往首页查看商家号码',
+          });
         }
         break;
       case OrderActionMap.REQUEST_REFUND:
@@ -95,13 +97,13 @@ export class OrderUtil {
       default:
         break;
     }
-
   }
 
   public static copyOrderNo(orderNo: string) {
     let pasteData = pasteboard.createData(pasteboard.MIMETYPE_TEXT_PLAIN, orderNo);
     let systemPasteboard = pasteboard.getSystemPasteboard();
-    systemPasteboard.setData(pasteData)
+    systemPasteboard
+      .setData(pasteData)
       .then(() => {
         promptAction.showToast({ message: '订单号复制成功！' });
       })

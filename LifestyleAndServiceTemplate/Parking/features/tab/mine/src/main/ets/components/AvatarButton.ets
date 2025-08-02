@@ -1,6 +1,6 @@
 import { MinePageVM } from '../viewmodels/MinePageVM';
-import { FunctionalButton, functionalButtonComponentManager } from '@kit.ScenarioFusionKit';
-import { Logger } from 'commonlib';
+import { Logger } from 'common';
+import { FunctionalButton, functionalButtonComponentManager } from '@hms.core.atomicserviceComponent.atomicserviceUi';
 
 const TAG = '[AvatarButton]';
 

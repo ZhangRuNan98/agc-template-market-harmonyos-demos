@@ -9,9 +9,9 @@ export struct CartPageHeader {
   // 是否编辑态
   @Param isEdit: boolean = false;
   // 切换编辑的回调
-  @Event changeEdit: () => void = () => {}
+  @Event changeEdit: () => void = () => {};
   // 作为子页面时，返回事件回调
-  @Event onBack: () => void = () => {}
+  @Event onBack: () => void = () => {};
 
   @Builder
   titleContentView() {
@@ -27,7 +27,7 @@ export struct CartPageHeader {
         }
         .justifyContent(FlexAlign.Center)
         .onClick(() => {
-          this.changeEdit()
+          this.changeEdit();
         })
       }
     }
@@ -40,11 +40,11 @@ export struct CartPageHeader {
     BaseTitle({
       showBackBtn: this.isChildRoute,
       onBack: () => {
-        this.onBack && this.onBack()
+        this.onBack && this.onBack();
       },
       titleContentBuilder: () => {
         this.titleContentView();
-      }
+      },
     })
   }
 }

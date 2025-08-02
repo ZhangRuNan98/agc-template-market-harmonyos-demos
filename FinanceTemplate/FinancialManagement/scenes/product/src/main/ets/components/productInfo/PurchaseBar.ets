@@ -1,6 +1,6 @@
-import { FormatUtil, RouterMap } from 'commonlib'
-import { ProductInfoVM } from '../../viewModels/ProductInfoVM'
 import { emitter } from '@kit.BasicServicesKit'
+import { FormatUtil, RouterMap } from 'module_base'
+import { ProductInfoVM } from '../../viewModels/ProductInfoVM'
 
 @ComponentV2
 export struct PurchaseBar {
@@ -21,10 +21,10 @@ export struct PurchaseBar {
 
       Flex({ alignItems: ItemAlign.Center }) {
         Column() {
-          Image(!this.vm.isSelected ? $r('app.media.ic_add') : $r('app.media.ic_cancel'))
+          Image(this.vm.isSelected ? $r('app.media.ic_cancel') : $r('app.media.ic_add'))
             .width(24)
             .height(24)
-          Text(!this.vm.isSelected ? '加自选' : '取消自选')
+          Text(this.vm.isSelected ? '取消自选' : '加自选')
             .fontSize(10)
             .fontWeight(FontWeight.Regular)
         }

@@ -1,16 +1,77 @@
-import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
+import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import { window } from '@kit.ArkUI';
-import { BookApi, GlobalContext, TCRouter, WindowUtils, UserInfoUtil } from 'common';
+import { router, window } from '@kit.ArkUI';
+import { BookApi, Constants, GlobalContext, TCRouter, UserInfoUtil, WindowUtils } from 'common';
+import { BusinessError } from '@kit.BasicServicesKit';
+import { pushService } from '@kit.PushKit';
+import { notificationManager } from '@kit.NotificationKit';
 
+interface PushData {
+  pushContent: string
+  time: string
+  read: false
+}
+
+const DOMAIN_NUMBER: number = 0xFF00;
 
 export default class EntryAbility extends UIAbility {
-  async onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): Promise<void> {
+  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+    this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT);
     GlobalContext.initContext(this.context);
     TCRouter.init();
     BookApi.init('data.json');
     UserInfoUtil.init();
+    let pushToken: string
+    // 获取Push Token
+    try {
+      const pushToken = pushService.getToken();
+      AppStorage.setOrCreate('PushToken', pushToken)
+      hilog.info(0x0000, 'testTag', 'Succeeded in getting push token');
+    } catch (err) {
+      let e: BusinessError = err as BusinessError;
+      hilog.error(0x0000, 'testTag', 'Failed to get push token: %{public}d %{public}s', e.code, e.message);
+    }
+
+    if (want.action === 'com.test.action') {
+
+      AppStorage.setOrCreate('takeMessage', 1)
+
+      const pushData: PushData = {
+        pushContent: want.parameters?.pushContent as string,
+        time: want.parameters?.time as string,
+        read: false
+      }
+      AppStorage.setOrCreate('pushData', pushData)
+    }
+
+    // axios.post("http://localhost:8080/upload", pushToken, {
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // })
+    //   .then((response:AxiosResponse) => {
+    //     console.log("服务器响应:", response.data);
+    //   })
+    //   .catch((err:BusinessError) => {
+    //     console.error("请求失败:", err);
+    //   });
+    // 上报Push Token到服务端
+  }
+
+  onNewWant(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+
+    if (want.action === 'com.test.action') {
+      AppStorage.setOrCreate('takeMessage', 1)
+      AppStorage.setOrCreate('coldBoot', 1)
+      const pushData: PushData = {
+        pushContent: want.parameters?.pushContent as string,
+        time: want.parameters?.time as string,
+        read: false
+      }
+      AppStorage.setOrCreate('pushData', pushData)
+    }
   }
 
   onDestroy(): void {
@@ -18,6 +79,46 @@ export default class EntryAbility extends UIAbility {
   }
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
+    // 设置WindowStage的事件订阅（获焦/失焦、切到前台/切到后台、前台可交互/前台不可交互）
+    try {
+      windowStage.on('windowStageEvent', (data) => {
+        let stageEventType: window.WindowStageEventType = data;
+        switch (stageEventType) {
+          case window.WindowStageEventType.SHOWN: // 切到前台
+            hilog.info(DOMAIN_NUMBER, 'testTag', `windowStage foreground.`);
+            break;
+          case window.WindowStageEventType.ACTIVE: // 获焦状态
+            if (AppStorage.get('takeMessage') === 1 &&
+              AppStorage.get('coldBoot') === 1 &&
+              AppStorage.get('inMessagePage')!==1) {
+              TCRouter.push(Constants.MESSAGE_PAGE_ROUTE)
+              AppStorage.setOrCreate('takeMessage', 0)
+              AppStorage.setOrCreate('coldBoot', 0)
+              AppStorage.setOrCreate('inMessagePage',1)
+            }
+            hilog.info(DOMAIN_NUMBER, 'testTag', `windowStage active.`);
+            break;
+          case window.WindowStageEventType.INACTIVE: // 失焦状态
+            hilog.info(DOMAIN_NUMBER, 'testTag', `windowStage inactive.`);
+            break;
+          case window.WindowStageEventType.HIDDEN: // 切到后台
+            hilog.info(DOMAIN_NUMBER, 'testTag', `windowStage background.`);
+            break;
+          case window.WindowStageEventType.RESUMED: // 前台可交互状态
+            hilog.info(DOMAIN_NUMBER, 'testTag', `windowStage resumed.`);
+            break;
+          case window.WindowStageEventType.PAUSED: // 前台不可交互状态
+            hilog.info(DOMAIN_NUMBER, 'testTag', `windowStage paused.`);
+            break;
+          default:
+            break;
+        }
+
+      });
+    } catch (exception) {
+      hilog.error(DOMAIN_NUMBER, 'testTag',
+        `Failed to enable the listener for window stage event changes. Cause: ${JSON.stringify(exception)}`);
+    }
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
     WindowUtils.init(windowStage.getMainWindowSync());
@@ -27,6 +128,12 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
+      notificationManager.requestEnableNotification(this.context).then(() => {
+        hilog.info(0x0000, 'testTag', `[ANS] requestEnableNotification success`);
+      }).catch((err: BusinessError) => {
+        hilog.error(0x0000, 'testTag',
+          `[ANS] requestEnableNotification failed, code is ${err.code}, message is ${err.message}`);
+      });
     });
   }
 

@@ -1,6 +1,6 @@
+import { FormBar,FormType } from 'form_bar';
 import { Constants } from 'utils';
 import { BaseSettingViewModel } from '../viewmodel/BaseSettingViewModel';
-import { TextSettingBarView } from 'uicomponents';
 
 @Builder
 export function BaseSettingPageBuilder(name: string, param: Object) {
@@ -15,12 +15,12 @@ export struct BaseSettingPage {
 
   @Builder
   BuildDeviceNameSetting() {
-    TextSettingBarView({
-      // nameImage: '',
+    FormBar({
+      formType:FormType.TEXT_SETTING,
       name: '设备名称',
       value: this.baseSettingViewModel.deviceName,
-      valueChangeCb: (value: string) => {
-        this.baseSettingViewModel.setDeviceName(value);
+      valueChangeCb: (value: ResourceStr) => {
+        this.baseSettingViewModel.setDeviceName(value as string);
       },
     });
   }

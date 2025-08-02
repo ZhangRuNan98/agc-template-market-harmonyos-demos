@@ -1,4 +1,4 @@
-import { IOrder } from 'commonlib';
+import { IOrder } from 'common';
 import { BaseResponse } from '../types/BaseResponse';
 import {
   AddCommonAddressesRequest,
@@ -10,35 +10,29 @@ import {
   SetDefaultLicenseNumberRequest,
   UpdateCommonAddressesRequest,
 } from '../types/AxiosRequestParam';
-import {
-  AllCommonAddressesResp,
-  AllLicenseInfoResp,
-  AllOrderResp,
-  AssociateAccountResp,
-  DisassociateAccountResp,
-  GetDefaultLicenseNumberResp,
-  GetHomePageBannerResp,
-  GetParkingDetailResp,
-  GetUserInfoResp,
-  PayParkingResp,
-  SetDefaultLicenseNumberResp,
-  UserLoginResp,
-} from '../types/responseTypes';
-import {
-  allCommonAddressesMock,
-  allLicenseInfoMock,
-  allOrderNormalMock,
-  allOrderNullErrorMock,
-  associateAccountMock,
-  getDefaultLicenseNumberMock,
-  getHomePageBannerMock,
-  getParkingDetailMock,
-  getUserInfoMock,
-  MAP_ORDER,
-  setDefaultLicenseNumberMock,
-  userLoginMock,
-} from './mockData';
-import { payParkingMock } from './mockData/payParkingMock';
+import { payParkingMock } from './mockData/PayParkingMockData';
+import { UserLoginResp } from '../types/responseTypes/UserLoginResp';
+import { GetUserInfoResp } from '../types/responseTypes/GetUserInfoResp';
+import { AssociateAccountResp } from '../types/responseTypes/AssociateAccountResp';
+import { DisassociateAccountResp } from '../types/responseTypes/DiassociateAccountResp';
+import { GetHomePageBannerResp } from '../types/responseTypes/GetHomePageBannerResp';
+import { AllLicenseInfoResp } from '../types/responseTypes/AllLicenseNumbersResp';
+import { GetDefaultLicenseNumberResp } from '../types/responseTypes/GetDefaultLicenseNumberResp';
+import { AllOrderResp } from '../types/responseTypes/AllOrderResp';
+import { PayParkingResp } from '../types/responseTypes/PayParkingResp';
+import { allOrderNormalMock, allOrderNullErrorMock, MAP_ORDER } from './mockData/AllOrderData';
+import { userLoginMock } from './mockData/UserLoginData';
+import { getUserInfoMock } from './mockData/GetUserInfoData';
+import { associateAccountMock } from './mockData/AssociateAccountMockData';
+import { getHomePageBannerMock } from './mockData/GetHomePageBannerData';
+import { allLicenseInfoMock } from './mockData/AllLicenseInfoData';
+import { getDefaultLicenseNumberMock } from './mockData/GetDefaultLicenseNumberData';
+import { SetDefaultLicenseNumberResp } from '../types/responseTypes/SetDefaultLicenseNumberResp';
+import { setDefaultLicenseNumberMock } from './mockData/SetDefaultLicenseNumberData';
+import { AllCommonAddressesResp } from '../types/responseTypes/AllCommonAddressesResp';
+import { allCommonAddressesMock } from './mockData/AllCommonAddressesData';
+import { GetParkingDetailResp } from '../types/responseTypes/GetParkingDetailResp';
+import { getParkingDetailMock } from './mockData/GetParkingDetailData';
 
 class HttpsApiMock {
   /** 用户登录信息 **/

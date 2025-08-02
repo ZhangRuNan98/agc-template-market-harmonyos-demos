@@ -1,11 +1,12 @@
-import { Constants, NavHeaderBar, TCRouter, RechargeRecord } from 'common';
-import { RechargeRecordVM } from '../viewmodel/RechargeRecordVM';
+import { Constants, NavHeaderBar} from 'common';
+import { RechargeRecord } from 'common/src/main/ets/model/Member';
+import { RechargeRecordVM } from 'common/src/main/ets/viewmodel/RechargeRecordVM';
 
 @Preview
 @ComponentV2
 export struct RechargeRecordPage {
   vm: RechargeRecordVM = new RechargeRecordVM();
-
+  bottomRectHeight: number = AppStorage.get('bottomRectHeight') as number
   aboutToAppear(): void {
     this.vm.getRechargeRecords();
   }
@@ -71,6 +72,7 @@ export struct RechargeRecordPage {
             .width('100%')
             .layoutWeight(1)
             .scrollBar(BarState.Off)
+            .edgeEffect(EdgeEffect.Spring)
             .backgroundColor($r('sys.color.background_primary'))
             .borderRadius(16)
             .divider({
@@ -84,7 +86,7 @@ export struct RechargeRecordPage {
         .width(Constants.FULL_SIZE)
         .height(Constants.FULL_SIZE)
         .layoutWeight(1)
-        .padding(12)
+        .padding({ bottom: this.bottomRectHeight, left: 12, right: 12,top:12 })
         .backgroundColor($r('sys.color.background_secondary'))
       }
     }

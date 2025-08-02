@@ -1,23 +1,20 @@
-import { CommonConstants } from 'commonlib';
-import { FindPageVM } from '../viewmodels/FindPageVM';
-import { MapComponent } from '@kit.MapKit';
+import { CommonConstants, RouterMap, RouterModule } from 'common';
 import { TopPart } from '../components/TopPart';
-import { BottomPart } from '../components/BottomPart';
+import { ParkingMapList } from 'module_parking_map';
 
 @ComponentV2
 export struct FindPage {
-  vm: FindPageVM = FindPageVM.instance;
-
   build() {
     Stack({ alignContent: Alignment.Top }) {
-      // 地图(高度为1-HeightEnum.LEVEL1)
-      MapComponent({ mapOptions: this.vm.mapOptions, mapCallback: this.vm.mapInitCallback }).height('92%')
+      // 地图+列表
+      ParkingMapList({
+        cardClick: (item) => {
+          RouterModule.push({ url: RouterMap.SITE_DETAIL, param: item });
+        },
+      })
 
       // 顶部展示栏
-      TopPart().position({ top: 0 })
-
-      // 底部列表栏
-      BottomPart().position({ bottom: 0 })
+      TopPart()
     }
     .height(CommonConstants.FULL_HEIGHT)
     .backgroundColor($r('app.color.system_color_background_gray'))
@@ -25,6 +22,6 @@ export struct FindPage {
 }
 
 @Builder
-export function FindPageBuilder() {
+export function findPageBuilder() {
   FindPage()
 }

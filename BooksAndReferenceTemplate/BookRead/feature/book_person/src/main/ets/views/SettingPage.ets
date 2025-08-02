@@ -1,17 +1,24 @@
-import { Constants, NavHeaderBar, ReturnButton, TCRouter } from 'common';
-import { emitter } from '@kit.BasicServicesKit';
+import { BusinessError, emitter } from '@kit.BasicServicesKit';
+import { fileIo, storageStatistics } from '@kit.CoreFileKit';
+import { promptAction } from '@kit.ArkUI';
+import { Logger } from '@hw-agconnect/ui-base';
+import { Constants, NavHeaderBar, TCRouter } from 'common';
 import { UserInfo } from 'base_common';
 
 @ComponentV2
 export struct SettingPage {
   @Local windowTopHeight: number = AppStorage.get('windowTopHeight') as number || 38.77;
   @Local userInfo: UserInfo | undefined = undefined;
+  @Local appCache: number = 10.33;
 
   async aboutToAppear(): Promise<void> {
     this.userInfo = AppStorage.get('userInfo') as UserInfo;
     emitter.on(Constants.LOGIN_CHANGE, () => {
       this.userInfo = AppStorage.get('userInfo') as UserInfo;
     })
+  }
+
+  async onPageShow(): Promise<void>  {
   }
 
   build() {
@@ -27,7 +34,42 @@ export struct SettingPage {
           Column() {
             Column({ space: 12 }) {
               this.settingOptionView('个人信息',Constants.ACCOUNT_ROUTE)
+              this.settingOptionView('阅读设置',Constants.READ_SETTING_ROUTE)
               this.settingOptionView('隐私设置',Constants.PRIVACY_ROUTE)
+
+              Row(){
+                Text('清理缓存')
+                  .fontSize(16)
+                  .height(21)
+                  .width(100)
+                Row({space:6.6}){
+                  Text(this.appCache+'M')
+                    .fontSize(16)
+                    .fontWeight(400)
+                    .fontColor('#99000000')
+                  Image($r('app.media.ic_arrow_right'))
+                    .width(7)
+                    .height(14)
+                    .objectFit(ImageFit.Contain)
+                }
+
+              }
+              .width(Constants.FULL_SIZE)
+              .height(61)
+              .backgroundColor('#FFFFFF')
+              .borderRadius(16)
+              .justifyContent(FlexAlign.SpaceBetween)
+              .padding({
+                left:18,
+                top:20,
+                bottom:20,
+                right:18
+              })
+              .onClick(() => {
+                this.clearCache()
+                this.getCache()
+              })
+
               this.settingOptionView('关于',Constants.ABOUT_ROUTE)
             }
             if (this.userInfo?.isLogin){
@@ -52,24 +94,30 @@ export struct SettingPage {
       .backgroundColor($r('sys.color.background_secondary'))
     }
     .hideTitleBar(true)
-    .width(Constants.FULL_SIZE)
-    .height(Constants.FULL_SIZE)
-    .backgroundColor($r('sys.color.background_secondary'))
   }
 
   @Builder
-  settingOptionView(text:string, url:string){
+  settingOptionView(text:string, url:string, extraText?:string){
     Row(){
       Text(text)
         .fontSize(16)
         .height(21)
         .width(100)
-      Image($r('app.media.ic_arrow_right'))
-        .width(7)
-        .height(14)
-        .objectFit(ImageFit.Contain)
-    }
 
+      Row({space:6.6}){
+        if(extraText){
+          Text(extraText)
+            .fontSize(16)
+            .fontWeight(400)
+            .fontColor('#99000000')
+        }
+        Image($r('app.media.ic_arrow_right'))
+          .width(7)
+          .height(14)
+          .objectFit(ImageFit.Contain)
+      }
+
+    }
     .width(Constants.FULL_SIZE)
     .height(61)
     .backgroundColor('#FFFFFF')
@@ -82,7 +130,7 @@ export struct SettingPage {
       right:18
     })
     .onClick(() => {
-      if (url === Constants.ACCOUNT_ROUTE) {
+      if (url === Constants.ACCOUNT_ROUTE || url === Constants.READ_SETTING_ROUTE)  {
         TCRouter.pushByLogin(url)
       } else {
         TCRouter.push(url);
@@ -129,7 +177,7 @@ export struct SettingPage {
               if (data.index === 1) {
                 // 保留会员状态和书币信息，只清除登录状态
                 const savedMembershipStatus = this.userInfo?.isMembership || false;
-                const savedBookCoins = this.userInfo?.bookCoins || 100;
+                const savedBookCoins = typeof this.userInfo?.bookCoins === 'number' ? this.userInfo.bookCoins : 100;
 
                 // 保存会员状态和书币信息到本地存储
                 AppStorage.setOrCreate('membershipStatus', savedMembershipStatus);
@@ -144,5 +192,55 @@ export struct SettingPage {
           }
         })
     }
+  }
+
+  // 获取应用数据空间大小
+  getCache() {
+    storageStatistics.getCurrentBundleStats((error: BusinessError, bundleStats: storageStatistics.BundleStats) => {
+      if (error) {
+        Logger.error('getCurrentBundleStats failed with error:' + JSON.stringify(error));
+      } else {
+        Logger.info('getCurrentBundleStats successfully:' + JSON.stringify(bundleStats));
+        Logger.info('appsize :' + bundleStats.appSize);
+        Logger.info('cacheSize :' + bundleStats.cacheSize);
+        Logger.info('dataSize :' + bundleStats.dataSize);
+        this.appCache = this.byteToM(bundleStats.cacheSize)
+      }
+    });
+  }
+
+  // 清理缓存
+  clearCache() {
+    let cacheDir = getContext(this).cacheDir;
+    Logger.info(cacheDir);
+    fileIo.listFile(cacheDir).then((filenames) => {
+      for (let i = 0; i < filenames.length; i++) {
+        let dirPath = cacheDir + '/' + filenames[i];
+        Logger.info(dirPath);
+        // 判断是否为文件夹
+        let isDirectory: boolean = false;
+        try {
+          isDirectory = fileIo.statSync(dirPath).isDirectory();
+        } catch (e) {
+          Logger.error(JSON.stringify(e));
+        }
+
+        if (isDirectory) {
+          fileIo.rmdirSync(dirPath);
+        } else {
+          fileIo.unlink(dirPath).then(() => {
+            Logger.info('remove file succeed');
+          }).catch((err: Error) => {
+            Logger.error('remove file failed with error message: ' + err.message);
+          });
+        }
+      }
+    })
+    promptAction.showToast({ message: '缓存清理完成！' })
+  }
+
+  byteToM(num: number) {
+    const mb = num / 1048576
+    return Math.round(mb * 100) / 100
   }
 }

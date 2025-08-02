@@ -1,17 +1,15 @@
-import { IAddressInfo, RouterMap, RouterModule } from 'commonlib';
-import { CommonHeader } from 'componentlib';
-import { FindPageVM } from '../viewmodels/FindPageVM';
+import { AppStorageMap, CommonHeader, RouterMap, RouterModule } from 'common';
 
-@ComponentV2
+@Component
 export struct TopPart {
-  vm: FindPageVM = FindPageVM.instance;
+  @StorageLink(AppStorageMap.SELECTED_ADDRESS) query: string = '';
 
   build() {
     Column() {
       CommonHeader({ title: '找车位', showBackButton: false })
 
       Stack({ alignContent: Alignment.End }) {
-        Search({ value: $$this.vm.query, placeholder: '输入地址' })
+        Search({ value: $$this.query, placeholder: '输入地址' })
           .backgroundColor($r('sys.color.white'))
           .shadow({
             radius: 4,
@@ -22,26 +20,16 @@ export struct TopPart {
           .searchButton('搜索')
           .focusable(false)
           .onClick(() => {
-            RouterModule.push({
-              url: RouterMap.SEARCH_LIST,
-              param: this.vm.query,
-              onPop: (res) => {
-                if (res.result) {
-                  const info = res.result as IAddressInfo;
-                  this.vm.query = info.name;
-                  this.vm.moveCamera(info.location);
-                }
-              },
-            });
+            RouterModule.push({ url: RouterMap.SEARCH_LIST, param: this.query });
           })
 
-        if (this.vm.query) {
+        if (this.query) {
           Row()
             .width(24)
             .height(24)
             .margin({ right: 72 })
             .onClick(() => {
-              this.vm.query = '';
+              this.query = '';
             })
         }
       }

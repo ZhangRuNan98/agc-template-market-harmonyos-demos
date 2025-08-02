@@ -1,10 +1,18 @@
-export { cache } from './src/main/ets/utils/caches/Index';
+export { cache } from './src/main/ets/utils/Caches';
 
-export { iData, GlobalStateMgr } from './src/main/ets/utils/idata/Index';
+export { iData, GlobalStateMgr } from './src/main/ets/utils/IData';
 
-export { iResourceMgr } from './src/main/ets/utils/resmanage/Index';
+export { iResourceMgr } from './src/main/ets/utils/ResManage';
 
-export { routerStack } from './src/main/ets/utils/routerstack/Index';
+export { routerStack } from './src/main/ets/utils/RouterStack';
+
+export {
+  BreakpointTypeEnum,
+  BreakpointSystem,
+  BreakpointType,
+  BreakpointModel,
+  BreakpointStorage
+} from './src/main/ets/utils/BreakpointSystem'
 
 export * from './src/main/ets/featurecomponents/Index';
 
@@ -14,4 +22,4 @@ export * from './src/main/ets/types/Index';
 
 export * from './src/main/ets/models/Index';
 
-export * from './src/main/ets/constants/Index';
+export * from './src/main/ets/constants/Index'

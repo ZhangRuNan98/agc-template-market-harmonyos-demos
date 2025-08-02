@@ -1,0 +1,251 @@
+import { Logger } from '@hw-agconnect/ui-base';
+import { Constants, NavHeaderBar, ReturnButton, TCRouter } from 'common';
+import { baseActionSheet, UserInfo } from 'base_common';
+
+@ComponentV2
+export struct ReadSettingPage {
+  @Local windowTopHeight: number = AppStorage.get('windowTopHeight') as number || 38.77;
+  @Local userInfo: UserInfo = AppStorage.get<UserInfo>('userInfo')!
+  @Local isReminderTime: boolean = false
+  @Local reminderTime: number=this.userInfo.reminderTime
+  @Local optionTime: number=this.userInfo.reminderTime
+
+  build() {
+    NavDestination() {
+      Column() {
+        NavHeaderBar({
+          title: '阅读设置',
+          hasBackButton: true,
+          hasBgColor: true,
+          isMainPage: false,
+        })
+        Column({space: 12}) {
+          Column(){
+            Row(){
+              Text('全屏阅读')
+                .fontSize(16)
+                .height(21)
+                .width(191)
+              Toggle({ type: ToggleType.Switch, isOn: this.userInfo.fullScreen })
+                .width(36)
+                .height(20)
+                .selectedColor('#007DFF')
+                .switchPointColor('#FFFFFF')
+                .onChange((isOn: boolean) => {
+                  this.userInfo.fullScreen = isOn
+                })
+            }
+            .width(Constants.FULL_SIZE)
+            .height(56)
+            .backgroundColor('#FFFFFF')
+            .justifyContent(FlexAlign.SpaceBetween)
+
+            Divider()
+              .width(Constants.FULL_SIZE)
+
+            Row(){
+              Text('不显示时间')
+                .fontSize(16)
+                .height(21)
+                .width(191)
+              Toggle({ type: ToggleType.Switch, isOn: this.userInfo.noTimeBattery })
+                .width(36)
+                .height(20)
+                .selectedColor('#007DFF')
+                .switchPointColor('#FFFFFF')
+                .onChange((isOn: boolean) => {
+                  this.userInfo.noTimeBattery = isOn
+                })
+            }
+            .width(Constants.FULL_SIZE)
+            .height(56)
+            .backgroundColor('#FFFFFF')
+            .justifyContent(FlexAlign.SpaceBetween)
+          }
+          .width(Constants.FULL_SIZE)
+          .backgroundColor('#FFFFFF')
+          .padding({
+            left:12,
+            right:12
+          })
+          .borderRadius(16)
+
+          Row(){
+            Text('自动购买下一章')
+              .fontSize(16)
+              .height(21)
+              .width(191)
+            Toggle({ type: ToggleType.Switch, isOn: this.userInfo.continuousBuy })
+              .width(36)
+              .height(20)
+              .selectedColor('#007DFF')
+              .switchPointColor('#FFFFFF')
+              .onChange((isOn: boolean) => {
+                this.userInfo.continuousBuy = isOn
+              })
+          }
+          .settingStyle()
+          .justifyContent(FlexAlign.SpaceBetween)
+
+          Row(){
+            Text('休息时间提醒')
+              .fontSize(16)
+              .height(21)
+              .width(191)
+            Row({space:6.6}){
+              Text(this.reminderTime===0? '关闭': this.reminderTime+'分钟')
+                .fontSize(16)
+                .fontColor('#99000000')
+              Image($r('app.media.ic_arrow_right'))
+                .width(7)
+                .height(14)
+                .objectFit(ImageFit.Contain)
+            }
+          }
+          .settingStyle()
+          .justifyContent(FlexAlign.SpaceBetween)
+          .onClick(() => { baseActionSheet.show({
+            id: 'ReminderSheetBuilder',
+            showClose: false,
+            height: SheetSize.FIT_CONTENT,
+            backgroundColor: $r('app.color.pure_white'),
+            customContent: () => {
+              this.ReminderSheetBuilder()
+            },
+          })
+          })
+        }
+        .width(Constants.FULL_SIZE)
+        .padding({
+          top:12,
+          left:16,
+          right:16
+        })
+      }
+      .height(Constants.FULL_SIZE)
+    }
+    .hideTitleBar(true)
+    .width(Constants.FULL_SIZE)
+    .height(Constants.FULL_SIZE)
+    .backgroundColor($r('sys.color.background_secondary'))
+  }
+
+  @Styles
+  settingStyle() {
+    .width(Constants.FULL_SIZE)
+    .height(61)
+    .backgroundColor('#FFFFFF')
+    .borderRadius(16)
+    .padding({
+      left:12,
+      top:20,
+      bottom:20,
+      right:12
+    })
+  }
+
+  @Builder
+  ReminderSheetBuilder() {
+    Column() {
+      Row(){
+        Row({space:8}){
+          Button() {
+            Image($r('app.media.ic_cross'))
+              .width(13)
+              .height(13)
+              .objectFit(ImageFit.Contain)
+          }
+          .width(40)
+          .height(40)
+          .padding({
+            top: 11,
+            left: 11,
+            right: 11,
+            bottom: 11
+          })
+          .borderRadius(1000)
+          .backgroundColor('#0D000000')
+          .onClick(() => {
+            baseActionSheet.close('ReminderSheetBuilder')
+            this.optionTime=this.reminderTime
+          })
+          Text('休息时间提醒')
+            .fontSize(20)
+            .fontWeight(FontWeight.Bold)
+        }
+        Button() {
+          Image($r('app.media.ic_tick'))
+            .width(18)
+            .height(18)
+            .objectFit(ImageFit.Contain)
+        }
+        .width(40)
+        .height(40)
+        .padding({
+          top: 11,
+          left: 11,
+          right: 11,
+          bottom: 11
+        })
+        .borderRadius(1000)
+        .backgroundColor('#0D000000')
+        .onClick(() => {
+          baseActionSheet.close('ReminderSheetBuilder')
+          this.reminderTime=this.optionTime
+          this.userInfo.reminderTime=this.optionTime
+        })
+      }
+      .width(Constants.FULL_SIZE)
+      .justifyContent(FlexAlign.SpaceBetween)
+      .padding({
+        top:8,
+        bottom:8
+      })
+      this.SheetOptionView(45)
+      this.SheetOptionView(90)
+      this.SheetOptionView(120)
+      this.SheetOptionView(0)
+    }
+    .width(Constants.FULL_SIZE)
+    .padding({ bottom: 40, left: 16, right: 16, top: 8 })
+    .backgroundColor($r('app.color.pure_white'))
+    .borderRadius(16)
+  }
+
+  @Builder
+  SheetOptionView(tempTime: number) {
+    Row({space:18}){
+      Checkbox({ name: tempTime.toString(), group: 'reminderGroup', })
+        .select(this.optionTime===tempTime)
+        .height(20)
+        .width(20)
+        .selectedColor('#E84026')
+        .shape(CheckBoxShape.CIRCLE)
+        .onClick(() => {
+          if(this.optionTime!==tempTime) {
+            this.optionTime=tempTime
+          }
+        })
+
+      Text(tempTime===0? '关闭': tempTime+'分钟')
+        .fontSize(16)
+        .fontWeight(FontWeight.Medium)
+        .textAlign(TextAlign.Start)
+    }
+    .width(Constants.FULL_SIZE)
+    .padding({
+      left:12,
+      right:12,
+      top:16,
+      bottom:16
+    })
+    .justifyContent(FlexAlign.Start)
+    .onClick(() => {
+      if(this.optionTime!==tempTime) {
+        this.optionTime=tempTime
+      }
+    })
+  }
+}
+
+

@@ -1,6 +1,6 @@
 import { OrderListPageVM } from '../viewModels/OrderListPageVM';
 import { OrderApi } from '../http/Api';
-import { OrderCardVM, OrderSkuDto } from '../http/Type'
+import { OrderCardVM, OrderSkuDto } from '../http/Type';
 import { CustomContentDialog, LengthMetrics, promptAction, TipsDialog } from '@kit.ArkUI';
 import { CommonButton } from '../components/CommonButton';
 import { emitter } from '@kit.BasicServicesKit';
@@ -11,7 +11,7 @@ import {
   PreOrderRequest,
   routerStack,
   Style,
-  TitleBar
+  TitleBar,
 } from 'lib_foundation';
 import { client } from 'lib_network';
 import { AddressManage } from 'module_address_manage';
@@ -19,7 +19,7 @@ import { buildSkuCard, OrderType } from '../common';
 
 @ComponentV2
 struct OrderListPage {
-  vm: OrderListPageVM = OrderListPageVM.instance
+  vm: OrderListPageVM = OrderListPageVM.instance;
   private tabsController: TabsController = new TabsController();
   dialogControllerDelete: CustomDialogController = new CustomDialogController({
     builder: TipsDialog({
@@ -27,7 +27,7 @@ struct OrderListPage {
       primaryButton: {
         value: '取消',
         action: () => {
-          console.info('Callback when the first button is clicked')
+          console.info('Callback when the first button is clicked');
         },
       },
       secondaryButton: {
@@ -36,19 +36,19 @@ struct OrderListPage {
         action: () => {
           this.vm.showLoading = true;
           OrderApi.deleteOrder(this.vm.curOrderCode)
-            .then(() => this.vm.refresh(false))
-          this.dialogControllerDelete.close()
-        }
+            .then(() => this.vm.refresh(false));
+          this.dialogControllerDelete.close();
+        },
       },
     }),
-  })
+  });
   dialogControllerCancel: CustomDialogController = new CustomDialogController({
     builder: TipsDialog({
       content: '是否取消当前订单?',
       primaryButton: {
         value: '取消',
         action: () => {
-          console.info('Callback when the first button is clicked')
+          console.info('Callback when the first button is clicked');
         },
       },
       secondaryButton: {
@@ -57,19 +57,19 @@ struct OrderListPage {
         action: () => {
           this.vm.showLoading = true;
           OrderApi.cancelOrderByCode(this.vm.curOrderCode)
-            .then(() => this.vm.refresh(false))
-          this.dialogControllerCancel.close()
-        }
+            .then(() => this.vm.refresh(false));
+          this.dialogControllerCancel.close();
+        },
       },
     }),
-  })
+  });
   dialogControllerRefund: CustomDialogController = new CustomDialogController({
     builder: TipsDialog({
       content: '是否退款?',
       primaryButton: {
         value: '取消',
         action: () => {
-          console.info('Callback when the first button is clicked')
+          console.info('Callback when the first button is clicked');
         },
       },
       secondaryButton: {
@@ -78,26 +78,26 @@ struct OrderListPage {
         action: () => {
           this.vm.showLoading = true;
           OrderApi.refundOrderByCode(this.vm.curOrderCode)
-            .then(() => this.vm.refresh(false))
-          this.dialogControllerRefund.close()
-        }
+            .then(() => this.vm.refresh(false));
+          this.dialogControllerRefund.close();
+        },
       },
     }),
-  })
+  });
 
   aboutToAppear(): void {
-    this.vm.init()
-    this.vm.refresh()
+    this.vm.init();
+    this.vm.refresh();
     emitter.on('updateOrder', (data) => {
       if (data.data) {
-        this.vm.refresh()
+        this.vm.refresh();
       }
-    })
+    });
   }
 
   aboutToDisappear(): void {
-    this.vm.clear()
-    emitter.off('updateOrder')
+    this.vm.clear();
+    emitter.off('updateOrder');
   }
 
   build(): void {
@@ -105,9 +105,9 @@ struct OrderListPage {
       Column() {
         TitleBar({
           barPadding: { right: Style.MENU_BAR_MARGIN_RIGHT },
-          barColor: Color.White
+          barColor: Color.White,
         }) {
-          buildProductGhostSearchBar('搜索我的订单', () => routerStack.pushPathByName('OrderSearchPage', null, false))
+          buildProductGhostSearchBar('搜索我的订单', () => routerStack.pushPathByName('OrderSearchPage', null, false));
         }
 
         Tabs({ controller: this.tabsController }) {
@@ -117,15 +117,15 @@ struct OrderListPage {
         }
         .onTabBarClick((index: number) => {
           this.vm.curIndex = index;
-          this.vm.type = index
-          this.vm.refresh()
+          this.vm.type = index;
+          this.vm.refresh();
         })
         .barMode(BarMode.Scrollable)
         .height(44)
         .width('100%')
 
         Column() {
-          this.buildContent()
+          this.buildContent();
         }
         .layoutWeight(1)
       }
@@ -199,7 +199,7 @@ struct OrderListPage {
           } else {
             Column() {
               ForEach(this.vm.orderCards, (card: OrderCardVM, index: number) => {
-                this.buildOrderCard(card, index)
+                this.buildOrderCard(card, index);
               }, (item: OrderCardVM[]) => JSON.stringify(item))
             }
             .width('100%')
@@ -210,6 +210,7 @@ struct OrderListPage {
         }
         .height('100%')
         .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring)
         .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.BOTTOM])
 
         if (this.vm.showLoading) {
@@ -225,7 +226,8 @@ struct OrderListPage {
           .justifyContent(FlexAlign.Center)
         }
       }
-      .backgroundColor('#F1F3F5')
+      .backgroundColor(Style.BACKGROUND_COLOR_GREY)
+      .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.BOTTOM])
     }
   }
 
@@ -245,15 +247,15 @@ struct OrderListPage {
 
       Column() {
         ForEach(card.skuList, (sku: OrderSkuDto) => {
-          buildSkuCard(sku)
+          buildSkuCard(sku);
         }, (item: OrderSkuDto[]) => JSON.stringify(item))
       }
       .onClick(() => {
-        routerStack.pushPathByName('OrderInfoPage', card)
+        routerStack.pushPathByName('OrderInfoPage', card);
       })
 
       Row() {
-        Text('总价¥' + card.totalPrice)
+        Text(`总价¥ ${card.totalPrice + (card.discount ?? 0)}`)
           .fontColor($r('sys.color.mask_tertiary'))
           .fontSize(12)
           .margin({ right: 8 })
@@ -271,26 +273,26 @@ struct OrderListPage {
 
       Row() {
         if (card.type === OrderType.PENDING_PAY) {
-          this.buildCancelButton(card)
-          this.buildAddressButton(card)
-          this.buildPaymentButton(card)
+          this.buildCancelButton(card);
+          this.buildAddressButton(card);
+          this.buildPaymentButton(card);
         } else if (card.type === OrderType.PENDING_SEND) {
-          this.buildRefundButton(card)
-          this.buildAddCartButton(card)
-          this.buildSendButton(card)
+          this.buildRefundButton(card);
+          this.buildAddCartButton(card);
+          this.buildSendButton(card);
         } else if (card.type === OrderType.PENDING_GET) {
-          this.buildRefundButton(card)
-          this.buildAddCartButton(card)
-          this.buildAgreeButton(card)
+          this.buildRefundButton(card);
+          this.buildAddCartButton(card);
+          this.buildAgreeButton(card);
         } else if (card.type === OrderType.SUCCESS) {
-          this.buildDeleteButton(card)
-          this.buildAddCartButton(card)
-          this.buildPayAgainButton(card)
+          this.buildDeleteButton(card);
+          this.buildAddCartButton(card);
+          this.buildPayAgainButton(card);
         } else if (card.type === OrderType.CANCEL) {
-          this.buildDeleteButton(card)
-          this.buildPayAgainButton(card)
+          this.buildDeleteButton(card);
+          this.buildPayAgainButton(card);
         } else if (card.type === OrderType.REFUND) {
-          this.buildDeleteButton(card)
+          this.buildDeleteButton(card);
         }
       }
       .margin({ top: 12 })
@@ -319,8 +321,8 @@ struct OrderListPage {
     .borderRadius(23)
     .margin({ left: 8 })
     .onClick(() => {
-      this.vm.curOrderCode = card.orderCode
-      this.dialogControllerDelete.open()
+      this.vm.curOrderCode = card.orderCode;
+      this.dialogControllerDelete.open();
     })
   }
 
@@ -340,8 +342,8 @@ struct OrderListPage {
     .borderRadius(23)
     .margin({ left: 8 })
     .onClick(() => {
-      this.vm.curOrderCode = card.orderCode
-      this.dialogControllerCancel.open()
+      this.vm.curOrderCode = card.orderCode;
+      this.dialogControllerCancel.open();
     })
   }
 
@@ -359,9 +361,9 @@ struct OrderListPage {
     .borderRadius(23)
     .margin({ left: 8 })
     .onClick(() => {
-      this.vm.curOrderCode = card.orderCode
-      this.vm.curPrice = card.totalPrice
-      this.vm.prepay(card.orderCode)
+      this.vm.curOrderCode = card.orderCode;
+      this.vm.curPrice = card.totalPrice;
+      this.vm.prepay(card.orderCode);
     })
   }
 
@@ -381,8 +383,8 @@ struct OrderListPage {
     .borderRadius(23)
     .margin({ left: 8 })
     .onClick(() => {
-      this.vm.curOrderCode = card.orderCode
-      this.dialogControllerRefund.open()
+      this.vm.curOrderCode = card.orderCode;
+      this.dialogControllerRefund.open();
     })
   }
 
@@ -402,7 +404,7 @@ struct OrderListPage {
     .onClick(() => {
       this.vm.showLoading = true;
       OrderApi.agreeOrderByCode(card.orderCode)
-        .then(() => this.vm.refresh(false))
+        .then(() => this.vm.refresh(false));
     })
   }
 
@@ -412,11 +414,11 @@ struct OrderListPage {
       navPathStack: routerStack,
       isSelectMode: true,
       onSelect: (data) => {
-        card.address.name = data.name
-        card.address.cellphone = data.phone
-        card.address.address = data.province + data.city + data.district + data.street + data.detail
-        OrderApi.updateOrderAddressByCode(card.orderCode, card.address)
-      }
+        card.address.name = data.name;
+        card.address.cellphone = data.phone;
+        card.address.address = data.province + data.city + data.district + data.street + data.detail;
+        OrderApi.updateOrderAddressByCode(card.orderCode, card.address);
+      },
     }) {
       Button() {
         Text('修改地址')
@@ -451,8 +453,8 @@ struct OrderListPage {
     .margin({ left: 8 })
     .onClick(() => {
       card.skuList.forEach((item) => {
-        client.cart.addSkuToCart(item.skuCode, item.count)
-      })
+        client.cart.addSkuToCart(item.skuCode, item.count);
+      });
       promptAction.showToast({ message: '成功加入购物车', alignment: Alignment.Center });
     })
   }
@@ -471,7 +473,7 @@ struct OrderListPage {
     .borderRadius(23)
     .margin({ left: 8 })
     .onClick(() => {
-      promptAction.showToast({ message: '已提醒商家发货', alignment: Alignment.Center })
+      promptAction.showToast({ message: '已提醒商家发货', alignment: Alignment.Center });
     })
   }
 
@@ -493,13 +495,13 @@ struct OrderListPage {
       for (let sku of card.skuList) {
         const preOrderItem: PreOrderItem = {
           skuCode: sku.skuCode,
-          quantity: sku.count
+          quantity: sku.count,
         };
         items.push(preOrderItem);
       }
       const preOrderRequest: PreOrderRequest = {
         items: items,
-        removeFromCart: true
+        removeFromCart: true,
       };
       routerStack.pushPathByName('OrderSubmitPage', preOrderRequest);
     })

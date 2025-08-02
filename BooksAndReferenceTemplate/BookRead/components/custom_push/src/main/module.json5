@@ -1,0 +1,11 @@
+{
+  "module": {
+    "name": "custom_push",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet",
+      "2in1"
+    ]
+  }
+}

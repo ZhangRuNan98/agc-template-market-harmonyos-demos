@@ -40,7 +40,7 @@ export struct CategoryPageContent {
       })
       .finally(() => {
         this.isLoading = false;
-      })
+      });
   }
 
   build() {
@@ -63,12 +63,12 @@ export struct CategoryPageContent {
       hideBackButton: !this.isSubPage,
       barColor: Color.White,
       barPadding: this.isSubPage ? { right: 12 } : { left: 12, right: 12 },
-      barExpandSafeArea: true
+      barExpandSafeArea: true,
     }) {
       buildProductGhostSearchBar(
         '请输入搜索内容',
         () => routerStack.pushPathByName(RouterMap.PRODUCT_SEARCH, null),
-      )
+      );
     }
   }
 
@@ -85,7 +85,7 @@ export struct CategoryPageContent {
             };
           }, (item: Category, index: number) => index + JSON.stringify(item));
         }
-        .width(96)
+        .width('30%')
         .height('100%')
         .borderWidth({ right: 1 })
         .borderColor(Style.BACKGROUND_COLOR_GREY);

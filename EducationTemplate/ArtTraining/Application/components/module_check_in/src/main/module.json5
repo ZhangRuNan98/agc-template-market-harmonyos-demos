@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "module_check_in",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ],
+  }
+}

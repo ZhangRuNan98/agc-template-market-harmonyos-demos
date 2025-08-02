@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -13,49 +14,51 @@
 
 <img src="./screenshot/example_tool.png">
 
-## 使用
+## 约束与限制
 
-1. 组件依赖
+### 环境
 
-    由于reader_tool_bar组件依赖**base_common** har包，所以需要将模板根目录的components下**base_common** 目录拷贝至您的工程相应目录。
+- DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+- 设备类型：华为手机（直板机）
+- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
 
+## 快速入门
+
+1. 安装组件
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+   如果是从生态市场下载组件，请参考以下步骤安装组件。  
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的xxx目录下。  
+   b. 在项目根目录build-profile.json5并添加reader_tool_bar和base_common模块。
     ```typescript
-    // reader_tool_bar har包依赖情况
-    "dependencies": {
-      "base_common": "file:../base_common",
-    }
-    ```
-
-2. 安装组件
-
-    ```typescript
-    // 在项目根目录build-profile.json5填写reader_tool_bar和base_common路径
+    // 在项目根目录的build-profile.json5填写reader_tool_bar和base_common路径。其中xxx为组件存在的目录名
      "modules": [
         {
           "name": "reader_tool_bar",
-        "srcPath": "./components/reader_tool_bar",
+        "srcPath": "./xxx/reader_tool_bar",
         },
         {
           "name": "base_common",
-        "srcPath": "./components/base_common",
+        "srcPath": "./xxx/base_common",
         }
      ]
     ```
-
+   c. 在项目根目录oh-package.json5中添加依赖
     ```typescript
-    // 模块下的oh-package.json5
+    // xxx为组件存放的目录名称
     "dependencies": {
-      "reader_tool_bar": "file:../../components/reader_tool_bar"
+      "reader_tool_bar": "file:../xxx/reader_tool_bar",
+      "base_common": "file:../xxx/base_common"
     }
     ```
 
-3. 引入组件。
+2. 引入组件。
 
     ```typescript
     import { ReaderToolBar } from 'reader_tool_bar';
     ```
 
-4. 调用组件。详细参数配置说明参见[API参考](#API参考)。
+3. 调用组件。详细参数配置说明参见[API参考](#API参考)。
 
     ```typescript
     ReaderToolBar({
@@ -89,39 +92,18 @@
 
 | 名称                      | 类型                                                                            | 是否必填 | 说明               |
 | ------------------------- |-------------------------------------------------------------------------------| -------- | ------------------ |
-| spineList                 | bookParser.[SpineItem](#SpineItem对象说明)[]                           | 是       | 书籍的书脊项列表   |
-| catalogItemList           | bookParser.[CatalogItem](#CatalogItem对象说明) []                      | 是       | 书籍目录项列表     |
-| readerSetting             | readerCore.[ReaderSetting](#ReaderSetting对象说明)                     | 是       | 阅读设置项         |
+| spineList                 | bookParser.[SpineItem](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/reader-book-parser#section1029864651619)[]                           | 是       | 书籍的书脊项列表   |
+| catalogItemList           | bookParser.[CatalogItem](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/reader-book-parser#section12325515195) []                      | 是       | 书籍目录项列表     |
+| readerSetting             | readerCore.[ReaderSetting](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/reader-read-core#section13615732174218)                     | 是       | 阅读设置项         |
 | lockedStatus              | boolean[]                                                                     | 是       | 需要付费的章节列表 |
 | curChapterId              | number                                                                        | 是       | 当前阅读的章节数   |
-| bookParserHandler         | bookParser.[BookParserHandler](#BookParserHandler对象说明)             | 是       | 书籍解析句柄       |
-| readerComponentController | readerCore.[ReaderComponentController](#ReaderComponentController对象说明) | 是       | 阅读组件控制器     |
+| bookParserHandler         | bookParser.[BookParserHandler](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/reader-book-parser#section59035422210)             | 是       | 书籍解析句柄       |
+| readerComponentController | readerCore.[ReaderComponentController](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/reader-read-core#section1917812014110) | 是       | 阅读组件控制器     |
 
-### SpineItem对象说明
-
-   具体请参考[官网链接](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/reader-book-parser#section1029864651619)
-
-### CatalogItem对象说明
-
-   具体请参考[官网链接](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/reader-book-parser#section12325515195)
-
-### ReaderSetting对象说明
-
-   具体请参考[官网链接](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/reader-read-core#section13615732174218)
-
-### BookParserHandler对象说明
-
-   具体请参考[官网链接](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/reader-book-parser#section59035422210)
-
-### ReaderComponentController对象说明
-
-   具体请参考[官网链接](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/reader-read-core#section1917812014110)
 
 ## 示例代码
 
 ```typescript
-// 引入组件
-// 引入组件
 // 引入组件
 import { ReaderToolBar } from 'reader_tool_bar';
 import { bookParser, readerCore, ReadPageComponent } from '@kit.ReaderKit';

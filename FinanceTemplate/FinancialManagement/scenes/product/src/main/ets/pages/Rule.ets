@@ -1,4 +1,5 @@
-import { CommonRuleLine } from 'componentlib';
+import { CommonRuleLine } from 'module_base';
+import { CommonCheckCard } from '../components/CommonCheckCard';
 import { CommonRow } from '../components/CommonRow';
 import { CommonRowSecond } from '../components/productInfo/CommonRowSecond';
 import { RuleVM } from '../viewModels/RuleVM';
@@ -57,54 +58,16 @@ struct Rule {
                     top: 24,
                     bottom: 4,
                     left: 12,
-                    right: 12
+                    right: 12,
                   })
                   .backgroundColor($r('sys.color.background_primary'))
                   .borderRadius(16)
                   .margin({ bottom: 12 })
 
-                  Column() {
-                    Row() {
-                      Text('购买流程')
-                        .fontSize(18)
-                        .fontWeight(FontWeight.Bold)
-                        .fontColor($r('sys.color.font_primary'))
-                    }
-                    .width('100%')
-                    .margin({ bottom: 16 })
-
-                    CommonRuleLine({
-                      isPurchase: true,
-                      confirmationDate: this.vm.purchaseProcess?.redemptionDate,
-                      redemptionDate: this.vm.purchaseProcess?.redemptionDate
-                    })
-
-                    Row() {
-                      Row()
-                        .width(4)
-                        .height(4)
-                        .backgroundColor($r('sys.color.icon_tertiary'))
-                        .borderRadius('50%')
-                        .margin({ left: 8, right: 4 })
-                      Text(`17:00点前购买，${this.vm.purchaseProcess?.confirmationDate}可查看持仓并开始计算收益`)
-                        .fontSize(10)
-                        .fontWeight(FontWeight.Regular)
-                        .fontColor($r('sys.color.font_secondary'))
-                    }
-                    .width('100%')
-                    .height(32)
-                    .backgroundColor($r('sys.color.comp_background_tertiary'))
-                    .borderRadius(8)
-                  }
-                  .padding({
-                    top: 24,
-                    bottom: 16,
-                    left: 12,
-                    right: 12
+                  CommonCheckCard({
+                    redemptionDate: this.vm.purchaseProcess?.redemptionDate,
+                    confirmationDate: this.vm.purchaseProcess?.confirmationDate,
                   })
-                  .backgroundColor($r('sys.color.background_primary'))
-                  .borderRadius(16)
-                  .margin({ bottom: 12 })
 
                   CommonRowSecond({ text: '认购费率', value: this.vm.buyRule?.purchaseRate + '%' })
 
@@ -131,6 +94,7 @@ struct Rule {
                 }
               }
               .scrollBar(BarState.Off)
+              .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
             }
             .width('100%')
             .height('100%')
@@ -157,7 +121,7 @@ struct Rule {
                     top: 24,
                     bottom: 4,
                     left: 12,
-                    right: 12
+                    right: 12,
                   })
                   .backgroundColor($r('sys.color.background_primary'))
                   .borderRadius(16)
@@ -176,7 +140,7 @@ struct Rule {
                     CommonRuleLine({
                       isPurchase: false,
                       confirmationDate: this.vm.redemptionProcess?.confirmationDate,
-                      redemptionDate: this.vm.redemptionProcess?.redemptionDate
+                      redemptionDate: this.vm.redemptionProcess?.redemptionDate,
                     })
 
                     Row() {
@@ -200,7 +164,7 @@ struct Rule {
                     top: 24,
                     bottom: 16,
                     left: 12,
-                    right: 12
+                    right: 12,
                   })
                   .backgroundColor($r('sys.color.background_primary'))
                   .borderRadius(16)
@@ -223,6 +187,7 @@ struct Rule {
                 }
               }
               .scrollBar(BarState.Off)
+              .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
             }
             .width('100%')
             .height('100%')

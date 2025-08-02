@@ -4,27 +4,57 @@ import { Constants, TCRouter } from 'common'
 export struct ActivityCard {
   build() {
     Row() {
-      Row({space: 12}){
-        Image($r('app.media.activity_center'))
-          .height(48)
-          .width(48)
-          .objectFit(ImageFit.Contain)
-        Column({space: 2}){
-          Text($r('app.string.activity_center'))
-            .width(64)
-            .height(21)
-            .fontSize(16)
-            .fontWeight(FontWeight.Medium)
-          Text($r('app.string.activity_description'))
-            .width(70)
-            .height(14)
-            .fontSize(10)
-            .fontWeight(FontWeight.Regular)
+      Row(){
+        Row(){
+          Column({space: 2}){
+            Text($r('app.string.welfare_center'))
+              .width(64)
+              .height(21)
+              .fontSize(16)
+              .fontWeight(FontWeight.Medium)
+            Text($r('app.string.welfare_description'))
+              .width(70)
+              .height(14)
+              .fontSize(10)
+              .fontWeight(FontWeight.Regular)
+          }
+          .alignItems(HorizontalAlign.Start)
+          Image($r('app.media.welfare_center'))
+            .height(48)
+            .width(48)
+            .objectFit(ImageFit.Contain)
+            .margin({left:22})
         }
-        .alignItems(HorizontalAlign.Start)
+        .onClick(() => {
+          TCRouter.pushByLogin(Constants.WELFARE_CENTER);
+        })
+        Row(){
+          Column({space: 2}){
+            Text($r('app.string.activity_center'))
+              .width(64)
+              .height(21)
+              .fontSize(16)
+              .fontWeight(FontWeight.Medium)
+            Text($r('app.string.activity_description'))
+              .width(70)
+              .height(14)
+              .fontSize(10)
+              .fontWeight(FontWeight.Regular)
+          }
+          .alignItems(HorizontalAlign.Start)
+          Image($r('app.media.activity_center'))
+            .height(48)
+            .width(48)
+            .objectFit(ImageFit.Contain)
+            .margin({left:22})
+        }
+        .onClick(() => {
+          TCRouter.push(Constants.ACTIVITY_ROUTE);
+        })
+
       }
-      .width(304)
-      .height(56)
+      .width(Constants.FULL_SIZE)
+      .justifyContent(FlexAlign.SpaceBetween)
       .padding({
         left:8,
         right:8
@@ -40,8 +70,6 @@ export struct ActivityCard {
       top:8,
       bottom:8
     })
-    .onClick(() => {
-      TCRouter.push(Constants.ACTIVITY_ROUTE);
-    })
+
   }
 }

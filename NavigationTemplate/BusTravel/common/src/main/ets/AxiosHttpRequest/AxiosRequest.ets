@@ -1,7 +1,7 @@
 //AxiosRequest.ets
-import { AxiosHttpRequest, errorHandler } from './AxiosHttp'
-import { AxiosRequestHeaders, AxiosResponse } from '@ohos/axios';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { AxiosRequestHeaders, AxiosResponse } from '@ohos/axios'
+import { AxiosHttpRequest, errorHandler } from './AxiosHttp'
 
 const axiosClient = new AxiosHttpRequest({
   baseURL: '/api',

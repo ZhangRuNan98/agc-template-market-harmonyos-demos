@@ -22,15 +22,13 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       let windowClass: window.Window = windowStage.getMainWindowSync(); // 获取应用主窗口
-      // 设置窗口全屏
-      await windowClass.setWindowLayoutFullScreen(true);
-      let type = window.AvoidAreaType.TYPE_SYSTEM; // 以状态栏避让为例
+      let type = window.AvoidAreaType.TYPE_SYSTEM;
       let avoidArea = windowClass.getWindowAvoidArea(type);
 
 
       const windowConfig = AppStorageV2.connect(WindowConfig, 'windowConfig', () => new WindowConfig())!;
       windowConfig.windowTopHeight = px2vp(avoidArea.topRect.height);
-      type = window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR; // 以导航条避让为例
+      type = window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR;
       avoidArea = windowClass.getWindowAvoidArea(type);
       windowConfig.windowBottomHeight = px2vp(avoidArea.bottomRect.height);
       Logger.info(TAG, 'Succeeded in loading the content.');

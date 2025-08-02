@@ -1,18 +1,19 @@
-import { CommonConstants, RouterMap, RouterModule } from 'commonlib';
+import { CommonConstants, CommonHeader, RouterMap, RouterModule } from 'common';
 import { LicenseSwiper } from '../components/LicenseSwiper';
 import { HomePageVM } from '../viewmodels/HomePageVM';
-import { AssociateUtil, CommonHeader } from 'componentlib';
 import { CommonAddress } from '../components/CommonAddress';
-import { SpotsList } from '../components/SpotsList';
+import { AssociateUtil } from 'network';
+import { SpotsTab } from 'module_parking_spots';
 
 @ComponentV2
 export struct HomePage {
   @Local offsetY: number = 0;
   vm: HomePageVM = HomePageVM.instance;
   controller: Scroller = new Scroller();
+  maxHeight: Length = '64%';
 
   aboutToAppear() {
-    this.vm.init();
+    this.vm.handleHomePageConfig();
   }
 
   build() {
@@ -31,7 +32,12 @@ export struct HomePage {
         CommonAddress().margin({ top: 12 })
 
         // 车场列表
-        SpotsList()
+        SpotsTab({
+          cardClick: (item) => {
+            RouterModule.push({ url: RouterMap.SITE_DETAIL, param: item });
+          },
+        })
+          .constraintSize({ maxHeight: this.maxHeight })
       }
       .padding({ bottom: $r('app.string.padding_12') })
     }
@@ -77,6 +83,6 @@ export struct HomePage {
 }
 
 @Builder
-export function HomePageBuilder() {
+export function homePageBuilder() {
   HomePage()
 }

@@ -75,7 +75,6 @@ export class CoursesVM {
     } finally {
       this.isLoading = false;
     }
-
   }
 
   public async sortCourseList(sortType: CourseSortTypeMap) {

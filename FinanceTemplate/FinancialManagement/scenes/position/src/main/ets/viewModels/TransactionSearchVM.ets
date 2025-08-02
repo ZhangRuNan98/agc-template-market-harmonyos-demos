@@ -1,9 +1,5 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, } from 'commonlib';
-import { IProductItem, } from 'network/src/main/ets/types/responseTypes/GetProductResp';
-import { ITransactionItem } from 'network/src/main/ets/types/responseTypes/GetTransactionRecordListResp';
-
-const TAG = '[TransactionSearchVM]';
+import { https, ITransactionItem } from 'lib_foundation';
+import { RouterModule } from 'module_base';
 
 @ObservedV2
 export class TransactionSearchVM {

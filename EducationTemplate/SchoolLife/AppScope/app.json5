@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "com.atomicservice.xxx",
+    "bundleName": "com.atomicservice.xxx", // todo: 填写正确的 bundleName
     "bundleType": "atomicService",
     "vendor": "example",
     "versionCode": 1000000,

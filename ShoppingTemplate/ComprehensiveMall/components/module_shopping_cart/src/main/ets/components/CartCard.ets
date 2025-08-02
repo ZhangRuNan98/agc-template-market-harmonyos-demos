@@ -17,9 +17,9 @@ export struct CartCard {
 
   build() {
     Row({space: 12}) {
-      this.checkboxBuilder()
-      this.cardImgBuilder()
-      this.cardInfoBuilder()
+      this.checkboxBuilder();
+      this.cardImgBuilder();
+      this.cardInfoBuilder();
     }
     .alignItems(VerticalAlign.Top)
     .backgroundColor(Color.White)
@@ -27,7 +27,7 @@ export struct CartCard {
     .padding({ left: 12, right: 12, top: 16, bottom: 16 })
     .borderRadius(8)
     .onClick(() => {
-      this.onCardClick && this.onCardClick()
+      this.onCardClick && this.onCardClick();
     })
   }
 
@@ -39,7 +39,7 @@ export struct CartCard {
         .shape(CheckBoxShape.CIRCLE)
         .select(this.data.isSelected)
         .onChange((value: boolean) => {
-          this.data.isSelected = value
+          this.data.isSelected = value;
         })
     }
     .alignSelf(ItemAlign.Stretch)
@@ -116,7 +116,7 @@ export struct CartCard {
           .backgroundColor('#E84026')
           .borderRadius(4)
           .onClick(() => {
-            this.onDelete && this.onDelete(this.data.skuCode)
+            this.onDelete && this.onDelete(this.data.skuCode);
           })
         } else {
           NumberStepper({
@@ -139,7 +139,7 @@ export struct CartCard {
                 return;
               }
               this.data.count = value;
-              this.onChangeCount && this.onChangeCount(this.data.skuCode)
+              this.onChangeCount && this.onChangeCount(this.data.skuCode);
             },
           })
         }

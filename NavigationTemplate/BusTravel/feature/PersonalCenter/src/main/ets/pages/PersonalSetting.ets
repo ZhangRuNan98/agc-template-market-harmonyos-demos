@@ -1,13 +1,12 @@
-import { PersonalSet } from '../model/PersonalSet'
-import { getDataFromJSON } from 'common';
-import { UserInfo } from 'common';
-import { RouteEntryVM } from 'common'
 import { notificationManager } from '@kit.NotificationKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { FunctionalButton, functionalButtonComponentManager } from '@kit.ScenarioFusionKit';
 import { authentication } from '@kit.AccountKit';
 import { util } from '@kit.ArkTS';
+import { getDataFromJSON, RouteEntryVM, UserInfo } from 'common'
+import { PersonalSet } from '../model/PersonalSet'
+
 
 @Builder
 export function PersonalSettingBuilder() {
@@ -31,9 +30,9 @@ export struct PersonalSetting {
   logTag: string = 'QuickLoginButtonComponent';
   @State nickName: string = ''
   @State isNickNameShow: Boolean = false;
+
   async aboutToAppear(): Promise<void> {
     this.initDataSource()
-    console.log('============' + JSON.stringify(this.personalSetItems))
     let data: boolean = await notificationManager.isNotificationEnabled()
     this.notifyToggle = data
     this.getQuickLoginAnonymousPhone()
@@ -84,14 +83,14 @@ export struct PersonalSetting {
   @Builder
   myNameBuilder() {
     Column() {
-      TextInput({ placeholder: '请输入您的名称',text:$$this.nickName })
+      TextInput({ placeholder: '请输入您的名称', text: $$this.nickName })
         .caretColor($r('app.color.system_color_green'))
         .fontSize(14)
         .fontWeight(FontWeight.Regular)
         .width('90%')
         .placeholderFont({ size: $r('sys.float.Body_L') })
         .backgroundColor($r('sys.color.white'))
-        .margin({bottom:246})
+        .margin({ bottom: 246 })
         .maxLength(7)
       Button('确定')
         .height(40)
@@ -101,7 +100,6 @@ export struct PersonalSetting {
         .backgroundColor($r('app.color.system_color_green'))
         .onClick(() => {
           this.nickNameValue=this.nickName
-          console.log('textinput nickname button====' + JSON.stringify(this.nickNameValue)+JSON.stringify(this.nickName))
           this.isNickNameShow = false;
       })
     }
@@ -110,11 +108,11 @@ export struct PersonalSetting {
 
   @Builder
   buildFaceView() {
-    Row(){
+    Row() {
       Text('头像')
         .fontSize(16)
         .fontWeight(FontWeight.Medium)
-      Row(){
+      Row() {
         FunctionalButton({
           params: {
             // OpenType.CHOOSE_AVATAR表示Button为选择头像类型
@@ -148,7 +146,7 @@ export struct PersonalSetting {
         Image($r('app.media.icon_right'))
           .height(24)
           .width(24)
-          .margin({left:4})
+          .margin({ left: 4 })
       }
 
     }
@@ -157,27 +155,27 @@ export struct PersonalSetting {
     .backgroundColor($r('sys.color.white'))
     .borderRadius($r('sys.float.corner_radius_level8'))
     .justifyContent(FlexAlign.SpaceBetween)
-    .margin({top:12,bottom:12})
+    .margin({ top: 12, bottom: 12 })
   }
 
   @Builder
-  buildPersonalInfo(){
-    Column(){
-      Row(){
+  buildPersonalInfo() {
+    Column() {
+      Row() {
         Text('昵称')
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
-        Row(){
+        Row() {
           Text(this.nickNameValue)
           Image($r('app.media.ic_public_brush'))
             .height(24)
             .width(24)
-            .margin({left:4})
+            .margin({ left: 4 })
         }
         .onClick(() => {
           this.isNickNameShow = true
         })
-        .bindSheet($$this.isNickNameShow,this.myNameBuilder(),{
+        .bindSheet($$this.isNickNameShow, this.myNameBuilder(), {
           height: 418,
           backgroundColor: '#f1f3f5',
           showClose: false,
@@ -190,25 +188,30 @@ export struct PersonalSetting {
       .justifyContent(FlexAlign.SpaceBetween)
 
       Divider()
-        .margin({ top: 13, bottom:16 })
+        .margin({ top: 13, bottom: 16 })
         .strokeWidth('1px').color($r('sys.color.ohos_id_color_list_separator'))
 
-      Row(){
+      Row() {
         Text('电话')
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
-        Row(){
+        Row() {
           Text(this.quickLoginAnonymousPhone)
             .fontSize(14)
             .fontWeight(FontWeight.Regular)
         }
-        .margin({right:4})
+        .margin({ right: 4 })
       }
       .width('100%')
       .justifyContent(FlexAlign.SpaceBetween)
     }
     .width('90%')
-    .padding({left:12,right:12,top:17,bottom:17})
+    .padding({
+      left: 12,
+      right: 12,
+      top: 17,
+      bottom: 17
+    })
     .backgroundColor($r('sys.color.white'))
     .backgroundColor($r('sys.color.white'))
     .borderRadius($r('sys.float.corner_radius_level8'))
@@ -216,15 +219,21 @@ export struct PersonalSetting {
 
   build() {
     NavDestination() {
-      Column() {
-        this.buildFaceView()
-        this.buildPersonalInfo()
+      Scroll() {
+        Column() {
+          this.buildFaceView()
+          this.buildPersonalInfo()
+        }
+        .width('100%')
+        .height('100%')
+        .align(Alignment.TopStart)
+        .backgroundImageSize(ImageSize.Auto)
+        .backgroundColor('#F5F5F5')
       }
-      .width('100%')
-      .height('100%')
-      .align(Alignment.TopStart)
-      .backgroundImageSize(ImageSize.Auto)
-      .backgroundColor('#F5F5F5')
+      .scrollable(ScrollDirection.Vertical)
+      .scrollBar(BarState.Auto)
+      .scrollBarWidth('0vp')
+      .edgeEffect(EdgeEffect.Spring)
     }
     .hideTitleBar(false)
     .title('个人设置')

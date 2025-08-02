@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "bike_mine",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ]
+  }
+}

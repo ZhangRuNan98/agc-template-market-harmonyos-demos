@@ -43,13 +43,13 @@ export struct BookSortPage {
         }, (item: ResourceStr) => JSON.stringify(item))
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring)
       .listDirection(Axis.Horizontal)
       .padding({ top: 10, left: 18, right: 18 })
     }
 
   }
 
-  // Right side list header. rightTop
   @Builder
   goodsHeaderBuilder(headerName: string) {
     Row() {
@@ -63,36 +63,26 @@ export struct BookSortPage {
     .backgroundColor($r('sys.color.white'))
   }
 
-  // [Start list_sliding_event]
-  // List sliding event.
   listChange(index: number, isGoods: boolean) {
     if (this.currentTitleId !== index) {
       this.currentTitleId = index;
       if (isGoods) {
-        // IsGoods is true, controlling the data in the right-hand list to slide to the specified index.
         this.bookListScroller.scrollToIndex(index);
       } else {
-        // IsGoods is set to false, controlling the left list data to slide to the specified index.
         this.navTitleScroller.scrollToIndex(index);
       }
     }
   }
 
-  // [End list_sliding_event]
-
   @Builder
   SecondaryLevelList() {
     Column() {
       Row() {
-        // [Start on_list_change]
-        // [Start tabs_and_navigation]
-        // Left List Data Display.
         List({ space: 8, scroller: this.navTitleScroller }) {
           ForEach(this.categoryList, (item: BookCategory, index: number) => {
             ListItem() {
               Row() {
-                Text(item.categoryName)// [StartExclude on_list_change]
-                  // [StartExclude tabs_and_navigation]
+                Text(item.categoryName)
                   .width('100%')
                   .height(56)
                   .fontSize(this.currentTitleId === index ? 16 : 14)
@@ -100,9 +90,8 @@ export struct BookSortPage {
                   .fontColor(this.currentTitleId === index ? '#ffffff' : '#000000')
                   .opacity(this.currentTitleId === index ? 1 : 0.6)
                   .fontWeight(this.currentTitleId === index ? FontWeight.Bold :
-                  FontWeight.Normal)// [EndExclude on_list_change]
+                  FontWeight.Normal)
                   .onClick(() => {
-                    // Pass in the current list item index and true.
                     this.listChange(index, true);
                   })
               }
@@ -113,25 +102,16 @@ export struct BookSortPage {
                 bottomRight: 12
               })
               .backgroundColor(this.currentTitleId === index ? '#E84026' : '')
-
-              // [EndExclude tabs_and_navigation]
             }
           }, (item: BookCategory) => JSON.stringify(item.categoryName))
         }
-        // [StartExclude on_list_change]
-        // [StartExclude tabs_and_navigation]
         .width(100)
         .height('100%')
+        .edgeEffect(EdgeEffect.Spring)
         .scrollBar(BarState.Off)
         .backgroundColor('#F1F3F5')
         .padding({ top: 12 })
-
-        // [EndExclude tabs_and_navigation]
-        // [EndExclude on_list_change]
-
-        // Display of List Content on the Right.
         List({ scroller: this.bookListScroller }) {
-          // [StartExclude on_list_change]
           ForEach(this.categoryList, (item: BookCategory) => {
             ListItemGroup({ space: 8, header: this.goodsHeaderBuilder(item.categoryName) }) {
               ForEach(item.subcategory, (bookCategoryItem: BookSubcategory) => {
@@ -142,26 +122,20 @@ export struct BookSortPage {
             }
 
           }, (item: BookCategory) => JSON.stringify(item.subcategory))
-          // [EndExclude on_list_change]
         }
-        // [StartExclude on_list_change]
-        // [End tabs_and_navigation]
         .width('100%')
         .height('100%')
         .layoutWeight(1)
         .lanes(3)
         .scrollBar(BarState.Off)
         .sticky(StickyStyle.Header)
-        .edgeEffect(EdgeEffect.None)
+        .edgeEffect(EdgeEffect.Spring)
         .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
         .padding({ left: 8, right: 12 })
         .backgroundColor('#ffffff')
-        // [EndExclude on_list_change]
         .onScrollIndex((index: number) => {
-          // Pass in the current list item index and false.
           this.listChange(index, false)
         })
-        // [End on_list_change]
       }
       .width('100%')
       .height('90.5%')
@@ -173,7 +147,7 @@ export struct BookSortPage {
   }
 
   build() {
-    Navigation() {
+    NavDestination() {
       Column() {
         NavHeaderBar({
           title: $r('app.string.book_sort'),
@@ -185,13 +159,11 @@ export struct BookSortPage {
           Scroll() {
             this.categoryTab()
           }
-
           this.SecondaryLevelList()
-
         }
         .height('100%')
         .width('100%')
-        .padding({ bottom: '27%' })
+        .layoutWeight(1)
       }
     }
     .hideTitleBar(true)

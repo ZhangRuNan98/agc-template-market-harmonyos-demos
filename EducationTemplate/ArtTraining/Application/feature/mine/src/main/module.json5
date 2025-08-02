@@ -3,8 +3,7 @@
     "name": "mine",
     "type": "har",
     "deviceTypes": [
-      "default",
-      "tablet"
+      "phone"
     ],
     "routerMap": "$profile:route_map_mine"
   }

@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "aggregated_swiper",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

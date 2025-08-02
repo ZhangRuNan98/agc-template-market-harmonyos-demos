@@ -11,6 +11,13 @@
     "installationFree": false,
     "routerMap": "$profile:route_map",
     "pages": "$profile:main_pages",
+    "metadata": [
+      {
+        "name": "client_id",
+        // todo 替换client_id值
+        "value": "xxx"
+      }
+    ],
     "abilities": [
       {
         "name": "PhoneAbility",
@@ -35,19 +42,7 @@
       }
     ],
     "extensionAbilities": [
-      {
-        "name": "PhoneFormAbility",
-        "srcEntry": "./ets/phoneformability/PhoneFormAbility.ets",
-        "label": "$string:EntryFormAbility_label",
-        "description": "$string:EntryFormAbility_desc",
-        "type": "form",
-        "metadata": [
-          {
-            "name": "ohos.extension.form",
-            "resource": "$profile:form_config"
-          }
-        ]
-      }
+
     ]
   }
 }

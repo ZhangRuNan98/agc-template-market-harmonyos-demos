@@ -1,7 +1,7 @@
-import { Constants, TCRouter } from 'common'
 import { call } from '@kit.TelephonyKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { baseActionSheet } from 'base_common';
+import { Constants, TCRouter } from 'common'
 
 @ComponentV2
 export struct ServiceCard {
@@ -45,43 +45,67 @@ export struct ServiceCard {
           right:12
         })
         .onClick(() => {
-          this.tabsController.changeIndex(this.currentIndexTab-3)
+          this.currentIndexTab = 0;
+          this.tabsController.changeIndex(0)
           this.isHistory = true
         })
 
-      this.serviceButtonView('app.media.ic_reading_preference','app.string.reading_preference',Constants.PREFERENCE_ROUTE)
+        Row(){
+          Image($r('app.media.ic_public_office_brush'))
+            .height(24)
+            .width(24)
+            .objectFit(ImageFit.Contain)
+            .margin({
+              right:12
+            })
 
-      Row(){
-        Image($r('app.media.ic_contact'))
-          .height(24)
-          .width(24)
-          .objectFit(ImageFit.Contain)
-          .margin({
-            right:12
-          })
+          Text($r('app.string.my_evaluation'))
+        }
+        .height(47)
+        .width(Constants.FULL_SIZE)
+        .backgroundColor('#ffffff')
+        .borderRadius(16)
+        .padding({
+          left:12,
+          right:12
+        })
+        .onClick(() => {
+          TCRouter.push(Constants.MY_EVALUATION_ROUTE);
+        })
 
-        Text($r('app.string.contact'))
-      }
-      .height(47)
-      .width(Constants.FULL_SIZE)
-      .backgroundColor('#ffffff')
-      .borderRadius(16)
-      .padding({
-        left:12,
-        right:12
-      })
-      .onClick(() => { baseActionSheet.show({
-        id: 'PhoneSheetBuilder',
-        title: { title: '联系客服' },
-        height: SheetSize.FIT_CONTENT,
-        backgroundColor: $r('app.color.pure_white'),
-        customContent: () => {
-          this.PhoneSheetBuilder()
-        },
-      })
-      })
+        this.serviceButtonView('app.media.ic_reading_preference','app.string.reading_preference',Constants.PREFERENCE_ROUTE)
 
-      this.serviceButtonView('app.media.ic_issue_and_feedback','app.string.issue_and_feedback',Constants.ISSUE_AND_FEEDBACK_ROUTE)
+        Row(){
+          Image($r('app.media.ic_contact'))
+            .height(24)
+            .width(24)
+            .objectFit(ImageFit.Contain)
+            .margin({
+              right:12
+            })
+
+          Text($r('app.string.contact'))
+        }
+        .height(47)
+        .width(Constants.FULL_SIZE)
+        .backgroundColor('#ffffff')
+        .borderRadius(16)
+        .padding({
+          left:12,
+          right:12
+        })
+        .onClick(() => { baseActionSheet.show({
+          id: 'PhoneSheetBuilder',
+          title: { title: '联系客服' },
+          height: SheetSize.FIT_CONTENT,
+          backgroundColor: $r('app.color.pure_white'),
+          customContent: () => {
+            this.PhoneSheetBuilder()
+          },
+        })
+        })
+
+        this.serviceButtonView('app.media.ic_issue_and_feedback','app.string.issue_and_feedback',Constants.ISSUE_AND_FEEDBACK_ROUTE)
       }
     }
   }
@@ -108,7 +132,7 @@ export struct ServiceCard {
       right:12
     })
     .onClick(() => {
-        TCRouter.push(url);
+      TCRouter.push(url);
     })
   }
 

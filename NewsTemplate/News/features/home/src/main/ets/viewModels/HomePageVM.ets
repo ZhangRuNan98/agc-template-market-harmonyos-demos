@@ -1,5 +1,4 @@
-import { AccountUtil, DialogMap, Logger, PermissionUtil, RouterModule, UserInfoModel } from 'commonlib';
-import { Permissions } from '@kit.AbilityKit';
+import { AccountUtil, RouterModule, UserInfoModel } from 'commonlib';
 
 const TAG: string = 'HomePageVM';
 
@@ -12,9 +11,6 @@ export class HomePageVM {
   @Trace curIndex: number = 0;
 
   @Trace userInfo: UserInfoModel = AccountUtil.getUserInfo();
-  @Trace message: string = 'Hello World';
-  @Trace name: string = '177****4565'
-  @Trace score: string = '20'
   @Trace changeFontSize: number = 0;
   @Trace comment: string = '';
 
@@ -27,12 +23,5 @@ export class HomePageVM {
 
   // 初始化
   public async init() {
-    AccountUtil.silentLogin();
-  }
-
-
-  // 绑定手机号
-  public requestPhoneNumber() {
-    RouterModule.openDialog(DialogMap.BIND_PHONE_DIALOG,);
   }
 }

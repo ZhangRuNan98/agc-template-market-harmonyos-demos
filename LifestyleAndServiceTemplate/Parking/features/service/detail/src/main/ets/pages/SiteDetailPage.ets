@@ -1,26 +1,21 @@
-import { CommonConstants, FormatUtil, LocationUtil, WindowUtil } from 'commonlib';
-import { CommonCall, CommonHeader } from 'componentlib';
+import {
+  CommonConstants,
+  CommonHeader,
+  CONTAINER_STYLE_CALC_WIDTH,
+  FormatUtil,
+  TelUtil,
+  WindowUtil,
+} from 'common';
 import { SiteDetailPageVM } from '../viewmodels/SiteDetailPageVM';
 import { common } from '@kit.AbilityKit';
-import { PreView } from '../utils/PreView';
+import { SwiperPicsPreview } from 'module_swiper_preview';
 
 @ComponentV2
 struct SiteDetailPage {
-  @Local showCall: boolean = false;
   vm: SiteDetailPageVM = SiteDetailPageVM.instance;
-  controller: SwiperController = new SwiperController();
-
-  getMargin(index: number): Padding {
-    if (index === 0) {
-      return { left: 16, right: 6 };
-    } else if (index + 1 === this.vm.detail?.basicPic.length) {
-      return { left: 6, right: 16 };
-    }
-    return { left: 6, right: 6 };
-  }
 
   aboutToAppear() {
-    this.vm.init(this.getUIContext());
+    this.vm.init();
   }
 
   build() {
@@ -96,41 +91,30 @@ struct SiteDetailPage {
         .alignItems(HorizontalAlign.Start)
 
         Image($r('app.media.ic_nav')).width(24).onClick(() => {
-          LocationUtil.navWithLatLng(this.vm.detail!.location, getContext(this) as common.UIAbilityContext);
+          const uri = `https://www.petalmaps.com/routes/?utm_source=fb&daddr=${this.vm.detail!.location.latitude + ',' +
+          this.vm.detail!.location.longitude}`;
+          const ctx = getContext(this) as common.UIAbilityContext;
+          if (ctx) {
+            ctx.openLink(uri, { appLinkingOnly: true });
+          }
         })
 
         Image($r('app.media.ic_call')).width(24).onClick(() => {
-          this.showCall = true;
+          TelUtil.open({ title: '联系客服', phoneNum: this.vm.detail!.phone });
         }).margin({ left: $r('app.string.margin_16') })
-          .bindSheet($$this.showCall, this.callBuilder, { height: SheetSize.FIT_CONTENT })
       }.alignItems(VerticalAlign.Center)
     }
-    .containerStyle()
+    .attributeModifier(CONTAINER_STYLE_CALC_WIDTH)
   }
 
   @Builder
   swiperBuilder() {
-    Swiper(this.controller) {
-      ForEach(this.vm.detail!.basicPic, (item: ResourceStr, index: number) => {
-        Image(item)
-          .margin(this.getMargin(index))
-          .onClick(() => {
-            if (this.vm.swiperParams) {
-              this.vm.swiperParams.index = index;
-              PreView.openDialogWithParams(this.vm.swiperParams);
-            }
-          })
-          .borderRadius($r('app.string.border_radius_16'))
-      }, (item: ResourceStr, index) => JSON.stringify(item) + '_' + index)
-    }
-    .height(120)
-    .width(CommonConstants.FULL_WIDTH)
-    .index(this.vm.swiperIndex)
-    .autoPlay(false)
-    .indicator(false)
-    .loop(false)
-    .nextMargin(50, true)
-    .prevMargin(50, true)
+    SwiperPicsPreview({
+      pics: this.vm.detail?.basicPic,
+      iHeight: 120,
+      pad: 16,
+      out: 50,
+    })
   }
 
   @Builder
@@ -145,7 +129,7 @@ struct SiteDetailPage {
           this.numItemBuilder(1, this.vm.detail?.leftChargeSpots ?? 0)
         }
       }
-    }.containerStyle().alignItems(HorizontalAlign.Start)
+    }.attributeModifier(CONTAINER_STYLE_CALC_WIDTH).alignItems(HorizontalAlign.Start)
   }
 
   @Builder
@@ -167,7 +151,7 @@ struct SiteDetailPage {
         .justifyContent(FlexAlign.SpaceBetween)
         .width(CommonConstants.FULL_WIDTH)
       }
-    }.containerStyle()
+    }.attributeModifier(CONTAINER_STYLE_CALC_WIDTH)
   }
 
   @Builder
@@ -213,25 +197,6 @@ struct SiteDetailPage {
       .fontColor($r('app.color.icon_bg_blue'))
     }
   }
-
-  @Builder
-  callBuilder() {
-    CommonCall({
-      phoneNum: this.vm.detail?.phone,
-      title: '联系客服',
-      cancel: () => {
-        this.showCall = false;
-      },
-    })
-  }
-
-  @Styles
-  containerStyle() {
-    .padding($r('app.string.padding_12'))
-    .borderRadius($r('app.string.border_radius_16'))
-    .backgroundColor($r('app.color.system_color_background_white'))
-    .width('calc(100% - 32vp)')
-  }
 }
 
 @Extend(Text)
@@ -251,6 +216,6 @@ function textStyle() {
 }
 
 @Builder
-export function SiteDetailPageBuilder() {
+export function siteDetailPageBuilder() {
   SiteDetailPage()
 }

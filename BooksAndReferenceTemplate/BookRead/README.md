@@ -3,21 +3,23 @@
 ## 目录
 
 - [功能介绍](#功能介绍)
-
-- [环境要求](#环境要求)
-
+- [约束与限制](#约束与限制)
 - [快速入门](#快速入门)
-
 - [示例效果](#示例效果)
-
-- [权限要求](#权限要求)
-
 - [开源许可协议](#开源许可协议)
 
 ## 功能介绍
-您可以基于此[模板](#模板)直接定制应用/元服务，也可以挑选此模板中提供的多种[组件](#组件)使用，从而降低您的开发难度，提高您的开发效率。
+您可以基于此[模板](#模板)直接定制应用，也可以挑选此模板中提供的多种[组件](#组件)使用，从而降低您的开发难度，提高您的开发效率。
 
-### 模板
+本模板中提供了多种组件，您可以按需选择合适的组件进行使用，所有组件存放在工程根目录的components下。
+
+| 组件                        | 描述           | 使用指导                                         |
+|---------------------------|--------------|----------------------------------------------|
+| 阅读器工具栏组件（reader_tool_bar） | 支持在阅读器工具展示常用功能，例如目录选择、字体、字号、行间距、背景设置等。 | [使用指导](components/reader_tool_bar/README.md) |
+| 滑动卡片组件（swiper_card）       | 展示可滑动图片组。    | [使用指导](components/swiper_card/README.md)     |
+| 推送组件（custom_push）         | 本组件提供了推送组件功能。 | [使用指导](components/custom_push/README.md)        |
+| 激励广告组件（incentive_ad）      | 展示激励广告的相关功能。 | [使用指导](components/incentive_ad/README.md)    |
+
 本模板为电子书类应用提供了常用功能实现案例，涵盖了从书籍获取、阅读体验到个性化管理的核心环节，模板主要分阅读、书架、书城、分类和我的五大模块：
 
 - 阅读：支持电子书阅读功能及阅读工具（目录导航、字体调整、屏幕亮度调节与深色模式等功能）。
@@ -26,9 +28,9 @@
 - 分类：支持按男频/女频等大类划分，并支持细分类别的探索，便于找到感兴趣的特定类型作品。
 - 我的：支持华为账号登录、个性化阅读偏好设置、账户内资产（书币、会员权益）、活动中心以及问题与反馈等功能。
 
-| 阅读                               | 书架                               | 书城                                  | 分类                              | 我的                              |
-|----------------------------------|----------------------------------|-------------------------------------|---------------------------------|---------------------------------|
-| ![book_read](docs/book_read.jpg) | ![book_shelf](docs/book_shelf.jpeg) | ![book_store](docs/book_store.jpeg) | ![category](docs/category.jpeg) | ![book_person](docs/person.jpg) |
+| 阅读                               | 书架                               | 书城                                  | 分类                              | 我的                               |
+|----------------------------------|----------------------------------|-------------------------------------|---------------------------------|----------------------------------|
+| ![book_read](docs/book_read.jpg) | ![book_shelf](docs/book_shelf.jpeg) | ![book_store](docs/book_store.jpeg) | ![category](docs/category.jpeg) | ![book_person](docs/person.jpeg) |
 
 本模板主要页面涉核心功能清单如下所示：
 
@@ -58,6 +60,7 @@
     |     └-- 选择套餐并开通会员
     |-- 我的账户
     |     └-- 选择套餐并充值书币
+    |-- 福利中心
     |-- 活动中心
     |-- 阅读记录
     |-- 阅读偏好设置
@@ -70,14 +73,16 @@
     └-- 设置
        |-- 个人信息
        |     └-- 修改头像/昵称/电话
+       |-- 阅读设置
        |-- 隐私设置
        |-- 关于
+       |-- 清理缓存
        └-- 退出登录
 ```
 
 本模板工程核心代码结构如下所示：
 
-```shell
+```
 BookRead
 ├─BookRead/entry/src/main/ets
 │ ├─entryability
@@ -115,17 +120,17 @@ BookRead
 │ │ ├─CommonUI.ets                         // 基础UI组件
 │ │ └─TSearch.ets                          // 搜索功能相关组件
 │ ├─utils
+│ │ ├─DialogUtil.ets                       // 全局弹窗工具类
 │ │ ├─EpubUtils.ets                        // Epub格式相关工具方法
 │ │ ├─FileUtils.ets                        // 文件操作工具类
 │ │ ├─MathUtil.ets                         // 数学计算工具类
 │ │ ├─TimeUtils.ets                        // 时间处理工具类
 │ │ ├─UserInfoUtil.ets                     // 用户信息处理工具类
 │ │ └─WindowUtils.ets                      // 窗口或界面尺寸相关工具
-│ └─payment
-│   ├─AggregatedPaymentVM.ets              // 集成支付业务逻辑模型
-│   ├─MockApi.ets                          // 模拟API
-│   ├─OrderInfoUtil.ets                    // 订单信息处理
-│   └─SignUtils.ets                        // 签名相关工具
+│ └─viewmodel
+│   ├─MemberCenterVM.ets                   // 会员中心逻辑模型
+│   ├─RechargeRecordVM.ets                 // 充值记录逻辑模型
+│   └─RechargeVM.ets                       // 充值功能业务逻辑模型
 │
 ├─BookRead/feature/book_home/src/main/ets
 │ ├─comps
@@ -151,14 +156,10 @@ BookRead
 │ │ ├─MyBalanceCard.ets                    // 余额信息展示卡片
 │ │ ├─MyInfoCard.ets                       // 个人基本信息展示卡片
 │ │ ├─OptionView.ets                       // 选项卡片组件
-│ │ ├─PaymentSheet.ets                     // 支付功能底部弹窗
 │ │ ├─SelectAvatarCard.ets                 // 头像选择器组件
 │ │ ├─ServiceCard.ets                      // 服务入口卡片
-│ │ ├─UsrMsgCard.ets                       // 用户信息卡片
-│ ├─viewmodel
-│ │ ├─MemberCenterVM.ets                   // 会员中心逻辑模型
-│ │ ├─RechargeRecordVM.ets                 // 充值记录逻辑模型
-│ │ └─RechargeVM.ets                       // 充值功能业务逻辑模型
+│ │ ├─SignComp.ets                         // 签到卡片
+│ │ └─UsrMsgCard.ets                       // 用户信息卡片
 │ └─views
 │   ├─AboutPage.ets                        // 关于我们信息页
 │   ├─AccountPage.ets                      // 账户管理主页面
@@ -176,31 +177,68 @@ BookRead
 │   ├─PreferencePage.ets                   // 偏好设置页面
 │   ├─PrivacyPage.ets                      // 隐私设置界面
 │   ├─PrivacyPolicyPage.ets                // 隐私政策声明页
+│   ├─ReadSettingPage.ets                  // 阅读设置页
 │   ├─RechargePage.ets                     // 充值中心主界面
 │   ├─RechargeRecordPage.ets               // 充值记录查询页
+│   ├─WelfareCenter.ets                    // 福利中心页面
 │   └─SettingPage.ets                      // 系统设置综合页面
 │
 ├─BookRead/feature/book_read_kit/src/main/ets
-│ └─components
-│   ├─BookCoverCard.ets                    // 图书封面展示组件
-│   ├─ReaderPage.ets                       // 阅读器核心页面
-│   ├─ReaderTopCard.ets                    // 阅读器顶部控制栏
-│   └─ShareBookCard.ets                    // 图书分享功能组件
+│ ├─components
+│ │ ├─BookCoverCard.ets                    // 图书封面展示组件
+│ │ ├─ExpandableText.ets                   // 书评展示组件
+│ │ ├─ReaderPage.ets                       // 阅读器核心页面
+│ │ ├─ReaderTopCard.ets                    // 阅读器顶部控制栏
+│ │ └─ShareBookCard.ets                    // 图书分享功能组件
+│ ├─model
+│ │ └─ReviewModels.ets                     // 图书数据模型
+│ ├─pages
+│ │ ├─MyReviewPage.ets                     // 我的评价页面
+│ │ ├─WonderfulReviewPage.ets              // 精彩书评页面
+│ │ ├─WriteCommentPage.ets                 // 写评论页面
+│ │ └─WriteReviewPage.ets                  // 全部书评页面
+│ ├─utils
+│ │ └─ReviewdataUtil.ets                   // 书籍评论工具类
+│ └─viewmodel
+│   └─WriteReviewVM.ets                    // 书籍评论数据模型
 │
 ├─BookRead/feature/book_shelf/src/main/ets
 │ ├─comps
-│ │ └─DeleteBottomCard.ets                 // 书籍删除确认底部弹窗
+│ │ ├─DeleteBottomCard.ets                 // 书籍删除确认底部弹窗
+│ │ └─ManageGroupBottomCard.ets            // 管理分组底部卡片
 │ └─views
+│   ├─BookGroupContent.ets                 // 书籍分组页
 │   └─BookShelfPage.ets                    // 我的书架主界面
 │
 ├─BookRead/feature/book_sort/src/main/ets
 │ └─pages
 │   └─BookSortPage.ets                     // 图书分类导航页面
 │
+├─BookRead/components/aggregated_payment/src/main/ets
+│ ├─components
+│ │ └─AggregatedPaymentPicker.ets          // 集成支付选择器组件
+│ ├─model
+│ │ └─PaymentModels.ets                    // 支付相关信息模型
+│ └─views
+│   ├─AggregatedPaymentVM.ets              // 支付组件数据模型
+│   ├─MockApi.ets                          // 支付mock数据
+│   ├─OrderInfoUtil.ets                    // 支付mock参数工具
+│   └─SignUtils.ets                        // 支付mock签名工具
+│
 ├─BookRead/components/base_common/src/main/ets
 │ └─components
 │   ├─ActionSheet.ets                      // 阅读器底部工具栏
 │   └─UserInfo.ets                         // 阅读器用户信息
+│
+├─BookRead/components/incentive_ad/src/main/ets
+│ ├─components
+│ │ └─IncentiveAdvertising.ets             // 广告位广告类
+│ └─viewmodel
+│   └─RewardAdStatusHandler.ets            // 事件订阅
+│
+├─BookRead/components/reader_tool_bar/src/main/ets
+│ └─components
+│   └─PushKit.ets                          // 推送组件
 │
 ├─BookRead/components/reader_tool_bar/src/main/ets
 │ └─components
@@ -215,30 +253,27 @@ BookRead
   └─model
     ├─Book.ets                             // 图书数据模型定义
     └─LazyDataVM.ets                       // 数据逻辑模型
-
 ```
 
-### 组件
 
-本模板中提供了多种组件，您可以按需选择合适的组件进行使用，所有组件存放在工程根目录的components下。
+## 约束与限制
 
-| 组件                                | 描述                                                         | 使用指导                                         |
-| ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------------ |
-| 阅读器工具栏组件（reader_tool_bar） | 支持在阅读器工具展示常用功能，例如目录选择、字体、字号、行间距、背景设置等。 | [使用指导](components/reader_tool_bar/README.md) |
-| 滑动卡片组件（swiper_card）         | 展示可滑动图片组                                             | [使用指导](components/swiper_card/README.md)     |
-
-
-## 环境要求
-
-### 软件
+### 环境
 
 * DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
 * HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
-
-### 硬件
-
 * 设备类型：华为手机（直板机）
 * HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+### 权限要求
+
+- 网络权限：ohos.permission.INTERNET
+- 数据网络权限：ohos.permission.GET_NETWORK_INFO
+- 允许应用读取开放匿名设备标识符权限：ohos.permission.APP_TRACKING_CONSENT
+
+### 调试
+
+本模板不支持使用模拟器调试，请使用真机进行调试
 
 ## 快速入门
 
@@ -248,7 +283,7 @@ BookRead
 
 1. 在AppGallery Connect创建应用，将包名配置到模板中。
 
-   a. 参考[创建应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建 APPID 和应用包名，并将APPID与应用进行关联。
+   a. 参考[创建应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-create-app-0000002247955506)为应用创建APP ID，并将APP ID与应用进行关联。
 
    b. 返回应用列表页面，查看应用的包名。
 
@@ -256,33 +291,66 @@ BookRead
 
 2. 配置华为账号服务。
 
-   a. 将应用的client ID配置到entry模块的src/main/module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
+   a. 将应用的client ID配置到entry/src/main路径下的[module.json5](./entry/src/main/module.json5)文件中，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
-
-   c. 申请华为帐号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-get-phonenumber)。
+   b. 申请华为账号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。
 
 3. 配置支付服务。
 
    华为支付当前仅支持商户接入，在使用服务前，需要完成商户入网、开发服务等相关配置，本模板仅提供了端侧集成的示例。详细参考：[支付服务接入准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/payment-preparations)。
 
+4. 对应用进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
+
+5. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-cert-fingerprint-0000002278002933)。
+
+6. 配置推送服务。
+
+   a. [开启推送服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/push-config-setting)。
+   
+   b. 按照需要的权益[申请通知消息自分类权益](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/push-apply-right)。
+   
+7. 模拟服务端发送Push消息。
+
+   a. 获取Push Token。
+   
+   在entry\src\main\ets\entryability\EntryAbility.ets的onCreate()生命周期中通过pushService.getToken()获取Push Token。
+   
+   可在此上报Push Token到服务端， 调试状态可在控制台打印出pushToken后手动放入components\push_kit\src\main\ets\pushKitForJava\messageBody.json的token中。
+   ```json5
+   "target": {
+      "token": ["xxx"]
+   }
+   ```
+   b. 获取服务账号密钥文件。
+   
+   获取服务账号密钥文件(components\push_kit\src\main\ets\pushKitForJava\serviceAccountPrivateKey.json)，可参考[获取服务账号密钥文件](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/push-jwt-token)中的开发步骤1。
+   
+   将获取到的服务账号密钥文件命名为serviceAccountPrivateKey.json替换原有文件。
+   
+   获取服务账号密钥文件后手动去除"private_key"字段的"'-----BEGIN PRIVATE KEY-----\n'和 '\n-----END PRIVATE KEY-----\n'或在JsonWebTokenFactory.java中去除。
+   
+   c. 将pushKitForJava所有文件放入java项目中，项目结构如图显示。
+   
+   <img src="./docs/struct.png" width="300">
+   
+   检查JsonWebTokenFactory.java中的路径并将String url中的项目id替换为serviceAccountPrivateKey.json的project_id。
+   
+   运行JsonWebTokenFactory.java即可收到推送。
+   
+   d. 运行JsonWebTokenFactory.java。
+   
+
 ### 运行调试工程
 
 1. 连接调试手机和PC。
 
-2. 对应用[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-signing-V5#section297715173233)。
-
-3. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
+2. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
 
 ## 示例效果
 
-阅读                                | 书架                               | 书城                                  | 分类                              | 我的                              |
-|----------------------------------|----------------------------------|-------------------------------------|---------------------------------|---------------------------------|
-| ![book_read](docs/book_read.jpg) | ![book_shelf](docs/book_shelf.jpeg) | ![book_store](docs/book_store.jpeg) | ![category](docs/category.jpeg) | ![book_person](docs/person.jpg) |
-
-## 权限要求
-
-- 网络权限：ohos.permission.INTERNET、ohos.permission.GET_NETWORK_INFO
+|阅读                                | 书架                               | 书城                                  | 分类                              | 我的                               |
+|----------------------------------|----------------------------------|-------------------------------------|---------------------------------|----------------------------------|
+| ![book_read](docs/book_read.jpg) | ![book_shelf](docs/book_shelf.jpeg) | ![book_store](docs/book_store.jpeg) | ![category](docs/category.jpeg) | ![book_person](docs/person.jpeg) |
 
 ## 开源许可协议
 

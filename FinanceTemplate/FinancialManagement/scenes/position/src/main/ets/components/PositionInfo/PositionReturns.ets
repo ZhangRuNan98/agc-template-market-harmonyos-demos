@@ -1,4 +1,4 @@
-import { CommonCharts } from 'componentlib'
+import { CommonCharts } from 'module_line_chart'
 import { PositionInfoVM } from '../../viewModels/PositionInfoVM'
 
 @ComponentV2

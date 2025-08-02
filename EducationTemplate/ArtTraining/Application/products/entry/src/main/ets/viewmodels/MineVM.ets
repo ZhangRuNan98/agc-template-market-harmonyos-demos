@@ -1,15 +1,7 @@
-import {
-  AccountUtil,
-  DialogMap,
-  OrderTabsMap,
-  RouterMap,
-  RouterModule,
-  StoreInfo,
-  UserInfoModel,
-} from 'commonlib';
+import { AccountUtil, DialogMap, OrderTabsMap, RouterMap, RouterModule, StoreInfo, UserInfoModel } from 'commonlib';
+import { STORE_INFO_LIST } from '../constants/Constants';
 import { StoreInfoTypeMap, StudyServiceMap } from '../constants/Enums';
 import { StoreInfoItem } from '../types/Types';
-import { STORE_INFO_LIST } from '../constants/Constants';
 
 @ObservedV2
 export class MineVM {
@@ -100,8 +92,8 @@ export class MineVM {
     switch (item.type) {
       case StoreInfoTypeMap.PHONE:
         RouterModule.push({
-          url:DialogMap.CONTACT_CUSTOM_SERVICE,
-          param:item.value,
+          url: DialogMap.CONTACT_CUSTOM_SERVICE,
+          param: item.value,
         });
         break;
       case StoreInfoTypeMap.ABOUT_US:

@@ -109,10 +109,6 @@
       "value": "刷新成功"
     },
     {
-      "name": "search_text",
-      "value": "搜索"
-    },
-    {
       "name": "get_location",
       "value": "获取定位"
     },

@@ -8,6 +8,7 @@
   "dependencies": {
     "commonlib": "file:../../commons/commonlib",
     "componentlib": "file:../../commons/componentlib",
-    "network": "file:../../commons/network"
+    "network": "file:../../commons/network",
+    "module_store_map": "file:../../components/module_store_map"
   }
 }

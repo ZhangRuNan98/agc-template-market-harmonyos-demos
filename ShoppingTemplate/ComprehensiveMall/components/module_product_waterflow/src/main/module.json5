@@ -3,7 +3,7 @@
     "name": "module_product_waterflow",
     "type": "har",
     "deviceTypes": [
-      "default",
+      "phone",
       "tablet",
       "2in1"
     ]

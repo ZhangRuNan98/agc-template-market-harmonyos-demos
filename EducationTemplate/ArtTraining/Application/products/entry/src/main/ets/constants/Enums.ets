@@ -1,5 +1,3 @@
-
-
 export enum MainServiceMap {
   COURSES_COLUMN,
   ONLINE_COURSES,
@@ -14,7 +12,6 @@ export enum StoreInfoTypeMap {
   ABOUT_US,
   BUSINESS_TIME,
 }
-
 
 export enum StudyServiceMap {
   COURSES,

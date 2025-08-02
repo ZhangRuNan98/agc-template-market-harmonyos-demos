@@ -1,10 +1,8 @@
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { BusinessError, emitter } from '@kit.BasicServicesKit';
-import { font } from '@kit.ArkUI';
-import { AvatarIcon, SelectAvatarCard } from './SelectAvatarCard';
 import { Constants, TCRouter, UserInfoModel, UserInfoUtil } from 'common';
-import UserAuthIcon from '@ohos.userIAM.userAuthIcon';
 import { UserInfo } from 'base_common';
+import { AvatarIcon, SelectAvatarCard } from './SelectAvatarCard';
 @ComponentV2
 export struct MyInfoCard {
   @Local userName: string = ''
@@ -87,45 +85,49 @@ export struct MyInfoCard {
   @Builder
   membershipBuilder() {
     Stack() {
-      Image($r('app.media.ic_vip_on'))
-        .width(32)
-        .height(32)
-        .objectFit(ImageFit.Contain)
-
-      Column({ space: 2 }) {
-        Text('阅读听书会员')
-          .fontColor('#D17E18')
-          .fontSize(16)
-          .fontWeight(FontWeight.Medium)
-        Text('开通会员享受购书折扣')
-          .fontColor('#D17E18')
-          .fontSize(12)
-          .fontWeight(FontWeight.Regular)
-      }
-      .alignItems(HorizontalAlign.Start)
-      .margin({ left: 40 })
-
-      Button((this.isLogin && this.isMembership) ? $r('app.string.member_center') : $r('app.string.open_member'),
-        { controlSize: ControlSize.SMALL })
-        .fontSize(14)
-        .fontWeight(FontWeight.Medium)
-        .fontColor($r('sys.color.font_on_primary'))
-        .backgroundColor('#E3922F')
-        .margin({ left: 220 })
-        .onClick(() => {
-          if (!this.isLogin) {
-            this.showLoginPrompt();
-          } else {
-            TCRouter.push(Constants.MEMBER_CENTER_ROUTE);
+      Row(){
+        Row({space:8}){
+          Image($r('app.media.ic_vip_on'))
+            .width(32)
+            .height(32)
+            .objectFit(ImageFit.Contain)
+          Column({ space: 2 }) {
+            Text('阅读听书会员')
+              .fontColor('#D17E18')
+              .fontSize(16)
+              .fontWeight(FontWeight.Medium)
+            Text('开通会员享受购书折扣')
+              .fontColor('#D17E18')
+              .fontSize(12)
+              .fontWeight(FontWeight.Regular)
           }
-        })
+          .alignItems(HorizontalAlign.Start)
+        }
+        .alignItems(VerticalAlign.Top)
+        Button((this.isLogin && this.isMembership) ? $r('app.string.member_center') : $r('app.string.open_member'),
+          { controlSize: ControlSize.SMALL })
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r('sys.color.font_on_primary'))
+          .backgroundColor('#E3922F')
+          .onClick(() => {
+            if (!this.isLogin) {
+              this.showLoginPrompt();
+            } else {
+              TCRouter.push(Constants.MEMBER_CENTER_ROUTE);
+            }
+          })
+      }
+      .width(Constants.FULL_SIZE)
+      .alignItems(VerticalAlign.Top)
+      .justifyContent(FlexAlign.SpaceBetween)
     }
     .height(64)
     .width(Constants.FULL_SIZE)
     .borderRadius(12)
     .padding({
       top:12,
-      left:13,
+      left:12,
       right:12
     })
     .alignContent(Alignment.TopStart)

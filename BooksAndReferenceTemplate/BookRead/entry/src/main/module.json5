@@ -15,12 +15,14 @@
         "name": "EntryAbility",
         "srcEntry": "./ets/entryability/EntryAbility.ets",
         "description": "$string:EntryAbility_desc",
-        "icon": "$media:app_icon",
+        "icon": "$media:layered_image",
         "label": "$string:EntryAbility_label",
         "startWindowIcon": "$media:startIcon",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
-        "supportWindowMode": ['fullscreen'],
+        "supportWindowMode": [
+          "fullscreen"
+        ],
         "skills": [
           {
             "entities": [
@@ -29,14 +31,20 @@
             "actions": [
               "action.system.home"
             ]
+          },
+          {
+            "actions": [
+              "com.test.action"
+            ]
           }
-        ]
-      }
+        ],
+        "launchType": "singleton"
+      },
     ],
     "metadata": [
       {
-        // 替换应用的clientID
         "name": "client_id",
+        // todo 替换client_id值,
         "value": "xxx"
       }
     ],
@@ -51,7 +59,7 @@
             "name": "ohos.extension.backup",
             "resource": "$profile:backup_config"
           }
-        ],
+        ]
       }
     ],
     "requestPermissions": [
@@ -73,6 +81,16 @@
             "FormAbility"
           ],
           "when": "always"
+        }
+      },
+      {
+        "name": "ohos.permission.APP_TRACKING_CONSENT",
+        "reason": "$string:app_name",
+        "usedScene": {
+          "abilities": [
+            "FormAbility"
+          ],
+          "when": "inuse"
         }
       }
     ]

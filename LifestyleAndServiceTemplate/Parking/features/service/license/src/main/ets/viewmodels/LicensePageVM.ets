@@ -1,5 +1,5 @@
-import { LicenseModel, LicenseUtil, RouterModule } from 'commonlib';
-import { getId, Https } from 'network';
+import { AccountUtil, LicenseModel, LicenseUtil, RouterModule } from 'common';
+import { Https } from 'network';
 import { promptAction } from '@kit.ArkUI';
 
 @ObservedV2
@@ -39,7 +39,8 @@ export class LicensePageVM {
       promptAction.showToast({ message: '已存在相同车牌' });
       return;
     }
-    const res = await Https.addNewLicenseNumber({ id: getId(), new: this.license, isDfault: this.isDefault });
+    const res =
+      await Https.addNewLicenseNumber({ id: AccountUtil.getId(), new: this.license, isDfault: this.isDefault });
     if (res.code === 0) {
       LicenseUtil.addLicense(this.license, this.isDefault);
       RouterModule.pop(animation);
@@ -51,7 +52,7 @@ export class LicensePageVM {
     if (this.license === this.licenseInfo.default) {
       return;
     }
-    const res = await Https.setDefaultLicenseNumber({ id: getId(), new: this.license });
+    const res = await Https.setDefaultLicenseNumber({ id: AccountUtil.getId(), new: this.license });
     if (res.code === 0) {
       LicenseUtil.updateDefaultLicense(res.data.default);
     }
@@ -59,7 +60,7 @@ export class LicensePageVM {
 
   /** 删除车牌 **/
   public async deleteLicense() {
-    const res = await Https.deleteOldLicenseNumber({ id: getId(), old: this.license });
+    const res = await Https.deleteOldLicenseNumber({ id: AccountUtil.getId(), old: this.license });
     if (res.code === 0) {
       LicenseUtil.deleteLicense(this.license);
     }

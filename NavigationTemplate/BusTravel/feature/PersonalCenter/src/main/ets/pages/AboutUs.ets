@@ -1,7 +1,6 @@
-import { RouteEntryVM } from 'common'
 import { common, Want } from '@kit.AbilityKit';
-import { PageHeader } from '../components/PageHeader';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { Logger, RouteEntryVM } from 'common'
 
 @Builder
 export function AboutUsBuilder() {
@@ -25,8 +24,7 @@ export struct AboutUs {
     cancel: this.existApp,
     autoCancel: true,
     onWillDismiss: (dismissDialogAction: DismissDialogAction) => {
-      console.info('reason======' + JSON.stringify(dismissDialogAction.reason))
-      console.log('dialogController dialog onWillDismiss========')
+      Logger.info('reason======' + JSON.stringify(dismissDialogAction.reason))
       if (dismissDialogAction.reason === DismissReason.PRESS_BACK) {
         dismissDialogAction.dismiss()
       }
@@ -54,8 +52,7 @@ export struct AboutUs {
     cancel: this.existApp,
     autoCancel: true,
     onWillDismiss: (dismissDialogAction: DismissDialogAction) => {
-      console.info('reason' + JSON.stringify(dismissDialogAction.reason))
-      console.log('newDialogController dialog onWillDismiss')
+      Logger.info('reason' + JSON.stringify(dismissDialogAction.reason))
       if (dismissDialogAction.reason === DismissReason.PRESS_BACK) {
         dismissDialogAction.dismiss()
       }
@@ -79,13 +76,20 @@ export struct AboutUs {
 
   build() {
     NavDestination() {
-      Column() {
-        this.buildLogo()
-        this.buildUse()
+      Scroll() {
+        Column() {
+          this.buildLogo()
+          this.buildUse()
+          Blank()
+            .layoutWeight(1)
+        }
+        .width('100%')
+        .backgroundColor('#F1F3F5')
       }
-      .height('100%')
-      .width('100%')
-      .backgroundColor('#F1F3F5')
+      .scrollable(ScrollDirection.Vertical)
+      .scrollBar(BarState.Auto)
+      .scrollBarWidth('0vp')
+      .edgeEffect(EdgeEffect.Spring)
     }
     .hideTitleBar(false)
     .title('关于我们')
@@ -172,15 +176,15 @@ export struct AboutUs {
   }
 
   onCancel() {
-    console.info('Callback when the first button is clicked')
+
   }
 
   onAccept() {
-    console.info('Callback when the second button is clicked')
+
   }
 
   existApp() {
-    console.info('Click the callback in the blank area')
+
   }
 }
 
@@ -264,7 +268,7 @@ export struct NewUpdate {
             .width('90lpx')
             .fontSize('12lpx')
             .fontWeight(500)
-            .fontColor($r('sys.color.gray_04'))
+            .fontColor($r('sys.color.warning'))
             .backgroundColor($r('sys.color.white'))
             .margin({ right: '14lpx' })
             .onClick(() => {
@@ -287,7 +291,7 @@ export struct NewUpdate {
               const context = getContext(this) as common.UIAbilityContext;
               context.startAbility(want, (err: BusinessError) => {
                 if (err.code) {
-                  console.error(`Failed to startAbility. Code: ${err.code}, message: ${err.message}`);
+                  Logger.error(`Failed to startAbility. Code: ${err.code}, message: ${err.message}`)
                 }
               })
             })

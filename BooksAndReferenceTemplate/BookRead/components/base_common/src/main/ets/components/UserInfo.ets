@@ -15,4 +15,7 @@ export class UserInfo {
   isMembership: boolean = false
   bookCoins: number = 100
   continuousBuy: boolean = false
+  reminderTime: number = 0
+  fullScreen: boolean = false
+  noTimeBattery: boolean = false
 }

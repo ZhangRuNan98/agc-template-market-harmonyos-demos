@@ -5,8 +5,6 @@ import {
   TaskCheckInStatus,
   CheckInTaskItem,
   CheckInRecord,
-  PickerPreviewItem,
-  PickerResourceType,
 } from 'commonlib';
 import { https } from 'network';
 import { CheckInLogRouteParam, TaskCheckInPopParam } from '../types/Index';
@@ -66,7 +64,9 @@ export class CheckInTaskVM {
 
   public async getCheckInRecord() {
     if (this.activity) {
-      const res = await https.getUserCheckInRecordList({ activityId: this.activity.activityId });
+      const res = await https.getUserCheckInRecordList({
+        activityId: this.activity.activityId,
+      });
       if (res.ret.code === 0) {
         this.historyRecordList = res.result.list;
         this.historyRecordList.sort((a, b) => {
@@ -89,17 +89,6 @@ export class CheckInTaskVM {
       return true;
     }
     return false;
-  }
-
-  public jumpToFullScreenPage(type: PickerResourceType, uri: ResourceStr) {
-    const item: PickerPreviewItem = {
-      type,
-      uri,
-    };
-    RouterModule.push({
-      url: RouterMap.ACTIVITY_FULL_SCREEN_MEDIA,
-      param: item,
-    });
   }
 
   public jumpToActivityIntro() {

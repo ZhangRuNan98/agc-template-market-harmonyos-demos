@@ -5,7 +5,7 @@ const TAG = '[order]';
 
 let myHandler = async function (event, context, callback, logger) {
   logger.info(event);
-  let userId: string = event.body ? JSON.parse(event.body).userId : event.userId;
+  let userId: string = event.headers ? event.headers.uid : event.userId;
   let trigger: string = event.body ? JSON.parse(event.body).trigger : event.trigger;
   if (!userId) {
     callback({

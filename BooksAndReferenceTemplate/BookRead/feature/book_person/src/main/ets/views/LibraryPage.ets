@@ -53,6 +53,7 @@ export struct LibraryPage {
                   },(item: string) => new Date().toString())
                 }
                 .scrollBar(BarState.Off)
+                .edgeEffect(EdgeEffect.Spring)
               }
               .justifyContent(FlexAlign.Center)
               .width(Constants.FULL_SIZE)

@@ -41,6 +41,26 @@
       "value": "information_title2_string"
     },
     {
+      "name": "huawei_user",
+      "value": "Huawei user"
+    },
+    {
+      "name": "confirm",
+      "value": "confirm"
+    },
+    {
+      "name": "log_out",
+      "value": "logout"
+    },
+    {
+      "name": "cancel",
+      "value": "cancel"
+    },
+    {
+      "name": "app_chat",
+      "value": "appchat"
+    },
+    {
       "name": "information_content2_string",
       "value": "information_content2_string"
     },

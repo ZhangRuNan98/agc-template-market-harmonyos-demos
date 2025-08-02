@@ -1,7 +1,7 @@
 import { formBindingData, FormExtensionAbility, formInfo, formProvider } from '@kit.FormKit';
 import { Want } from '@kit.AbilityKit';
-import { getId, Https } from 'network';
-import { FormatUtil, WidgetUtil } from 'commonlib';
+import { Https } from 'network';
+import { AccountUtil, FormatUtil, WidgetUtil } from 'common';
 
 export default class PhoneFormAbility extends FormExtensionAbility {
   public onAddForm(want: Want) {
@@ -25,8 +25,8 @@ export default class PhoneFormAbility extends FormExtensionAbility {
   public onFormEvent(formId: string, message: string): void {
     const params = JSON.parse(message) as Record<string, string | Map<string, string>>;
     const license = params.license as string;
-    Https.queryParking({ id: getId(), license: license });
-    Https.queryParking({ id: getId(), license: license }).then(res => {
+    Https.queryParking({ id: AccountUtil.getId(), license: license });
+    Https.queryParking({ id: AccountUtil.getId(), license: license }).then(res => {
       if (res.code === 0) {
         const order = res.data.info?.pop();
         if (order) {

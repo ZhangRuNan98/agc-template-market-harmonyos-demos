@@ -1,12 +1,18 @@
 import { Context } from '../common/Context';
 import { TitleBar } from '../common/TitleBar';
 import { buildLoadingMask } from '../common/CommonBuilders';
-import { IColor, IFontSize, IStyle, Operation } from '../common/CommonConst';
+import { parseAddressByText } from '../common/AddressManageUtil';
+import { ParsedAddressDTO } from '../model/ParsedAddressDTO';
 import { AddressDTO } from '../model/AddressDTO';
 import { AddressVM } from '../viewmodel/AddressVM';
+import { Config, IColor, IFontSize, IStyle, Operation, ShippingAddressErrorCode } from '../common/CommonConst';
 
-import { promptAction } from '@kit.ArkUI';
+import shippingAddress from '@hms.core.account.shippingAddress';
+import pasteboard from '@ohos.pasteboard';
+import i18n from '@ohos.i18n';
+import { PromptAction, KeyboardAvoidMode, MeasureUtils } from '@ohos.arkui.UIContext';
 import { sceneMap } from '@kit.MapKit';
+import { BusinessError } from '@ohos.base';
 
 @ComponentV2
 struct AddressEditPage {
@@ -17,10 +23,48 @@ struct AddressEditPage {
   @Local
   private address: AddressVM = new AddressVM();
 
+  @Local
+  private clipboardText: string = '';
+
+  @Local
+  private isSelectingDistrict: boolean = false;
+
+  @Local
+  private isSelectingAddress: boolean = false;
+
+  @Local
+  private isResolvingClipboardText: boolean = false;
+
+  @Computed
+  private get isFocusable(): boolean {
+    return !this.isSelectingDistrict && !this.isSelectingAddress;
+  }
+
+  @Computed
+  private get showLoadingMask(): boolean {
+    return this.ctx.addressMgr.isLoading ||
+           this.isSelectingDistrict ||
+           this.isSelectingAddress ||
+           this.isResolvingClipboardText;
+  }
+
+  private promptAction: PromptAction = this.getUIContext().getPromptAction();
+
+  private systemPasteboard: pasteboard.SystemPasteboard = pasteboard.getSystemPasteboard();
+
+  private formatNational: i18n.PhoneNumberFormat = new i18n.PhoneNumberFormat('CN', { type: 'NATIONAL' });
+
+  private measure: MeasureUtils = this.getUIContext().getMeasureUtils();
+
   public aboutToAppear(): void {
+    this.getUIContext().setKeyboardAvoidMode(KeyboardAvoidMode.RESIZE);
     if (this.ctx.operation === Operation.EDIT && this.ctx.editingAddressDTO) {
       this.address.assignFromDTO(this.ctx.editingAddressDTO);
     }
+  }
+
+  public aboutToDisappear(): void {
+    this.getUIContext().setKeyboardAvoidMode(KeyboardAvoidMode.OFFSET);
   }
 
   public build(): void {
@@ -37,8 +81,8 @@ struct AddressEditPage {
         }
         Stack() {
           this.buildMainContent();
-          if (this.ctx.addressMgr.isLoading) {
-            buildLoadingMask();
+          if (this.showLoadingMask) {
+            buildLoadingMask(this.ctx.addressMgr.isLoading || this.isResolvingClipboardText);
           }
         }
         .layoutWeight(1)
@@ -58,6 +102,88 @@ struct AddressEditPage {
     Column() {
       Scroll() {
         Column() {
+          Row() {
+            Text('获取华为账号地址')
+              .layoutWeight(1)
+              .fontSize(IFontSize.BODY)
+              .fontColor(IColor.BLACK_TRANSPARENT_60)
+              .maxLines(1)
+            Image($r('app.media.ic_left_arrow'))
+              .height(16)
+              .objectFit(ImageFit.Contain)
+              .rotate({ angle: -180 })
+              .fillColor(IColor.BLACK_TRANSPARENT_40)
+              .draggable(false)
+          }
+          .width('100%')
+          .height(48)
+          .backgroundColor(IColor.WHITE)
+          .borderRadius(8)
+          .padding({ left: 16, right: 16 })
+          .margin({ bottom: IStyle.CARD_GAP })
+          .onClick(() => this.handleSelectAddress())
+          // 地址解析
+          Column() {
+            TextArea({ text: this.clipboardText, placeholder: '在此粘贴复制的地址信息，自动拆分姓名，电话和地址' })
+              .width('100%')
+              .height(105)
+              .placeholderColor(IColor.BLACK_TRANSPARENT_40)
+              .placeholderFont({ size: 14 })
+              .caretColor(IColor.THEME_PRIMARY)
+              .fontColor(IColor.BLACK_TRANSPARENT_90)
+              .fontSize(IFontSize.BODY)
+              .maxLength(Config.ADDRESS_PARSE_TEXT_CHAR_LIMIT)
+              .showCounter(true, { thresholdPercentage: 50, highlightBorder: false })
+              .barState(BarState.Off)
+              .onChange((value: string) => this.clipboardText = value)
+              .borderRadius(8)
+              .padding(10)
+              .backgroundColor('#FFF1F3F5')
+              .focusable(this.isFocusable)
+            Text('示例：唐小虎，112xxxxxxxx，江苏省南京市鼓楼区美景雅苑xxx号')
+              .width('100%')
+              .fontSize(IFontSize.BODY)
+              .fontColor(IColor.THEME_PRIMARY)
+              .margin({ top: 12 })
+            Row() {
+              PasteButton({
+                icon: PasteIconStyle.LINES,
+                text: PasteDescription.PASTE,
+                buttonType: ButtonType.Normal
+              })
+                .width(80)
+                .height(28)
+                .borderRadius(16)
+                .fontSize(IFontSize.BODY)
+                .fontColor(IColor.WHITE)
+                .backgroundColor(IColor.THEME_PRIMARY)
+                .onClick((_: ClickEvent, result: PasteButtonOnClickResult) => {
+                  this.handlePasteButtonOnClickResult(result);
+                })
+              Button() {
+                Text('识别')
+                  .fontSize(IFontSize.BODY)
+                  .fontColor(IColor.WHITE)
+                  .fontWeight(600)
+              }
+              .width(80)
+              .height(28)
+              .borderRadius(16)
+              .fontWeight(400)
+              .type(ButtonType.Normal)
+              .backgroundColor(IColor.THEME_PRIMARY)
+              .margin({ left: 16 })
+              .onClick(() => {
+                this.handleResolvingClipboardText();
+              })
+            }
+          }
+          .width('100%')
+          .backgroundColor(IColor.WHITE)
+          .alignItems(HorizontalAlign.End)
+          .borderRadius(8)
+          .padding({ left: 10, right: 10, top: 12, bottom: 12 })
+          .margin({ bottom: IStyle.CARD_GAP })
           // 收货人 & 手机号码
           Column() {
             Row() {
@@ -80,6 +206,7 @@ struct AddressEditPage {
                 .maxLines(1)
                 .backgroundColor(IColor.WHITE)
                 .onChange((value: string) => this.address.name = value)
+                .focusable(this.isFocusable)
             }
             .width('100%')
             .height(48)
@@ -99,7 +226,7 @@ struct AddressEditPage {
                 .type(InputType.PhoneNumber)
                 .placeholderColor(IColor.BLACK_TRANSPARENT_40)
                 .caretColor(IColor.THEME_PRIMARY)
-                .maxLength(11)
+                .maxLength(30)
                 .fontColor(IColor.BLACK_TRANSPARENT_90)
                 .fontSize(14)
                 .placeholderFont({ size: 14 })
@@ -108,6 +235,7 @@ struct AddressEditPage {
                 .maxLines(1)
                 .backgroundColor(IColor.WHITE)
                 .onChange((value: string) => this.address.phone = value)
+                .focusable(this.isFocusable)
             }
             .width('100%')
             .height(48)
@@ -126,10 +254,10 @@ struct AddressEditPage {
                 .fontColor(IColor.BLACK_TRANSPARENT_60)
                 .textAlign(TextAlign.Start)
                 .margin({ right: 24 })
-              Column() {
+              Row() {
                 if (this.address.region) {
                   Text(this.address.region)
-                    .width('100%')
+                    .layoutWeight(1)
                     .fontSize(14)
                     .maxLines(1)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -137,15 +265,22 @@ struct AddressEditPage {
                     .textAlign(TextAlign.Start)
                 } else {
                   Text('省市区县、乡镇等')
-                    .width('100%')
+                    .layoutWeight(1)
                     .fontSize(14)
                     .maxLines(1)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
                     .fontColor(IColor.BLACK_TRANSPARENT_40)
                     .textAlign(TextAlign.Start)
                 }
+                Image($r('app.media.ic_left_arrow'))
+                  .height(16)
+                  .objectFit(ImageFit.Contain)
+                  .rotate({ angle: -180 })
+                  .fillColor(IColor.BLACK_TRANSPARENT_40)
+                  .draggable(false)
               }
               .layoutWeight(1)
+              .height('100%')
               .onClick(() => this.handleSelectDistrict())
             }
             .width('100%')
@@ -169,14 +304,20 @@ struct AddressEditPage {
                 .caretColor(IColor.THEME_PRIMARY)
                 .fontColor(IColor.BLACK_TRANSPARENT_90)
                 .fontSize(14)
-                .maxLength(80)
+                .maxLength(60)
                 .showCounter(true, { thresholdPercentage: 50, highlightBorder: false })
                 .barState(BarState.Off)
                 .onChange((value: string) => this.address.detail = value)
                 .borderRadius(0)
-                .padding({ top: 15.85, bottom: 15.85, left: 0, right: 0 })
+                .padding({
+                  top: (48 - this.measureTextHeight('详细地址', 14)) / 2,
+                  bottom: 12,
+                  left: 0,
+                  right: 0
+                })
                 .backgroundColor(IColor.WHITE)
-                .height(130)
+                .height(80)
+                .focusable(this.isFocusable)
             }
             .width('100%')
             .alignItems(VerticalAlign.Top)
@@ -214,7 +355,7 @@ struct AddressEditPage {
         .padding(IStyle.CARD_GAP)
       }
       .layoutWeight(1)
-      .scrollBar(BarState.Off)
+      .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.None)
       this.buildSaveButton();
     }
@@ -240,8 +381,8 @@ struct AddressEditPage {
           if (this.verify()) {
             const address: AddressDTO = this.address.toDTO();
             this.ctx.operation === Operation.CREATE ?
-              this.ctx.addressMgr.create(address, () => this.ctx.navPathStack.pop()) :
-              this.ctx.addressMgr.update(address, () => this.ctx.navPathStack.pop());
+            this.ctx.addressMgr.create(address, () => this.ctx.navPathStack.pop()) :
+            this.ctx.addressMgr.update(address, () => this.ctx.navPathStack.pop());
           }
         })
       }
@@ -255,18 +396,19 @@ struct AddressEditPage {
   }
 
   private handleSelectDistrict(): void {
+    if (this.isSelectingDistrict || this.isSelectingAddress) {
+      return;
+    }
+    this.isSelectingDistrict = true;
+    this.getUIContext().getFocusController().clearFocus();
     const options: sceneMap.DistrictSelectOptions = {
       countryCode: 'CN',
       language: 'zh',
+      cancelCallback: () => this.isSelectingDistrict = false
     };
     sceneMap.selectDistrict(this.getUIContext().getHostContext(), options)
       .then((result: sceneMap.DistrictSelectResult) => {
-        this.address.countryCode = '';
-        this.address.country = '';
-        this.address.province = '';
-        this.address.city = '';
-        this.address.district = '';
-        this.address.street = '';
+        this.address.clearRegion();
         for (let district of result.districts) {
           switch (district.adminLevel) {
             case 'COUNTRY':
@@ -287,28 +429,138 @@ struct AddressEditPage {
               break;
           }
         }
-      });
+      })
+      .catch((e: BusinessError<void>) => this.showErrorToast(e))
+      .finally(() => this.isSelectingDistrict = false);
+  }
+
+  private handleSelectAddress(): void {
+    if (this.isSelectingDistrict || this.isSelectingAddress) {
+      return;
+    }
+    this.isSelectingAddress = true;
+    this.getUIContext().getFocusController().clearFocus();
+    shippingAddress.chooseAddress(this.getUIContext().getHostContext())
+      .then((info: shippingAddress.AddressInfo) => {
+        // 根据官方文档，当前收货地址仅支持中国境内
+        this.address.countryCode = 'CN';
+        this.address.country = '中国';
+        this.address.name = info.userName;
+        this.address.phone = this.formatNational.format(info.mobileNumber).replace(/\s+/g, '');
+        this.address.detail = info.detailedAddress ?? '';
+        this.address.province = info.provinceName;
+        this.address.city = info.cityName;
+        this.address.district = info.districtName;
+        this.address.street = info.streetName ?? '';
+        this.promptAction.showToast({ message: '获取华为账号地址成功' });
+      })
+      .catch((e: BusinessError<void>) => {
+        // 用户未完成操作就退出了地址管理服务
+        if (e.code === ShippingAddressErrorCode.USER_CANCELED) {
+          return;
+        }
+        this.showErrorToast(e)
+      })
+      .finally(() => this.isSelectingAddress = false);
+  }
+
+  private async handlePasteButtonOnClickResult(result: PasteButtonOnClickResult): Promise<void> {
+    try {
+      if (!this.isResolvingClipboardText && this.systemPasteboard.hasDataSync()) {
+        const data: pasteboard.PasteData = this.systemPasteboard.getDataSync();
+        const text: string | undefined = data.getPrimaryText()?.slice(0, Config.ADDRESS_PARSE_TEXT_CHAR_LIMIT);
+        if (text) {
+          this.clipboardText = text;
+        } else if (result !== PasteButtonOnClickResult.SUCCESS) {
+          this.getUIContext().getFocusController().clearFocus();
+          this.showErrorToast('Failed to obtain temporary clipboard permission.');
+        }
+      }
+    } catch (e) {
+      this.showErrorToast(e);
+    }
+  }
+
+  private handleResolvingClipboardText(): void {
+    if (!this.clipboardText || this.isResolvingClipboardText) {
+      return;
+    }
+    this.isResolvingClipboardText = true;
+    this.getUIContext().getFocusController().clearFocus();
+    parseAddressByText(this.clipboardText)
+      .then((result: ParsedAddressDTO) => {
+        let isSuccess: boolean = false;
+        if (result.name) {
+          this.address.name = result.name;
+          isSuccess = true;
+        }
+        if (result.phone) {
+          this.address.phone = result.phone;
+          isSuccess = true;
+        }
+        if (result.hasCompleteLocation()) {
+          this.address.countryCode = result.countryCode;
+          this.address.country = result.country;
+          this.address.province = result.province;
+          this.address.city = result.city;
+          this.address.district = result.district;
+          this.address.street = result.street;
+          this.address.detail = result.detail;
+          isSuccess = true;
+        }
+        this.promptAction.showToast({ message: isSuccess ? '识别成功' : '识别失败' });
+      })
+      .catch((e: BusinessError<void>) => {
+        this.showErrorToast(e);
+      })
+      .finally(() => this.isResolvingClipboardText = false);
+  }
+
+  private showErrorToast(error: BusinessError<void> | string): void {
+    if (!Config.IS_DEV) {
+      return;
+    }
+    let message: string = '';
+    if (typeof error === 'string') {
+      message = 'error: ' + error;
+    } else if (!error.code) {
+      message = 'error: ' + error.message;
+    } else {
+      message = `code: ${error.code}, msg: ${error.message}`;
+    }
+    this.promptAction.showToast({
+      message: message,
+      backgroundBlurStyle: BlurStyle.NONE,
+      backgroundColor: IColor.DEV_TOAST_BG_COLOR,
+      textColor: IColor.BLACK_TRANSPARENT_90
+    });
+  }
+
+  private measureTextHeight(text: string, fontSizeVP: number): number {
+    const size: SizeOptions = this.measure.measureTextSize({ textContent: text, fontSize: fontSizeVP });
+    const heightPX: number = size.height as number;
+    return heightPX ? this.getUIContext().px2vp(heightPX) : 0;
   }
 
   private verify(): boolean {
     if (!this.address.name) {
-      promptAction.showToast({ message: '请输入收货人姓名' });
+      this.promptAction.showToast({ message: '请输入收货人姓名' });
       return false;
     }
     if (!this.address.phone) {
-      promptAction.showToast({ message: '请输入手机号码' });
+      this.promptAction.showToast({ message: '请输入手机号码' });
       return false;
     }
-    if (!/^1[3-9]\d{9}$/.test(this.address.phone)) {
-      promptAction.showToast({ message: '手机号码不正确' });
+    if (!this.formatNational.isValidNumber(this.address.phone)) {
+      this.promptAction.showToast({ message: '手机号码不正确' });
       return false;
     }
     if (!this.address.region) {
-      promptAction.showToast({ message: '请选择所在地区' });
+      this.promptAction.showToast({ message: '请选择所在地区' });
       return false;
     }
     if (!this.address.detail) {
-      promptAction.showToast({ message: '请输入详细地址' });
+      this.promptAction.showToast({ message: '请输入详细地址' });
       return false;
     }
     return true;

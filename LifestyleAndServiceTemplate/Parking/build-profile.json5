@@ -1,6 +1,7 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+    ],
     "products": [
       {
         "name": "default",
@@ -42,12 +43,8 @@
       "srcPath": "./commons/network",
     },
     {
-      "name": "commonLib",
-      "srcPath": "./commons/commonLib",
-    },
-    {
-      "name": "componentLib",
-      "srcPath": "./commons/componentLib",
+      "name": "common",
+      "srcPath": "./commons/common"
     },
     {
       "name": "home",
@@ -110,18 +107,6 @@
       ]
     },
     {
-      "name": "search",
-      "srcPath": "./features/service/search",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
       "name": "detail",
       "srcPath": "./features/service/detail",
       "targets": [
@@ -156,6 +141,30 @@
           ]
         }
       ]
+    },
+    {
+      "name": "module_swiper_preview",
+      "srcPath": "./components/module_swiper_preview",
+    },
+    {
+      "name": "module_parking_spots",
+      "srcPath": "./components/module_parking_spots"
+    },
+    {
+      "name": "module_parking_base",
+      "srcPath": "./components/module_parking_base",
+    },
+    {
+      "name": "module_parking_map",
+      "srcPath": "./components/module_parking_map",
+    },
+    {
+      "name": "module_address_search",
+      "srcPath": "./components/module_address_search",
+    },
+    {
+      "name": "module_license_keyboard",
+      "srcPath": "./components/module_license_keyboard",
     }
   ]
 }

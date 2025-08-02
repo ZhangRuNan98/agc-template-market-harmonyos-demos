@@ -126,7 +126,7 @@ export function minePageBuilder() {
 
 @ComponentV2
 struct MinePage {
-  @Local vm: MinePageVM = MinePageVM.instance;
+  @Local vm: MinePageVM = MinePageVM.getInstance(this.getUIContext());
   @Local modifyValue: string = '';
   @Local userInfoModel: UserInfoModel = PersistenceV2.connect(UserInfoModel, () => new UserInfoModel())!;
 
@@ -187,6 +187,7 @@ struct MinePage {
     .backgroundColor(Color.White)
     .width(ComponentConst.FULL_PARENT)
     .height(ComponentConst.FULL_PARENT)
+    .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP])
   }
 
   @Builder

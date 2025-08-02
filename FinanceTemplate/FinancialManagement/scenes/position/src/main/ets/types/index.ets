@@ -1,6 +1,6 @@
 import {
   IInvestmentRecordItem,
-  IRegularInvestmentInfo } from 'network/src/main/ets/types/responseTypes/GetRegularInvestmentResp';
+  IRegularInvestmentInfo } from 'lib_foundation';
 
 export interface IRedemptionButton {
   index: number,

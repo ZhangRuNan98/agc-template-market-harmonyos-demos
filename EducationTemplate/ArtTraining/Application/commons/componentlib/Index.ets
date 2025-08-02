@@ -14,12 +14,6 @@ export { ContainerRow } from './src/main/ets/components/ContainerRow/Index';
 
 export { ContainerColumn } from './src/main/ets/components/ContainerColumn/Index';
 
-export { CourseList } from './src/main/ets/components/CourseList/Index';
-
-export { StoreMap, StoreMapVM, mapOptionsDialog } from './src/main/ets/components/StoreMap/Index';
-
 export { BindPhoneUtil } from './src/main/ets/pages/BindPhonePage/BindPhoneUtil';
 
 export { ConfirmParam } from './src/main/ets/dialog/CommonConfirmDialog';
-
-

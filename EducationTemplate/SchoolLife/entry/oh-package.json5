@@ -10,7 +10,8 @@
     componentlib: "file:../commons/componentLib",
     network: "file:../commons/network",
     home: "file:../features/tab/home",
-    mine: "file:../features/tab/mine"
+    mine: "file:../features/tab/mine",
+    courseschedule: "file:../features/service/courseSchedule"
   }
 }
 

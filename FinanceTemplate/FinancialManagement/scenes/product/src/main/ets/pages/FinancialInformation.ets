@@ -1,5 +1,5 @@
-import { FormatUtil, RouterMap } from 'commonlib'
-import { INoticeItem } from 'network/src/main/ets/types/responseTypes/NoticeResp'
+import { FormatUtil, RouterMap } from 'module_base'
+import { INoticeItem } from 'lib_foundation'
 import { FinancialInformationVM } from '../viewModels/FinancialInformationVM'
 
 @Builder
@@ -31,7 +31,7 @@ struct FinancialInformation {
               .flexShrink(0)
               .padding({
                 top: 13,
-                bottom: 13
+                bottom: 13,
               })
               .margin({ right: 12 })
 
@@ -59,7 +59,7 @@ struct FinancialInformation {
               .flexGrow(1)
               .padding({
                 top: 13,
-                bottom: 13
+                bottom: 13,
               })
               .borderWidth({ bottom: 1 })
               .borderColor($r('sys.color.comp_divider'))
@@ -69,10 +69,12 @@ struct FinancialInformation {
             .onClick(() => {
               FormatUtil.jumpToNext(RouterMap.INFORMATION_INFO, notice)
             })
-          }, (item: INoticeItem[]) => JSON.stringify(item))
+          }, (item: INoticeItem) => JSON.stringify(item))
         }
         .padding({ left: 16, right: 16 })
       }
+      .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
     }
     .backgroundColor($r('sys.color.background_secondary'))
     .title('理财资讯')

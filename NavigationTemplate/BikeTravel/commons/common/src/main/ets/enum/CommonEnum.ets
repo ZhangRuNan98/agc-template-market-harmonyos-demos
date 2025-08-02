@@ -1,0 +1,35 @@
+export enum RouterPageEnum {
+  BIKE_HOME_ROUTER = 'bike_home',
+  NEW_HOME_ROUTER = 'new_home',
+  HOME_ROUTER = 'home',
+  LOGIN_ROUTER = 'login',
+  FAULT_REPORTING_ROUTER = 'FaultReportingPage',
+  FEEDBACK_ROUTER = 'FeedbackPage',
+  USER_GUIDE_ROUTER = 'UserGuidePage',
+  CUSTOM_SCAN_ROUTER = 'CustomScanPage',
+  MINE_ROUTER = 'MinePage',
+  CYCLE_RECORD_ROUTER = 'CycleRecordPage',
+  BACK_ID_ROUTER = 'BackID',
+  FRONT_ID_ROUTER = 'FrontID',
+  REAL_NAME_AUTH_ROUTER = 'RealNameAuth',
+  TRIP_DETAIL_ROUTER = 'TripDetail',
+  PERSONAL_INFO_ROUTER = 'PersonalInfo',
+  QUICK_LOGIN_ROUTER = 'LoginWithHuaweiIDComponent',
+  MANUAL_INPUT_ROUTER = 'ManualInput',
+  CYCLING_ROUTER = 'Cycling',
+  SETTING_ROUTER = 'Setting',
+  PRIVACY_POLICY_ROUTER = 'PrivacyPolicy',
+  DATA_SHARING_ROUTER = 'DataSharing',
+  DATA_COLLECTION_ROUTER = 'DataCollection',
+  USER_AGREEMENT_ROUTER = 'UserAgreement'
+}
+
+export enum BikeStatus {
+  LOOKING_FOR_BIKE = 1,
+  WAITING_SCAN,
+  WAITING_UNLOCK,
+  RIDING,
+  WAITING_PAYMENT,
+  PAYMENT_COMPLETED,
+  NOT_READY,
+}

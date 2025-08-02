@@ -173,7 +173,7 @@
     <td><a href="./BooksAndReferenceTemplate/BookRead/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
-    <td rowspan="3"><a href="#出行导航">出行导航</a></td>
+    <td rowspan="4"><a href="#出行导航">出行导航</a></td>
     <td><a href="#公交出行应用模板">公交出行应用模板</a></td>
     <td><a href="./NavigationTemplate/BusTravel/README.md" target="_blank">快速开始</a></td>
   </tr>
@@ -185,15 +185,27 @@
    <td><a href="#航空出行元服务模板">航空出行元服务模板</a></td>
    <td><a href="./NavigationTemplate/AirTrip/Application/README.md" target="_blank">快速开始</a></td>
   </tr>
+   <tr>
+   <td><a href="#单车出行应用模板">单车出行应用模板</a></td>
+   <td><a href="./NavigationTemplate/BikeTravel/README.md" target="_blank">快速开始</a></td>
+  </tr>
   <tr>
-    <td><a href="#影音娱乐">影音娱乐</a></td>
+    <td rowspan="2"><a href="#影音娱乐">影音娱乐</a></td>
     <td><a href="#视频短剧元服务模板">视频短剧元服务模板</a></td>
     <td><a href="./MovieTVAndLivestreamingTemplate/WebShortDrama/README.md" target="_blank">快速开始</a></td>
   </tr>
+   <tr>
+    <td><a href="#直播应用模板">直播应用模板</a></td>
+    <td><a href="./MovieTVAndLivestreamingTemplate/LiveStreaming/README.md" target="_blank">快速开始</a></td>
+  </tr>
   <tr>
-    <td><a href="#房产与装修">房产与装修</a></td>
+    <td  rowspan="2"><a href="#房产与装修">房产与装修</a></td>
     <td><a href="#家居装修应用模板">家居装修应用模板</a></td>
     <td><a href="./HouseAndHomeTemplate/HomeDecoration/README.md" target="_blank">快速开始</a></td>
+  </tr>
+   <tr>
+    <td><a href="#租房找房应用模板">租房找房应用模板</a></td>
+    <td><a href="./HouseAndHomeTemplate/RentAndBuy/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#拍摄美化">拍摄美化</a></td>
@@ -635,7 +647,7 @@
 
 | 首页                | 我的                |
 | ------------------- | ------------------- |
-| <img src="./EducationTemplate/SchoolLife/doc/1.jpeg" alt="首页" width="300"> | <img src="./EducationTemplate/SchoolLife/doc/2.jpeg" alt="首页" width="300">  |
+| <img src="./EducationTemplate/SchoolLife/screenshots/首页.jpg" alt="首页" width="300"> | <img src="./EducationTemplate/SchoolLife/screenshots/我的.jpg" alt="首页" width="300">  |
 
 
 ### 艺术培训元服务模板
@@ -655,7 +667,7 @@
 
 | 首页                                                                               | 课程中心                                                                             | 打卡活动                                                                              | 我的                                                                               |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_home.jpeg) | ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_course.jpeg) | ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_checkin.jpeg) | ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_mine.jpeg) |
+| ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_home.png) | ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_course.png) | ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_checkin.png) | ![项目打开](./EducationTemplate/ArtTraining/Application/screenshots/tab_mine.jpeg) |
 
 ### 备考应用模板
 
@@ -1004,6 +1016,25 @@
 | ---------------------------------------------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | ![首页](./NavigationTemplate/AirTrip/Application/screenshot/home.jpeg) | ![行程](./NavigationTemplate/AirTrip/Application/screenshot/itinerary.jpeg) | ![航班动态](./NavigationTemplate/AirTrip/Application/screenshot/flight.jpeg) | ![我的](./NavigationTemplate/AirTrip/Application/screenshot/mine.jpeg) |
 
+
+### 单车出行应用模板
+
+**功能介绍**
+
+本模板为单车出行应用提供了常用功能的开发样例，模板主要分主页、我的两大模块：
+
+- 主页：主要提供地图定位、扫码用车、更多服务等功能。
+
+- 我的：登录/退出登录、编辑个人信息、查看骑行记录等功能。
+
+本模板已集成华为账号、地图导航、定位、原生扫码等服务，只需做少量配置和定制即可快速实现华为账号的登录、位置定位等功能，从而快速完成相关功能的实现。
+
+<a href="./NavigationTemplate/BikeTravel/README.md" target="_blank">详细说明</a>
+
+| 主页                                                  | 我的                                                     |
+|-----------------------------------------------------|--------------------------------------------------------|
+| <img src="./NavigationTemplate/BikeTravel/docs/mainpage.jpeg" alt="主页" width="300"> | <img src="./NavigationTemplate/BikeTravel/docs/settingpage.jpeg" alt="我的" width="300"> |
+
 ## 影音娱乐
 
 ### 视频短剧元服务模板
@@ -1027,6 +1058,27 @@
 | 首页                         | 剧场                         | 我的                         | 详情                         |
 |----------------------------|----------------------------|----------------------------|----------------------------|
 | ![首页](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/首页.jpeg) | ![剧场](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/剧场.jpeg) | ![我的](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/我的.jpeg) | ![详情](./MovieTVAndLivestreamingTemplate/WebShortDrama/screenshots/详情.jpeg) |
+
+
+### 直播应用模板
+
+**功能介绍**
+
+本模板为直播类应用提供了常用功能的开发样例，模板主要分首页、我的及详情播放页三大模块：
+
+* 首页：提供直播推荐卡片功能，支持搜索和扫一扫。
+
+* 我的：支持账号的管理和常用服务(消息通知/意见反馈)。
+
+* 详情: 沉浸式观看直播，支持直播常用功能(上下滑切换直播，发送评论，赠送礼物等)
+
+本模板已集成华为账号等服务，只需做少量配置和定制即可快速实现华为账号的登录功能。
+
+<a href="./MovieTVAndLivestreamingTemplate/LiveStreaming/README.md" target="_blank">详细说明</a>
+
+| 首页                         | 我的                         | 详情                         |
+|----------------------------|----------------------------|----------------------------|
+| <img src="./MovieTVAndLivestreamingTemplate/LiveStreaming/screenshots/首页.jpeg" width="300"> | <img src="./MovieTVAndLivestreamingTemplate/LiveStreaming/screenshots/我的.jpeg" width="300"> | <img src="./MovieTVAndLivestreamingTemplate/LiveStreaming/screenshots/详情.jpeg" width="300"> |
 
 ## 拍摄美化
 
@@ -1068,6 +1120,23 @@
 | 首页                                                                | 找设计师                                                                | 定制设计                                                                  | 我的                                                                |
 |-------------------------------------------------------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------|-------------------------------------------------------------------|
 | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/screenShot_home.jpeg" alt="首页" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/screenShot_custom.jpeg" alt="找设计师" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/screenShot_custom.jpeg" alt="定制设计" width="300"> | <img src="./HouseAndHomeTemplate/HomeDecoration/screenshots/screenShot_mine.jpeg" alt="我的" width="300"> |
+
+### 租房找房应用模板
+
+**功能介绍**
+
+本模板为租房买房类应用提供了常用功能的开发样例，模板主要分首页、我的两大模块：
+
+* 首页：找新房、找二手房、租房、房源搜索、热门房屋推荐、地图找房。
+* 我的：一键登录、修改个人信息、查看我的关注、查看并管理浏览历史。
+
+本模板已集成华为账号、通话、地图、定位等服务，只需做少量配置和定制即可快速实现华为账号的登录、一键拨打服务电话、城市定位选择、根据地图找房等功能。
+
+<a href="./HouseAndHomeTemplate/RentAndBuy/README.md" target="_blank">详细说明</a>
+
+| 首页                                                    | 我的                                                    |
+|-------------------------------------------------------|-------------------------------------------------------|
+| <img src="./HouseAndHomeTemplate/RentAndBuy/screenshots/home.png" alt="首页" width="300"> | <img src="./HouseAndHomeTemplate/RentAndBuy/screenshots/mine.png" alt="我的" width="300"> |
 
 ## 开源许可协议
 

@@ -1,9 +1,7 @@
-import { RouteEntryVM } from 'common'
-import { Common, Logger, preferencesUtil } from 'common'
 import dataPreferences from '@ohos.data.preferences';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { CodeScanPage } from './CodeScanPage';
-import { UserInfo } from 'common';
+import { Common, Logger, preferencesUtil, RouteEntryVM, RouterModule, UserInfo } from 'common';
+import { CodeScanComp } from './CodeScanPage';
 
 @Builder
 export function CloudCardBuilder() {
@@ -15,12 +13,14 @@ export struct CloudCard {
   @StorageLink('cloudCard') cloudCard: boolean = AppStorage.get('cloudCard') ?? false;
   @StorageLink('isLogin') isLogin: boolean = AppStorage.get('isLogin') ?? false;
   @StorageLink('userInfo') userInfo: UserInfo = AppStorage.get('userInfo') ?? new UserInfo();
+  @State isSecondLevel: boolean = false
   vm: RouteEntryVM = RouteEntryVM.instance;
   @State usingTexts: string[] =
     ['1.开通乘车码：点击下方“领取电子卡”，确认信息，勾选协议，点击“点击同意协议并领卡”和“开通免密支付”。',
       ' 2.扫码乘车：上车时打开乘车码界面，将手机屏幕上的乘车码对准公交车上的扫码设备，听到“滴”声或看到相关提示即表示刷码成功，乘车费用会在余额中自动扣除。'];
 
   aboutToAppear(): void {
+    this.isSecondLevel = RouterModule.getStackSize() > 0
     //进入时判断用户是否已开通云卡
     preferencesUtil.getPreferencesValue(Common.CLOUDCARD, Common.CLOUDCARD_USE, false)
       .then((value: dataPreferences.ValueType | undefined) => {
@@ -38,39 +38,50 @@ export struct CloudCard {
   build() {
     NavDestination() {
       if (this.isLogin === true && this.cloudCard) {
-        CodeScanPage()
+        CodeScanComp()
       } else {
-        Column() {
-          Column(){
-            this.buildTitle()
-            this.buildCard()
-            this.buildUsing()
-          }
-
-          Button('开通')
-            .fontColor($r('sys.color.font_on_primary'))
-            .fontSize($r('sys.float.Body_L'))
-            .width('312lpx')
-            .backgroundColor($r('app.color.system_color_green'))
-            .onClick(() => {
-              if (this.isLogin === false) {
-                this.vm.toRouteDetail('Login')
-              } else if (this.cloudCard === false) {
-                this.vm.toRouteDetail('ActivateCloudCard')
-              } else { // 跳转到二维码页面并且记住用户已经开通过云卡
-                this.saveCloudCardUse()
+        Scroll() {
+          Column() {
+            Column() {
+              if (!this.isSecondLevel) {
+                this.buildTitle()
               }
-            })
-            .margin({bottom:20})
+              this.buildCard()
+              this.buildUsing()
+            }
+
+            Blank()
+              .layoutWeight(1)
+
+            Button('开通')
+              .fontColor($r('sys.color.font_on_primary'))
+              .fontSize($r('sys.float.Body_L'))
+              .width('312lpx')
+              .backgroundColor($r('app.color.system_color_green'))
+              .onClick(() => {
+                if (this.isLogin === false) {
+                  this.vm.toRouteDetail('Login')
+                } else if (this.cloudCard === false) {
+                  this.vm.toRouteDetail('ActivateCloudCard')
+                } else { // 跳转到二维码页面并且记住用户已经开通过云卡
+                  this.saveCloudCardUse()
+                }
+              })
+              .margin({ bottom: 20 })
+          }
+          .width('100%')
+          .align(Alignment.TopStart)
+          .backgroundImageSize(ImageSize.Auto)
+          .backgroundColor('#F1F3F5')
+          .justifyContent(FlexAlign.SpaceBetween)
         }
-        .width('100%')
-        .height('100%')
-        .align(Alignment.TopStart)
-        .backgroundImageSize(ImageSize.Auto)
-        .backgroundColor('#F1F3F5')
-        .justifyContent(FlexAlign.SpaceBetween)
+        .scrollable(ScrollDirection.Vertical)
+        .scrollBar(BarState.Auto)
+        .scrollBarWidth('0vp')
+        .edgeEffect(EdgeEffect.Spring)
       }
-    }.hideTitleBar(true)
+    }.hideTitleBar(!this.isSecondLevel)
+    .title('乘车码')
   }
 
   @Builder

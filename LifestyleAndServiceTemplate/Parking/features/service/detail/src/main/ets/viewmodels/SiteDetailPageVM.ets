@@ -1,13 +1,9 @@
-import { PreView, SwiperParams } from '../utils/PreView';
-import { UIContext } from '@kit.ArkUI';
-import { BasicParkInfo, CollectUtil, DetailParkInfo, RouterMap, RouterModule } from 'commonlib';
+import { BasicParkInfo, CollectUtil, DetailParkInfo, RouterMap, RouterModule } from 'common';
 import { Https } from 'network';
 
 @ObservedV2
 export class SiteDetailPageVM {
   @Trace detail?: DetailParkInfo;
-  @Trace swiperParams?: SwiperParams;
-  @Trace swiperIndex: number = 0;
   @Trace isCollect: boolean = false;
   private static _instance: SiteDetailPageVM;
 
@@ -22,20 +18,10 @@ export class SiteDetailPageVM {
    * 初始化
    * 1.重置参数
    * 2.获取详情
-   * 3.更新预览图
    */
-  public init(ctx: UIContext) {
+  public init() {
     this._resetData();
-    this._getDetail().then(() => {
-      this.swiperParams = new SwiperParams(this.detail!.basicPic, 0);
-      this.swiperParams.slideDown = () => {
-        PreView.closeDialog();
-      };
-      this.swiperParams.change = (index: number) => {
-        this.swiperIndex = index;
-      };
-      PreView.init(ctx, this.swiperParams);
-    });
+    this._getDetail();
   }
 
   /** 收藏 or 取消 **/
@@ -51,7 +37,6 @@ export class SiteDetailPageVM {
 
   /** 重置详情页面参数 **/
   private _resetData() {
-    this.swiperIndex = 0;
     this.isCollect = false;
     this.detail = undefined;
   }

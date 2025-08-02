@@ -1,6 +1,9 @@
 {
   "app": {
-    "bundleName": "xxx.xxx.xxx",
+/**
+     * todo
+     */
+    "bundleName": "xx.xx.xx",
     "vendor": "example",
     "versionCode": 1000000,
     "versionName": "1.0.0",

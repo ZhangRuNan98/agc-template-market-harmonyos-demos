@@ -1,15 +1,7 @@
-import { promptAction } from '@kit.ArkUI';
-import { common, Permissions, Want } from '@kit.AbilityKit';
+import { Permissions } from '@kit.AbilityKit';
 import { abilityAccessCtrl } from '@kit.AbilityKit';
 import { bundleManager } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-
-export function prompt(str: string) {
-  promptAction.showToast({
-    message: str,
-    duration: 2000
-  });
-}
 
 export async function checkPermissionGrant(permission: Permissions): Promise<abilityAccessCtrl.GrantStatus> {
   let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
@@ -36,18 +28,4 @@ export async function checkPermissionGrant(permission: Permissions): Promise<abi
   }
 
   return grantStatus;
-}
-
-
-export function jumpToAppSettings(context: common.UIAbilityContext) {
-  let want: Want = {
-    bundleName: 'com.huawei.hmos.settings',
-    abilityName: 'com.huawei.hmos.settings.MainAbility',
-    uri: 'application_info_entry',
-    parameters: {
-      bundleName: context.abilityInfo.bundleName, // 拉起方应用包名
-      pushParams: context.abilityInfo.bundleName, // 拉起方应用包名
-    }
-  };
-  context.startAbility(want);
 }

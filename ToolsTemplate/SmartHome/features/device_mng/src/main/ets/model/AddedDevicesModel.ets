@@ -1,7 +1,8 @@
 import { AdapterModel, DeviceBaseInfo } from 'external_interactions';
 import { MQTT_STATE, MqttClientModel, MqttClientObserverIntf } from './MqttClientModel';
 import { MqttMessage } from '@ohos/mqtt';
-import { prompt, ObserverMngModel } from 'utils';
+import { ObserverMngModel } from 'utils';
+import { prompt } from 'base_apis';
 
 export class DeviceNotifyRecord {
   message: string;

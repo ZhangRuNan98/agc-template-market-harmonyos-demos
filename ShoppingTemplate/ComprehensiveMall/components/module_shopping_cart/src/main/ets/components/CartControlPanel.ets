@@ -1,26 +1,26 @@
-import { PopupSheet } from './PopupSheet'
+import { PopupSheet } from './PopupSheet';
 
 @ComponentV2
 export struct CartControlPanel {
   // 是否是编辑态
-  @Param isEdit: boolean = false
+  @Param isEdit: boolean = false;
   // 是否是子页面路由
-  @Param isChildRoute: boolean = false
+  @Param isChildRoute: boolean = false;
   // 总价
-  @Param totalPrice: number = 0
+  @Param totalPrice: number = 0;
   // 优惠
-  @Param discountAmount: number = 0
+  @Param discountAmount: number = 0;
   // 选择的商品个数
-  @Param quantity: number = 0
+  @Param quantity: number = 0;
   // 全选的回调事件
-  @Event onSelectAll: () => void = () => {}
+  @Event onSelectAll: () => void = () => {};
   // 删除事件
-  @Event onDelete: () => void = () => {}
+  @Event onDelete: () => void = () => {};
   // 结算
-  @Event onCheckout: () => void = () => {}
+  @Event onCheckout: () => void = () => {};
 
   @Local visible: boolean = false;
-  @Local popupMaskHeight: Length = ''
+  @Local popupMaskHeight: Length = '';
 
   build() {
     Column() {
@@ -30,8 +30,8 @@ export struct CartControlPanel {
             .selectedColor('#FFE64566')
             .checkboxShape(CheckBoxShape.CIRCLE)
             .onChange((event: CheckboxGroupResult) => {
-              this.visible = false
-              this.onSelectAll && this.onSelectAll()
+              this.visible = false;
+              this.onSelectAll && this.onSelectAll();
             })
           Text('全选')
             .fontColor($r('sys.color.mask_secondary'))
@@ -42,16 +42,16 @@ export struct CartControlPanel {
         Row() {
           if (this.isEdit) {
             // 删除
-            this.DeleteBtn()
+            this.DeleteBtn();
           } else {
             // 总价大于0，需要展示明细
             if (this.totalPrice > 0) {
-              this.TotalCostDetailView()
+              this.TotalCostDetailView();
             } else {
-              this.TotalView()
+              this.TotalView();
             }
             // 结算按钮
-            this.CheckoutBtn()
+            this.CheckoutBtn();
           }
         }
         .layoutWeight(1)
@@ -72,16 +72,16 @@ export struct CartControlPanel {
         cornerRadius: 12,
         maskHeight: this.popupMaskHeight,
         customContentBuilder: () => {
-          this.PopupContentBuilder()
+          this.PopupContentBuilder();
         },
-        title: '金额明细'
+        title: '金额明细',
       })
     }
     .backgroundColor(Color.White)
     .margin({bottom: this.isChildRoute ? 0 : 48})
     .onAreaChange((ov, nv) => {
       if (nv.globalPosition.y) {
-        this.popupMaskHeight = nv.globalPosition.y
+        this.popupMaskHeight = nv.globalPosition.y;
       }
     })
   }
@@ -102,7 +102,7 @@ export struct CartControlPanel {
     .borderRadius(21)
     .margin({ left: 16 })
     .onClick(() => {
-      this.onDelete && this.onDelete()
+      this.onDelete && this.onDelete();
     })
   }
 
@@ -130,7 +130,7 @@ export struct CartControlPanel {
     Column({space: 4}) {
       Row() {
         Text(`已选${this.quantity}件, `).fontSize(12).fontColor('#959496')
-        this.TotalView()
+        this.TotalView();
       }
       .justifyContent(FlexAlign.End)
       .alignItems(VerticalAlign.Center)
@@ -153,7 +153,7 @@ export struct CartControlPanel {
           .draggable(false)
       }
       .onClick(() => {
-        this.visible = !this.visible
+        this.visible = !this.visible;
       })
     }
     .alignItems(HorizontalAlign.End)
@@ -174,17 +174,17 @@ export struct CartControlPanel {
     .borderRadius(21)
     .margin({ left: 16 })
     .onClick(() => {
-      this.onCheckout && this.onCheckout()
+      this.onCheckout && this.onCheckout();
     })
   }
 
   @Builder
   PopupContentBuilder() {
     Column({space: 14}) {
-      this.PopupContentItem('商品金额', this.totalPrice + (this.discountAmount || 0))
+      this.PopupContentItem('商品金额', this.totalPrice + (this.discountAmount || 0));
       // 是否有优惠
       if (this.discountAmount) {
-        this.PopupContentItem('活动优惠', this.discountAmount)
+        this.PopupContentItem('活动优惠', this.discountAmount);
       }
       // 合计
       Row() {

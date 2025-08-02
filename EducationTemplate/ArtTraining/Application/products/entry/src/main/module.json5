@@ -11,6 +11,7 @@
     "installationFree": true,
     "pages": "$profile:main_pages",
     "metadata": [
+      // todo: client_id配置
       {
         "name": "client_id",
         "value": "xxx"

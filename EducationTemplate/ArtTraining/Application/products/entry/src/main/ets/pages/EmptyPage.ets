@@ -1,22 +1,18 @@
-import { AccountUtil, WindowUtil } from 'commonlib';
+import { AccountUtil } from 'commonlib';
 import { router, promptAction } from '@kit.ArkUI';
 
 @Entry
-@Component
+@ComponentV2
 struct EmptyPage {
   aboutToAppear(): void {
-    AccountUtil.silentLogin().then(() => {
-      if (AccountUtil.getAccountInfo().openID) {
-        WindowUtil.initWindowUtil();
+    AccountUtil.authSignIn()
+      .catch(() => {
+        promptAction.showToast({ message: '华为账号登录失败，请检查工程签名配置~' });
+      })
+      .finally(() => {
         router.replaceUrl({
           url: 'pages/MainEntry',
         });
-      } else {
-        promptAction.showToast({ message: '请先登录华为账号~' });
-      }
-    })
-      .catch(() => {
-        promptAction.showToast({ message: '华为账号登录失败，请检查工程签名配置~' });
       });
   }
 

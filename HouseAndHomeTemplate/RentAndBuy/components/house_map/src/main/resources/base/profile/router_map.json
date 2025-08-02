@@ -1,0 +1,12 @@
+{
+  "routerMap": [
+    {
+      "name": "HouseMap",
+      "pageSourceFile": "src/main/ets/pages/HouseMap.ets",
+      "buildFunction": "HouseMapBuilder",
+      "data": {
+        "description": "this is Mall"
+      }
+    }
+  ]
+}

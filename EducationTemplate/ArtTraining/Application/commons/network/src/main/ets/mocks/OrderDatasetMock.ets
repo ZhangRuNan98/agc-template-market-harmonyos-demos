@@ -27,7 +27,6 @@ const order2: OrderInfo = {
   totalPrice: 199,
   student: '小明',
   phone: '12300000000',
-
 };
 
 // 订单信息 3

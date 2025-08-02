@@ -71,6 +71,18 @@
     {
       "name": "hwid_text_button_known",
       "value": "OK"
+    },
+    {
+      "name": "my_message",
+      "value": "my message"
+    },
+    {
+      "name": "user_name",
+      "value": "User name"
+    },
+    {
+      "name": "mine_setting",
+      "value": "mine_setting"
     }
   ]
 }

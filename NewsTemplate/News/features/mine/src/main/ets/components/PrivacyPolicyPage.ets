@@ -1,4 +1,4 @@
-import { webview } from '@kit.ArkWeb';
+import { AtomicServiceWeb, AtomicServiceWebController } from '@kit.ArkUI';
 import { MainPageVM } from '../viewModels/MainPageVM';
 
 @Builder
@@ -6,14 +6,15 @@ export function privacyPolicyPageBuilder() {
   PrivacyPolicyPage()
 }
 
-@ComponentV2
+@Component
 export struct PrivacyPolicyPage {
-  controller: webview.WebviewController = new webview.WebviewController();
+  @State controller: AtomicServiceWebController = new AtomicServiceWebController()
   vm: MainPageVM = MainPageVM.instance;
+
   build() {
     NavDestination() {
       Column() {
-        Web({ src: $rawfile('privacy_policy.html'), controller: this.controller });
+        AtomicServiceWeb({ src: $rawfile('privacy_policy.html'), controller: this.controller })
       }
       .padding(8)
       .layoutWeight(1)
@@ -22,7 +23,7 @@ export struct PrivacyPolicyPage {
     .padding({
       left: 8,
     })
-    .backgroundColor('#ffffff')
+    .backgroundColor($r('app.color.bgc'))
     .height('100%')
     .hideTitleBar(false)
     .title('隐私协议')

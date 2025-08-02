@@ -1,3 +1,0 @@
-params:
-  - name: exclude
-    value: (/src/main/cpp/third_party)

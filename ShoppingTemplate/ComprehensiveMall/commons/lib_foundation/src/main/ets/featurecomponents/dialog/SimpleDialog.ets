@@ -75,7 +75,7 @@ export class SimpleDialog {
           if (this.willDismiss()) {
             this._close();
           }
-        }
+        },
       })
       .catch(() => this.node = null);
   }

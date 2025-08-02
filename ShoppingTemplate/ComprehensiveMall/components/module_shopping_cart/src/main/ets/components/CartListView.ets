@@ -8,9 +8,9 @@ export struct CartListView {
   // 是否编辑态
   @Param isEdit: boolean = false;
   // 购物车商品数量变化的事件回调
-  @Event onChangeCount: (skuCode: string) => void = (skuCode: string) => {}
+  @Event onChangeCount: (skuCode: string) => void = (skuCode: string) => {};
   // 删除操作
-  @Event onDelete: (skuCode: string) => void = (skuCode: string) => {}
+  @Event onDelete: (skuCode: string) => void = (skuCode: string) => {};
   // 商品卡片事件回调
   @Event onCardClick: (id: string) => void = (id: string) => {};
 
@@ -22,20 +22,20 @@ export struct CartListView {
             data: card,
             isEdit: this.isEdit,
             onChangeCount: (skuCode: string) => {
-              this.onChangeCount && this.onChangeCount(skuCode)
+              this.onChangeCount && this.onChangeCount(skuCode);
             },
             onCardClick: () => {
-              this.onCardClick && this.onCardClick(card.productId)
+              this.onCardClick && this.onCardClick(card.productId);
             },
             onDelete: (skuCode: string) => {
-              this.onDelete && this.onDelete(skuCode)
-            }
+              this.onDelete && this.onDelete(skuCode);
+            },
           })
         }
         .transition({ type: TransitionType.Delete, opacity: 0 })
         .swipeAction(this.isEdit ? {} : {
           end: this.CardItemEnd(card, index),
-          edgeEffect: SwipeEdgeEffect.None
+          edgeEffect: SwipeEdgeEffect.None,
         })
       }, (item: Product, index: number) => index + '__' + JSON.stringify(item))
     }
@@ -59,7 +59,7 @@ export struct CartListView {
       .padding({left:14, right: 14})
       .backgroundColor('#E84026')
       .onClick(() => {
-        this.onDelete && this.onDelete(card.skuCode)
+        this.onDelete && this.onDelete(card.skuCode);
       })
     }
     .justifyContent(FlexAlign.SpaceEvenly)

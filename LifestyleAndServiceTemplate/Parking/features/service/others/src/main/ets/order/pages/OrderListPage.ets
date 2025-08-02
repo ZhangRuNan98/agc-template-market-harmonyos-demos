@@ -1,5 +1,5 @@
-import { CommonConstants, IOrder, WindowUtil } from 'commonlib';
-import { CommonHeader, AssociateUtil } from 'componentlib';
+import { CommonConstants, CommonHeader, IOrder, WindowUtil } from 'common';
+import { AssociateUtil } from 'network';
 import { OrderCardItem } from '../components/OrderCardItem';
 import { OrderPageVM } from '../viewmodels/OrderPageVM';
 
@@ -71,6 +71,6 @@ export struct OrderListPage {
 }
 
 @Builder
-export function OrderListPageBuilder() {
+export function orderListPageBuilder() {
   OrderListPage()
 }

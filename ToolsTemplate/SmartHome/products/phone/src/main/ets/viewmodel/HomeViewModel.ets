@@ -1,4 +1,4 @@
-import { BleClientModel, BleClientObserverIntf, BleDeviceInfo } from 'device_add';
+import { BleClientModel, BleClientObserverIntf, BleDeviceInfo } from 'bluetooth_scan';
 import { AddDeviceInfo, AddedDevicesModel } from 'device_mng';
 
 export class HomeViewModel extends BleClientObserverIntf {

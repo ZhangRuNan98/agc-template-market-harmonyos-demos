@@ -1,6 +1,5 @@
-import { BusLinePlan } from '../page/BusLinePlan';
-import { RealTimeBus } from '../page/realTimeBus';
 import { RouteEntryVM } from 'common'
+import { BusLinePlan } from '../page/BusLinePlan'
 
 @Builder
 export function RouteDesignBuilder() {
@@ -9,7 +8,7 @@ export function RouteDesignBuilder() {
 
 @Component
 export struct RouteDesign {
-  vm: RouteEntryVM = RouteEntryVM.instance;
+  vm: RouteEntryVM = RouteEntryVM.instance
 
   build() {
     BusLinePlan()

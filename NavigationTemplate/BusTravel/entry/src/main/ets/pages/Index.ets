@@ -1,5 +1,5 @@
+import { TabInfo } from 'common'
 import AppConstants from '../constants/AppConstants'
-import { TabInfo, RouterModule } from 'common'
 import { EntryVM } from '../viewmodels/EntryVM'
 
 @Entry

@@ -1,5 +1,6 @@
-import { CheckInRecord, CheckInTaskItem, FormatUtil, PickerResourceType } from 'commonlib';
+import { CheckInRecord, CheckInTaskItem, FormatUtil } from 'commonlib';
 import { CommonButton, CommonDivider, CommonHeader, CommonLoading, ContainerColumn } from 'componentlib';
+import { MediaPreviewSheet, PickerPreviewItem, PickerResourceType } from 'module_check_in';
 import { TaskUtil } from '../utils/Index';
 import { CheckInTaskVM } from '../viewmodels/TaskCheckInVM';
 
@@ -10,6 +11,10 @@ export function checkInTaskPageBuilder() {
 
 @ComponentV2
 export struct CheckInTaskPage {
+  @Local
+  showPreview: boolean = false;
+  @Local
+  previewItem: PickerPreviewItem | undefined = undefined;
   vm: CheckInTaskVM = CheckInTaskVM.instance;
 
   build() {
@@ -37,7 +42,8 @@ export struct CheckInTaskPage {
         }
         .backgroundColor($r('app.color.system_color_background_auxiliary'))
         .layoutWeight(1)
-        .width($r('app.string.width_percent_full'));
+        .width($r('app.string.width_percent_full'))
+        .bindSheet($$this.showPreview, this.fullScreenPreviewBuilder(),{showClose:false});
       }
     }
     .hideTitleBar(true)
@@ -271,7 +277,11 @@ export struct CheckInTaskPage {
             }
             .recordMediaContainerStyle()
             .onClick(() => {
-              this.vm.jumpToFullScreenPage(PickerResourceType.IMAGE, img);
+              this.previewItem = {
+                uri: img,
+                type: PickerResourceType.IMAGE,
+              };
+              this.showPreview = true;
             });
           }, (img: string, index: number) => index + '_' + img);
         }
@@ -288,7 +298,11 @@ export struct CheckInTaskPage {
             }
             .recordMediaContainerStyle()
             .onClick(() => {
-              this.vm.jumpToFullScreenPage(PickerResourceType.VIDEO, video);
+              this.previewItem = {
+                uri: video,
+                type: PickerResourceType.VIDEO,
+              };
+              this.showPreview = true;
             });
           }, (video: string, index: number) => index + '_' + video);
         }
@@ -302,6 +316,17 @@ export struct CheckInTaskPage {
     }
     .width($r('app.string.width_percent_full'))
     .alignItems(HorizontalAlign.Start);
+  }
+
+  @Builder
+  fullScreenPreviewBuilder() {
+    MediaPreviewSheet({
+      previewItem: this.previewItem,
+      clickBackButton: () => {
+        this.showPreview = false;
+        this.previewItem = undefined;
+      },
+    });
   }
 }
 

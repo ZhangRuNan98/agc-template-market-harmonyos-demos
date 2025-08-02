@@ -323,8 +323,28 @@
       "value": "请先阅读并同意协议"
     },
     {
+      "name": "confirm",
+      "value": "确定"
+    },
+    {
+      "name": "huawei_user",
+      "value": "华为用户"
+    },
+    {
+      "name": "log_out",
+      "value": "退出登录"
+    },
+    {
+      "name": "cancel",
+      "value": "取消"
+    },
+    {
       "name": "mine_login",
       "value": "点击登录"
+    },
+    {
+      "name": "app_chat",
+      "value": "消息"
     }
   ]
 }

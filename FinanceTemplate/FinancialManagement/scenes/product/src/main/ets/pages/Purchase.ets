@@ -1,9 +1,8 @@
-import { PurchaseVM } from '../viewModels/PurchaseVM'
-import { CustomContentDialog, window, KeyboardAvoidMode } from '@kit.ArkUI'
-import { RouterMap } from 'commonlib'
-import { FormatUtil } from 'commonlib'
-import { IButtonMoney } from '../types'
 import { common } from '@kit.AbilityKit'
+import { CustomContentDialog, window, KeyboardAvoidMode } from '@kit.ArkUI'
+import { RouterMap, FormatUtil } from 'module_base'
+import { IButtonMoney } from '../types'
+import { PurchaseVM } from '../viewModels/PurchaseVM'
 import { CommonRowThird } from '../components/productInfo/CommonRowThird'
 
 @Builder
@@ -21,7 +20,7 @@ struct Purchase {
     builder: CustomContentDialog({
       contentBuilder: () => {
         this.buildContent();
-      }
+      },
     }),
   })
   dialogController: CustomDialogController = new CustomDialogController({
@@ -36,7 +35,7 @@ struct Purchase {
       topLeft: 32,
       topRight: 32,
       bottomLeft: 0,
-      bottomRight: 0
+      bottomRight: 0,
     },
     alignment: DialogAlignment.Bottom,
   })
@@ -69,7 +68,7 @@ struct Purchase {
             top: 14,
             bottom: 13,
             left: 16,
-            right: 16
+            right: 16,
           })
           .margin({ bottom: 8 })
           .backgroundColor(Color.White)
@@ -85,7 +84,7 @@ struct Purchase {
             top: 14,
             bottom: 13,
             left: 16,
-            right: 16
+            right: 16,
           })
           .margin({ bottom: 8 })
           .backgroundColor(Color.White)
@@ -113,16 +112,27 @@ struct Purchase {
                 .fontColor($r('sys.color.font_primary'))
               TextInput({
                 text: this.vm.money,
-                placeholder: `${this.vm.productInfo?.minimumPurchaseAmount}元起购，${this.vm.productInfo?.minimumPurchaseAmount}元递增`
+                placeholder: `${this.vm.productInfo?.minimumPurchaseAmount}元起购，${this.vm.productInfo?.minimumPurchaseAmount}元递增`,
               })
-                .type(InputType.NUMBER_DECIMAL)
+                .type(InputType.Number)
                 .backgroundColor(Color.White)
                 .borderRadius(0)
                 .padding({ left: 0 })
                 .placeholderFont({ size: 16, weight: FontWeight.Regular })
                 .placeholderColor($r('sys.color.font_tertiary'))
-                .onChange((value: string) => {
-                  this.vm.money = value
+                .onWillInsert((info: InsertValue) => {
+                  const res = this.vm.account.bankAmount > this.vm.productInfo!.remainingPurchaseAmount ?
+                  this.vm.productInfo!.remainingPurchaseAmount : this.vm.account.bankAmount
+                  if (Number.parseInt(this.vm.money) >= res) {
+                    this.getUIContext().getFocusController().clearFocus()
+                    return false
+                  }
+                  return true;
+                })
+                .onChange((value) => {
+                  if(value){
+                    this.vm.money = this.vm.getLimitMoney(Number(value))
+                  }
                 })
             }
             .height(48)
@@ -143,7 +153,7 @@ struct Purchase {
                     this.vm.getButtonMoney(item.index)
                     this.vm.selectedMoneyIndex = item.index
                   })
-              }, (item: IButtonMoney[]) => JSON.stringify(item))
+              }, (item: IButtonMoney) => JSON.stringify(item))
             }
             .margin({ bottom: 16 })
 
@@ -160,7 +170,7 @@ struct Purchase {
             top: 15,
             bottom: 16,
             left: 16,
-            right: 16
+            right: 16,
           })
           .margin({ bottom: 8 })
           .backgroundColor(Color.White)
@@ -169,9 +179,20 @@ struct Purchase {
             if (this.vm.isPurchase) {
               CommonRowThird({ text: '扣款日期', value: FormatUtil.formatDate(new Date()) })
             } else {
-              CommonRowThird({ text: '定投周期', value: this.vm.cycle + this.vm.date })
+              Flex({ justifyContent: FlexAlign.SpaceBetween }) {
+                Text('定投周期')
+                  .fontSize(16)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor($r('sys.color.font_primary'))
+                Text(this.vm.cycle + this.vm.date)
+                  .fontSize(14)
+                  .fontWeight(FontWeight.Regular)
+                  .fontColor($r('sys.color.font_secondary'))
+                  .onClick(() => {
+                    this.dialogController.open()
+                  })
+              }
             }
-
 
             Divider().color($r('sys.color.comp_divider')).margin({ top: 12, bottom: 4 })
 
@@ -195,7 +216,7 @@ struct Purchase {
             top: 14,
             bottom: 4,
             left: 16,
-            right: 16
+            right: 16,
           })
           .backgroundColor(Color.White)
 
@@ -252,12 +273,13 @@ struct Purchase {
             top: 14,
             bottom: 13,
             left: 16,
-            right: 16
+            right: 16,
           })
         }
         .margin({ top: 8 })
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
     }
     .title(this.vm.isPurchase ? '理财购买' : '理财定投')
     .backgroundColor($r('sys.color.background_secondary'))
@@ -397,6 +419,7 @@ struct Purchase {
         .width('100%')
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring)
     }
   }
 
@@ -482,6 +505,7 @@ struct Purchase {
         .padding({ bottom: 28 })
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring)
     }
   }
 }

@@ -3,7 +3,7 @@
     {
       "name": "SiteDetail",
       "pageSourceFile": "src/main/ets/pages/SiteDetailPage.ets",
-      "buildFunction": "SiteDetailPageBuilder",
+      "buildFunction": "siteDetailPageBuilder",
       "data": {
         "description": "停车场详情页面"
       }

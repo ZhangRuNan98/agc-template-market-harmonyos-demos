@@ -17,25 +17,17 @@ export const ORDER_TAB_LIST: OrderType[] = [
   {
     type: OrderTabsMap.PENDING_PAYMENT,
     label: '待支付',
-    status: [
-      OrderStatusMap.PENDING_PAYMENT,
-    ],
+    status: [OrderStatusMap.PENDING_PAYMENT],
   },
   {
     type: OrderTabsMap.COMPLETED,
     label: '已完成',
-    status: [
-      OrderStatusMap.CANCEL,
-      OrderStatusMap.COMPLETE,
-    ],
+    status: [OrderStatusMap.CANCEL, OrderStatusMap.COMPLETE],
   },
   {
     type: OrderTabsMap.AFTER_SALE,
     label: '售后',
-    status: [
-      OrderStatusMap.REFUND_IN_PROGRESS,
-      OrderStatusMap.REFUNDED,
-    ],
+    status: [OrderStatusMap.REFUND_IN_PROGRESS, OrderStatusMap.REFUNDED],
   },
 ];
 

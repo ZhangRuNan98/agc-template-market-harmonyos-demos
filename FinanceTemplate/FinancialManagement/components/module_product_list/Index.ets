@@ -1,0 +1,1 @@
+export { ModuleProductList } from './src/main/ets/components/ProductList'

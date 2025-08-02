@@ -70,4 +70,9 @@ export class RouterModule {
     return params
   }
 
+  // 获取栈大小
+  public static getStackSize(): number{
+    return RouterModule.stack.size()
+  }
+
 }

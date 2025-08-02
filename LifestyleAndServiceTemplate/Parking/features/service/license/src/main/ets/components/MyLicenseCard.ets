@@ -1,4 +1,4 @@
-import { CommonConstants } from 'commonlib';
+import { CommonConstants } from 'common';
 import { LicensePageVM } from '../viewmodels/LicensePageVM';
 
 @ComponentV2

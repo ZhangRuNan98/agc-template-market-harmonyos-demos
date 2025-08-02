@@ -3,17 +3,23 @@
 ## 目录
 
 - [功能介绍](#功能介绍)
-- [环境要求](#环境要求)
+- [约束和限制](#约束和限制)
 - [快速入门](#快速入门)
 - [示例效果](#示例效果)
-- [权限要求](#权限要求)
 - [开源许可协议](#开源许可协议)
 
 
 ## 功能介绍
-您可以基于此[模板](#模板)直接定制应用，也可以挑选此模板中提供的多种[组件](#组件)使用，从而降低您的开发难度，提高您的开发效率。
+您可以基于此模板直接定制应用，也可以挑选此模板中提供的多种组件使用，从而降低您的开发难度，提高您的开发效率。
 
-### 模板
+此模板提供如下组件，所有组件存放在工程根目录的components下，如果您仅需使用组件，可参考对应组件的指导链接；如果您使用此模板，请参考本文档。
+
+| 组件                  | 描述                       | 使用指导                                |
+| --------------------- | -------------------------- | --------------------------------------- |
+| 考试（exam）组件      | 展示各类考题，可进行考试   | [使用指导](components/exam/README.md)   |
+| 考试引导（guide）组件 | 首次引导进入对应类型的考试 | [使用指导](components/guide/README.md)  |
+| 搜索（search）组件    | 搜索考题                   | [使用指导](components/search/README.md) |
+
 本模板为驾考类应用提供了常用功能的开发样例，模板主要有引导页、考试和我的三大模块：
 
 * 引导页：提供定位、城市选择、驾照类型选择、学车阶段选择功能。
@@ -208,38 +214,29 @@ DriverLicenseExam
   |   |         └- SelectCityView.ets              // 城市选择页面
   
 ```
-### 组件
-本模板中提供了多种组件，您可以按需选择合适的组件进行使用，所有组件存放在工程根目录的components下。
-
-| 组件                  | 描述                       | 使用指导                                |
-| --------------------- | -------------------------- | --------------------------------------- |
-| 考试（exam）组件      | 展示各类考题，可进行考试   | [使用指导](components/exam/README.md)   |
-| 考试引导（guide）组件 | 首次引导进入对应类型的考试 | [使用指导](components/guide/README.md)  |
-| 搜索（search）组件    | 搜索考题                   | [使用指导](components/search/README.md) |
 
 
+## 约束和限制
+### 环境
+- DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.1(13) Release SDK及以上
+- 设备类型：华为手机（直板机）
+- HarmonyOS版本：HarmonyOS 5.0.1 Release及以上
 
-## 环境要求
-### 软件
-* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
-* HarmonyOS SDK版本：HarmonyOS 5.0.2(14) Release SDK及以上
-### 硬件
-* 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.1 Release及以上
-
-
+### 权限
+- 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION，ohos.permission.LOCATION。
+- 网络权限：ohos.permission.INTERNET
+- 获取网络信息：ohos.permission.GET_NETWORK_INFO
 
 ## 快速入门
 
 ###  配置工程
 在运行此模板前，需要完成以下配置：
-
-
 1. 在AppGallery Connect创建应用，将包名配置到模板中。
 
-   a. 参考[创建应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建APPID，并将APP ID与应用进行关联。
+   a. 参考[创建HarmonyOS应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建APP ID，并将APP ID与应用进行关联。
 
-   b. 返回应用列表页面，查看创建应用的包名。
+   b. 返回应用列表页面，查看应用的包名。
 
    c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建应用的包名。
 
@@ -247,9 +244,7 @@ DriverLicenseExam
 
    a. 将应用的client ID配置到products/entry模块的src/main/module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
-
-   c. 申请华为账号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。
+   b. 申请华为账号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。
 
 3. 配置地图服务。
 
@@ -259,22 +254,17 @@ DriverLicenseExam
 
    c. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
 
+4. 为应用进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
+5. 添加手工签名所用证书对应的公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+
 ### 运行调试工程
-1. 连接调试手机和PC。
+1. 用USB线连接调试手机和PC。
 
-2. 对应用签名：由于模板中集成了华为账号一键登录和定位服务，所以需要采用[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
-
-3. 菜单选择“Run > Run 'phone' ”或者“Run > Debug 'phone' ”，运行或调试模板工程。
+2. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
 
 ## 示例效果
 
 [功能展示录屏](./picture/exam_video.mp4)
-
-## 权限要求
-
-* 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION，ohos.permission.LOCATION。
-* 网络权限：ohos.permission.INTERNET
-* 获取网络信息：ohos.permission.GET_NETWORK_INFO
 
 
 ## 开源许可协议

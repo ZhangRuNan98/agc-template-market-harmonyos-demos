@@ -7,9 +7,10 @@ import {
   EmitterConstants,
   RouterMap,
   RouterModule,
-} from 'commonlib';
+} from 'common';
 import { emitter } from '@kit.BasicServicesKit';
 import { AddressPageVM } from '../viewmodels/AddressPageVM';
+import { MapController } from 'module_parking_map';
 
 @ComponentV2
 export struct CommonAddressListItem {
@@ -42,8 +43,9 @@ export struct CommonAddressListItem {
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .onClick(() => {
               // 跳转
-              AppStorage.setOrCreate(AppStorageMap.SELECTED_ADDRESS, this.address);
+              AppStorage.setOrCreate(AppStorageMap.SELECTED_ADDRESS, this.address.name);
               emitter.emit(EmitterConstants.TO_FIND);
+              MapController.move(this.address.location);
               RouterModule.pop();
             })
         } else {

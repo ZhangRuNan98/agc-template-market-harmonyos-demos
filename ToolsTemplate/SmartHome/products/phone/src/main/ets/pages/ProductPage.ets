@@ -19,6 +19,7 @@ export struct ProductPage {
   BuildBanner() {
     Image($r('app.media.product_banner'))
       .width('90%')
+      .height(157)
       .margin({ top: 20 });
   }
 
@@ -99,6 +100,7 @@ export struct ProductPage {
       }
       .scrollBar(BarState.Off);
     }
+    .mode(NavigationMode.Stack)
     .backgroundColor(Constants.NAV_DESTINATION_BACKGROUND_COLOR)
     .hideTitleBar(true);
   }

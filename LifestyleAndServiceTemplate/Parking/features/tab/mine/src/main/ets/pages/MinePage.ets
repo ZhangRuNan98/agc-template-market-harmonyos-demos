@@ -1,5 +1,4 @@
-import { CommonConstants } from 'commonlib';
-import { CommonHeader } from 'componentlib';
+import { CommonConstants, CommonHeader } from 'common';
 import { HeadPart } from '../components/HeaderPart';
 import { Settings } from '../components/Settings';
 import { MinePageVM } from '../viewmodels/MinePageVM';
@@ -32,6 +31,6 @@ export struct MinePage {
 }
 
 @Builder
-export function MinePageBuilder() {
+export function minePageBuilder() {
   MinePage()
 }

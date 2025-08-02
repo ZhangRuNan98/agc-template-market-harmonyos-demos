@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "location_reason",
+      "value": "定位当前设备精准位置，获取相对距离"
+    },
+    {
+      "name": "approximately_location_reason",
+      "value": "定位当前设备大致位置，获取相对距离"
+    },
+    {
+      "name": "agcit_huawei_parking_module_parking_base",
+      "value": "1.0.0"
+    },
+    {
+      "name": "agcittype_huawei_parking_module_parking_base",
+      "value": "serviceComponent"
+    }
+  ]
+}

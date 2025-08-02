@@ -11,7 +11,7 @@ import { ServiceCard } from '../comp/ServiceCard';
 @ComponentV2
 export struct PersonPage {
   @Local windowTopHeight: number = AppStorage.get('windowTopHeight') as number || 38.77;
-
+  @Provider('index') index: number = 0;
 
   build() {
     NavDestination() {
@@ -25,7 +25,7 @@ export struct PersonPage {
               ActivityCard();
               ServiceCard();
             }
-          }.layoutWeight(1).scrollBar(BarState.Off).align(Alignment.Top);
+          }.layoutWeight(1).scrollBar(BarState.Off).align(Alignment.Top).edgeEffect(EdgeEffect.Spring);
 
         }
         .alignItems(HorizontalAlign.Start)
@@ -49,18 +49,27 @@ export struct PersonPage {
           .fontColor($r('sys.color.font_primary'))
           .fontSize( $r('sys.float.Title_M') )
           .fontWeight(FontWeight.Medium)
-        Button({type: ButtonType.Circle}){
-          Image($r('app.media.ic_setting'))
-            .width(24)
-            .height(24)
-            .objectFit(ImageFit.Contain)
+        Row() {
+          Image($r('app.media.ic_message'))
+            .height(40)
+            .width(40)
+            .margin({ right: 8 })
+            .onClick(() => {
+              TCRouter.push(Constants.MESSAGE_PAGE_ROUTE);
+            });
+          Button({ type: ButtonType.Circle }) {
+            Image($r('app.media.ic_setting'))
+              .width(24)
+              .height(24)
+              .objectFit(ImageFit.Contain)
+          }
+          .height(40)
+          .width(40)
+          .backgroundColor('#0D000000')
+          .onClick(() => {
+            TCRouter.push(Constants.SETTING_ROUTE);
+          })
         }
-        .height(40)
-        .width(40)
-        .backgroundColor('#0D000000')
-        .onClick(() => {
-          TCRouter.push(Constants.SETTING_ROUTE);
-        })
       }
       .height(36)
       .width(Constants.FULL_SIZE)

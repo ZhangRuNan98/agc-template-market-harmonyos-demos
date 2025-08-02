@@ -1,7 +1,7 @@
-import { PreferenceModel, RouterMap, RouterModule } from 'commonlib';
-import { MainPageVM } from '../viewModels/MainPageVM';
 import { window } from '@kit.ArkUI';
 import { util } from '@kit.ArkTS';
+import { RouterMap, RouterModule } from 'commonlib';
+import { MainPageVM } from '../viewModels/MainPageVM';
 
 class NewsData{
   title:string=''
@@ -16,27 +16,6 @@ class NewsData{
 export interface KeywordItem {
   desc: string;
   count: number;
-}
-
-class CommentList{
-  keyWordList: KeywordItem[] = [
-    {
-      desc: '服务周到',
-      count: 4.6,
-    },
-    {
-      desc: '环境卫生',
-      count: 4.3,
-    },
-    {
-      desc: '设施设备',
-      count: 4.4,
-    },
-    {
-      desc: '综合体验',
-      count: 4.5,
-    },
-  ];
 }
 
 @Builder
@@ -70,15 +49,11 @@ export struct MyComment {
   @Local newsData: NewsData = new NewsData();
   @Local counts: number = 0;
   @Local likeFlag: boolean = false;
-  private commenList: Array<object> = [
+  private commentList: Array<object> = [
     new CommentInfo('我的昵称', 'hello world'),
     new CommentInfo('我的昵称', '真是一个好消息'),
   ]
   textAreaController: TextAreaController = new TextAreaController();
-
-  aboutToAppear(): void {
-
-  }
 
   aboutToDisappear(): void {
     window.getLastWindow(getContext(this)).then((windowClass)=>{
@@ -93,13 +68,13 @@ export struct MyComment {
         Image($r('app.media.ic_person'))
           .width(20)
           .height(20)
-          .borderRadius('24vp')
+          .borderRadius(24)
         Text(this.vm.userInfo.name || '网友7890')
           .fontSize(`${12 + this.vm.changeFontSize}`)
           .margin({left:8})
           .textAlign(TextAlign.Start)
           .height(20)
-          .fontColor('#99000000')
+          .fontColor($r('sys.color.ohos_id_color_text_primary'))
       }
       .width('100%')
       Row() {
@@ -137,8 +112,9 @@ export struct MyComment {
       Row() {
         Text('住建部称住宅层高标准将提至不低于3米，层高低的房子不值钱了？')
           .fontSize(`${16 + this.vm.changeFontSize}`)
+          .fontColor($r('app.color.news_title_fontColor'))
           .fontFamily('鸿蒙黑体')
-          .fontWeight('bold')
+          .fontWeight(FontWeight.Bold)
           .maxLines(2)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .margin({top: 20, left:14, right:14})
@@ -155,7 +131,7 @@ export struct MyComment {
       Divider()
         .margin({ top: 12 })
         .strokeWidth(8)
-        .color('#F1F3F5')
+        .color($r('app.color.bgc'))
     }
   }
 
@@ -163,7 +139,7 @@ export struct MyComment {
     NavDestination(){
       Column() {
         List() {
-          ForEach(this.commenList, (item: CommentInfo) => {
+          ForEach(this.commentList, (item: CommentInfo) => {
             ListItem() {
               this.commentItem()
             }

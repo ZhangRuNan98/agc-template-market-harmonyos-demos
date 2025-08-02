@@ -8,6 +8,7 @@
   "dependencies": {
     "common": "file:../../commons/common",
     "book_home": "file:../book_home",
-    "base_common": "file:../../components/base_common"
+    "base_common": "file:../../components/base_common",
+    "book_read_kit": "file:../book_read_kit"
   }
 }

@@ -1,8 +1,5 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, } from 'commonlib';
-import { IHistoricalPerformance, IProductInfo, } from 'network/src/main/ets/types/responseTypes/GetProductResp';
-
-const TAG = '[HistoricalPerformanceVM]';
+import { https, IHistoricalPerformance, IProductInfo } from 'lib_foundation';
+import { RouterMap, RouterModule } from 'module_base';
 
 @ObservedV2
 export class HistoricalPerformanceVM {

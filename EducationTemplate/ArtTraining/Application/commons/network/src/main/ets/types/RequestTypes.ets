@@ -33,7 +33,7 @@ export interface GetOrderListReq extends PageQueryReq {
   orderStatus: number[];
 }
 
-export interface GetOrderDetailReq{
+export interface GetOrderDetailReq {
   orderNo: string;
 }
 

@@ -1,17 +1,8 @@
-import {
-  ItemRestriction,
-  promptAction,
-  SegmentButton,
-  SegmentButtonIconTextItem,
-  SegmentButtonItemTuple,
-  SegmentButtonOptions,
-  SegmentButtonTextItem
-} from '@kit.ArkUI'
+import { ItemRestriction, SegmentButton, SegmentButtonIconTextItem, SegmentButtonOptions } from '@kit.ArkUI';
 import { RealTimeBus } from './realTimeBus';
-import { RouteEntryVM } from 'common'
+import { RouteEntryVM } from 'common';
 import { TravelPlan } from './TravelPlan';
-import { abilityAccessCtrl, common, PermissionRequestResult, Permissions, Want } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
+import { Permissions } from '@kit.AbilityKit';
 import { RandomCountdown } from '../components/RandomCountdown';
 
 @Builder
@@ -26,7 +17,6 @@ export struct BusLinePlan {
   vm: RouteEntryVM = RouteEntryVM.instance;
   @State @Watch('refreshIndex') mTabSelectedIndex: number[] = [0]
   @State @Watch('refreshPage') mCurrentIndex: number = 0;
-  private context = getContext(this) as common.UIAbilityContext;
   @State tabOptions: SegmentButtonOptions = SegmentButtonOptions.capsule({
     buttons: [
       { text: '实时公交', icon: $r('app.media.bus'), selectedIcon: $r('app.media.bus_select') },
@@ -43,6 +33,7 @@ export struct BusLinePlan {
   @State tabSelectedIndexes: number[] = [0];
   private controller: TabsController = new TabsController();
   scroller: Scroller = new Scroller()
+
   //Tabs刷新SegmentButton (Tabs => SegmentButton)
   refreshPage() {
     this.mTabSelectedIndex = [this.mCurrentIndex]
@@ -52,68 +43,71 @@ export struct BusLinePlan {
   refreshIndex() {
     this.controller.changeIndex(this.mTabSelectedIndex[0])
   }
+
   @Builder
-  topTitle(){
-    Row(){
+  topTitle() {
+    Row() {
       Text('出行')
         .fontSize(24)
         .fontWeight(FontWeight.Medium)
     }
     .width('100%')
     .height(70)
-    .padding({left:24})
+    .padding({ left: 24 })
     .justifyContent(FlexAlign.Start)
   }
+
   build() {
     NavDestination() {
+      Scroll() {
+        Column() {
+          this.topTitle()
+          Row() {
+            SegmentButton({
+              options: this.tabOptions,
+              selectedIndexes: this.mTabSelectedIndex
+            })
+              .width('328lpx')
+              .height('63lpx')
+          }
+          .height('64lpx')
+          .width('330lpx')
+          .margin({ bottom: '24lpx' })
+          .justifyContent(FlexAlign.SpaceBetween)
 
-      Column() {
-        this.topTitle()
-        Row() {
-          SegmentButton({
-            options: this.tabOptions,
-            selectedIndexes: this.mTabSelectedIndex
+          Tabs({ controller: this.controller }) {
+            TabContent() {
+              RealTimeBus()
+            }
+
+            TabContent() {
+              TravelPlan()
+            }
+          }
+          .barHeight(0)
+          .onChange((index: number) => {
+            this.mCurrentIndex = index;
+
           })
-            .width('328lpx')
-            .height('63lpx')
+          //使用onAnimationStart，动画开始执行至targetIndex时进行刷新
+          .onAnimationStart((index: number, targetIndex: number, event: TabsAnimationEvent) => {
+            if (index === targetIndex) {
+              return
+            }
+            this.mCurrentIndex = targetIndex
+          })
+
+          Blank()
+            .layoutWeight(1)
         }
-        .height('64lpx')
-        .width('330lpx')
-        .margin({ bottom: '24lpx' })
-        .justifyContent(FlexAlign.SpaceBetween)
-
-        Tabs({ controller: this.controller }) {
-          TabContent() {
-            RealTimeBus()
-          }
-
-          TabContent() {
-            TravelPlan()
-          }
-        }.barHeight(0)
-        // .height('70%')
-        .onChange((index: number) => {
-          this.mCurrentIndex = index;
-
-        })
-        // 注意：如果使用onChange回调，会导致Tabs滑动切换完才会执行该回调，进而导致SegmentButton会慢一拍刷新
-        // .onChange((index: number) => {
-        //   this.mCurrentIndex = index;
-        // })
-
-        //使用onAnimationStart，动画开始执行至targetIndex时进行刷新
-        .onAnimationStart((index: number, targetIndex: number, event: TabsAnimationEvent) => {
-          if (index === targetIndex) {
-            return
-          }
-          this.mCurrentIndex = targetIndex
-        })
-
+        .alignItems(HorizontalAlign.Center)
+        .width('100%')
+        .backgroundColor('#F1F3F5')
       }
-      .alignItems(HorizontalAlign.Center)
-      .width('100%')
-      .height('100%')
-      .backgroundColor('#F1F3F5')
+      .scrollable(ScrollDirection.Vertical)
+      .scrollBar(BarState.Auto)
+      .scrollBarWidth('0vp')
+      .edgeEffect(EdgeEffect.Spring)
     }
     .hideTitleBar(true)
   }

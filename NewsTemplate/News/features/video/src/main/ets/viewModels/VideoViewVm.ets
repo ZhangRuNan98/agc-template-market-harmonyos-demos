@@ -5,7 +5,6 @@ export class VideoViewVm {
   @Trace changeFontSize: number = 0;
   private static _instance: VideoViewVm;
 
-
   public static get instance() {
     if (!VideoViewVm._instance) {
       VideoViewVm._instance = new VideoViewVm();
@@ -18,5 +17,4 @@ export class VideoViewVm {
     if (param) {
     }
   }
-
 }

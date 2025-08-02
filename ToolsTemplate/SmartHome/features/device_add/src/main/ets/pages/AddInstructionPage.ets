@@ -40,6 +40,8 @@ export struct AddInstructionPage {
         .verticalScrollBarAccess(false)
         .horizontalScrollBarAccess(false)
         .zoomAccess(false)
+        .fileAccess(false)
+        .geolocationAccess(false)
     }
     .height('60%')
     .width('90%')

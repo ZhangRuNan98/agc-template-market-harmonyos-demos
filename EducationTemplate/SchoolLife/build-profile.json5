@@ -5,7 +5,7 @@
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "5.0.1(13)",
+        "compatibleSdkVersion": "5.0.3(15)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
@@ -25,18 +25,6 @@
     ]
   },
   "modules": [
-    {
-      "name": "entry",
-      "srcPath": "./entry",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
     {
       "name": "commonLib",
       "srcPath": "./commons/commonLib",
@@ -86,8 +74,16 @@
       ]
     },
     {
-      "name": "classSignIn",
-      "srcPath": "./features/service/classSignIn",
+      "name": "module_course_schedule",
+      "srcPath": "./components/module_course_schedule",
+    },
+    {
+      "name": "module_secure_checkin",
+      "srcPath": "./components/module_secure_checkin",
+    },
+    {
+      "name": "entry",
+      "srcPath": "./entry",
       "targets": [
         {
           "name": "default",
@@ -96,14 +92,6 @@
           ]
         }
       ]
-    },
-    {
-      "name": "ui_schedule_flow",
-      "srcPath": "./component/ui_schedule_flow"
-    },
-    {
-      "name": "ui_verify_code",
-      "srcPath": "./component/ui_verify_code",
     }
   ]
 }

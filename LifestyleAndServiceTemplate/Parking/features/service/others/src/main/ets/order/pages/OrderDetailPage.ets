@@ -1,5 +1,6 @@
-import { CommonConstants, FormatUtil, IOrder, RouterMap, RouterModule, WindowUtil } from 'commonlib';
-import { CommonHeader } from 'componentlib';
+import { CommonConstants, CommonHeader,
+  CONTAINER_STYLE_CALC_WIDTH,
+  FormatUtil, IOrder, RouterMap, RouterModule, WindowUtil } from 'common';
 
 @ComponentV2
 export struct OrderDetailPage {
@@ -32,7 +33,7 @@ export struct OrderDetailPage {
             this.itemBuilder('支付金额', '¥ ' + this.order?.cost?.toFixed(2), true)
             this.itemBuilder('支付方式', '华为支付')
             this.itemBuilder('订单号', this.order?.orderId ?? '')
-          }.containerStyle()
+          }.attributeModifier(CONTAINER_STYLE_CALC_WIDTH)
 
           Blank().layoutWeight(1)
         }
@@ -54,14 +55,6 @@ export struct OrderDetailPage {
     .width(CommonConstants.FULL_WIDTH)
     .justifyContent(FlexAlign.SpaceBetween)
   }
-
-  @Styles
-  containerStyle() {
-    .padding($r('app.string.padding_12'))
-    .borderRadius($r('app.string.border_radius_16'))
-    .backgroundColor($r('app.color.system_color_background_white'))
-    .width('calc(100% - 32vp)')
-  }
 }
 
 @Extend(Text)
@@ -72,6 +65,6 @@ function textStyle(medium: boolean) {
 }
 
 @Builder
-export function OrderDetailPageBuilder() {
+export function orderDetailPageBuilder() {
   OrderDetailPage()
 }

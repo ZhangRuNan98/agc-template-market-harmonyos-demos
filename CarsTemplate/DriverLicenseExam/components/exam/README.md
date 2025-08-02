@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -16,25 +17,40 @@
 |  <img src="screenshots/sequence_practice.jpg" alt="练习" width="300">    |  <img src="screenshots/setting.jpg" alt="设置" width="300">    | <img src="screenshots/answer_card.jpg"   alt="答题卡" width="300">       |    <img src="screenshots/mock_exam.jpg"  alt="模拟考试" width="300">      |
 
 
-## 使用
+## 约束与限制
+### 环境
+* DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.1(13) Release SDK及以上
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.1 Release及以上
+
+## 快速入门
 1. 安装组件。
-   将模板根目录的components下[exam](../../components/exam)目录拷贝至您工程根目录components/。
-   
+
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
+
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
+
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加exam模块。
+
     ```typescript
-    // entry/oh-package.json5
-    "dependencies": {
-       "exam": "../components/exam"
-    } 
-    ```
-    ```typescript
-    // build-profile.json5
+    // 在项目根目录build-profile.json5填写exam路径。其中XXX为组件存放的目录名
     "modules": [
-       {
+        {
           "name": "exam",
-          "srcPath": "./components/exam",
-       }
+          "srcPath": "./XXX/exam"
+        }
     ]
     ```
+   c. 在项目根目录oh-package.json5中添加依赖。
+    ```typescript
+    // XXX为组件存放的目录名称
+    "dependencies": {
+      "exam": "file:./XXX/exam"
+    }
+   ```
  
    
 2. 引入组件。
@@ -45,17 +61,78 @@ import { Exam } from 'exam';
 
 3. 调用组件，详细参数配置说明参见[API参考](#API参考)。
 
-    ```typescript
-    Exam({
-       appPathStack: this.appPathStack,
-       examManager: this.examManager,
-       mockExamCall: (score: number) => {
-          this.examService.addMockExamCount(score)
-       },
-    });
-    ```
+ ```typescript
+import { Exam, ExamController, ExamManager, showSettingSheet } from 'exam';
+import { generateExamDetail } from './SequencePractice';
+
+@Builder
+export function MockExamBuilder() {
+   MockExam();
+}
+
+@ComponentV2
+export struct MockExam {
+   @Consumer('appPathStack') appPathStack: NavPathStack = new NavPathStack();
+   @Local isShowSetting: boolean = false;
+   private examController: ExamController = ExamController.instance;
+   @Local examManager: ExamManager = new ExamManager('模拟考试', generateExamDetail());
+
+   aboutToAppear(): void {
+      this.examManager.timeLimit = 10;
+   }
+   build() {
+      NavDestination() {
+         Column() {
+            Exam({
+               appPathStack: this.appPathStack,
+               examManager: this.examManager,
+            });
+         }
+         .width('100%')
+            .height('100%')
+      }
+      .title('模拟考试')
+         .menus(this.toolBar())
+         .onBackPressed(() => {
+            if (this.examManager.timeLimit !== 0) {
+               // 打开模拟考试结束弹窗
+               this.examController.isShowMockExamDialog = true;
+               return true;
+            }
+            this.appPathStack.pop();
+            return true;
+         })
+   }
+
+   @Builder
+   toolBar() {
+      Row() {
+         SymbolGlyph($r('sys.symbol.gearshape'))
+            .fontSize(27)
+      }
+      .width(50)
+         .height(40)
+         .justifyContent(FlexAlign.Center)
+         .margin({
+            top: 10,
+            right: '4%',
+         })
+         .onClick(() => {
+            this.isShowSetting = !this.isShowSetting
+         })
+         .bindSheet($$this.isShowSetting, showSettingSheet(), {
+            height: '25%',
+            width: '100%',
+            title: { title: '设置' },
+            backgroundColor: Color.White,
+         });
+   }
+}
+ ```
 
 ## API参考
+### 子组件
+无
 
 ### 接口
 Exam(options: ExamOptions)

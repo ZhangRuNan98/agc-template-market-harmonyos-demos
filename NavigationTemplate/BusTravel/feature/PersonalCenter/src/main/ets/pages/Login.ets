@@ -2,8 +2,8 @@ import { promptAction, router } from '@kit.ArkUI';
 import { util } from '@kit.ArkTS';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { RouteEntryVM, UserInfo } from 'common'
 import { authentication, loginComponentManager, LoginWithHuaweiIDButton } from '@kit.AccountKit';
+import { RouteEntryVM, UserInfo } from 'common'
 
 @Builder
 export function LoginBuilder() {
@@ -465,6 +465,7 @@ struct QuickLoginButtonComponent {
     }
     .width('100%')
     .height('100%')
+    .edgeEffect(EdgeEffect.Spring)
   }
 }
 

@@ -1,19 +1,21 @@
-import { AppStorageV2, promptAction } from '@kit.ArkUI';
-import { AppStorageMap } from '../constants/CommonEnums';
+import auth from '@hw-agconnect/auth';
 import { authentication } from '@kit.AccountKit';
 import { util } from '@kit.ArkTS';
-import { Logger } from './Logger';
+import { AppStorageV2, PersistenceV2, promptAction } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { AppStorageMap } from '../constants/CommonEnums';
 import { UserInfo } from '../types/Index';
+import { Logger } from './Logger';
 
 const TAG = '[AccountUtil]';
 
+enum ErrorCode {
+  EXIST_USER = 1210005,
+}
+
 @ObservedV2
 export class HuaweiAccountModel {
-  @Trace public openID: string = '';
-  @Trace public unionID: string = '';
-  @Trace public authCode?: string = '';
-  @Trace public idToken?: string = '';
+  @Trace public uid: string = ''; // 认证服务ID
 }
 
 @ObservedV2
@@ -28,49 +30,39 @@ export class UserInfoModel {
 
 @ObservedV2
 export class AccountUtil {
-  private static _accountInfo: HuaweiAccountModel = AppStorageV2.connect(
+  @Trace private static _accountInfo: HuaweiAccountModel = PersistenceV2.connect(
     HuaweiAccountModel,
     AppStorageMap.HUAWEI_ACCOUNT,
     () => new HuaweiAccountModel(),
   )!;
-  private static _userInfo: UserInfoModel = AppStorageV2.connect(
+  @Trace private static _userInfo: UserInfoModel = AppStorageV2.connect(
     UserInfoModel,
     AppStorageMap.USER_INFO,
     () => new UserInfoModel(),
   )!;
 
-  public static async silentLogin() {
-    if (AccountUtil._accountInfo.unionID) {
+  public static async authSignIn() {
+    if (AccountUtil._accountInfo.uid) {
       return;
     }
     try {
-      const loginRequest = new authentication.HuaweiIDProvider().createLoginWithHuaweiIDRequest();
-      loginRequest.forceLogin = false;
-      loginRequest.state = util.generateRandomUUID();
-      const controller = new authentication.AuthenticationController();
-      await controller
-        .executeRequest(loginRequest)
-        .then((response: authentication.LoginWithHuaweiIDResponse) => {
-          const state = response.state;
-          if (state !== undefined && loginRequest.state !== state) {
-            Logger.error(TAG, `Failed to login. The state is different, response state: ${state}`);
-            return;
-          }
-          const loginWithHuaweiIDCredential = response.data!;
-          AccountUtil._accountInfo.idToken = loginWithHuaweiIDCredential.idToken;
-          AccountUtil._accountInfo.openID = loginWithHuaweiIDCredential.openID;
-          AccountUtil._accountInfo.unionID = loginWithHuaweiIDCredential.unionID;
-          AccountUtil._accountInfo.authCode = loginWithHuaweiIDCredential.authorizationCode;
-          Logger.debug(TAG, 'unionID:::' + AccountUtil._accountInfo.unionID);
-          Logger.debug(TAG, 'openID:::' + AccountUtil._accountInfo.openID);
-          Logger.debug(TAG, 'idToken:::' + AccountUtil._accountInfo.idToken);
-          Logger.debug(TAG, 'authCode:::' + AccountUtil._accountInfo.authCode);
-        })
-        .catch((error: BusinessError) => {
-          AccountUtil._dealAllError(error);
-        });
+      const signInResult = await auth.signIn({
+        autoCreateUser: true,
+        credentialInfo: {
+          kind: 'hwid',
+        },
+      });
+      Logger.info(TAG, `signInHwid success. result: ${signInResult.getUser().getUid()}`);
+      AccountUtil._accountInfo.uid = signInResult.getUser().getUid();
     } catch (error) {
-      AccountUtil._dealAllError(error);
+      // 当前用户已登录
+      if (error.code === ErrorCode.EXIST_USER) {
+        const signInResult = await auth.getCurrentUser();
+        AccountUtil._accountInfo.uid = signInResult!.getUid();
+        Logger.info(TAG, 'already sign in a user');
+      } else {
+        Logger.error(TAG, `signInHwid error, Code: ${error.code}, message: ${error.message}`);
+      }
     }
   }
 
@@ -80,19 +72,22 @@ export class AccountUtil {
     cancelRequest.state = util.generateRandomUUID();
     try {
       const controller: authentication.AuthenticationController = new authentication.AuthenticationController();
-      controller.executeRequest(cancelRequest).then((data: authentication.AuthenticationResponse) => {
-        const cancelAuthorizationResponse = data as authentication.CancelAuthorizationResponse;
-        const state: string = cancelAuthorizationResponse.state!;
-        if (cancelRequest.state !== state) {
-          Logger.error('Failed to cancel. The state is different');
-          return;
-        }
-        AccountUtil.clearUserInfo();
-        promptAction.showToast({ message: '解除账号关联成功！' });
-        Logger.debug(TAG, 'cancel authorization success');
-      }).catch((err: BusinessError) => {
-        Logger.error(`Failed to cancel. errCode is ${err.code}, errMessage is ${err.message}`);
-      });
+      controller
+        .executeRequest(cancelRequest)
+        .then((data: authentication.AuthenticationResponse) => {
+          const cancelAuthorizationResponse = data as authentication.CancelAuthorizationResponse;
+          const state: string = cancelAuthorizationResponse.state!;
+          if (cancelRequest.state !== state) {
+            Logger.error('Failed to cancel. The state is different');
+            return;
+          }
+          AccountUtil.clearUserInfo();
+          promptAction.showToast({ message: '解除账号关联成功！' });
+          Logger.debug(TAG, 'cancel authorization success');
+        })
+        .catch((err: BusinessError) => {
+          Logger.error(`Failed to cancel. errCode is ${err.code}, errMessage is ${err.message}`);
+        });
     } catch (err) {
       Logger.error(`Failed to cancel. errCode is ${err.code}, errMessage is ${err.message}`);
     }
@@ -124,9 +119,5 @@ export class AccountUtil {
 
   public static getUserInfo() {
     return AccountUtil._userInfo;
-  }
-
-  private static _dealAllError(error: BusinessError): void {
-    Logger.error(TAG, `Failed to login, errorCode: ${error.code}, errorMsg: ${error.message}`);
   }
 }

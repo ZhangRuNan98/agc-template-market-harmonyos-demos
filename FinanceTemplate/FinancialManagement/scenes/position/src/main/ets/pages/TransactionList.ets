@@ -1,12 +1,7 @@
-import { RouterMap } from 'commonlib/src/main/ets/constants/CommonEnum'
-import {
-  IMonthTransactionItem,
-  ITransactionItem
-} from 'network/src/main/ets/types/responseTypes/GetTransactionRecordListResp'
-import { TransactionListVM } from '../viewModels/TransactionListVM'
 import { CustomContentDialog } from '@kit.ArkUI'
-import { FormatUtil } from 'commonlib'
-import { CommonFilter } from 'componentlib'
+import { CommonFilter, RouterMap, FormatUtil } from 'module_base'
+import { IMonthTransactionItem, ITransactionItem } from 'lib_foundation'
+import { TransactionListVM } from '../viewModels/TransactionListVM'
 
 
 @ComponentV2
@@ -25,7 +20,7 @@ struct TransactionRecordList {
       topLeft: 32,
       topRight: 32,
       bottomLeft: 0,
-      bottomRight: 0
+      bottomRight: 0,
     },
     alignment: DialogAlignment.Bottom,
   })
@@ -171,21 +166,22 @@ struct TransactionRecordList {
                       top: 12,
                       bottom: 12,
                       left: 16,
-                      right: 16
+                      right: 16,
                     })
                     .onClick(() => {
                       FormatUtil.jumpToNext(RouterMap.TRANSACTION_RECORD_INFO, transactionItem.id)
                     })
-                  }, (monthTransactionItem: IMonthTransactionItem[]) => JSON.stringify(monthTransactionItem))
+                  }, (monthTransactionItem: IMonthTransactionItem) => JSON.stringify(monthTransactionItem))
                 }
                 .width('100%')
                 .alignItems(HorizontalAlign.Start)
               }
               .margin({ top: 10 })
-            }, (item: IMonthTransactionItem[]) => JSON.stringify(item))
+            }, (item: IMonthTransactionItem) => JSON.stringify(item))
           }
           .layoutWeight(1)
           .scrollBar(BarState.Off)
+          .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
         }
       }
       .width('100%')
@@ -229,8 +225,8 @@ struct TransactionRecordList {
               value: this.vm.transactionType,
               list: this.vm.transactionTypeList,
               changeValue: (value) => {
-                this.vm.transactionType = value
-              }
+                this.vm.tempTransactionType = value
+              },
             })
           }
           .margin({ bottom: 11 })
@@ -240,49 +236,43 @@ struct TransactionRecordList {
             value: this.vm.transactionDate,
             list: this.vm.transactionDateList,
             changeValue: (value) => {
-              this.vm.transactionDate = value
-            }
+              this.vm.tempTransactionDate = value
+            },
           })
 
-          Row() {
-            Row() {
-              Button('重置')
-                .width('100%')
-                .height(40)
-                .fontColor($r('sys.color.font_primary'))
-                .backgroundColor($r('sys.color.comp_background_tertiary'))
-            }
-            .width('calc(50% - 6vp)')
-            .height(40)
-            .justifyContent(FlexAlign.Center)
-            .margin({ right: 12 })
-            .onClick(() => {
-              this.vm.isSelecting = false
-              this.vm.reset()
-              this.dialogController.close()
-            })
+          Row({ space: 12 }) {
+            Button('重置')
+              .height(40)
+              .fontColor($r('sys.color.font_primary'))
+              .backgroundColor($r('sys.color.comp_background_tertiary'))
+              .flexGrow(1)
+              .onClick(() => {
+                this.vm.isSelecting = false
+                this.vm.reset()
+                this.dialogController.close()
+              })
 
-            Row() {
-              Button('完成')
-                .width('100%')
-                .height(40)
-                .fontColor(Color.White)
-                .backgroundColor('#E4480C')
-            }
-            .width('calc(50% - 6vp)')
-            .height(40)
-            .onClick(async () => {
-              this.vm.isSelecting = true
-              this.vm.search()
-              this.dialogController.close()
-            })
+            Button('完成')
+              .height(40)
+              .fontColor(Color.White)
+              .backgroundColor('#E4480C')
+              .flexGrow(1)
+              .onClick(() => {
+                this.vm.transactionType = this.vm.tempTransactionType
+                this.vm.transactionDate = this.vm.tempTransactionDate
+                this.vm.isSelecting = true
+                this.vm.search()
+                this.dialogController.close()
+              })
           }
+          .width('100%')
           .margin({ top: 28 })
         }
         .width('100%')
         .padding({ bottom: 28 })
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring)
     }
   }
 }

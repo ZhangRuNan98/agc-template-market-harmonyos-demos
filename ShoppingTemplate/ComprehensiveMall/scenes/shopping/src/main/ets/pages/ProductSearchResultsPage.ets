@@ -6,6 +6,7 @@ import {
   routerStack,
   RouterMap,
 } from 'lib_foundation';
+import { SearchBar } from 'module_product_search';
 import { ProductWaterFlow, RequestType } from 'module_product_waterflow';
 
 @ComponentV2
@@ -20,15 +21,13 @@ struct ProductSearchResultsPage {
   build() {
     NavDestination() {
       Column() {
-        TitleBar({
-          barPadding: { right: Style.MENU_BAR_MARGIN_RIGHT },
-          barColor: Color.White,
-        }) {
-          buildProductGhostSearchBar(this.keywords, () => {
-            this.keywords = cache.search.lastSubmit;
+        SearchBar({
+          searchWords: this.keywords,
+          disabled: true,
+          clickBack:()=> {
             routerStack.pop(false);
-          }, false);
-        };
+          },
+        });
 
         Column() {
           ProductWaterFlow({

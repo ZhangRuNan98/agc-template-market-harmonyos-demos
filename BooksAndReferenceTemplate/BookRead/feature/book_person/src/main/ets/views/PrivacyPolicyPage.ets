@@ -1,7 +1,5 @@
-import { Constants, NavHeaderBar, ReturnButton } from 'common';
+import { Constants, NavHeaderBar} from 'common';
 import { webview } from '@kit.ArkWeb';
-
-
 @ComponentV2
 export struct PrivacyPolicyPage {
   @Local windowTopHeight: number = AppStorage.get('windowTopHeight') as number || 38.77;

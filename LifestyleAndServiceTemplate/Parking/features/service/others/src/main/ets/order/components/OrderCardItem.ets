@@ -1,4 +1,4 @@
-import { CommonConstants, FormatUtil, IOrder, RouterMap, RouterModule } from 'commonlib';
+import { CONTAINER_STYLE, FormatUtil, IOrder, RouterMap, RouterModule } from 'common';
 
 @ComponentV2
 export struct OrderCardItem {
@@ -58,15 +58,7 @@ export struct OrderCardItem {
     .onClick(() => {
       RouterModule.push({ url: RouterMap.ORDER_DETAIL, param: this.order });
     })
-    .containerStyle()
-  }
-
-  @Styles
-  containerStyle() {
-    .padding($r('app.string.padding_12'))
-    .borderRadius($r('app.string.border_radius_16'))
-    .backgroundColor($r('app.color.system_color_background_white'))
-    .width(CommonConstants.FULL_WIDTH)
+    .attributeModifier(CONTAINER_STYLE)
     .height(140)
   }
 }

@@ -1,4 +1,4 @@
-import { IPositionRecord } from 'network/src/main/ets/types/responseTypes/GetPositionInfoResp';
+import { IPositionRecord } from 'lib_foundation';
 import { PositionRecordVM } from '../viewModels/PositionRecordVM';
 
 @Builder
@@ -77,7 +77,7 @@ struct PositionRecord {
                   Divider().color($r('sys.color.comp_divider'))
                 }
               }
-            }, (item: IPositionRecord[]) => JSON.stringify(item))
+            }, (item: IPositionRecord) => JSON.stringify(item))
           }
           .width('100%')
           .padding({ left: 16, right: 16 })
@@ -85,6 +85,7 @@ struct PositionRecord {
         }
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
     }
     .title('交易记录')
     .backgroundColor($r('sys.color.background_secondary'))

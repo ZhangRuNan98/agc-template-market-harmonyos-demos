@@ -8,8 +8,8 @@ import {
   TabsIndexMap,
   UserInfoModel,
 } from 'commonlib';
+import { CheckInActivityDB, CourseInfoDB, https } from 'network';
 import { TAB_LIST } from '../constants/Constants';
-import { https } from 'network';
 
 @ObservedV2
 export class MainEntryVM {
@@ -40,7 +40,9 @@ export class MainEntryVM {
   public async initData() {
     await PreloadUtil.preload();
     CloudStorageUtil.initBucket();
-    https.getUserInfo().then((res)=> {
+    await CourseInfoDB.initList()
+    await CheckInActivityDB.initList()
+    https.getUserInfo().then((res) => {
       if (res.ret.code === 0) {
         AccountUtil.setUserInfo(res.result);
       }

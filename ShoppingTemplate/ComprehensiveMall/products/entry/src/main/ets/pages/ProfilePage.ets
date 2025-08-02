@@ -1,131 +1,98 @@
-import { promptAction } from '@kit.ArkUI';
 import { iData, routerStack, CallButton, RouterMap, Style } from 'lib_foundation';
 import { promptLogin } from 'module_login';
 import { AddressManage } from 'module_address_manage';
 
+@Builder
+export function buildProfilePage() {
+  ProfilePage();
+}
+
 @ComponentV2
 export struct ProfilePage {
-  build(): void {
-    Scroll() {
-      Stack({ alignContent: Alignment.TopStart }) {
-        Column()
-          .width('100%')
-          .height('40%')
-          .linearGradient({
-            colors: [['#30E64566', 0], ['#00E64566', 1.0]],
-          })
-          .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP])
-        Column() {
-          Column() {
-            Text('我的')
-              .fontSize(24)
-              .fontColor('#E6000000')
-              .fontWeight(600)
-              .margin({ left: 12 })
-          }
-          .width('100%')
-          .height(56)
-          .alignItems(HorizontalAlign.Start)
-          .justifyContent(FlexAlign.Center)
+  build() {
+    Column() {
+      Text('我的')
+        .fontSize(24)
+        .fontColor(Style.FONT_COLOR_LEVEL1)
+        .fontWeight(FontWeight.Medium)
+        .height(56);
+
+      Scroll() {
+        Column({ space: 12 }) {
           buildUserInfoArea();
           buildOrderInfoArea();
           buildMenuArea();
-        }
-        .width('100%')
-        .padding({ left: 12, right: 12, bottom: Style.BOTTOM_NAV_HEIGHT })
+        };
       }
-      .width('100%')
-      .constraintSize({ minHeight: '100%' })
+      .layoutWeight(1)
+      .align(Alignment.Top)
+      .edgeEffect(EdgeEffect.Spring)
+      .scrollBar(BarState.Off);
     }
     .height('100%')
-    .scrollBar(BarState.Off)
-    .edgeEffect(EdgeEffect.None)
-    .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP])
+    .width('100%')
+    .linearGradient({
+      colors: [['#33e64566', 0], ['#00E64566', 0.4]],
+    })
+    .backgroundColor(Style.BACKGROUND_COLOR_GREY)
+    .padding({ left: 16, right: 16 })
+    .alignItems(HorizontalAlign.Start)
+    .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP]);
   }
-}
-
-@Builder
-export function buildProfilePage() {
-  ProfilePage()
 }
 
 @Builder
 function buildUserInfoArea() {
-  Column() {
-    Row() {
-      Image(iData.global.userInfo.avatar ? iData.global.userInfo.avatar : $r('app.media.default_avatar_v2'))
-        .width(48)
-        .height(48)
-        .borderRadius(48)
-        .draggable(false)
-        .margin({ right: 16 })
-      Column() {
-        Text(iData.global.isLogin ?
-          iData.global.userInfo.nickname ? iData.global.userInfo.nickname : '华为用户' :
-          '未登录'
-        )
-          .width('100%')
-          .fontWeight(600)
-          .fontSize(18)
-          .maxLines(1)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-          .textAlign(TextAlign.Start)
-          .fontColor('#E6000000')
-        Row() {
-          if (iData.global.isLogin) {
-            Image($r('app.media.ic_mobile_phone'))
-              .height(16)
-              .objectFit(ImageFit.Contain)
-              .draggable(false)
-              .margin({ right: 8 })
-            Text(iData.global.userInfo.anonymousPhone)
-              .layoutWeight(1)
-              .fontSize(12)
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .fontColor($r('sys.color.mask_secondary'))
-          } else {
-            Text('登录后享受更多服务')
-              .width('100%')
-              .fontSize(12)
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .fontColor('#E6000000')
-          }
-        }
-        .justifyContent(FlexAlign.Start)
-        .alignItems(VerticalAlign.Center)
-      }
-      .layoutWeight(1)
+  Row() {
+    Image(iData.global.userInfo.avatar ? iData.global.userInfo.avatar : $r('app.media.default_avatar_v2'))
+      .width(48)
       .height(48)
-      .justifyContent(FlexAlign.SpaceBetween)
-      .padding({ top: 3, bottom: 3 })
-
-      if (!iData.global.isLogin) {
-        Image($r('app.media.ic_left_arrow'))
-          .height(14)
-          .objectFit(ImageFit.Contain)
-          .rotate({ angle: 180 })
-          .fillColor($r('sys.color.mask_tertiary'))
-          .draggable(false)
+      .borderRadius(48)
+      .draggable(false)
+      .margin({ right: 16 });
+    Column() {
+      Text(iData.global.isLogin ?
+        iData.global.userInfo.nickname ? iData.global.userInfo.nickname : '华为用户' :
+        '未登录',
+      )
+        .fontWeight(FontWeight.Medium)
+        .fontSize(18)
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .textAlign(TextAlign.Start)
+        .fontColor(Style.FONT_COLOR_LEVEL1);
+      Row() {
+        if (iData.global.isLogin) {
+          Image($r('app.media.ic_mobile_phone'))
+            .commonIconStyle()
+            .margin({ right: 8 });
+          Text(iData.global.userInfo.anonymousPhone).commonLabelStyle();
+        } else {
+          Text('登录后享受更多服务')
+            .commonLabelStyle()
+            .fontColor(Style.FONT_COLOR_LEVEL1);
+        }
       }
+      .justifyContent(FlexAlign.Start)
+      .alignItems(VerticalAlign.Center);
     }
-    .width('100%')
-    .height(72)
-    .backgroundColor(Color.White)
-    .borderRadius(16)
-    .padding(12)
-    .alignItems(VerticalAlign.Center)
-    .onClick(() => {
-      if (!iData.global.isLogin) {
-        promptLogin();
-      } else {
-        routerStack.pushPath({ name: RouterMap.USER_PROFILE_EDIT });
-      }
-    })
+    .layoutWeight(1)
+    .height(48)
+    .alignItems(HorizontalAlign.Start)
+    .justifyContent(FlexAlign.SpaceAround);
+
+    if (!iData.global.isLogin) {
+      Image($r('app.media.ic_arrow_right')).commonIconStyle();
+    }
   }
-  .margin({ top: 12 })
-  .padding({ left: 4, right: 4 })
+  .containerStyle()
+  .onClick(() => {
+    if (!iData.global.isLogin) {
+      promptLogin();
+    } else {
+      routerStack.pushPath({ name: RouterMap.USER_PROFILE_EDIT });
+    }
+  });
 }
 
 @Builder
@@ -134,32 +101,21 @@ function buildOrderInfoArea() {
     Row() {
       Text('我的订单')
         .fontSize(14)
-        .fontWeight(600)
-        .fontColor('#E6000000')
-      Row() {
-        Text('全部')
-          .fontColor($r('sys.color.mask_tertiary'))
-          .fontSize(12)
-        Image($r('app.media.ic_left_arrow'))
-          .height(12)
-          .objectFit(ImageFit.Contain)
-          .rotate({ angle: 180 })
-          .fillColor($r('sys.color.mask_tertiary'))
-          .draggable(false)
-      }
-      .onClick(() => {
-        if (!iData.global.isLogin) {
-          promptLogin();
-          return;
-        }
-        routerStack.pushPathByName(RouterMap.ORDER_LIST, 0);
-      })
+        .fontWeight(FontWeight.Medium)
+        .fontColor(Style.FONT_COLOR_LEVEL1);
+      Blank();
+      Text('全部').commonLabelStyle().margin({ right: 4 });
+      Image($r('app.media.ic_arrow_right')).commonIconStyle();
     }
+    .onClick(() => {
+      if (!iData.global.isLogin) {
+        promptLogin();
+        return;
+      }
+      routerStack.pushPathByName(RouterMap.ORDER_LIST, 0);
+    })
     .width('100%')
-    .height(50)
-    .justifyContent(FlexAlign.SpaceBetween)
-    .alignItems(VerticalAlign.Center)
-    .padding({ left: 16, right: 16 })
+    .margin({ bottom: 16 });
 
     Row() {
       buildOrderTab($r('app.media.ic_order_pending_payment'), '待付款', 1);
@@ -170,23 +126,22 @@ function buildOrderInfoArea() {
     }
     .width('100%')
     .alignItems(VerticalAlign.Center)
-    .justifyContent(FlexAlign.SpaceBetween)
-    .padding({
-      left: 18,
-      right: 18,
-      bottom: 20,
-      top: 6,
-    })
+    .justifyContent(FlexAlign.SpaceBetween);
   }
-  .width('100%')
-  .borderRadius(8)
-  .backgroundColor(Color.White)
-  .margin({ top: 12 })
+  .containerStyle();
 }
 
 @Builder
 function buildMenuArea() {
-  Column() {
+  Column({ space: 20 }) {
+    buildMenuItem($r('app.media.ic_coupon'), '优惠券', () => {
+      if (!iData.global.isLogin) {
+        promptLogin();
+      } else {
+        routerStack.pushPath({ name: RouterMap.USER_COUPON_PAGE });
+      }
+    });
+
     AddressManage({
       navPathStack: routerStack,
       onBeforeNavigate: () => {
@@ -197,109 +152,77 @@ function buildMenuArea() {
         return true;
       },
     }) {
-      Row() {
-        Image($r('app.media.ic_address_mgr'))
-          .draggable(false)
-          .height(18)
-          .objectFit(ImageFit.Contain)
-          .margin({ right: 10 })
-        Row() {
-          Text('地址管理')
-            .fontSize(12)
-            .fontColor($r('sys.color.mask_secondary'))
-          Image($r('app.media.ic_left_arrow'))
-            .height(18)
-            .objectFit(ImageFit.Contain)
-            .rotate({ angle: 180 })
-            .fillColor($r('sys.color.mask_tertiary'))
-            .draggable(false)
-        }
-        .layoutWeight(1)
-        .justifyContent(FlexAlign.SpaceBetween)
-      }
-      .width('100%')
-      .height(50)
-    }
+      buildMenuItem($r('app.media.ic_address_mgr'), '地址管理');
+    };
 
     CallButton() {
-      Row() {
-        Image($r('app.media.ic_call_center'))
-          .draggable(false)
-          .height(18)
-          .objectFit(ImageFit.Contain)
-          .margin({ right: 10 })
-        Row() {
-          Text('联系客服')
-            .fontSize(12)
-            .fontColor($r('sys.color.mask_secondary'))
-          Image($r('app.media.ic_left_arrow'))
-            .height(18)
-            .objectFit(ImageFit.Contain)
-            .rotate({ angle: 180 })
-            .fillColor($r('sys.color.mask_tertiary'))
-            .draggable(false)
-        }
-        .layoutWeight(1)
-        .justifyContent(FlexAlign.SpaceBetween)
-      }
-      .width('100%')
-      .height(50)
-    }
+      buildMenuItem($r('app.media.ic_call_center'), '联系客服');
+    };
 
-    Row() {
-      Image($r('app.media.ic_setting'))
-        .draggable(false)
-        .height(18)
-        .objectFit(ImageFit.Contain)
-        .margin({ right: 10 })
-      Row() {
-        Text('设置')
-          .fontSize(12)
-          .fontColor($r('sys.color.mask_secondary'))
-        Image($r('app.media.ic_left_arrow'))
-          .height(18)
-          .objectFit(ImageFit.Contain)
-          .rotate({ angle: 180 })
-          .fillColor($r('sys.color.mask_tertiary'))
-          .draggable(false)
-      }
-      .layoutWeight(1)
-      .justifyContent(FlexAlign.SpaceBetween)
-    }
-    .width('100%')
-    .height(50)
-    .onClick(() => routerStack.pushPathByName(RouterMap.SETTING, null))
+    buildMenuItem($r('app.media.ic_setting'), '设置', () => {
+      routerStack.pushPathByName(RouterMap.SETTING, null);
+    });
+  }
+  .containerStyle();
+}
+
+@Builder
+function buildMenuItem(icon: ResourceStr, label: string, callback?: () => void) {
+  Row() {
+    Image(icon).commonIconStyle().margin({ right: 8 });
+    Text(label).commonLabelStyle();
+    Blank();
+    Image($r('app.media.ic_arrow_right')).commonIconStyle();
   }
   .width('100%')
-  .borderRadius(8)
-  .backgroundColor(Color.White)
-  .margin({ top: 12 })
-  .padding({ left: 12, right: 12 })
+  .hitTestBehavior(callback ? HitTestMode.Default : HitTestMode.None)
+  .onClick(() => {
+    callback?.();
+  });
 }
 
 @Builder
 function buildOrderTab(icon: ResourceStr, label: string, type: number) {
   Column() {
     Image(icon)
-      .width(20)
-      .height(20)
-      .objectFit(ImageFit.Cover)
-      .fillColor($r('sys.color.mask_secondary'))
-      .margin({ bottom: 4 })
+      .commonIconStyle()
+      .width(24)
+      .height(24)
+      .margin({ bottom: 4 });
     Text(label)
-      .fontSize(10)
-      .fontWeight(FontWeight.Medium)
-      .fontColor($r('sys.color.mask_secondary'))
+      .commonLabelStyle()
+      .fontSize(10);
   }
   .alignItems(HorizontalAlign.Center)
   .justifyContent(FlexAlign.Start)
   .onClick(() => {
-    if (type === -1) {
-      promptAction.showToast({ message: '您可以按照自身业务逻辑接入评论中心' });
-    } else if (!iData.global.isLogin) {
+    if (!iData.global.isLogin) {
       promptLogin();
     } else {
       routerStack.pushPathByName(RouterMap.ORDER_LIST, type);
     }
-  })
+  });
+}
+
+@Styles
+function containerStyle() {
+  .backgroundColor(Style.BACKGROUND_COLOR)
+  .borderRadius(16)
+  .padding(12);
+}
+
+@Extend(Text)
+function commonLabelStyle() {
+  .fontSize(12)
+  .maxLines(1)
+  .textOverflow({ overflow: TextOverflow.Ellipsis })
+  .fontColor(Style.FONT_COLOR_LEVEL2);
+}
+
+@Extend(Image)
+function commonIconStyle() {
+  .draggable(false)
+  .height(16)
+  .width(16)
+  .fillColor(Style.FONT_COLOR_LEVEL2);
 }

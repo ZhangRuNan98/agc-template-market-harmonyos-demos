@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "bluetooth_access",
+      "value": ""
+    },
+    {
+      "name": "agcit_huawei_smart_home_category_list",
+      "value": "1.0.0"
+    },
+    {
+      "name": "agcittype_huawei_smart_home_category_list",
+      "value": "serviceComponent"
+    }
+  ]
+}

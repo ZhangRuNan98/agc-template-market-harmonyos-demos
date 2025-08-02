@@ -6,6 +6,8 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "common": 'file:../../common'
+    "common": 'file:../../common',
+    "route_detail": 'file:../../components/route_detail',
+    "route_search":'file:../../components/route_search'
   }
 }

@@ -1,10 +1,11 @@
-import { Constants, NavHeaderBar, TCRouter,
-  AggregatedPaymentPicker, ChannelType, MockApi, RechargePackage, RechargeRecord } from 'common';
+import { Constants, NavHeaderBar, TCRouter } from 'common';
+import { UserInfo } from 'base_common';
+import { RechargePackage, RechargeRecord } from 'common/src/main/ets/model/Member';
+import { AggregatedPaymentPicker, ChannelType, MockApi } from 'aggregated_payment';
 import { promptAction } from '@kit.ArkUI';
 import { emitter } from '@kit.BasicServicesKit';
-import { RechargeVM } from '../viewmodel/RechargeVM';
-import { RechargeRecordVM } from '../viewmodel/RechargeRecordVM';
-import { UserInfo } from 'base_common';
+import { RechargeVM } from 'common/src/main/ets/viewmodel/RechargeVM';
+import { RechargeRecordVM } from 'common/src/main/ets/viewmodel/RechargeRecordVM';
 
 @Preview
 @ComponentV2
@@ -19,7 +20,8 @@ export struct RechargePage {
     // 更新用户书币余额
     const userInfoFromStorage: UserInfo = AppStorage.get('userInfo') as UserInfo;
     if (userInfoFromStorage) {
-      userInfoFromStorage.bookCoins = (userInfoFromStorage.bookCoins || 100) + amount;
+      const currentCoins = typeof userInfoFromStorage.bookCoins === 'number' ? userInfoFromStorage.bookCoins : 100;
+      userInfoFromStorage.bookCoins = currentCoins + amount;
       AppStorage.setOrCreate('userInfo', userInfoFromStorage);
       AppStorage.setOrCreate('bookCoins', userInfoFromStorage.bookCoins);
     }

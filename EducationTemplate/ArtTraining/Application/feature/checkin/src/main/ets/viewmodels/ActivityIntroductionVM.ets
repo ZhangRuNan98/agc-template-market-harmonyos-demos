@@ -1,6 +1,6 @@
+import { promptAction } from '@kit.ArkUI';
 import { AccountUtil, CheckInActivity, RouterMap, RouterModule } from 'commonlib';
 import { https } from 'network';
-import { promptAction } from '@kit.ArkUI';
 
 @ObservedV2
 export class ActivityIntroductionVM {
@@ -76,7 +76,7 @@ export class ActivityIntroductionVM {
             param: this.activity!.activityId,
           });
           clearTimeout(timer);
-        }, 1000);
+        }, 200);
       } else {
         promptAction.showToast({ message: '打卡活动参与失败，请稍后重试~' });
       }

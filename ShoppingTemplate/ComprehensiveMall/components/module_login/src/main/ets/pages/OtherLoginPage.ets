@@ -36,8 +36,8 @@ export struct OtherLoginPage {
       type: loginComponentManager.TextType.RICH_TEXT,
       extraParams: {
         'label': '用户协议',
-        'url': 'resource://rawfile/static/html/user-agreement.html'
-      }
+        'url': 'resource://rawfile/static/html/user-agreement.html',
+      },
     },
     {
       text: '和',
@@ -48,9 +48,9 @@ export struct OtherLoginPage {
       type: loginComponentManager.TextType.RICH_TEXT,
       extraParams: {
         'label': '隐私政策',
-        'url': 'resource://rawfile/static/html/privacy-policy.html'
-      }
-    }
+        'url': 'resource://rawfile/static/html/privacy-policy.html',
+      },
+    },
   ];
 
   public aboutToDisappear(): void {
@@ -246,7 +246,7 @@ export struct OtherLoginPage {
     iData.global.isLogin = true;
     iData.global.userInfo.reset();
     iData.global.userInfo.nickname = '华为用户';
-    iData.global.userInfo.anonymousPhone = '123******00'
+    iData.global.userInfo.anonymousPhone = '123******00';
     iData.global.userInfo.phone = '12345678900';
     iData.global.userInfo.avatar = '';
     promptAction.showToast({ message: 'Mock登录成功' });

@@ -1,4 +1,4 @@
-import { AccountUtil, Logger, RouterModule, UserInfoModel } from 'commonlib';
+import { Logger, RouterModule } from 'commonlib';
 import { FunctionalButton, functionalButtonComponentManager } from '@kit.ScenarioFusionKit';
 import { promptAction } from '@kit.ArkUI';
 

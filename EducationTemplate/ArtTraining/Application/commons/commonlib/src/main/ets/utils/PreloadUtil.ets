@@ -1,7 +1,7 @@
+import { PersistenceV2 } from '@kit.ArkUI';
 import { cloudFunction } from '@kit.CloudFoundationKit';
 import { CourseInfo, StoreConfig, StoreInfo } from '../types/Index';
 import { Logger } from './Logger';
-import { PersistenceV2 } from '@kit.ArkUI';
 
 const TAG = 'PreloadUtil';
 
@@ -24,8 +24,11 @@ export class PreloadResultModel implements StoreConfig {
 
 @ObservedV2
 export class PreloadUtil {
-  private static _preloadResult: PreloadResultModel =
-    PersistenceV2.connect(PreloadResultModel, 'preloadResult', () => new PreloadResultModel())!;
+  private static _preloadResult: PreloadResultModel = PersistenceV2.connect(
+    PreloadResultModel,
+    'preloadResult',
+    () => new PreloadResultModel(),
+  )!;
 
   public static async preload() {
     if (!canIUse('SystemCapability.DeviceCloudGateway.CloudFoundation')) {
@@ -33,7 +36,7 @@ export class PreloadUtil {
       return;
     }
     let promise = cloudFunction.call({
-      name: 'course',
+      name: 'preload',
       timeout: 3000, // 获取缓存数据的超时时间
       loadMode: cloudFunction.LoadMode.PRELOAD, // 获取缓存数据必须设置为PRELOAD
     });

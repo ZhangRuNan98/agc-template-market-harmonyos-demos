@@ -1,5 +1,5 @@
-import {  Constants } from 'common';
 import { webview } from '@kit.ArkWeb';
+import {  Constants } from 'common';
 
 @ComponentV2
 export struct ActivityPage {

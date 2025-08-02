@@ -19,11 +19,11 @@ import {
   GetOrderListResp,
   GetUserCheckInRecordListRsp,
 } from '../types/ResponseTypes';
-import { CourseDatasetMock } from './CourseDatasetMock';
 import { CheckInActivityDatasetMock } from './CheckInActivityDatasetMock';
 import { CheckInRecordDatasetMock } from './CheckInRecordDatasetMock';
-import { StoreConfigMock } from './StoreConfigMock';
+import { CourseDatasetMock } from './CourseDatasetMock';
 import { OrderDatasetMock } from './OrderDatasetMock';
+import { StoreConfigMock } from './StoreConfigMock';
 
 const SUCCESS_RET: BaseRet = {
   code: 0,
@@ -70,7 +70,6 @@ class HttpApiMock {
         storeInfo: StoreConfigMock.storeInfo,
         courseList: CourseDatasetMock.getCourseList(),
       },
-
     };
     return Promise.resolve(res);
   }
@@ -171,10 +170,11 @@ class HttpApiMock {
     return Promise.resolve(res);
   }
 
-  public createCheckInActivityOrder(data: CheckInTaskOrderReq): Promise<BaseResponse> {
+  public createCheckInActivityOrder(data: CheckInTaskOrderReq): Promise<BaseResp<number>> {
     CheckInActivityDatasetMock.createActivityOrder(data.activityId);
-    const res: BaseResponse = {
+    const res: BaseResp<number> = {
       ret: SUCCESS_RET,
+      result: 1,
     };
     return Promise.resolve(res);
   }
@@ -212,7 +212,7 @@ class HttpApiMock {
     const recordList = CheckInRecordDatasetMock.getUserCheckInRecordList(data.activityId);
     const res: BaseResp<GetUserCheckInRecordListRsp> = {
       ret: SUCCESS_RET,
-      result:{
+      result: {
         totalCount: recordList.length,
         returnCount: recordList.length,
         list: recordList,

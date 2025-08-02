@@ -47,10 +47,10 @@ export struct NewsDetail {
           .height('100%')
         }
         .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring)
       }
       .margin({ top: 20 })
       .padding(12)
-      // .backgroundColor($r('app.color.background_color_white'))
     }
     .width('100%')
     .height('100%')

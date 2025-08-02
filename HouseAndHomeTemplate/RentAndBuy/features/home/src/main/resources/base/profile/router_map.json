@@ -1,0 +1,52 @@
+{
+  "routerMap": [
+    {
+      "name": "HouseList",
+      "pageSourceFile": "src/main/ets/pages/HouseList.ets",
+      "buildFunction": "HouseListBuilder",
+      "data": {
+        "description": "this is Mall"
+      }
+    },
+    {
+      "name": "NewDetail",
+      "pageSourceFile": "src/main/ets/pages/NewDetail.ets",
+      "buildFunction": "NewDetailBuilder",
+      "data": {
+        "description": "this is NewDetail"
+      }
+    },
+    {
+      "name": "SecondDetail",
+      "pageSourceFile": "src/main/ets/pages/SecondDetail.ets",
+      "buildFunction": "SecondDetailBuilder",
+      "data": {
+        "description": "this is SecondDetail"
+      }
+    },
+    {
+      "name": "RentDetail",
+      "pageSourceFile": "src/main/ets/pages/RentDetail.ets",
+      "buildFunction": "RentDetailBuilder",
+      "data": {
+        "description": "this is RentDetail"
+      }
+    },
+    {
+      "name": "CitySelect",
+      "pageSourceFile": "src/main/ets/pages/CitySelect.ets",
+      "buildFunction": "CitySelectBuilder",
+      "data": {
+        "description": "this is CitySelect"
+      }
+    },
+    {
+      "name": "HouseSearch",
+      "pageSourceFile": "src/main/ets/pages/HouseSearch.ets",
+      "buildFunction": "HouseSearchBuilder",
+      "data": {
+        "description": "this is CitySelect"
+      }
+    }
+  ]
+}

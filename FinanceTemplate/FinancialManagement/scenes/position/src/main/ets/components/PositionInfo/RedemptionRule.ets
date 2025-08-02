@@ -1,4 +1,4 @@
-import { FormatUtil, RouterMap } from 'commonlib'
+import { FormatUtil, RouterMap } from 'module_base'
 import { PositionInfoVM } from '../../viewModels/PositionInfoVM'
 
 

@@ -1,11 +1,10 @@
-import { CommonConstants, RouterMap, RouterModule } from 'commonlib';
-import { AssociateUtil, CommonCall } from 'componentlib';
-import { SettingItem } from '../types';
+import { CommonConstants, CONTAINER_STYLE, RouterMap, RouterModule, TelUtil } from 'common';
+import { AssociateUtil } from 'network';
+import { SettingItem } from '../types/Types';
 import { MinePageVM } from '../viewmodels/MinePageVM';
 
 @ComponentV2
 export struct Settings {
-  @Local showCall: boolean = false;
   vm: MinePageVM = MinePageVM.instance;
 
   build() {
@@ -17,10 +16,9 @@ export struct Settings {
           }, (item: SettingItem, index) => JSON.stringify(item) + '_' + index)
         }
         .divider({ strokeWidth: 1, color: $r('app.color.divider_gray') })
-        .containerStyle()
+        .attributeModifier(CONTAINER_STYLE)
       }, (group: SettingItem, index) => JSON.stringify(group) + '_' + index)
     }
-    .bindSheet($$this.showCall, this.callBuilder, { height: SheetSize.FIT_CONTENT })
   }
 
   @Builder
@@ -38,34 +36,16 @@ export struct Settings {
     }
     .onClick(() => {
       if (item.url === 'CallPhone') {
-        this.showCall = true;
+        TelUtil.open({ title: '联系客服', phoneNum: '01201000100' });
         return;
       }
       if (item.url === RouterMap.PRIVACY_POLICY) {
         RouterModule.push({ url: RouterMap.PRIVACY_POLICY });
       } else {
         AssociateUtil.checkBindPhone(() => {
-          RouterModule.push({ url: item.url as RouterMap });
+          RouterModule.push({ url: item.url });
         });
       }
     })
-  }
-
-  @Builder
-  callBuilder() {
-    CommonCall({
-      phoneNum: '01201000100',
-      title: '联系客服',
-      cancel: () => {
-        this.showCall = false;
-      },
-    })
-  }
-
-  @Styles
-  containerStyle() {
-    .padding($r('app.string.padding_12'))
-    .borderRadius($r('app.string.border_radius_16'))
-    .backgroundColor($r('app.color.system_color_background_white'))
   }
 }

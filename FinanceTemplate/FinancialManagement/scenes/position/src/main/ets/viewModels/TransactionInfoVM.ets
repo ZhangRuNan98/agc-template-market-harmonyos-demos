@@ -1,9 +1,6 @@
-import { https } from 'network';
-import { RouterMap, RouterModule, } from 'commonlib';
-import { ITransactionInfo, State } from 'network/src/main/ets/types/responseTypes/GetTransactionRecordInfoResp';
-import { OrderDetailBean } from 'componentlib'
-
-const TAG = '[TransactionInfoVM]';
+import { https,ITransactionInfo, State } from 'lib_foundation';
+import { RouterMap, RouterModule, } from 'module_base';
+import { OrderDetailBean } from 'module_time_line'
 
 @ObservedV2
 export class TransactionInfoVM {

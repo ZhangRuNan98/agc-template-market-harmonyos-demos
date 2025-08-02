@@ -2,6 +2,7 @@ import { Constants } from 'utils';
 import { DeviceBaseInfoView } from 'uicomponents';
 import { SelectWifiViewModel } from '../viewmodel/SelectWifiViewModel';
 import { window } from '@kit.ArkUI';
+import { WifiSelectView } from 'wifi_scan';
 
 @Builder
 export function SelectWifiPageBuilder(name: string, param: Object) {
@@ -16,22 +17,8 @@ export struct SelectWifiPage {
   windowClass: window.Window | undefined
   options: Array<SelectOption> = [];
   selectedWifiIndex: number = 0
-  wifiName: string = ''
-
-  @Styles
-  InputStyle() {
-    .width('80%')
-    .backgroundColor(Color.White)
-  }
-
-  GetSelectOption(): void {
-    this.selectWifiViewModel.allWifi.forEach((item) => {
-      this.options.push({ value: item, icon: $r('app.media.wlan') });
-    })
-  }
 
   aboutToAppear(): void {
-    this.GetSelectOption();
     window.getLastWindow(getContext(this), (error, data) => {
       if (error.code) {
         return
@@ -54,56 +41,16 @@ export struct SelectWifiPage {
     }
   }
 
-  @Builder
-  BuildWifiNameInput() {
-    Select(this.options)
-      .optionHeight(300)
-      .value('点击选择Wi-Fi')
-      .margin({ top: 50 })
-      .InputStyle()
-      .onSelect((index: number, text?: string | undefined) => {
-        if (text) {
-          this.wifiName = text
-        }
-      })
-  }
-
-  @Local wifiPassword: string = ''
-
-  @Builder
-  BuildWifiPasswordInput() {
-    TextInput({ placeholder: 'Wi-Fi密码' })
-      .type(InputType.Password)
-      .margin({ top: 20 })
-      .InputStyle()
-      .onChange((value: string) => {
-        this.wifiPassword = value
-      })
-  }
-
-  @Builder
-  BuildNextButton() {
-    Button('下一步')
-      .margin({ top: 100 })
-      .width('60%')
-      .onClick(() => {
-        this.selectWifiViewModel.setWifi(this.wifiName, this.wifiPassword)
-        this.pathStack.pushPathByName('ConfigDevicePage', this.deviceId)
-      })
-  }
-
-  @Builder
-  BuildSetWifi() {
-    this.BuildWifiNameInput()
-    this.BuildWifiPasswordInput()
-  }
-
   build() {
     NavDestination() {
       Column() {
         DeviceBaseInfoView({ image: this.selectWifiViewModel.deviceImage, name: this.selectWifiViewModel.deviceName })
-        this.BuildSetWifi()
-        this.BuildNextButton()
+        WifiSelectView({
+          clickEvent: (wifiName: string, wifiPassWord) => {
+            this.selectWifiViewModel.setWifi(wifiName, wifiPassWord)
+            this.pathStack.pushPathByName('ConfigDevicePage', this.deviceId)
+          }
+        })
       }
       .height('100%')
       .width('100%')

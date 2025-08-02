@@ -13,30 +13,50 @@
  * limitations under the License.
  */
 import { JobListItem } from '../clazz/JobListItem';
-import { ResumeEntity } from '../clazz/ResumeEntity';
+;
 /**
  * Style constants that can be used by all modules
  */
+
+export enum ROUTES_TYPE {
+  FAVOURITE,
+  MY_DELIVERY,
+  RESUME_MANAGEMENT,
+  MY_MESSAGE,
+  PERSONAL_SETTING
+}
+
 /**
  * Route type define.
  */
+@ObservedV2
 export class Route {
   title: string | Resource;
   img: Resource;
   path: string;
+  type: ROUTES_TYPE;
+  @Trace unReadCount: number;
 
-  constructor(title: string | Resource, img: Resource, path: string) {
+  constructor(title: string | Resource, img: Resource, path: string, type: ROUTES_TYPE , unReadCount:number = 0) {
     this.title = title;
     this.img = img;
     this.path = path;
+    this.type = type;
+    this.unReadCount = unReadCount;
   }
 }
 
-export class CommonConstants {
+
+
+export class  CommonConstants {
   /**
    * Full width.
    */
   static readonly FULL_WIDTH: string = '100%';
+  /**
+   * Full percent.
+   */
+  static readonly FULL_PERCENT: string = '100%';
   /**
    * Full height.
    */
@@ -101,16 +121,14 @@ export class CommonConstants {
   static readonly TRANSPARENCY_HALF: number = 0.4;
   
   static readonly ROUTES: Route[] = [
-    new Route($r('app.string.mine_my_favorite'), $r('app.media.star'), `pages/mine/MyFavorite`),
-    new Route($r('app.string.mine_delivery_info'), $r('app.media.mine_delivery'), `pages/mine/MyDelivery`),
-    new Route($r('app.string.mine_resume_management'), $r('app.media.mine_resume'), `pages/mine/ResumeManagement`
-    )
-  ]
+    new Route($r('app.string.mine_my_favorite'), $r('app.media.star'), `pages/mine/MyFavorite`, ROUTES_TYPE.FAVOURITE),
+    new Route($r('app.string.mine_delivery_info'), $r('app.media.mine_delivery'), `pages/mine/MyDelivery`, ROUTES_TYPE.MY_DELIVERY),
+    new Route($r('app.string.mine_resume_management'), $r('app.media.mine_resume'), `pages/mine/ResumeManagement`, ROUTES_TYPE.RESUME_MANAGEMENT
+    ),
+    new Route($r('app.string.my_message'), $r('app.media.message'), `pages/mine/my_message/MyMessage`, ROUTES_TYPE.MY_MESSAGE),
+    new Route($r('app.string.mine_setting'), $r('app.media.mine_setting'), `pages/mine/PersonalSetting`, ROUTES_TYPE.PERSONAL_SETTING)
 
-  static readonly RESUMES: ResumeEntity[] =
-    [
-      new ResumeEntity()
-    ]
+  ]
   
   static readonly DELIVERY_STATUS: SearchType[] = [
     { index: 0, title: '进行中' },
@@ -263,7 +281,7 @@ export class CommonConstants {
           '3.熟悉Android开发，有Flutter、React Native等跨平台开发经验者优先；')
     ]
   static readonly JOB_LIST_MAP: Map<string, JobListItem> = new Map(
-    this.JOB_LIST.map(item => [item.jobId, item])
+    this.JOB_LIST.map(item => [item.id, item])
   );
 }
 

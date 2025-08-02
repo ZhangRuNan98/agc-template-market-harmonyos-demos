@@ -26,7 +26,9 @@ export struct DevicePrivateInfoView {
           this.updateHtml();
         })
         .backgroundColor(Color.Transparent)
-        .width('90%');
+        .width('90%')
+        .fileAccess(false)
+        .geolocationAccess(false)
     };
   }
 }

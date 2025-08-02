@@ -71,6 +71,10 @@
     {
       "name": "hwid_text_button_known",
       "value": "OK"
+    },
+    {
+      "name": "user_name",
+      "value": "username"
     }
   ]
 }

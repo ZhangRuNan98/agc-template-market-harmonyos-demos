@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "permission_reason_location",
+      "value": "用于获取当前定位"
+    },
+    {
+      "name": "agcit_huawei_art_training_module_store_map",
+      "value": "1.0.0"
+    },
+    {
+      "name": "agcittype_huawei_art_training_module_store_map",
+      "value": "serviceComponent"
+    },
+    {
+      "name": "agcitkid_huawei_art_training_module_store_map",
+      "value": "agcit_huawei_art_training_module_ui_base/1.0.0"
+    }
+  ]
+}

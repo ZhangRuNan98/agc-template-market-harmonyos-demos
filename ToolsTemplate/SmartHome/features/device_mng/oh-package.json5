@@ -10,6 +10,9 @@
     "utils": "file:../../commons/utils",
     "device_add": "file:../../features/device_add",
     "uicomponents": "file:../../commons/uicomponents",
-    "external_interactions": "file:../../commons/external_interactions"
+    "external_interactions": "file:../../commons/external_interactions",
+    "base_apis": "file:../../components/base_apis",
+    "form_bar": "file:../../components/form_bar",
+    "message_list": "file:../../components/message_list"
   }
 }

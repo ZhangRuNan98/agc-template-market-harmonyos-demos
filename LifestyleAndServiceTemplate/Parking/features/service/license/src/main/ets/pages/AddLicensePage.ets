@@ -1,5 +1,12 @@
-import { CommonConstants, RouterMap, RouterModule, WindowUtil } from 'commonlib';
-import { CommonButton, CommonHeader, CommonKeyboard } from 'componentlib';
+import {
+  CommonButton,
+  CommonConstants,
+  CommonHeader,
+  RouterMap,
+  RouterModule,
+  WindowUtil,
+} from 'common';
+import { CommonKeyboard } from 'module_license_keyboard';
 import { LicensePageVM } from '../viewmodels/LicensePageVM';
 
 @ComponentV2
@@ -57,6 +64,6 @@ export struct AddLicensePage {
 }
 
 @Builder
-export function AddLicensePageBuilder() {
+export function addLicensePageBuilder() {
   AddLicensePage()
 }

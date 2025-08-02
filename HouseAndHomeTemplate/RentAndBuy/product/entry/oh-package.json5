@@ -1,0 +1,16 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "foundation": "file:../../commons/foundation",
+    "home": "file:../../features/home",
+    "mine": "file:../../features/mine",
+    "aggregated_login": "file:../../components/aggregated_login",
+    "@tencent/wechat_open_sdk": "^1.0.7"
+  }
+}
+

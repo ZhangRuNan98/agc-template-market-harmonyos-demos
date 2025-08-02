@@ -1,8 +1,4 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, } from 'commonlib';
-import { IRevenueInfo } from 'network/src/main/ets/types/responseTypes/GetRevenueInfoResp';
-
-const TAG = '[RevenueInfoVM]';
+import { https, IRevenueInfo } from 'lib_foundation';
 
 @ObservedV2
 export class RevenueInfoVM {

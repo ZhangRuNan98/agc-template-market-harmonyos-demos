@@ -1,0 +1,17 @@
+{
+  "name": "home",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "Index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "packageType": "InterfaceHar",
+  "dependencies": {
+    "foundation": "file:../../commons/foundation",
+    "surround_facility": "file:../../components/surround_facility",
+    "aggregated_swiper": "file:../../components/aggregated_swiper",
+    "city_select": "file:../../components/city_select",
+    "house_map": "file:../../components/house_map",
+    "module_base": "file:../../components/module_base"
+  }
+}

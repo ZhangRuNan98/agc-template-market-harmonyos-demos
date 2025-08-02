@@ -10,7 +10,7 @@
     commonlib: "file:../../../commons/commonLib",
     componentlib: "file:../../../commons/componentLib",
     network: "file:../../../commons/network",
-
-    "@hw-agconnect/ui-schedule-flow": "file:../../../component/ui_schedule_flow"
+    module_course_schedule: "file:../../../components/module_course_schedule",
+    module_secure_checkin: "file:../../../components/module_secure_checkin"
   }
 }

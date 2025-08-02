@@ -68,7 +68,8 @@ export interface OrderSkuDto {
   skuCode: string;
   skuDesc: string;
   count: number;
-  banner: string;
+  dashPrice: number;
+  banner: ResourceStr;
   title: string;
   serviceDesc: string;
   price: number;
@@ -80,9 +81,20 @@ export interface OrderCardDto {
   statusDesc: string;
   skuList: OrderSkuDto[];
   logisticsInfo: LogisticsItemDto[];
+  discount?: number;
   totalPrice: number;
   remark: string;
   time: string;
+  address?: Address;
+  remainingTime?: string;
+  refundTime?: string;
+  receivingMethod?: string;
+}
+
+export interface Address {
+  name: string;
+  cellphone: string;
+  address: string;
 }
 
 export interface LogisticsItemDto {

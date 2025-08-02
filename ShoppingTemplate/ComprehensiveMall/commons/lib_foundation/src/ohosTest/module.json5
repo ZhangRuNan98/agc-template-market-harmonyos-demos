@@ -3,7 +3,7 @@
     "name": "lib_foundation_test",
     "type": "feature",
     "deviceTypes": [
-      "default"
+      "phone"
     ],
     "deliveryWithInstall": true,
     "installationFree": false

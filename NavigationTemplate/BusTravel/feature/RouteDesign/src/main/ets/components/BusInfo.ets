@@ -1,13 +1,12 @@
+import { getDataFromJSON } from 'common'
 import { RandomCountdown } from './RandomCountdown'
-import { SearchSet } from 'common';
-import { getDataFromJSON } from 'common';
-import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { generateRandomNumber } from './BusStationRandom'
+import { SearchSet } from 'route_detail'
 
 @Component
 @Preview
 export struct RealTimeBusComponent {
-  @Prop @Watch('change') busTimer: RandomCountdown;
+  @Prop busTimer: RandomCountdown
   @State busInfo: LineSetInfo = new LineSetInfo('', '', '', 116.490437, 39.90536209, 0);
   @State lineName: string = '';
   @State busStationRandom: Array<string> = ['北京南站'];
@@ -20,21 +19,7 @@ export struct RealTimeBusComponent {
   // 站线名 起点站 终点站 经纬度 站点名 seq
   @State busSetItems: Array<SearchSet> = [];
 
-  change() {
-    console.log('111111111111111111' + this.busTimer.nearestFirstStation);
-  }
-
-  // 换向
-  private refreshDirect() {
-    if (this.endDir === this.busInfo.endStation) {
-      this.endDir = this.busInfo.startStation;
-    } else {
-      this.endDir = this.busInfo.endStation;
-    }
-  }
-
   aboutToAppear(): void {
-    // console.log('111111111111111111nearestFirstStation' + this.busTimer.nearestFirstStation);
     this.endDir = this.busInfo.endStation
     this.busSetItems = getDataFromJSON<SearchSet>('Bus_Station.json', this);
     this.lineName = this.busInfo.lineName
@@ -91,7 +76,7 @@ export struct RealTimeBusComponent {
           Image($r('app.media.divider'))
             .size({ height: '16lpx', width: '2lpx' })
             .margin({ left: 6, right: 6 })
-          Image($r('app.media.walking'))// .margin({ right: 2 })
+          Image($r('app.media.walking'))
             .size({ height: '16lpx', width: '16lpx' })
 
           Text() {
@@ -148,7 +133,6 @@ export struct RealTimeBusComponent {
       .height('110lpx')
       .backgroundColor($r('sys.color.comp_background_list_card'))
       .borderRadius(12)
-      // .shadow({ radius: 6, color: '#50000000', offsetY: 3 })
       .alignItems(HorizontalAlign.Center)
       .justifyContent(FlexAlign.Center)
     }

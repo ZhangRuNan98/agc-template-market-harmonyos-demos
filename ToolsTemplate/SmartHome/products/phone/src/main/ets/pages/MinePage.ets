@@ -54,6 +54,7 @@ export struct MinePage {
         }
       }.scrollBar(BarState.Off)
     }
+    .mode(NavigationMode.Stack)
     .backgroundColor(Constants.NAV_DESTINATION_BACKGROUND_COLOR)
     .hideTitleBar(true);
   }

@@ -71,6 +71,14 @@
     {
       "name": "hwid_text_button_known",
       "value": "OK"
+    },
+    {
+      "name": "my_message",
+      "value": "我的消息"
+    },
+    {
+      "name": "mine_setting",
+      "value": "设置"
     }
   ]
 }

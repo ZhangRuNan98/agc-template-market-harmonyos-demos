@@ -1,0 +1,15 @@
+{
+  "module": {
+    "name": "module_swiper_preview",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.INTERNET",
+        "reason": "$string:internet_reason",
+      }
+    ]
+  }
+}

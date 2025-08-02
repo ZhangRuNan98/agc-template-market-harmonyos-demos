@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "location_reason",
+      "value": "定位当前设备精准位置，初始化附近停车场列表"
+    },
+    {
+      "name": "approximately_location_reason",
+      "value": "定位当前设备大致位置，初始化附近停车场列表"
+    },
+    {
+      "name": "agcit_huawei_parking_module_parking_spots",
+      "value": "1.0.0"
+    },
+    {
+      "name": "agcittype_huawei_parking_module_parking_spots",
+      "value": "serviceComponent"
+    }
+  ]
+}

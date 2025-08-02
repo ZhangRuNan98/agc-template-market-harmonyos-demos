@@ -1,8 +1,8 @@
-import { ImageSettingBarView, TextSettingBarView, TextShowBarView } from 'uicomponents';
 import { Constants } from 'utils';
 import { PersonalCenterViewModel } from '../viewmodel/PersonalCenterViewModel';
 import { AppStorageV2, CustomContentDialog } from '@kit.ArkUI';
 import { emitter } from '@kit.BasicServicesKit';
+import { FormBar, FormType } from 'form_bar';
 
 @Builder
 export function PersonalCenterPageBuilder(name: string, param: Object) {
@@ -42,7 +42,8 @@ export struct PersonalCenterPage {
 
   @Builder
   BuildAccountSetting() {
-    TextShowBarView({
+    FormBar({
+      formType: FormType.TEXT_SHOW,
       startImage: $r('app.media.account'),
       name: '账号',
       value: this.personalCenterViewModel.phone
@@ -51,19 +52,21 @@ export struct PersonalCenterPage {
 
   @Builder
   BuildNickNameSetting() {
-    TextSettingBarView({
+    FormBar({
+      formType: FormType.TEXT_SETTING,
       startImage: $r('app.media.nickname'),
       name: '昵称',
       value: this.personalCenterViewModel.nickName,
-      valueChangeCb: (value: string) => {
-        this.personalCenterViewModel.setNickName(value);
+      valueChangeCb: (value: ResourceStr) => {
+        this.personalCenterViewModel.setNickName(value as string);
       },
     });
   }
 
   @Builder
   BuildAvatarSetting() {
-    ImageSettingBarView({
+    FormBar({
+      formType: FormType.IMAGE_SETTING,
       startImage: $r('app.media.picture'),
       name: '头像',
       value: this.personalCenterViewModel.avatar,

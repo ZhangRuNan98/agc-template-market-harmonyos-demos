@@ -22,6 +22,8 @@ export struct ProductDetail {
   handlePayNow: (skuCode: string, count: number) => void;
   @Event
   handleNotLogin: () => void;
+  @Event
+  getProductInfo: (data: ProductInfo) => void;
   @Local
   isLoading: boolean = false;
   @Local
@@ -34,6 +36,7 @@ export struct ProductDetail {
   async aboutToAppear() {
     this.isLoading = true;
     this.productInfo = await ProductDetailApis.getProductDetail(this.productId);
+    this.getProductInfo?.(this.productInfo);
     this.isLoading = false;
   }
 
@@ -57,6 +60,7 @@ export struct ProductDetail {
           };
         }
         .edgeEffect(EdgeEffect.Spring)
+        .scrollBar(BarState.Off)
         .layoutWeight(1);
 
         Blank();
@@ -150,18 +154,21 @@ export struct ProductDetail {
         .onClick(() => {
           this.handleButtonClick(ProductOperationType.PAY_NOW);
         });
-
     }
     .width('100%')
-    .padding(16)
+    .padding({
+      left: 16,
+      right: 16,
+      top: 16,
+    })
     .backgroundColor(Constants.BACKGROUND_COLOR)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .bindSheet($$this.showSelector,
       this.productSelectorBuilder(),
       {
-        title: {title:'商品规格选择'},
-        detents:[SheetSize.FIT_CONTENT],
-        backgroundColor:Constants.BACKGROUND_COLOR,
+        title: { title: '商品规格选择' },
+        detents: [SheetSize.LARGE],
+        backgroundColor: Constants.BACKGROUND_COLOR,
         onWillDismiss: (action: DismissSheetAction) => {
           if (action.reason === DismissReason.PRESS_BACK || action.reason === DismissReason.CLOSE_BUTTON) {
             action.dismiss();

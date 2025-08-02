@@ -20,7 +20,7 @@
         "name": "EntryAbility",
         "srcEntry": "./ets/entryability/EntryAbility.ets",
         "description": "",
-        "icon": "$media:app_icon",
+        "icon": "$media:layered_image",
         "label": "$string:EntryAbility_label",
         "startWindowIcon": "$media:app_icon",
         "startWindowBackground": "$color:start_window_background",
@@ -36,6 +36,7 @@
           }
         ],
         "metadata": [
+          // todo: 修改client_id
           {
             "name": "client_id",
             "value": "xxx"

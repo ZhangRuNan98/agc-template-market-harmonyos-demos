@@ -1,1 +1,0 @@
-/parse/src/main/cpp/third_party/*

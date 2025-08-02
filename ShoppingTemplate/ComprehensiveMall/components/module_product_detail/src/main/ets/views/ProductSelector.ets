@@ -28,11 +28,17 @@ export struct ProductSelector {
   build() {
     Column() {
       if (this.vm.stockInfo) {
-        this.headerInfoBuilder();
-        this.specsInfoBuilder();
-        this.amountInfoBuilder();
+        Scroll() {
+          Column() {
+            this.headerInfoBuilder();
+            this.specsInfoBuilder();
+            this.amountInfoBuilder();
+          }
+        }
+        .align(Alignment.Top)
+        .padding({ bottom: 12 })
+        .layoutWeight(1)
       }
-      Blank();
       this.bottomOperationBuilder();
     }
     .width('100%')
@@ -44,7 +50,7 @@ export struct ProductSelector {
       topLeft: 32,
       topRight: 32,
     })
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM]);
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP]);
   }
 
   @Builder

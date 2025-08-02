@@ -1,15 +1,12 @@
-import { WindowConfig } from 'commonlib';
 import { TAB_LIST } from '../constants/Constants';
 import { TabListItem } from '../types/Types';
 import { MainEntryVM } from '../viewmodels/MainEntryVM';
-import { AppStorageV2 } from '@kit.ArkUI';
 
 @Entry
 @ComponentV2
 struct MainEntry {
   vm: MainEntryVM = MainEntryVM.instance;
   @Provider('mainTabController') mainTabController: TabsController = new TabsController();
-  @Provider('windowConfig') windowConfig: WindowConfig = AppStorageV2.connect(WindowConfig, 'windowConfig', () => new WindowConfig())!;
 
   build() {
     Navigation(this.vm.navStack) {
@@ -21,6 +18,7 @@ struct MainEntry {
             }
             .tabBar(this.tabBarBuilder(TAB_LIST[index], index))
             .clip(index !== 0)
+            .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP])
           }, (item: TabListItem) => item.label)
         }
         .scrollable(false)
@@ -31,10 +29,11 @@ struct MainEntry {
           this.vm.curIndex = index;
         })
         .id('main_tab_container')
+        .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP])
       }
-      .backgroundColor($r('sys.color.background_secondary'));
+      .backgroundColor($r('sys.color.background_secondary'))
+      .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP])
     }
-    .padding({ bottom: this.windowConfig.windowBottomHeight })
     .hideTitleBar(true)
     .hideToolBar(true)
     .hideBackButton(true)

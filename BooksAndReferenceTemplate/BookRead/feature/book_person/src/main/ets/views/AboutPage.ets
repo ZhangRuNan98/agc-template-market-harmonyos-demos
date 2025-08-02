@@ -1,9 +1,11 @@
-import { Constants, NavHeaderBar, ReturnButton } from 'common';
-import { AvatarIcon } from '../comp/SelectAvatarCard';
+import { promptAction, CustomContentDialog } from '@kit.ArkUI';
 import { call } from '@kit.TelephonyKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { baseActionSheet } from 'base_common';
 import { UserInfo } from 'base_common';
+import { Constants, NavHeaderBar, TCRouter } from 'common';
+import { AvatarIcon } from '../comp/SelectAvatarCard';
+
 
 @ComponentV2
 export struct AboutPage {
@@ -12,176 +14,137 @@ export struct AboutPage {
   @Local isSelectCalendar: boolean = false;
   @Local isModifyNickName: boolean = false;
   @Local windowTopHeight: number = AppStorage.get('windowTopHeight') as number || 38.77;
-
-  build() {
-    NavDestination() {
-      NavHeaderBar({
-        title: '关于',
-        hasBackButton: true,
-        hasBgColor: true,
-        isMainPage: false,
-      })
-      Column({space: 24}) {
-        Image($r('app.media.startIcon'))
-          .width(72)
-          .height(72)
-          .borderRadius(16)
-          .objectFit(ImageFit.Contain)
-        Column(){
-          Text('阅读')
-            .width(328)
-            .height(40)
-            .fontSize(30)
-            .fontWeight(500)
-            .textAlign(TextAlign.Center)
-          Text('业务描述')
-            .width(328)
-            .height(19)
-            .fontSize(14)
-            .fontWeight(400)
-            .fontColor($r('sys.color.font_secondary'))
-            .textAlign(TextAlign.Center)
+  @Local isLatestVersion: boolean = false
+  @Local updateProgress: number = 0
+  timerId?: number
+  updateDialogController: CustomDialogController = new CustomDialogController({
+    builder: CustomContentDialog({
+      contentBuilder: () => {
+        this.updateDialogBuilder();
+      },
+      buttons: [
+        {
+          value: '以后再说',
+          buttonStyle: ButtonStyleMode.TEXTUAL,
+          action: () => {
+            console.info('Callback when the button is clicked')
+          }
+        },
+        {
+          value: '立即更新',
+          buttonStyle: ButtonStyleMode.TEXTUAL,
+          action: () => {
+            this.progressDialogController.open()
+            this.update()
+          }
         }
-        this.aboutCardView()
+      ],
+    }),
+    alignment: DialogAlignment.Bottom
+  });
+
+  progressDialogController: CustomDialogController = new CustomDialogController({
+    builder: CustomContentDialog({
+      contentBuilder: () => {
+        this.progressDialogBuilder();
+      },
+    }),
+    alignment: DialogAlignment.Bottom
+  });
+
+  update(){
+    this.timerId= setInterval(() => {
+      if(this.updateProgress<100) {
+        this.updateProgress+=25
+      } else {
+        this.isLatestVersion=true
+        this.progressDialogController.close()
       }
-      .padding({
-        left:16,
-        right:16,
-        top:24
-      })
-      .width(Constants.FULL_SIZE)
-      .height(Constants.FULL_SIZE)
-    }
-    .hideTitleBar(true)
-    .width(Constants.FULL_SIZE)
-    .height(Constants.FULL_SIZE)
-    .backgroundColor($r('sys.color.background_secondary'))
+    }, 500)
+  }
+
+  stopUpdate(){
+    clearInterval(this.timerId)
+    this.progressDialogController.close()
+    this.updateProgress=0
   }
 
   @Builder
-  aboutCardView(){
-    Column({space : 11}){
-      Row(){
-        Column(){
-          Text('版本信息')
-            .fontSize(16)
-            .fontWeight(FontWeight.Normal)
-            .width(100)
-            .height(22)
-            .textAlign(TextAlign.Start)
-          Text('1.0.23.300')
-            .fontSize(12)
-            .fontWeight(FontWeight.Normal)
-            .width(100)
-            .height(16)
-            .textAlign(TextAlign.Start)
-            .fontColor($r('sys.color.font_secondary'))
-        }
-        .padding({
-          left:6,
-          right:6
-        })
-        Row({space :4}){
-          Text('检查更新')
-            .width(48)
-            .height(16)
-            .fontSize(12)
-            .fontWeight(FontWeight.Normal)
-            .textAlign(TextAlign.Start)
-            .fontColor($r('sys.color.font_secondary'))
-          Row(){
-            Image($r('app.media.ic_arrow_right'))
-              .width(7)
-              .height(14)
-              .objectFit(ImageFit.Contain)
-          }
-          .width(16)
-          .height(16)
-          .padding({
-            top:1,
-            bottom:1,
-            left:4.5,
-            right:4.5
-          })
-        }
-        .padding({
-          left:6,
-          right:6
-        })
-      }
-      .width(Constants.FULL_SIZE)
-      .justifyContent(FlexAlign.SpaceBetween)
-      .padding({
-        left:12,
-        right:12
-      })
-
-      Divider()
+  updateDialogBuilder() {
+    Column() {
+      Text('发现新版本')
+        .fontSize(20)
+        .fontWeight(FontWeight.Bold)
         .width(Constants.FULL_SIZE)
-      Row(){
-        Column(){
-          Text('客服电话')
-            .fontSize(16)
-            .fontWeight(FontWeight.Normal)
-            .width(100)
-            .height(22)
-            .textAlign(TextAlign.Start)
-          Text('000000')
-            .fontSize(12)
-            .fontWeight(FontWeight.Normal)
-            .width(100)
-            .height(16)
-            .textAlign(TextAlign.Start)
-            .fontColor($r('sys.color.font_secondary'))
-        }
         .padding({
-          left:6,
-          right:6
+          bottom:15
         })
-        Row({space :4}){
-          Row(){
-            Image($r('app.media.ic_arrow_right'))
-              .width(7)
-              .height(14)
-              .objectFit(ImageFit.Contain)
-          }
-          .width(16)
-          .height(16)
-          .padding({
-            top:1,
-            bottom:1,
-            left:4.5,
-            right:4.5
-          })
+      Column(){
+        Row({space:8}){
+          Text('应用')
+          Text('阅读听书')
         }
-        .padding({
-          left:6,
-          right:6
-        })
+        Row({space:8}){
+          Text('版本')
+          Text('1.0.00.000')
+        }
+        Row({space:8}){
+          Text('大小')
+          Text('50MB')
+        }
       }
       .width(Constants.FULL_SIZE)
-      .justifyContent(FlexAlign.SpaceBetween)
+      .alignItems(HorizontalAlign.Start)
       .padding({
-        left:12,
-        right:12
+        top:12,
+        bottom:12
       })
-      .onClick(() => { baseActionSheet.show({
-        id: 'PhoneSheetBuilder',
-        title: { title: '联系客服' },
-        height: SheetSize.FIT_CONTENT,
-        backgroundColor: $r('app.color.pure_white'),
-        customContent: () => {
-          this.PhoneSheetBuilder()
-        },
-      })
+      Column(){
+        Text('详情')
+          .margin({bottom:12})
+        Text('1、新增 发布添加表情自定义\n' +
+          '2、优化 新闻阅读闪退问题\n' +
+          '3、修复 若干bug')
+      }
+      .alignItems(HorizontalAlign.Start)
+      .width(Constants.FULL_SIZE)
+      .padding({
+        top:12,
+        bottom:12
       })
     }
+    .width('100%')
+  }
+
+  @Builder
+  progressDialogBuilder() {
+    Row(){
+      Column({space:12}){
+        Row(){
+          Text('正在更新')
+            .fontSize(14)
+            .fontColor('#E5000000')
+          Text(this.updateProgress+'%')
+            .fontSize(14)
+            .fontColor('#E5000000')
+        }
+        .width(244)
+        .justifyContent(FlexAlign.SpaceBetween)
+        Progress({ value: this.updateProgress, total: 100, type: ProgressType.Linear })
+          .width(244)
+      }
+      .width(244)
+      Image($r('app.media.ic_public_close_circle'))
+        .width(22)
+        .height(22)
+        .objectFit(ImageFit.Contain)
+        .onClick(() => {this.stopUpdate()})
+    }
+    .justifyContent(FlexAlign.SpaceBetween)
     .width(Constants.FULL_SIZE)
-    .borderRadius(16)
-    .backgroundColor('#ffffff')
     .padding({
-      top:12,
-      bottom:12
+      left:4,
+      right:4
     })
   }
 
@@ -238,5 +201,236 @@ export struct AboutPage {
     .margin({ bottom: 40, left: 16, right: 16 })
     .backgroundColor($r('app.color.pure_white'))
     .borderRadius(16)
+  }
+
+  @Builder
+  aboutCardView(){
+    Column({space : 10}){
+      Row(){
+        Column(){
+          Row({space:8}) {
+            Text('版本信息')
+              .fontSize(16)
+              .fontWeight(FontWeight.Normal)
+              .height(22)
+              .textAlign(TextAlign.Start)
+            if (!this.isLatestVersion) {
+              Image($r('app.media.red_dot'))
+                .width(6)
+                .height(6)
+                .objectFit(ImageFit.Contain)
+            }
+          }
+          .width(100)
+          .justifyContent(FlexAlign.Start)
+          Text('1.0.00.000')
+            .fontSize(12)
+            .fontWeight(FontWeight.Normal)
+            .width(100)
+            .height(16)
+            .textAlign(TextAlign.Start)
+            .fontColor($r('sys.color.font_secondary'))
+        }
+        Row({space:4}){
+          Text(this.isLatestVersion? '检查更新': '待更新')
+            .width(48)
+            .height(16)
+            .fontSize(12)
+            .fontWeight(FontWeight.Normal)
+            .textAlign(TextAlign.End)
+            .fontColor($r('sys.color.font_secondary'))
+          Row(){
+            Image($r('app.media.ic_arrow_right'))
+              .width(7)
+              .height(14)
+              .objectFit(ImageFit.Contain)
+          }
+          .width(16)
+          .height(16)
+          .padding({
+            top:1,
+            bottom:1,
+            left:4.5,
+            right:4.5
+          })
+        }
+      }
+      .width(Constants.FULL_SIZE)
+      .justifyContent(FlexAlign.SpaceBetween)
+      .onClick(() => {
+        if(this.isLatestVersion) {
+          promptAction.showToast({ message: '已是最新版本' })
+        } else {
+          this.updateDialogController.open()
+        }
+      })
+      Divider()
+        .width(Constants.FULL_SIZE)
+        .height(0.5)
+      Row(){
+        Column(){
+          Text('客服电话')
+            .fontSize(16)
+            .fontWeight(FontWeight.Normal)
+            .width(100)
+            .height(22)
+            .textAlign(TextAlign.Start)
+          Text('000000')
+            .fontSize(12)
+            .fontWeight(FontWeight.Normal)
+            .width(100)
+            .height(16)
+            .textAlign(TextAlign.Start)
+            .fontColor($r('sys.color.font_secondary'))
+        }
+        Row({space :4}){
+          Row(){
+            Image($r('app.media.ic_arrow_right'))
+              .width(7)
+              .height(14)
+              .objectFit(ImageFit.Contain)
+          }
+          .width(16)
+          .height(16)
+          .padding({
+            top:1,
+            bottom:1,
+            left:4.5,
+            right:4.5
+          })
+        }
+      }
+      .width(Constants.FULL_SIZE)
+      .justifyContent(FlexAlign.SpaceBetween)
+      .onClick(() => { baseActionSheet.show({
+        id: 'PhoneSheetBuilder',
+        title: { title: '联系客服' },
+        height: SheetSize.FIT_CONTENT,
+        backgroundColor: $r('app.color.pure_white'),
+        customContent: () => {
+          this.PhoneSheetBuilder()
+        },
+      })
+      })
+      Divider()
+        .width(Constants.FULL_SIZE)
+        .height(0.5)
+      Row(){
+        Text('个人信息收集清单')
+          .fontSize(16)
+          .fontWeight(FontWeight.Normal)
+          .height(22)
+          .textAlign(TextAlign.Start)
+        Row(){
+          Image($r('app.media.ic_arrow_right'))
+            .width(7)
+            .height(14)
+            .objectFit(ImageFit.Contain)
+        }
+        .width(16)
+        .height(16)
+        .padding({
+          top:1,
+          bottom:1,
+          left:4.5,
+          right:4.5
+        })
+      }
+      .width(Constants.FULL_SIZE)
+      .height(38)
+      .justifyContent(FlexAlign.SpaceBetween)
+      .onClick(() => {
+        TCRouter.push(Constants.DATA_COLLECTION_ROUTE)
+      })
+      Divider()
+        .width(Constants.FULL_SIZE)
+        .height(0.5)
+      Row(){
+        Text('第三方共享信息清单')
+          .fontSize(16)
+          .fontWeight(FontWeight.Normal)
+          .height(22)
+          .textAlign(TextAlign.Start)
+        Row(){
+          Image($r('app.media.ic_arrow_right'))
+            .width(7)
+            .height(14)
+            .objectFit(ImageFit.Contain)
+        }
+        .width(16)
+        .height(16)
+        .padding({
+          top:1,
+          bottom:1,
+          left:4.5,
+          right:4.5
+        })
+      }
+      .width(Constants.FULL_SIZE)
+      .height(38)
+      .justifyContent(FlexAlign.SpaceBetween)
+      .onClick(() => {
+        TCRouter.push(Constants.DATA_SHARING_ROUTE)
+      })
+    }
+    .width(Constants.FULL_SIZE)
+    .borderRadius(32)
+    .backgroundColor('#ffffff')
+    .padding({
+      top:16,
+      bottom:16,
+      left:12,
+      right:12
+    })
+  }
+
+  build() {
+    NavDestination() {
+      NavHeaderBar({
+        title: '关于',
+        hasBackButton: true,
+        hasBgColor: false,
+        isMainPage: false,
+      })
+      Column({space: 77}) {
+        Column({space: 8}){
+          Image($r('app.media.startIcon'))
+            .width(72)
+            .height(72)
+            .borderRadius(16)
+            .objectFit(ImageFit.Contain)
+          Text('阅读模板')
+            .width(328)
+            .height(21)
+            .fontSize(16)
+            .fontWeight(500)
+            .textAlign(TextAlign.Center)
+        }
+        this.aboutCardView()
+        Column(){
+          Text('XXXX备xxxxxxxx号-xxxx')
+            .fontSize(12)
+            .fontColor('#0A59F7')
+          Text('xxxx 版权所有 © xxxx-xxxx')
+            .fontSize(12)
+            .fontColor('#99000000')
+          Text('技术支持：xxxxxxxx')
+            .fontSize(12)
+            .fontColor('#99000000')
+        }
+        .margin({top:100})
+      }
+      .padding({
+        left:16,
+        right:16,
+        top:24
+      })
+      .width(Constants.FULL_SIZE)
+      .height(Constants.FULL_SIZE)
+    }
+    .hideTitleBar(true)
+    .width(Constants.FULL_SIZE)
+    .height(Constants.FULL_SIZE)
+    .backgroundColor($r('sys.color.background_secondary'))
   }
 }

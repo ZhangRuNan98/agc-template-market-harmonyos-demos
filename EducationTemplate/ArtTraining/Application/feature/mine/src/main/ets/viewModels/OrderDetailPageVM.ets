@@ -4,7 +4,6 @@ import { ORDER_ACTION_BUTTON_LIST } from '../constants/Constants';
 import { OrderActionMap } from '../constants/Enums';
 import { OrderUtil } from '../utils/OrderUtil';
 
-
 @ObservedV2
 export class OrderDetailPageVM {
   private static _instance: OrderDetailPageVM;
@@ -32,8 +31,11 @@ export class OrderDetailPageVM {
       }
       this.isLoading = false;
     }
-    if (this.orderInfo && this.orderInfo.orderStatus === OrderStatusMap.PENDING_PAYMENT &&
-      this.orderInfo.paymentMethod === CoursePaymentMap.ONLINE) {
+    if (
+      this.orderInfo &&
+      this.orderInfo.orderStatus === OrderStatusMap.PENDING_PAYMENT &&
+      this.orderInfo.paymentMethod === CoursePaymentMap.ONLINE
+    ) {
       this.paymentCountdown(new Date(this.orderInfo.expireTime), (time) => {
         this.countdownLabel = time;
       });
@@ -83,9 +85,9 @@ export class OrderDetailPageVM {
   }
 
   public getOrderActionButtonList(orderStatus?: number) {
-    const list = ORDER_ACTION_BUTTON_LIST
-      .filter((item) => item.orderStatus === orderStatus)
-      .filter((item) => item.action !== OrderActionMap.DELETE);
+    const list = ORDER_ACTION_BUTTON_LIST.filter((item) => item.orderStatus === orderStatus).filter(
+      (item) => item.action !== OrderActionMap.DELETE,
+    );
     return list;
   }
 }

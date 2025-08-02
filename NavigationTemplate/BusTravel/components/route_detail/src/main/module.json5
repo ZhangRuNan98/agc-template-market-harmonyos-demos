@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "route_detail",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

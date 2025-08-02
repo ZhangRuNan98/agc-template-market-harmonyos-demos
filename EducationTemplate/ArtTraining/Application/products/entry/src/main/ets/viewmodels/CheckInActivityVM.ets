@@ -25,8 +25,8 @@ export class CheckInActivityVM {
 
   public jumpToActivityIntroPage(activity: CheckInActivity) {
     RouterModule.push({
-      url:RouterMap.ACTIVITY_INTRODUCTION,
-      param:activity.activityId,
+      url: RouterMap.ACTIVITY_INTRODUCTION,
+      param: activity.activityId,
     });
   }
 }

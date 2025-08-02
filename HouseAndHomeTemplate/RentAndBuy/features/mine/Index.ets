@@ -1,0 +1,1 @@
+export { MineBuilder } from './src/main/ets/pages/Mine';

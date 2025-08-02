@@ -1,23 +1,13 @@
 export interface UserInfo {
   id: number;
   avatar: string;
+  phoneNumber: string;
   name: string;
-  nickname: string;
-  sex: string;
-  cellphone: string;
-  birthday: string;
+  isAssociate: boolean
 }
 
-export interface MemberInfo {
-  //会员卡号
-  memberCardNo: string;
-
-  //会员类别名称
-  memberClassTName: string;
-
-  //会员类别等级
-  memberClassTLevel: string;
-
-  //积分余额
-  pointBalance: string;
+export interface HuaweiIDResp {
+  openId: string
+  unionId: string
+  authCode: string
 }

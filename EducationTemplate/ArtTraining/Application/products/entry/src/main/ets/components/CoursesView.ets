@@ -1,5 +1,6 @@
 import { CourseInfo, CourseTypeMap } from 'commonlib';
-import { CommonHeader, CourseList } from 'componentlib';
+import { CommonHeader } from 'componentlib';
+import { CourseList } from 'module_course_list';
 import { COURSE_TYPE_RADIO_GROUP, COURSE_TYPE_RADIO_LIST } from '../constants/Constants';
 import { CourseSortButton, CourseSortTypeMap } from '../constants/Enums';
 import { CourseTypeRadio } from '../types/Types';

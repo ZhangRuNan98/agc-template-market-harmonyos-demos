@@ -1,5 +1,7 @@
-import { CourseTypeMap } from 'commonlib';
-import { CommonBanner, ContainerRow, CourseList, StoreMap } from 'componentlib';
+import { CourseInfo, CourseTypeMap } from 'commonlib';
+import { CommonBanner, ContainerRow} from 'componentlib';
+import { StoreMap } from 'module_store_map';
+import { CourseList } from 'module_course_list';
 import { MAIN_SERVICE_LIST } from '../constants/Constants';
 import { StoreInfoTypeMap } from '../constants/Enums';
 import { MainServiceItem } from '../types/Types';
@@ -73,11 +75,10 @@ export struct HomeView {
       coursesList: this.vm.onlineList,
       showTag: false,
       isVertical: false,
-      handleClick: (course) => {
+      handleClick: (course: CourseInfo) => {
         this.vm.handleClickCourseCard(course);
       },
     });
-
   }
 
   @Builder
@@ -86,7 +87,7 @@ export struct HomeView {
     Column() {
       CourseList({
         coursesList: this.vm.offlineList,
-        handleClick: (course) => {
+        handleClick: (course: CourseInfo) => {
           this.vm.handleClickCourseCard(course);
         },
       });

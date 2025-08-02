@@ -1,20 +1,25 @@
-import { AccountUtil, CourseInfo,
+import { common } from '@kit.AbilityKit';
+import { promptAction } from '@kit.ArkUI';
+import { BusinessError } from '@kit.BasicServicesKit';
+import { paymentService } from '@kit.PaymentKit';
+import {
+  AccountUtil,
+  CourseInfo,
   CoursePaymentMap,
   FullLoading,
   Logger,
   OrderSubmittedRouteParam,
-  RouterMap, RouterModule, UserInfoModel, WindowUtil } from 'commonlib';
+  RouterMap,
+  RouterModule,
+  UserInfoModel,
+  WindowUtil,
+} from 'commonlib';
 import { CourseOrderReq, https } from 'network';
 import { UserInfoForOrderMap } from '../constants/Enums';
 import { CourseOrderModel } from '../models/Index';
 import { CoursePaymentMethod } from '../types/Index';
-import { promptAction } from '@kit.ArkUI';
-import { paymentService } from '@kit.PaymentKit';
-import { common } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
 
 const TAG: string = '[CoursePrepayVM]';
-
 
 @ObservedV2
 export class CoursePrepayVM {
@@ -52,7 +57,6 @@ export class CoursePrepayVM {
     this.courseOrder.student = this.userInfo.nickname;
     this.courseOrder.phone = this.userInfo.phone;
   }
-
 
   public switchPaymentMethod(type: CoursePaymentMethod) {
     this.courseOrder.paymentMethod = type.id;

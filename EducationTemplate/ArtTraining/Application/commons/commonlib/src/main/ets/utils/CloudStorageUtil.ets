@@ -1,48 +1,33 @@
-import { cloudCommon, cloudStorage } from '@kit.CloudFoundationKit';
-import fs from '@ohos.file.fs';
-import { BusinessError, request } from '@kit.BasicServicesKit';
-import { Logger } from './Logger';
 import auth from '@hw-agconnect/auth';
 import { promptAction } from '@kit.ArkUI';
+import { BusinessError, request } from '@kit.BasicServicesKit';
+import { cloudCommon, cloudStorage } from '@kit.CloudFoundationKit';
+import fs from '@ohos.file.fs';
+import { AccountUtil } from './AccountUtil';
+import { Logger } from './Logger';
 import { WindowUtil } from './WindowUtil';
 
 const TAG = '[CloudStorageUtil]';
-
-enum ErrorCode {
-  EXIST_USER = 1210005,
-}
 
 export class CloudStorageUtil {
   private static _authProvider: cloudCommon.AuthProvider = auth.getAuthProvider();
   private static _storageBucket: cloudStorage.StorageBucket = cloudStorage.bucket();
   private static _isAuthValid: boolean = false;
+  private static _uid: string = '';
 
   // 认证服务登录
-  private static async _authSignIn() {
-    try {
-      const signInResult = await auth.signIn({
-        autoCreateUser: true,
-        credentialInfo: {
-          kind: 'hwid',
-        },
-      });
+  private static _authSignIn() {
+    CloudStorageUtil._uid = AccountUtil.getAccountInfo().uid;
+    if (CloudStorageUtil._uid) {
       CloudStorageUtil._isAuthValid = true;
-      Logger.info(TAG, `signInHwid success. result: ${signInResult.getUser().getUid()}`);
-    } catch (error) {
-      if (error.code === ErrorCode.EXIST_USER) {
-        Logger.info(TAG, 'already sign in a user');
-        CloudStorageUtil._isAuthValid = true;
-      }
-      Logger.error(TAG, `signInHwid error, Code: ${error.code}, message: ${error.message}`);
-    } finally {
-      if (CloudStorageUtil._isAuthValid) {
-        CloudStorageUtil._authProvider = auth.getAuthProvider();
-        cloudCommon.init({
-          authProvider: CloudStorageUtil._authProvider,
-        });
-      } else {
-        promptAction.showToast({ message: '华为账号认证服务异常，云存储服务不可用' });
-      }
+      CloudStorageUtil._authProvider = auth.getAuthProvider();
+      cloudCommon.init({
+        authProvider: CloudStorageUtil._authProvider,
+      });
+    } else {
+      promptAction.showToast({
+        message: '华为账号认证服务异常，云存储服务不可用',
+      });
     }
   }
 
@@ -54,7 +39,7 @@ export class CloudStorageUtil {
       return;
     }
     if (!CloudStorageUtil._isAuthValid) {
-      await CloudStorageUtil._authSignIn();
+      CloudStorageUtil._authSignIn();
     }
   }
 
@@ -68,7 +53,8 @@ export class CloudStorageUtil {
     let cacheFile = `${Date.now()}_${fileName}`;
     Logger.info(TAG, `cacheFile ${cacheFile}`);
     let cacheFilePath = getContext().cacheDir + '/' + cacheFile;
-    let cloudPath: string = `user-upload/${Date.now()}_${fileName}`;
+    // 云存储路径，拼接uid，云侧安全规则配置为用户私有，指定uid用户读写
+    let cloudPath: string = `user-upload/${CloudStorageUtil._uid}/${Date.now()}_${fileName}`;
     let srcFile: fs.File | null = null;
     let dstFile: fs.File | null = null;
     try {
@@ -86,10 +72,11 @@ export class CloudStorageUtil {
         fs.closeSync(dstFile);
       }
     }
-    return CloudStorageUtil._storageBucket.uploadFile(WindowUtil.context, {
-      localPath: cacheFile, // 本地文件路径，context.cacheDir目录下的文件
-      cloudPath, // 云侧路径
-    })
+    return CloudStorageUtil._storageBucket
+      .uploadFile(WindowUtil.context, {
+        localPath: cacheFile, // 本地文件路径，context.cacheDir目录下的文件
+        cloudPath, // 云侧路径
+      })
       .then((task: request.agent.Task) => {
         task.on('progress', (progress) => {
           Logger.info(TAG, `on progress ${JSON.stringify(progress)}`);
@@ -120,7 +107,6 @@ export class CloudStorageUtil {
       .catch((err: BusinessError) => {
         Logger.error(TAG, `uploadFile failed, Code: ${err.code}, message: ${err.message}`);
       });
-
   }
 
   // 删除上传时的缓存文件

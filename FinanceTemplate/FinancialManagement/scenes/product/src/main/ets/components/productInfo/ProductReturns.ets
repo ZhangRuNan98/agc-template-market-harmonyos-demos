@@ -1,5 +1,5 @@
+import { CommonCharts } from 'module_line_chart'
 import { ProductInfoVM } from '../../viewModels/ProductInfoVM'
-import { CommonCharts } from 'componentlib'
 import { dateButton, IDateButton } from '../../constants'
 
 @ComponentV2
@@ -75,7 +75,7 @@ export struct ProductReturns {
               }
             }
           })
-        }, (item: IDateButton[]) => JSON.stringify(item))
+        }, (item: IDateButton) => JSON.stringify(item))
       }
       .margin({ top: 16 })
     }

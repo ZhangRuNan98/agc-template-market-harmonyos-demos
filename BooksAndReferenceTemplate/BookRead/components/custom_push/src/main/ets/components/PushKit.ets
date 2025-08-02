@@ -1,0 +1,166 @@
+import { TipsDialog } from '@kit.ArkUI';
+import { notificationManager } from '@kit.NotificationKit';
+
+@Observed
+class PushDataImp implements PushData {
+  pushContent: ResourceStr
+  time: string
+  read: boolean
+
+  constructor(pushContent: ResourceStr, time: string, read: boolean) {
+    this.pushContent = pushContent;
+    this.time = time;
+    this.read = read;
+  }
+}
+
+interface PushData {
+  pushContent: ResourceStr
+  time: string
+  read: boolean
+}
+
+@ComponentV2
+export struct PushKit {
+
+  windowTopHeight: number = AppStorage.get('windowTopHeight') as number || 38.77;
+  i: number = 1
+  @Local pushData: Array<PushDataImp> = []
+  dialogControllerImage: CustomDialogController = new CustomDialogController({
+    builder: TipsDialog({
+      title: '温馨提示',
+      content: '您确定将全部未读消息标记为已读？',
+      primaryButton: {
+        value: '取消',
+        action: () => {
+          this.dialogControllerImage.close()
+        },
+      },
+      secondaryButton: {
+        value: '确定',
+        action: () => {
+          for (let index = 0; index < this.pushData.length; index++) {
+            let tempData: PushDataImp = this.pushData[index]
+            tempData.read = true
+            this.pushData.splice(index, 1, tempData)
+          }
+          this.dialogControllerImage.close()
+        }
+      },
+      onCheckedChange: () => {
+        console.info('Callback when the checkbox is clicked')
+      },
+    }),
+  })
+  @Param @Require navPathStack:NavPathStack
+  @Local unreadMessage:number = 0
+
+  aboutToAppear(): void {
+    for (let y = 0; y < 6; y++) {
+      this.pushData.push(new PushDataImp($r('app.string.system_message_content'), this.i + '小时前', false))
+      this.i++
+    }
+    if (AppStorage.get('pushData') as PushDataImp !== undefined) {
+      let pushData1: PushData = AppStorage.get('pushData') as PushData
+      let data2: PushDataImp = new PushDataImp(pushData1.pushContent, pushData1.time, pushData1.read)
+      this.pushData.unshift(data2)
+      this.unreadMessage++
+    }
+
+  }
+
+  build() {
+    Column() {
+      Row() {
+        Image($r('app.media.ic_back'))
+          .height('40vp')
+          .width('40vp')
+          .margin({ right: '8vp' })
+          .onClick(() => {
+            this.navPathStack.pop()
+          })
+        Row() {
+          Text('系统消息')
+            .fontSize(20)
+            .fontWeight(FontWeight.Bold)
+        }
+        .width(144)
+        .height(27)
+
+        Image($r('app.media.ic_public_read'))
+          .height('40vp')
+          .width('40vp')
+          .margin({ left: 96 })
+          .onClick(() => {
+            this.dialogControllerImage.open()
+          })
+      }
+      .height(56)
+
+
+      List() {
+        ForEach(this.pushData, (item: PushDataImp, index: number) => {
+          ListItem() {
+            Column() {
+              Row() {
+                Image($r('app.media.ic_ring'))
+                  .width(40)
+                  .height(40)
+                  .margin({ top: 4 })
+
+                Column() {
+                  Row() {
+                    Text('系统消息').fontWeight(400)
+                  }
+                  .height(22)
+
+                  Row() {
+                    Text(item.time).fontSize(12).fontColor($r('app.color.time_gray'))
+                    if (!item.read) {
+                      Image($r('app.media.ic_dot')).width(6).height(6).margin({ left: 4 })
+                    }
+                  }
+                  .height(18)
+                }
+                .alignItems(HorizontalAlign.Start)
+                .margin({ left: 8 })
+              }
+              .margin({ top: 4 })
+
+              Divider()
+                .vertical(false)
+                .width(328)
+                .margin({ top: 10.5 })
+
+              Row() {
+                Text(item.pushContent)
+                  .fontSize(16)
+                  .fontColor($r('app.color.message_content_font_color'))
+                  .fontWeight(400)
+                  .maxLines(3)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .margin({ top: 10 })
+            }
+
+            .alignItems(HorizontalAlign.Start)
+          }
+          .onAppear(() => {
+            item.read = true
+            this.pushData.splice(index, 1, item)
+            //减少角标
+            this.unreadMessage--
+            notificationManager.setBadgeNumber(this.unreadMessage)
+          })
+          .margin({ top: 8 })
+        })
+      }
+      .edgeEffect(EdgeEffect.Spring)
+      .scrollBar(BarState.Off)
+    }
+    .margin({ top: this.windowTopHeight })
+    .padding({ bottom: 32 + this.windowTopHeight })
+    .backgroundColor($r('app.color.pure_white'))
+    .width(328)
+  }
+}

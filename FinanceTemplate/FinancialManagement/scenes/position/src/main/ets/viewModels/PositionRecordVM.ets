@@ -1,9 +1,5 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, UserInfoModel, } from 'commonlib';
-import { IUserAccount } from 'network/src/main/ets/types/responseTypes/GetUserAccountResp';
-import { IPositionInfo, IPositionRecord } from 'network/src/main/ets/types/responseTypes/GetPositionInfoResp';
-
-const TAG = '[PositionRecordVM]';
+import { https, IPositionInfo, IPositionRecord } from 'lib_foundation';
+import { AccountUtil, RouterMap, RouterModule, UserInfoModel, } from 'module_base';
 
 @ObservedV2
 export class PositionRecordVM {

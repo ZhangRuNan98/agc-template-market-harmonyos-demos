@@ -1,6 +1,6 @@
 import { cloud, CloudDBCollection, CloudDBZoneObjectOperator, CloudDBZoneQuery } from '@hw-agconnect/cloud-server';
 import { OrderInfo } from './models/OrderInfo';
-import { UserCourseInfo } from './models/UserCourseInfo';
+import { CloudUserCourseInfo } from './models/CloudUserCourseInfo';
 import { GetOrderListReq, GetOrderDetailReq, CourseOrderReq, OrderNoReq } from './types/RequestTypes';
 import { OrderInfoResp } from './types/ResponseTypes';
 import { ListResp } from './models/ListResp';
@@ -14,13 +14,13 @@ export class DatabaseHelper {
   logger;
   private userId: string;
   private orderList: CloudDBCollection<OrderInfo>;
-  private userCourseList: CloudDBCollection<UserCourseInfo>;
+  private userCourseList: CloudDBCollection<CloudUserCourseInfo>;
 
   constructor(logger, userId) {
     this.logger = logger;
     this.userId = userId;
     this.orderList = cloud.database({ zoneName: ZONE_NAME }).collection(OrderInfo);
-    this.userCourseList = cloud.database({ zoneName: ZONE_NAME }).collection(UserCourseInfo);
+    this.userCourseList = cloud.database({ zoneName: ZONE_NAME }).collection(CloudUserCourseInfo);
   }
 
   public async getOrderList(params: GetOrderListReq) {
@@ -39,6 +39,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   public async getOrderDetail(params: GetOrderDetailReq) {
@@ -60,6 +61,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   public async createCourseOrder(params: CourseOrderReq) {
@@ -81,7 +83,10 @@ export class DatabaseHelper {
         orderItem.setTotalPrice(params.price);
         orderItem.setCourseInfo(JSON.stringify(courseInfo));
         orderItem.setExpireTime(expireTime);
-        const mockOrderStr = `{"app_id":"***","merc_no":"***","prepay_id":"xxx","timestamp":${timestamp},"noncestr":"1487b8a60ed9f9ecc0ba759fbec23f4f","sign":"****","auth_id":"***"}`;
+        orderItem.setRemark(params.remark);
+        // 此处需要对接真实商户后获取orderStr，参考README中配置准备-配置支付服务章节
+        const mockOrderStr =
+          `{"app_id":"***","merc_no":"***","prepay_id":"xxx","timestamp":${timestamp},"noncestr":"1487b8a60ed9f9ecc0ba759fbec23f4f","sign":"****","auth_id":"***"}`;
         orderItem.setOrderStr(mockOrderStr);
         const res = await this.orderList.upsert(orderItem);
         if (res) {
@@ -95,6 +100,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   public async cancelCourseOrder(params: OrderNoReq) {
@@ -116,6 +122,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   public async requestRefundCourseOrder(params: OrderNoReq) {
@@ -135,6 +142,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   public async cancelRefundCourseOrder(params: OrderNoReq) {
@@ -154,6 +162,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   public async deleteCourseOrder(params: OrderNoReq) {
@@ -173,6 +182,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   private async _queryOrderItem(orderNo: string) {
@@ -190,6 +200,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   private async _updateCourseStatus(item: OrderInfo, status: OrderStatusMap) {
@@ -227,12 +238,13 @@ export class DatabaseHelper {
     } else {
       this.logger.error(LOGGER_TAG, `init order status:${curStatus} doesn not match target status:${status}`);
     }
+    return;
   }
 
   private async _getCourseDetail(courseId: number) {
     const LOGGER_TAG = TAG + 'get course detail';
     try {
-      const courseQuery: CloudDBZoneQuery<UserCourseInfo> = this.userCourseList
+      const courseQuery: CloudDBZoneQuery<CloudUserCourseInfo> = this.userCourseList
         .query()
         .orderByAsc('courseId')
         .equalTo('userId', this.userId)
@@ -247,6 +259,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + `error: ${err}`);
     }
+    return;
   }
 
   private async _createOrderInfoRespList(query: CloudDBZoneQuery<OrderInfo>) {
@@ -260,7 +273,7 @@ export class DatabaseHelper {
       }
       userData.forEach(async (item: OrderInfo) => {
         const curTime = new Date().getTime();
-        const expireTime = item.getExpireTime();
+        const expireTime = item.getExpireTime().getTime();
         if (expireTime && curTime > expireTime && item.getOrderStatus() === OrderStatusMap.PENDING_PAYMENT) {
           await this._updateCourseStatus(item, OrderStatusMap.CANCEL);
           item.setOrderStatus(OrderStatusMap.CANCEL);
@@ -274,9 +287,10 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
-  private _createCourseInfoRespItem(item: UserCourseInfo): CourseInfoResp {
+  private _createCourseInfoRespItem(item: CloudUserCourseInfo): CourseInfoResp {
     const res: CourseInfoResp = {
       courseId: item.getCourseId(),
       type: item.getType(),
@@ -292,15 +306,15 @@ export class DatabaseHelper {
       classHour: item.getClassHour(),
       status: item.getStatus(),
       currentHour: item.getCurrentHour(),
-      timetable: item.getTimetable(),
+      timetable: JSON.parse(item.getTimetable()),
     };
     return res;
   }
 
   private _createOrderInfoRespItem(item: OrderInfo): OrderInfoResp {
     const res: OrderInfoResp = {
-      orderTime: item.getOrderTime(),
-      expireTime: item.getExpireTime(),
+      orderTime: item.getOrderTime().toString(),
+      expireTime: item.getExpireTime().toString(),
       orderStatus: item.getOrderStatus(),
       orderNo: item.getOrderNo(),
       paymentMethod: item.getPaymentMethod(),
@@ -309,6 +323,7 @@ export class DatabaseHelper {
       student: item.getStudent(),
       phone: item.getPhone(),
       courseInfo: JSON.parse(item.getCourseInfo() ?? '{}'),
+      remark: item.getRemark(),
     };
     return res;
   }

@@ -1,7 +1,6 @@
-import { RouterMap } from 'commonlib'
-import { IInvestmentRecordItem } from 'network/src/main/ets/types/responseTypes/GetRegularInvestmentResp'
+import { RouterMap, FormatUtil } from 'module_base'
+import { IInvestmentRecordItem } from 'lib_foundation'
 import { MyRegularInvestmentInfoVM } from '../viewModels/MyRegularInvestmentInfoVM'
-import { FormatUtil } from 'commonlib'
 
 
 @Builder
@@ -34,7 +33,7 @@ struct MyRegularInvestmentInfo {
                   top: 1,
                   bottom: 1,
                   left: 4,
-                  right: 4
+                  right: 4,
                 })
                 .borderRadius(4)
               }
@@ -81,7 +80,7 @@ struct MyRegularInvestmentInfo {
                 top: 14,
                 bottom: 14,
                 left: 8,
-                right: 8
+                right: 8,
               })
               .borderRadius(8)
               .backgroundColor($r('sys.color.comp_background_tertiary'))
@@ -90,7 +89,7 @@ struct MyRegularInvestmentInfo {
               top: 16,
               bottom: 16,
               left: 12,
-              right: 12
+              right: 12,
             })
             .backgroundColor($r('sys.color.comp_background_list_card'))
             .borderRadius(16)
@@ -142,14 +141,14 @@ struct MyRegularInvestmentInfo {
                     Divider().color($r('sys.color.comp_divider'))
                   }
                 }
-              }, (item: IInvestmentRecordItem[]) => JSON.stringify(item))
+              }, (item: IInvestmentRecordItem) => JSON.stringify(item))
 
             }
             .padding({
               top: 16,
               bottom: 6,
               left: 12,
-              right: 12
+              right: 12,
             })
             .backgroundColor($r('sys.color.comp_background_list_card'))
             .borderRadius(16)
@@ -160,6 +159,7 @@ struct MyRegularInvestmentInfo {
         .padding({ left: 16, right: 16 })
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
     }
     .title('定投详情')
     .backgroundColor($r('sys.color.background_secondary'))

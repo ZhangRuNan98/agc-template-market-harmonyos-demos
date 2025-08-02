@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "wifi_access",
+      "value": ""
+    },
+    {
+      "name": "agcit_huawei_smart_home_wifi_scan",
+      "value": "1.0.0"
+    },
+    {
+      "name": "agcittype_huawei_smart_home_wifi_scan",
+      "value": "serviceComponent"
+    }
+  ]
+}

@@ -23,7 +23,7 @@ export struct AgreementPage {
         }
         Web({
           src: this.url,
-          controller: this.controller
+          controller: this.controller,
         })
           .width('100%')
           .layoutWeight(1)

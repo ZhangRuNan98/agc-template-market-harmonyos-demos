@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "module_course_list",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ]
+  }
+}

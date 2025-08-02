@@ -1,13 +1,16 @@
-import { BookApi, BookInfo, Constants, EpubUtils, ReadSet, TCRouter} from 'common';
+import { CustomContentDialog } from '@kit.ArkUI';
 import { bookParser, readerCore, ReadPageComponent } from '@kit.ReaderKit';
 import { common, ConfigurationConstant } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import { BusinessError, systemDateTime } from '@kit.BasicServicesKit';
+import { BusinessError, systemDateTime, emitter } from '@kit.BasicServicesKit';
 import { AppStorageV2, promptAction } from '@kit.ArkUI';
-import { ReaderTopCard } from './ReaderTopCard';
-import { BookCoverCard } from './BookCoverCard';
+import { Logger } from '@hw-agconnect/ui-base';
 import { ReaderToolBar } from 'reader_tool_bar';
 import { baseActionSheet,UserInfo } from 'base_common';
+import { ReviewDataUtil } from '../utils/ReviewDataUtil';
+import { BookApi, BookInfo, Constants, EpubUtils, ReadSet, TCRouter} from 'common';
+import { ReaderTopCard } from './ReaderTopCard';
+import { BookCoverCard } from './BookCoverCard';
 
 @ComponentV2
 export struct ReaderPage {
@@ -31,10 +34,71 @@ export struct ReaderPage {
   @Provider('pageData') pageData: readerCore.PageDataInfo | undefined = undefined
   @Local readSet: ReadSet = AppStorageV2.connect(ReadSet, () => new ReadSet())!
   @Local readerSetting: readerCore.ReaderSetting = this.readSet.readerSetting
+  @Local reminderTime: number = 0
+  @Local timerId?: number
+  @Local isNavigatingToReview: boolean = false;
+  @Local isLastPage: boolean = false;
+  @Local hasTriggeredReviewNavigation: boolean = false;
+  private lastSwipeTime: number = 0;
+  private swipeThreshold: number = 50;
+  private swipeStartX: number = 0;
+  private hasTriggeredSwipe: boolean = false;
   windowTopHeight: number = AppStorage.get('windowTopHeight') as number
   bottomRectHeight: number = AppStorage.get('bottomRectHeight') as number
   textClockController: TextClockController = new TextClockController();
+  dialogController: CustomDialogController = new CustomDialogController({
+    builder: CustomContentDialog({
+      contentBuilder: () => {
+        this.reminderDialogBuilder();
+      },
+    }),
+    cancel:this.onAccept,
+    alignment: DialogAlignment.Center,
+    customStyle: false,
+    cornerRadius: 32,
+    width: 328,
+    backgroundColor: Color.White,
+  })
 
+  @Builder
+  reminderDialogBuilder() {
+    Column({space:24}) {
+      Image($r('app.media.rest_reminder'))
+        .width(220)
+        .height(220)
+        .objectFit(ImageFit.Contain)
+      Row({space:4}){
+        Text('您已经阅读了')
+          .fontSize(16)
+        Text(this.reminderTime+'分钟')
+          .fontSize(16)
+          .fontColor('#E84026')
+          .fontWeight(FontWeight.Bold)
+        Text('休息一下吧~~')
+          .fontSize(16)
+      }
+      Button('我知道了')
+        .backgroundColor('#0D000000')
+        .fontColor('#E84026')
+        .width(Constants.FULL_SIZE)
+        .onClick(() => {
+          this.onAccept()
+        })
+    }
+    .padding({
+      left:24,
+      right:24
+    })
+  }
+  // 处理书币扣费和更新
+  private updateBookCoinsAndSave(price: number): void {
+    if (this.userInfo) {
+      this.userInfo.bookCoins -= price;
+      AppStorage.set('userInfo', this.userInfo);
+      emitter.emit(Constants.COINS_CHANGE);
+    }
+  }
+  
   @Builder
   buildBuyChapter(index: number) {
     Column({ space: 8 }) {
@@ -56,7 +120,7 @@ export struct ReaderPage {
               duration: 2000
             });
           } else {
-            this.userInfo!.bookCoins -= this.price
+            this.updateBookCoinsAndSave(this.price)
             this.lockedStatus[index] = false
             this.isShowBuySheet = false
             baseActionSheet.close('buyChapter')
@@ -115,6 +179,7 @@ export struct ReaderPage {
   }
 
   private async preprocess() {
+
     let context = this.getUIContext().getHostContext() as common.UIAbilityContext;
     let initPromise: Promise<void> = this.readerComponentController.init(context);
     let defaultHandlerPromise: Promise<bookParser.BookParserHandler> =
@@ -158,10 +223,11 @@ export struct ReaderPage {
         let spineItem = this.spineList[data.resourceIndex]
         let catalogItem = this.catalogItemList.filter(item => item.resourceFile === spineItem.href)
         this.curChapterId = catalogItem[0].catalogId
+        this.pageData = data;
         if (this.lockedStatus[this.curChapterId]) {
           if (this.userInfo!.continuousBuy && this.userInfo!.bookCoins > this.price) {
             // 自动购买
-            this.userInfo!.bookCoins -= this.price
+            this.updateBookCoinsAndSave(this.price)
             this.lockedStatus[this.curChapterId] = false
           } else {
             if (!this.isShowBuySheet) {
@@ -187,12 +253,107 @@ export struct ReaderPage {
         } else {
           this.pageData = data
         }
+      } else if (data.state === readerCore.PageState.OPEN_BOOK_FAIL) {
+        hilog.info(0x0000, 'testTag', '检测到PAGE_OUT_OF_RANGE状态，跳转到精彩书评页面');
+        this.handleSwipeToReview();
+      }
+    });
+    this.hasTriggeredReviewNavigation = false;
+    hilog.info(0x0000, 'testTag', '阅读器预处理完成，重置跳转标志位');
+    this.registerPageShowListener();
+  }
+
+  private registerPageShowListener(): void {
+    this.readerComponentController.off('pageShow');
+    this.readerComponentController.off('resourceRequest');
+    hilog.info(0x0000, 'testTag', '重新注册阅读器事件监听器');
+
+    this.readerComponentController.on('resourceRequest', this.resourceRequest);
+    this.readerComponentController.on('pageShow', (data: readerCore.PageDataInfo): void => {
+      hilog.info(0x0000, 'testTag', 'pageshow: data is: ' + JSON.stringify(data));
+
+      if (data.state === readerCore.PageState.PAGE_ON_SHOW) {
+        this.isLoading = false;
+        let spineItem = this.spineList[data.resourceIndex]
+        let catalogItem = this.catalogItemList.filter(item => item.resourceFile === spineItem.href)
+        this.curChapterId = catalogItem[0].catalogId
+
+        // 更新最后一页状态
+        this.updateLastPageStatus(data);
+
+        if (this.lockedStatus[this.curChapterId]) {
+          if (this.userInfo!.continuousBuy && this.userInfo!.bookCoins > this.price) {
+            // 自动购买
+            this.updateBookCoinsAndSave(this.price)
+            this.lockedStatus[this.curChapterId] = false
+          } else {
+            if (!this.isShowBuySheet) {
+              this.isShowBuySheet = true
+              baseActionSheet.show({
+                id: 'buyChapter',
+                title: { title: '购买' },
+                height: SheetSize.FIT_CONTENT,
+                preferType: SheetType.CENTER,
+                customContent: () => {
+                  this.buildBuyChapter(this.curChapterId)
+                },
+                onWillDismiss: (dismissSheetAction: DismissSheetAction) => {
+                  this.isShowBuySheet = false
+                  if (this.lockedStatus[this.curChapterId]) {
+                    this.readerComponentController.startPlay(this.pageData!.resourceIndex, this.pageData!.startDomPos)
+                    dismissSheetAction.dismiss();
+                  }
+                }
+              })
+            }
+          }
+        } else {
+          this.pageData = data
+        }
+      } else if (data.state === readerCore.PageState.OPEN_BOOK_FAIL) {
+        hilog.info(0x0000, 'testTag', '检测到OPEN_BOOK_FAIL状态，判断是否为最后一页');
+        this.handlePageOutOfRange(data);
       }
     });
   }
 
+  private updateLastPageStatus(data: readerCore.PageDataInfo): void {
+    if (this.spineList && this.spineList.length > 0) {
+      // 判断是否在最后一个spine
+      this.isLastPage = data.resourceIndex >= this.spineList.length - 1;
+      hilog.info(0x0000, 'testTag', `当前页面索引: ${data.resourceIndex}, 总页面数: ${this.spineList.length}, 是否最后一页: ${this.isLastPage}`);
+    }
+  }
+
+  // 处理页面越界
+  private handlePageOutOfRange(data: readerCore.PageDataInfo): void {
+    if (!this.pageData) {
+      hilog.warn(0x0000, 'testTag', '当前页面数据为空，无法判断页面位置');
+      return;
+    }
+    const currentIndex = this.pageData.resourceIndex;
+    const totalSpines = this.spineList.length;
+    hilog.info(0x0000, 'testTag',
+      `页面越界检测: 当前索引=${currentIndex}, 总数=${totalSpines}, 是否已触发跳转=${this.hasTriggeredReviewNavigation}, 是否正在跳转=${this.isNavigatingToReview}`);
+    // 最后一页判断：
+    if (currentIndex >= totalSpines - 1 && !this.hasTriggeredReviewNavigation && !this.isNavigatingToReview) {
+      hilog.info(0x0000, 'testTag', '确认为最后一页左滑，跳转到精彩书评页面');
+      this.hasTriggeredReviewNavigation = true;
+      this.handleSwipeToReview();
+    } else if (currentIndex < totalSpines - 1) {
+      hilog.info(0x0000, 'testTag', `非最后一页的OPEN_BOOK_FAIL，当前索引=${currentIndex}，忽略跳转`);
+    } else if (this.hasTriggeredReviewNavigation) {
+      hilog.info(0x0000, 'testTag', '已经触发过跳转，忽略此次OPEN_BOOK_FAIL');
+    } else if (this.isNavigatingToReview) {
+      hilog.info(0x0000, 'testTag', '正在跳转过程中，忽略此次OPEN_BOOK_FAIL');
+    } else {
+      hilog.info(0x0000, 'testTag', '其他原因导致跳转被忽略');
+    }
+  }
+
   async startPlay() {
     try {
+      this.reminderTime = this.userInfo!.reminderTime
       let spineIndex: number = 0
       let domPos: string = '';
       if (this.pageData) {
@@ -223,17 +384,60 @@ export struct ReaderPage {
     this.readerComponentController.off('resourceRequest');
     this.readerComponentController.off('pageShow');
     this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT)
-    // 退出需要释放阅读器实例
-    this.readerComponentController.releaseBook();
+
+    // 如果是跳转到精彩书评页面，则不释放阅读器实例
+    if (!this.isNavigatingToReview) {
+      // 退出需要释放阅读器实例
+      this.readerComponentController.releaseBook();
+    }
     this.notFullScreen()
   }
 
   setFullScreen() {
+    if(this.userInfo?.fullScreen) {
     this.windowClass.setWindowSystemBarEnable([]);
+    }
   }
 
   notFullScreen() {
-    this.windowClass.setWindowSystemBarEnable(['status', 'navigation']);
+      this.windowClass.setWindowSystemBarEnable(['status', 'navigation']);
+  }
+
+  onAccept() {
+    Logger.info('Accepted');
+    this.dialogController.close()
+    this.initTimer()
+  }
+
+  initTimer() {
+    if(this.reminderTime>0){
+      this.timerId = setTimeout((() => {
+        this.dialogController.open()
+      }), this.reminderTime * 60 * 1000);
+      Logger.info('Timer is about to start'+ this.timerId)
+    }
+  }
+
+  clearTimer() {
+    Logger.info('Timer has been cleared'+ this.timerId)
+    clearTimeout(this.timerId);
+  }
+
+  private handleSwipeToReview(): void {
+    const currentTime = Date.now();
+    if (currentTime - this.lastSwipeTime < 1000) {
+      return;
+    }
+    this.lastSwipeTime = currentTime;
+    this.isNavigatingToReview = true;
+    promptAction.showToast({
+      message: '已到最后一页，为您推荐精彩书评',
+      duration: 2000
+    });
+    TCRouter.push(Constants.WONDERFUL_REVIEW_ROUTE, {
+      bookName: this.book?.name || '当前书籍',
+      fromCompleted: true
+    });
   }
 
   build() {
@@ -259,6 +463,28 @@ export struct ReaderPage {
               }
               this.readerComponentController.setPageConfig(this.readerSetting)
             })
+            .gesture(
+              PanGesture({ direction: PanDirection.Horizontal })
+                .onActionStart((event: GestureEvent) => {
+                  this.swipeStartX = event.offsetX;
+                  this.hasTriggeredSwipe = false;
+                  hilog.info(0x0000, 'testTag', `手势开始: startX=${this.swipeStartX}, isLastPage=${this.isLastPage}`);
+                })
+                .onActionUpdate((event: GestureEvent) => {
+                  const deltaX = event.offsetX - this.swipeStartX;
+                  if (deltaX < -this.swipeThreshold && this.isLastPage && !this.hasTriggeredSwipe) {
+                    hilog.info(0x0000, 'testTag', `检测到最后一页左滑手势: deltaX=${deltaX}, threshold=${this.swipeThreshold}`);
+                    this.hasTriggeredSwipe = true;
+                    this.handleSwipeToReview();
+                  }
+                })
+                .onActionEnd((event: GestureEvent) => {
+                  hilog.info(0x0000, 'testTag', `手势结束: endX=${event.offsetX}, totalDeltaX=${event.offsetX - this.swipeStartX}`);
+                  // 重置状态
+                  this.hasTriggeredSwipe = false;
+                })
+            )
+
           if (this.showController) {
             Column() {
               ReaderTopCard({ book: this.book })
@@ -283,18 +509,17 @@ export struct ReaderPage {
             .hitTestBehavior(HitTestMode.None)
           } else {
             Row() {
-              TextClock({ timeZoneOffset: -8, controller: this.textClockController })
-                .format('hh:mm')
-
+              if(!this.userInfo?.noTimeBattery){
+                TextClock({ timeZoneOffset: -8, controller: this.textClockController })
+                  .format('hh:mm')
+              }
               Text(`${((this.pageData?.resourceIndex! + 1) / this.spineList.length * 100).toFixed(2)}%`)
-
             }
             .position({ bottom: this.bottomRectHeight })
             .padding({ left: 16, right: 16 })
             .width('100%')
-            .justifyContent(FlexAlign.SpaceBetween)
+            .justifyContent(this.userInfo?.noTimeBattery? FlexAlign.End: FlexAlign.SpaceBetween)
           }
-
 
           Row() {
             Text('加载中...')
@@ -321,15 +546,32 @@ export struct ReaderPage {
       const p = TCRouter.getParams<BookInfo>(Constants.READ_KIT_ROUTER);
       if (p) {
         this.book = p
+        ReviewDataUtil.setCurrentBookInfo(this.book);
       }
     })
     .onWillShow(async () => {
+      if (this.isNavigatingToReview) {
+        this.isNavigatingToReview = false;
+        this.hasTriggeredReviewNavigation = false;
+
+        if (this.bookParserHandler) {
+          this.registerPageShowListener();
+
+          if (this.pageData) {
+            this.readerComponentController.setPageConfig(this.readerSetting);
+            this.readerComponentController.startPlay(this.pageData.resourceIndex, this.pageData.startDomPos);
+          }
+        }
+        return;
+      }
       await this.loadBook()
       await this.preprocess()
       await this.startPlay()
+      this.initTimer()
     })
     .onWillHide(() => {
       this.onWillHide()
+      this.clearTimer()
     })
   }
 }

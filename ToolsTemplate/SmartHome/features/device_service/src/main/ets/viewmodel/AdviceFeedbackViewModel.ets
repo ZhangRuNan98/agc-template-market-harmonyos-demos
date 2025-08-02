@@ -1,4 +1,5 @@
-import { LogUtil, prompt } from 'utils';
+import { prompt } from 'base_apis';
+import { LogUtil } from 'utils';
 
 export class AdviceFeedbackViewMode {
   submit(issue: string, contact: string): boolean {

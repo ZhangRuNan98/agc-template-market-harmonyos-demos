@@ -88,6 +88,7 @@ export struct BookListPage {
         }
       },(item: string) => new Date().toString())
     }
+    .edgeEffect(EdgeEffect.Spring)
     .scrollBar(BarState.Off)
     .listDirection(Axis.Horizontal)
     .padding({ top: 10, left: 18, right: 18 })
@@ -133,7 +134,7 @@ export struct BookListPage {
                 this.bookList(this.books,this.recommendBooks);
               }
             }
-          }.layoutWeight(1).scrollBar(BarState.Off)
+          }.layoutWeight(1).scrollBar(BarState.Off).edgeEffect(EdgeEffect.Spring)
         }
       }
       .width(Constants.FULL_SIZE)

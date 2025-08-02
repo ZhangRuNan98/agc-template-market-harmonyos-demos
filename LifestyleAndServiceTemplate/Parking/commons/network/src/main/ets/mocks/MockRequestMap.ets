@@ -1,70 +1,88 @@
 import { httpsMock } from './HttpRequestApiMock';
 import { promptAction } from '@kit.ArkUI';
-import { FullLoading, Logger } from 'commonlib';
+import { CommonConstants, FullLoading, Logger } from 'common';
 import { BaseResponse } from '../types/BaseResponse';
 import { RequestUrl } from './Constants';
-
-type MockMap = Record<string, (...args: ESObject[]) => Promise<BaseResponse>>;
-
-// 创建 URL 到 Mock 方法的映射对象
-const mockMap: MockMap = {
-  /**
-   * 用户相关
-   */
-  [RequestUrl.URL_USER_LOGIN]: httpsMock.userLogin,
-  [RequestUrl.URL_USER_INFO]: httpsMock.getUserInfo,
-  [RequestUrl.URL_USER_ASSOCIATE]: httpsMock.associateAccount,
-  [RequestUrl.URL_USER_DISASSOCIATE]: httpsMock.disassociateAccount,
-  /**
-   * 用户常用地址
-   */
-  [RequestUrl.URL_ADDRESS_GET]: httpsMock.getCommonAddresses,
-  [RequestUrl.URL_ADDRESS_ADD]: httpsMock.addCommonAddresses,
-  [RequestUrl.URL_ADDRESS_UPDATE]: httpsMock.updateCommonAddresses,
-  [RequestUrl.URL_ADDRESS_DELETE]: httpsMock.deleteCommonAddresses,
-
-  /**
-   * 车牌相关
-   */
-  [RequestUrl.URL_LICENSE_LIST]: httpsMock.getLicenseNumbers,
-  [RequestUrl.URL_LICENSE_DEFAULT_GET]: httpsMock.getDefaultLicenseNumber,
-  [RequestUrl.URL_LICENSE_DEFAULT_SET]: httpsMock.setDefaultLicenseNumber,
-  [RequestUrl.URL_LICENSE_ADD]: httpsMock.addNewLicenseNumber,
-  [RequestUrl.URL_LICENSE_DELETE]: httpsMock.deleteOldLicenseNumber,
-
-  /**
-   * 订单相关
-   */
-  [RequestUrl.URL_ORDER_QUERY]: httpsMock.queryParking,
-  [RequestUrl.URL_ORDER_PAY]: httpsMock.payParking,
-  [RequestUrl.URL_ORDER_LIST]: httpsMock.getAllOrder,
-  [RequestUrl.URL_ORDER_DELETE]: httpsMock.deleteOrder,
-
-  /**
-   * 首页配置
-   */
-  [RequestUrl.URL_BANNER_GET]: httpsMock.getHomePageBanner,
-
-  /**
-   * 车场信息
-   */
-  [RequestUrl.URL_DETAIL_GET]: httpsMock.getParkingDetail,
-};
+import {
+  AddCommonAddressesRequest,
+  AddNewLicenseNumberRequest,
+  DeleteCommonAddressesRequest,
+  DeleteOldLicenseNumberRequest,
+  DeleteOrderRequest,
+  QueryParkingRequest,
+  SetDefaultLicenseNumberRequest,
+  UpdateCommonAddressesRequest,
+} from '../types/AxiosRequestParam';
 
 export async function replaceMockData(url: string | undefined, args: Object): Promise<Object | string> {
-  const arr = Object.entries(mockMap);
-  if (url) {
-    // url严格一致
-    const func = arr.find((item) => url === item[0]);
-    if (func) {
-      const response: BaseResponse = await func[1](args);
-      const delayResponse: BaseResponse = await simulateDelay(response, 500);
-      FullLoading.hideLoading();
-      return Promise.resolve(delayResponse);
-    }
-    return mockErrorHandler('cannot find mock function.');
+  let response: BaseResponse | undefined = undefined;
+  switch (url) {
+    case RequestUrl.URL_USER_LOGIN:
+      response = await httpsMock.userLogin();
+      break;
+    case RequestUrl.URL_USER_INFO:
+      response = await httpsMock.getUserInfo();
+      break;
+    case RequestUrl.URL_USER_ASSOCIATE:
+      response = await httpsMock.associateAccount();
+      break;
+    case RequestUrl.URL_USER_DISASSOCIATE:
+      response = await httpsMock.disassociateAccount();
+      break;
+    case RequestUrl.URL_ADDRESS_GET:
+      response = await httpsMock.getCommonAddresses();
+      break;
+    case RequestUrl.URL_ADDRESS_ADD:
+      response = await httpsMock.addCommonAddresses(args as AddCommonAddressesRequest);
+      break;
+    case RequestUrl.URL_ADDRESS_UPDATE:
+      response = await httpsMock.updateCommonAddresses(args as UpdateCommonAddressesRequest);
+      break;
+    case RequestUrl.URL_ADDRESS_DELETE:
+      response = await httpsMock.deleteCommonAddresses(args as DeleteCommonAddressesRequest);
+      break;
+    case RequestUrl.URL_LICENSE_LIST:
+      response = await httpsMock.getLicenseNumbers();
+      break;
+    case RequestUrl.URL_LICENSE_DEFAULT_GET:
+      response = await httpsMock.getDefaultLicenseNumber();
+      break;
+    case RequestUrl.URL_LICENSE_DEFAULT_SET:
+      response = await httpsMock.setDefaultLicenseNumber(args as SetDefaultLicenseNumberRequest);
+      break;
+    case RequestUrl.URL_LICENSE_ADD:
+      response = await httpsMock.addNewLicenseNumber(args as AddNewLicenseNumberRequest);
+      break;
+    case RequestUrl.URL_LICENSE_DELETE:
+      response = await httpsMock.deleteOldLicenseNumber(args as DeleteOldLicenseNumberRequest);
+      break;
+    case RequestUrl.URL_ORDER_QUERY:
+      response = await httpsMock.queryParking(args as QueryParkingRequest);
+      break;
+    case RequestUrl.URL_ORDER_PAY:
+      response = await httpsMock.payParking();
+      break;
+    case RequestUrl.URL_ORDER_LIST:
+      response = await httpsMock.getAllOrder();
+      break;
+    case RequestUrl.URL_ORDER_DELETE:
+      response = await httpsMock.deleteOrder(args as DeleteOrderRequest);
+      break;
+    case RequestUrl.URL_BANNER_GET:
+      response = await httpsMock.getHomePageBanner();
+      break;
+    case RequestUrl.URL_DETAIL_GET:
+      response = await httpsMock.getParkingDetail();
+      break;
+    default:
+      return mockErrorHandler('cannot find url.');
   }
-  return mockErrorHandler('cannot find url.');
+  if (response) {
+    const delayResponse: BaseResponse = await simulateDelay(response, CommonConstants.SIMULATE_DELAY);
+    FullLoading.hideLoading();
+    return Promise.resolve(delayResponse);
+  }
+  return mockErrorHandler('cannot find mock function.');
 }
 
 function simulateDelay<T>(data: T, delay: number): Promise<T> {

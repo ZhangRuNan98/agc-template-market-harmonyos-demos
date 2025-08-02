@@ -1,4 +1,4 @@
-import { BookInfo } from '../model/Book'
+import { BookInfo } from '../model/Book';
 
 @Builder
 export function bookSingleSwiper(info?: BookInfo) {

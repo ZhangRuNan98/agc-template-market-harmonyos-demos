@@ -57,6 +57,14 @@
     {
       "name": "frontpage",
       "srcPath": "./feature/frontpage",
+    },
+    {
+      "name": "route_detail",
+      "srcPath": "./components/route_detail",
+    },
+    {
+      "name": "route_search",
+      "srcPath": "./components/route_search",
     }
   ]
 }

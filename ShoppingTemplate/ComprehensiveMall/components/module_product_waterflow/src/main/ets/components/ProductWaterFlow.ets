@@ -9,27 +9,38 @@ export struct ProductWaterFlow {
   @Param
   requestType: RequestType = RequestType.DEFAULT;
   @Param
-  categoryId: string | undefined = undefined;
+  categoryId?: string = undefined;
   @Param
-  keywords: string | undefined = undefined;
+  keywords?: string = undefined;
   @Param
   isVertical: boolean = false;
   @Param
   showInitLoading: boolean = false;
   @Param
   bgColor: ResourceColor = Constants.BACKGROUND_COLOR_GREY;
+  @Param
+  customColumnTemplate?: string = undefined
   @Local
   dataList: LazyDataSource<ProductCardItem> = new LazyDataSource();
   @Local
   reachEnd: boolean = false;
   @Local
   isLoading: boolean = false;
+  @Local
+  scrollHeight: number = 0;
+  @Local
+  startBack: boolean = false;
   @Event
   handleProductClick: (id: string) => void;
+  @Event
+  handleBack: () => void;
   scroller: Scroller = new Scroller();
 
   @Computed
   get columnTemplate() {
+    if (this.customColumnTemplate) {
+      return this.customColumnTemplate
+    }
     return this.isVertical ? '1fr' : '1fr 1fr';
   }
 
@@ -39,6 +50,11 @@ export struct ProductWaterFlow {
       return EdgeEffect.Spring;
     }
     return this.reachEnd || this.scroller.isAtEnd() ? EdgeEffect.Spring : EdgeEffect.None;
+  }
+
+  @Computed
+  get showButton() {
+    return this.scrollHeight > 400;
   }
 
   @Monitor('categoryId')
@@ -75,11 +91,11 @@ export struct ProductWaterFlow {
           Column() {
             Image($r('app.media.ic_search_empty'))
               .width(120)
-              .height(120)
+              .height(120);
             Text('暂无搜索结果')
               .fontSize(14)
-              .fontColor(Constants.FONT_COLOR_LEVEL2)
-          }
+              .fontColor(Constants.FONT_COLOR_LEVEL2);
+          };
         } else {
           WaterFlow({
             scroller: this.scroller,
@@ -108,14 +124,48 @@ export struct ProductWaterFlow {
           .onReachEnd(() => {
             this.getDataList();
           })
+          .onScrollStop(() => {
+            this.scrollHeight = this.scroller.currentOffset().yOffset;
+            if (this.scrollHeight === 0 && this.startBack) {
+              this.handleBack?.();
+              this.startBack = false;
+            }
+          })
           .nestedScroll({ scrollForward: NestedScrollMode.PARENT_FIRST, scrollBackward: NestedScrollMode.SELF_FIRST });
+
+          if (this.showButton) {
+            this.backTopButtonBuilder();
+          }
         }
       }
     }
     .width('100%')
     .height('100%')
     .justifyContent(FlexAlign.Center);
+  }
 
+  @Builder
+  backTopButtonBuilder() {
+    if (this.showButton) {
+      Image($r('app.media.ic_back_top_button'))
+        .width(40)
+        .height(40)
+        .position({
+          right: 16,
+          bottom: 56,
+        })
+        .onClick(() => {
+          this.startBack = true;
+          this.scroller.scrollTo({
+            xOffset: 0,
+            yOffset: 0,
+            animation: {
+              curve: Curve.Linear,
+              duration: 500,
+            },
+          });
+        });
+    }
   }
 
   @Builder
@@ -155,8 +205,7 @@ export struct ProductWaterFlow {
       .alignItems(HorizontalAlign.Start)
       .justifyContent(FlexAlign.Start)
       .padding(8)
-      .height('100%')
-
+      .height('100%');
     }
     .height(100)
     .clip(true)
@@ -273,7 +322,6 @@ export struct ProductWaterFlow {
         default:
           break;
       }
-
       if (res) {
         const newData: ProductCardItem[] = res.list;
         this.reachEnd = res.isFinal;

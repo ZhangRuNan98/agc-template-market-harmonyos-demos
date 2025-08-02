@@ -1,6 +1,6 @@
-import { AccountUtil, RouterModule, UserInfoModel } from 'commonlib';
-import { SETTING_LIST } from '../constants';
-import { SettingItem } from '../types';
+import { AccountUtil, RouterModule, UserInfoModel } from 'common';
+import { SETTING_LIST } from '../constants/Constants';
+import { SettingItem } from '../types/Types';
 import { promptAction } from '@kit.ArkUI';
 
 @ObservedV2

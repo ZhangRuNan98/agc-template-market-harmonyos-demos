@@ -8,8 +8,9 @@
   "packageType": "InterfaceHar",
   "dependencies": {
     "@hw-agconnect/ui-base": "^1.0.0",
-    "commonlib": "file:../../commons/commonlib",
-    "componentlib": "file:../../commons/componentlib",
-    "network": "file:../../commons/network",
+    "module_base": "file:../../components/module_base",
+    "lib_foundation": "file:../../commons/lib_foundation",
+    "module_line_chart": "file:../../components/module_line_chart",
+    "module_product_list": "file:../../components/module_product_list"
   }
 }

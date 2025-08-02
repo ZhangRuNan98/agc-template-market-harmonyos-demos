@@ -1,0 +1,38 @@
+<svg width="48.000000" height="48.000000" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs>
+		<filter id="filter_9_486_dd" x="8.000000" y="7.000000" width="29.830353" height="27.929260" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+			<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+			<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+			<feOffset dx="0" dy="1"/>
+			<feGaussianBlur stdDeviation="0.333333"/>
+			<feComposite in2="hardAlpha" operator="out" k2="-1" k3="1"/>
+			<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+			<feBlend mode="normal" in2="BackgroundImageFix" result="effect_dropShadow_1"/>
+			<feBlend mode="normal" in="SourceGraphic" in2="effect_dropShadow_1" result="shape"/>
+		</filter>
+		<filter id="filter_9_494_dd" x="13.118958" y="29.000000" width="26.806549" height="13.071533" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+			<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+			<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+			<feOffset dx="0" dy="1"/>
+			<feGaussianBlur stdDeviation="0.333333"/>
+			<feComposite in2="hardAlpha" operator="out" k2="-1" k3="1"/>
+			<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+			<feBlend mode="normal" in2="BackgroundImageFix" result="effect_dropShadow_1"/>
+			<feBlend mode="normal" in="SourceGraphic" in2="effect_dropShadow_1" result="shape"/>
+		</filter>
+		<linearGradient x1="24.000000" y1="0.000000" x2="24.000000" y2="48.000000" id="paint_linear_9_475_0" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#6BC19F"/>
+			<stop offset="0.979569" stop-color="#73D5A9" stop-opacity="0.631373"/>
+		</linearGradient>
+	</defs>
+	<rect rx="16.000000" width="48.000000" height="48.000000" fill="url(#paint_linear_9_475_0)" fill-opacity="1.000000"/>
+	<g filter="url(#filter_9_486_dd)">
+		<path d="M9.51 21.52C8.96 20.98 8.83 20.24 9.22 19.87L21.65 7.79C21.8 7.57 21.99 7.39 22.21 7.25L22.25 7.21C22.42 7.04 22.65 6.98 22.91 7C23.17 6.98 23.4 7.04 23.57 7.21L23.61 7.25C23.73 7.32 23.84 7.41 23.94 7.51C24.02 7.6 24.1 7.69 24.17 7.79L36.61 19.87C36.99 20.24 36.86 20.98 36.31 21.52C35.77 22.06 35.02 22.2 34.63 21.82L22.91 10.44L11.19 21.82C10.8 22.2 10.05 22.06 9.51 21.52ZM13.29 22.03L23.09 12.76L32.53 22.03L32.53 27.04L30.62 27.04L26.03 30.72L25.49 30.72L25.49 24.73L20.26 24.73L20.26 32.92L13.29 32.92L13.29 22.03Z" fill="#FFFFFF" fill-opacity="1.000000" fill-rule="nonzero"/>
+	</g>
+	<g filter="url(#filter_9_494_dd)">
+		<path d="M38.92 34.08L35.28 34.06C35.28 34.06 28.22 39.89 27.2 39.99C26.19 40.1 15.97 40.06 15.97 40.06C15.97 40.06 14.17 40.06 14.12 38.5C14.06 37.77 14.42 36.86 15.01 36.82L22.15 36.83C22.15 36.83 22.6 36.91 22.93 37.39C23.27 37.85 24.07 38.07 24.58 38.07C25.08 38.07 26.05 37.9 26.58 37.33C27.23 36.65 29.89 34.43 30.19 33.93C30.48 33.43 30.16 33.06 29.47 33.23C28.78 33.4 25.93 37.61 24.47 36.95C23.17 36.36 23.74 35.34 24.21 34.83C24.69 34.33 28.69 29.9 30.05 29.23C30.37 29.11 30.78 28.98 31.25 29C31.73 29.01 38.92 29 38.92 29L38.92 34.08Z" fill="#C4EFE1" fill-opacity="1.000000" fill-rule="nonzero"/>
+	</g>
+</svg>

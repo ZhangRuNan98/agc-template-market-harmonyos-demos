@@ -13,13 +13,18 @@ export struct AccountCard {
     emitter.on(Constants.LOGIN_CHANGE, () => {
       this.loadUserInfo();
     });
-
+    emitter.on(Constants.COINS_CHANGE,()=>{
+      this.loadUserInfo();
+    })
+    emitter.on(Constants.COINS_AD, () => {
+      this.loadUserInfo();
+    })
   }
 
   loadUserInfo() {
     const userInfoFromStorage: UserInfo = AppStorage.get('userInfo') as UserInfo;
     if (userInfoFromStorage) {
-      this.bookCoins = userInfoFromStorage.bookCoins || 100;
+      this.bookCoins = typeof userInfoFromStorage.bookCoins === 'number' ? userInfoFromStorage.bookCoins : 100;
       this.isLogin = true;
     } else {
       this.bookCoins = 0;
@@ -31,7 +36,8 @@ export struct AccountCard {
   updateBookCoins(amount: number) {
     const userInfoFromStorage: UserInfo = AppStorage.get('userInfo') as UserInfo;
     if (userInfoFromStorage) {
-      userInfoFromStorage.bookCoins = (userInfoFromStorage.bookCoins || 100) + amount;
+      const currentCoins = typeof userInfoFromStorage.bookCoins === 'number' ? userInfoFromStorage.bookCoins : 100;
+      userInfoFromStorage.bookCoins = currentCoins + amount;
       AppStorage.setOrCreate('userInfo', userInfoFromStorage);
       AppStorage.setOrCreate('bookCoins', userInfoFromStorage.bookCoins);
       this.loadUserInfo();

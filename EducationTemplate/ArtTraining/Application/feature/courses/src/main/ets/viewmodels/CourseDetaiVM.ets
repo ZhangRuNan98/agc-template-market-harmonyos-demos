@@ -43,4 +43,3 @@ export class CourseDetailVM {
     FrameworkUtil.backToHome();
   }
 }
-

@@ -1,16 +1,7 @@
-import { Logger, PreferencesUtil } from 'commonlib';
+import { AppStorageV2 } from '@kit.ArkUI';
+import { Logger, PreferencesUtil, WindowModel } from 'commonlib';
 import { SetFontSizeUtil } from '../utils/SetFontSizeUtil';
 import { MainPageVM } from '../viewModels/MainPageVM';
-
-class NewsData{
-  title:string=''
-  content:string=''
-  image?: Resource
-  comment:string=''
-  good:boolean=false
-  collect:boolean=false
-  share:number=0
-}
 
 @Builder
 export function setFontSizeBuilder() {
@@ -20,12 +11,10 @@ export function setFontSizeBuilder() {
 @ComponentV2
 export struct SetFontSize {
   vm: MainPageVM = MainPageVM.instance;
-  @Local message: string = 'Hello World';
-  @Local time: string = '2小时前'
-  @Local newsData: NewsData = new NewsData();
   private arr: number[] = [0, 1, 2];
   private initSize: number = 14;
 
+  windowModel: WindowModel = AppStorageV2.connect(WindowModel, () => new WindowModel())!;
 
   aboutToAppear() {
     PreferencesUtil.getChangeFontSize().then((value:number) => {
@@ -34,60 +23,6 @@ export struct SetFontSize {
       this.vm.fontSizeText = SetFontSizeUtil.getTextByFontSize(setZSize);
       Logger.info('setfontsize', 'Get the value of changeFontSize: ' + this.vm.changeFontSize);
     });
-  }
-
-  @Builder
-  Title() {
-    Row() {
-      Row() {
-        Image($r('app.media.chevron_backward')).width(9).height(16)
-          .margin({ left: 30, top: 48, bottom: 18})
-          .onClick(() => {
-          })
-      }.justifyContent(FlexAlign.Start)
-      .width('10%')
-    }
-    .width('100%')
-    .backgroundColor('#E84026')
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
-  }
-
-  @Builder
-  Comment() {
-    Column() {
-      Row() {
-        Text(this.newsData.comment||'这篇文章写得好，点赞！')
-      }.width('100%')
-      .justifyContent(FlexAlign.Start)
-      .margin({ bottom:10 })
-
-      Row(){
-        Text('【新闻】').margin({left:4}).fontSize(15).fontWeight(FontWeight.Medium)
-        Text(this.newsData.title||'新闻标题').fontSize(15).fontWeight(FontWeight.Medium)
-      }
-      .justifyContent(FlexAlign.Start)
-      .width('100%')
-      .margin({bottom:16})
-
-      Row(){
-        Text(this.time).fontSize(12).fontWeight(FontWeight.Regular).fontColor(Color.Gray)
-      }
-      .justifyContent(FlexAlign.Start)
-      .width('100%')
-      .margin({bottom:16})
-
-      Divider().strokeWidth(1)
-    }
-    .margin({ left: 16,top:16,right:16 })
-  }
-
-  @Builder
-  Comments() {
-    List() {
-      ListItem() {
-        this.Comment()
-      }
-    }
   }
 
   build() {
@@ -105,7 +40,7 @@ export struct SetFontSize {
                         .objectFit(ImageFit.ScaleDown)
                       Text('特朗普将封禁DeepSeek？外交部给出回应')
                         .fontSize(`${16 + this.vm.changeFontSize}`)
-                        .fontColor('#000000')
+                        .fontColor($r('app.color.news_title_fontColor'))
                         .layoutWeight(1)
                         .maxLines(1)
                         .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -120,7 +55,7 @@ export struct SetFontSize {
                       Text('习惯了城市生活的我们，或许去海边进行一趟旅行，可以缓解疲劳的心情')
                         .fontSize(`${14 + this.vm.changeFontSize}`)
                         .lineHeight(`${18 + this.vm.changeFontSize}`)
-                        .fontColor('#000000')
+                        .fontColor($r('app.color.news_content_fontColor'))
                         .width('100%')
                         .maxLines(2)
                         .margin({ top: 10 })
@@ -164,10 +99,10 @@ export struct SetFontSize {
           .layoutWeight(1)
         Text(this.vm.fontSizeText)
           .fontSize(14)
-          .fontColor('#182431')
+          .fontColor($r('app.color.news_content_fontColor'))
         Row() {
           Text('A')
-            .fontColor('#182431')
+            .fontColor($r('app.color.news_content_fontColor'))
             .fontSize(20)
             .fontWeight(FontWeight.Medium)
             .textAlign(TextAlign.End)
@@ -187,9 +122,10 @@ export struct SetFontSize {
               this.vm.fontSizeText = SetFontSizeUtil.getTextByFontSize(value);
               this.vm.changeFontSize = value - this.initSize;
               PreferencesUtil.saveChangeFontSize(this.vm.changeFontSize);
+              this.windowModel.fontSize = this.vm.changeFontSize
             })
           Text('A')
-            .fontColor('#182431')
+            .fontColor($r('app.color.news_content_fontColor'))
             .fontSize(24)
             .fontWeight(FontWeight.Bold)
             .width('12.5%')
@@ -197,7 +133,7 @@ export struct SetFontSize {
         }
       }
       .width('100%')
-      .backgroundColor(Color.White)
+      .backgroundColor($r('app.color.bgc'))
       .borderRadius(24)
       .width('93.3%')
       .padding({ top: 16, bottom: 21 })

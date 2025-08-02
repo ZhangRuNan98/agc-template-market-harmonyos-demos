@@ -1,7 +1,5 @@
-import prompt from '@ohos.prompt';
-import { SearchSet } from '../model/commonInterface';
+import { promptAction, SymbolGlyphModifier } from '@kit.ArkUI'
 import { RouteEntryVM } from '../utils/RouteEntryVM';
-import { promptAction, SymbolGlyphModifier } from '@kit.ArkUI';
 
 @Builder
 export function SpecificContentSearchBuilder() {
@@ -79,7 +77,7 @@ export struct SpecificContentSearch {
     .backgroundColor($r('app.color.background_color_white'))
     .width('100%')
     .scrollBar(BarState.Off)
-    .edgeEffect(EdgeEffect.None)
+    .edgeEffect(EdgeEffect.Spring)
     .alignListItem(ListItemAlign.Start)
     .divider({
       strokeWidth: 1,

@@ -1,7 +1,5 @@
-import { routerStack } from 'lib_foundation';
-import { OrderCardDto, OrderCardVM } from '../http/Type';
-import { common } from '@kit.AbilityKit';
-import { paymentService } from '@kit.PaymentKit';
+import { OrderCardDto} from 'lib_foundation';
+import { AddressModel, OrderCardVM } from '../http/Type';
 import { OrderApi } from '../http/Api';
 
 @ObservedV2
@@ -29,7 +27,7 @@ export class OrderSearchPageVM {
           card.logisticsInfo = cards[i].logisticsInfo;
           card.totalPrice = cards[i].totalPrice;
           card.remainingTime = cards[i].remainingTime ?? '';
-          card.address = cards[i].address;
+          card.address = cards[i].address as AddressModel;
           card.remark = cards[i].remark;
           card.refundTime = cards[i].refundTime ?? '';
           orderCards.push(card);

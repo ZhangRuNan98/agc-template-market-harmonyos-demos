@@ -1,5 +1,4 @@
 import { Constants, TCRouter } from 'common';
-import { TextReader } from '@kit.SpeechKit';
 import { BookHomePage } from './BookHomePage';
 import {
   AboutPage,
@@ -8,10 +7,6 @@ import {
   LibraryPage,
   LoginPage,
   PrivacyPage,
-  MemberCenterPage,
-  MemberAgreementPage,
-  RechargePage,
-  RechargeRecordPage,
   SettingPage,
   AccountPage,
   PreferencePage,
@@ -20,12 +15,19 @@ import {
   FeedbackRecordPage,
   IssueAndFeedbackPage,
   PrivacyPolicyPage,
+  WelfareCenter,
   DataCollectionPage,
-  DataSharingPage
+  DataSharingPage,
+  ReadSettingPage,
+  messagePage,
+  MemberCenterPage,
+  MemberAgreementPage,
+  RechargePage,
+  RechargeRecordPage,
 } from 'book_person';
-import { BookShelfPage } from 'book_shelf';
+import { BookGroupContent, BookShelfPage } from 'book_shelf';
 import { BookListPage, BookViewListPage, SearchPage } from 'book_home';
-import { ReaderPage } from 'book_read_kit';
+import { ReaderPage,WriteReviewPage, WriteCommentPage, WonderfulReviewPage, MyReviewPage } from 'book_read_kit';
 
 
 @Entry
@@ -33,6 +35,15 @@ import { ReaderPage } from 'book_read_kit';
 struct Index {
   aboutToAppear(): void {
     TCRouter.replace(Constants.HOME_ROUTER);
+    this.pushKitRouter()
+  }
+
+  pushKitRouter(){
+    if (AppStorage.get('takeMessage')===1) {
+      TCRouter.push(Constants.MESSAGE_PAGE_ROUTE)
+      AppStorage.setOrCreate('takeMessage',0)
+      AppStorage.setOrCreate('inMessagePage',1)
+    }
   }
 
   @Builder
@@ -85,10 +96,28 @@ struct Index {
       RechargePage();
     } else if (name === Constants.RECHARGE_RECORD_ROUTE) {
       RechargeRecordPage();
+    } else if (name === Constants.WELFARE_CENTER) {
+      WelfareCenter()
     } else if (name === Constants.DATA_COLLECTION_ROUTE) {
       DataCollectionPage();
     } else if (name === Constants.DATA_SHARING_ROUTE) {
       DataSharingPage();
+    } else if (name === Constants.READ_SETTING_ROUTE) {
+      ReadSettingPage();
+    } else if (name === Constants.WRITE_REVIEW_ROUTE) {
+      WriteReviewPage();
+    } else if (name === Constants.ALL_REVIEW_ROUTE) {
+      WriteReviewPage();
+    } else if (name === Constants.WRITE_COMMENT_ROUTE) {
+      WriteCommentPage();
+    } else if (name === Constants.WONDERFUL_REVIEW_ROUTE) {
+      WonderfulReviewPage();
+    } else if (name === Constants.MY_EVALUATION_ROUTE) {
+      MyReviewPage();
+    } else if (name === Constants.MESSAGE_PAGE_ROUTE) {
+      messagePage();
+    } else if (name === Constants.GROUP_ROUTE) {
+      BookGroupContent();
     }
   }
 

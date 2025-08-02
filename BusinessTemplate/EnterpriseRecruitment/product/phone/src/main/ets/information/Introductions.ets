@@ -2,6 +2,7 @@ import { Article } from './clazz/Article';
 import {
   CommonConstants
 } from '@ohos_agcit/common_component';
+import { router } from '@kit.ArkUI';
 
 @ComponentV2
 export struct Introductions {
@@ -20,6 +21,12 @@ export struct Introductions {
       ForEach(this.articleList, (item: Article) => {
         ArticleCard({ article: item })
           .margin({ bottom: 12 })
+          .onClick(() => {
+            router.pushUrl({
+              url: 'pages/homepage/CompanyIntroduction',
+              params: item.title
+            }, router.RouterMode.Standard)
+          })
       }, (item: Article) => item.id)
     }
     .width('100%')
@@ -60,6 +67,7 @@ struct ArticleCard {
               .borderRadius(16)
           }
         }  .listDirection(Axis.Horizontal)
+        .edgeEffect(EdgeEffect.Spring)
         .scrollBar(BarState.Off)
 
 

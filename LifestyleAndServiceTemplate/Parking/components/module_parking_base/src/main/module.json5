@@ -1,0 +1,19 @@
+{
+  "module": {
+    "name": "module_parking_base",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.LOCATION",
+        "reason": "$string:location_reason",
+      },
+      {
+        "name": "ohos.permission.APPROXIMATELY_LOCATION",
+        "reason": "$string:approximately_location_reason",
+      }
+    ]
+  }
+}

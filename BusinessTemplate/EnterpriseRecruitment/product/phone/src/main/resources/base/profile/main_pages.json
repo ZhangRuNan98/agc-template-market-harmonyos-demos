@@ -10,8 +10,13 @@
     "pages/mine/MyDelivery",
     "pages/mine/ResumeManagement",
     "pages/mine/QuickLoginPage",
-    "pages/mine/PersonalInformation",
     "pages/mine/AvatarUpload",
-    "pages/mine/RenamePage"
+    "pages/homepage/CompanyIntroduction",
+    "pages/mine/my_message/MyMessage",
+    "pages/mine/my_message/MessageDetail",
+    "pages/mine/my_message/JobDetail",
+    "pages/mine/PersonalInfo",
+    "pages/mine/PersonalSetting",
+    "pages/mine/PrivacyAgreement"
   ]
 }

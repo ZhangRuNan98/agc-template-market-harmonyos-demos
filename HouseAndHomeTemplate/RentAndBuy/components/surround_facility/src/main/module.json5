@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "surround_facility",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ],
+    "routerMap": "$profile:router_map"
+  }
+}

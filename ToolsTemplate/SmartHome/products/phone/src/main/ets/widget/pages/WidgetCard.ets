@@ -1,12 +1,13 @@
+import { faceDetector } from '@kit.CoreVisionKit';
 
 const local = new LocalStorage();
 
 @Entry(local)
 @Component
 struct WidgetCard {
-  @LocalStorageProp('deviceId') deviceId: string = '';
+  @LocalStorageProp('deviceId') deviceId: string = '111';
   @LocalStorageProp('deviceImage') deviceImage: string = '';
-  @LocalStorageProp('deviceName') deviceName: string = '';
+  @LocalStorageProp('deviceName') deviceName: string = '模拟灯';
   @LocalStorageProp('isDeleted') isDeleted: boolean = false;
 
   build() {

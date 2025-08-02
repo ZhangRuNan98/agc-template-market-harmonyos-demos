@@ -11,7 +11,9 @@
     "device_service": "file:../../features/device_service",
     "utils": "file:../../commons/utils",
     "uicomponents": "file:../../commons/uicomponents",
-    "external_interactions": "file:../../commons/external_interactions"
+    "external_interactions": "file:../../commons/external_interactions",
+    "form_bar": "file:../../components/form_bar",
+    "bluetooth_scan": "file:../../components/bluetooth_scan"
   }
 }
 

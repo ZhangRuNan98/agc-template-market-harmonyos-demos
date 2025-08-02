@@ -3,6 +3,7 @@ import { Constants, FeedbackItem, FeedbackItemType, ReturnButton,FeedbackRecord,
 import { image } from '@kit.ImageKit';
 import { fileSelect } from '../comp/FileSelect';
 import { AppStorageV2 } from '@kit.ArkUI';
+import { Logger } from '@hw-agconnect/ui-base';
 
 @ComponentV2
 export struct FeedbackPage {
@@ -104,6 +105,7 @@ export struct FeedbackPage {
               }
             }
           }
+          .edgeEffect(EdgeEffect.Spring)
         }
         .width('100%')
         .height(104)
@@ -186,7 +188,7 @@ export struct FeedbackPage {
     .height(20)
     .justifyContent(FlexAlign.SpaceBetween)
     .onClick(async ()=>{
-      console.log(`${currentCharNum}${title}${this.issueCharNum}`)
+      Logger.info(`${currentCharNum}${title}${this.issueCharNum}`)
     })
   }
 

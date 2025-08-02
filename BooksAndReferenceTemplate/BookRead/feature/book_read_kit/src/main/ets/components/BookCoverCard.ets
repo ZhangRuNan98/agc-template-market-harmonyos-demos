@@ -1,42 +1,343 @@
-import { BookApi, BookInfo, Constants, NavHeaderBar } from 'common';
-import { promptAction } from '@kit.ArkUI';
-
+import { BookApi, BookInfo, Constants, NavHeaderBar, TCRouter, GroupBook } from 'common';
+import { ReviewDataUtil } from '../utils/ReviewDataUtil';
+import { ReviewInfo } from '../model/ReviewModels';
 
 @ComponentV2
 export struct BookCoverCard {
   @Param @Require book: BookInfo;
   @Local isAddSuccess: boolean = false;
+  @Local wonderfulReviews: ReviewInfo[] = [];
 
   async aboutToAppear(): Promise<void> {
-    const rsp = await BookApi.getBooksShelfList('favBooks', Constants.API_GET_BOOK_FAVOURITE_PATH, '');
-    let books: BookInfo[] = rsp.books;
+    const rsp = await BookApi.getBooksShelfGroup('favBooks', Constants.API_GET_BOOK_FAVOURITE_PATH, '');
+    let books: GroupBook[] = rsp.books;
     books.forEach((book) => {
-      if (book.id === this.book.id) {
+      let index = book?.groupBooks?.findIndex(book => this.book.id === book.id)
+      if (book?.singleBook?.id === this.book.id || index !== -1) {
         this.isAddSuccess = true;
         return;
       }
     });
+    ReviewDataUtil.setCurrentBookInfo(this.book);
+    this.wonderfulReviews = ReviewDataUtil.getWonderfulReviews().slice(0, 2);
   }
 
-  async addBook2Shelf(isAdd: boolean, toast: ResourceStr) {
-    const rsp = await BookApi.getBooksShelfList('favBooks', Constants.API_GET_BOOK_FAVOURITE_PATH, '');
-    let books: BookInfo[] = rsp.books;
-    if (isAdd) {
-      books.push(this.book);
-      AppStorage.set('favBooks', books);
-      this.isAddSuccess = true;
-    } else {
-      let index = books.findIndex(book => this.book.id === book.id)
-      if (index !== -1) {
-        books.splice(index, 1);
-        this.isAddSuccess = false;
-      }
-      AppStorage.set('historyBooks', books)
+  // 获取付费状态文本
+  getFreeText(isFree?: string): ResourceStr {
+    switch (isFree) {
+      case '0':
+        return $r('app.string.free');
+      case '1':
+        return $r('app.string.member');
+      case '2':
+        return $r('app.string.paid');
+      default:
+        return $r('app.string.free');
     }
-    promptAction.showToast({
-      message: toast,
-      duration: 2000
-    });
+  }
+
+  // 获取付费状态颜色
+  getFreeColor(isFree?: string): ResourceStr {
+    switch (isFree) {
+      case '0':
+        return $r('sys.color.ohos_id_color_palette4');
+      case '1':
+        return $r('sys.color.ohos_id_color_palette10');
+      case '2':
+        return $r('sys.color.ohos_id_color_badge_red');
+      default:
+        return $r('sys.color.ohos_id_color_palette4');
+    }
+  }
+
+  // 获取书籍状态文本
+  getStatusText(status?: string): ResourceStr {
+    switch (status) {
+      case '0':
+        return $r('app.string.no_completed');
+      case '1':
+        return $r('app.string.completed');
+      default:
+        return $r('app.string.no_completed');
+    }
+  }
+
+  // 构建星级评分组件
+  @Builder
+  buildStarRating(rating: number) {
+    Row() {
+      ForEach(Array.from<number, number>({ length: 5 }, (_, index) => index + 1), (star: number) => {
+        Image($r('app.media.ic_public_star'))
+          .width(12)
+          .height(12)
+          .margin({ right: 2 })
+          .fillColor(star <= rating ? '#FFD700' : '#E0E0E0')
+      })
+    }
+  }
+
+  // 书籍信息
+  @Builder
+  buildBookInfoCard() {
+    Column() {
+      Row() {
+        Stack() {
+          Image($r(this.book.coverUrl?.toString()))
+            .width(104)
+            .height(144)
+            .objectFit(ImageFit.Cover)
+            .borderRadius(8)
+
+          Text(this.getFreeText(this.book.isFree))
+            .fontSize(10)
+            .fontColor(Color.White)
+            .textAlign(TextAlign.Center)
+            .height(20)
+            .width(35)
+            .backgroundColor(this.getFreeColor(this.book.isFree))
+            .borderRadius(10)
+            .position({ x: 69, y: 0 })
+        }
+        .margin({ right: 16 })
+
+        Column() {
+          Text(this.book.name)
+            .fontSize(14)
+            .lineHeight(19)
+            .fontFamily('HarmonyHeiTi')
+            .fontWeight(FontWeight.Medium)
+            .fontColor('#E5000000')
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .width('100%')
+            .textAlign(TextAlign.Start)
+
+          Row({ space: 4 }) {
+            Text(this.book.author + ' ' + '著')
+              .fontSize(12)
+              .fontColor('#99000000')
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
+          .margin({ top: 8 })
+          .width('100%')
+          .alignItems(VerticalAlign.Top)
+
+          Row({ space: 4 }) {
+            Text(this.getStatusText(this.book.status))
+              .fontSize(12)
+              .fontColor('#99000000')
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
+          .margin({ top: 4 })
+          .width('100%')
+          .alignItems(VerticalAlign.Top)
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+      }
+      .width('100%')
+      .alignItems(VerticalAlign.Top)
+
+      Row({ space: 50 }) {
+        Column({ space: 5 }) {
+          Row() {
+            Text(this.book.rate)
+              .fontSize(16)
+              .fontColor('#E5000000')
+            Text(' ')
+            Text($r('app.string.rating_point'))
+              .fontSize(12)
+              .fontColor('#99000000')
+          }
+
+          Text($r('app.string.rating'))
+            .fontSize(12)
+            .fontColor('#99000000')
+        }
+
+        Column({ space: 5 }) {
+          Row() {
+            Text(this.book.count)
+              .fontSize(16)
+              .fontColor('#E5000000')
+            Text(' ')
+            Text($r('app.string.ten_thousand_words'))
+              .fontSize(12)
+              .fontColor('#99000000')
+          }
+
+          Text($r('app.string.publishing_house'))
+            .fontSize(12)
+            .fontColor('#99000000')
+        }
+
+        Column({ space: 5 }) {
+          Row() {
+            Text(this.book.popular)
+              .fontSize(16)
+              .fontColor('#E5000000')
+            Text(' ')
+              .fontSize(12)
+              .fontColor('#99000000')
+            Text($r('app.string.ten_thousand'))
+              .fontSize(12)
+              .fontColor('#99000000')
+          }
+
+          Text($r('app.string.popular'))
+            .fontSize(12)
+            .fontColor('#99000000')
+        }
+      }
+      .width('100%')
+      .justifyContent(FlexAlign.Center)
+      .margin({ top: 24 })
+    }
+    .width(328)
+    .height(233)
+    .backgroundColor('#FFFFFF')
+    .borderRadius(16)
+    .padding(16)
+    .alignItems(HorizontalAlign.Start)
+  }
+
+  @Builder
+  buildBookDescriptionCard() {
+    Column() {
+      Text($r('app.string.briefly'))
+        .fontSize(16)
+        .lineHeight(21)
+        .fontFamily('HarmonyHeiTi')
+        .fontWeight(FontWeight.Medium)
+        .fontColor('#E5000000')
+        .margin({ bottom: 12 })
+        .width('100%')
+        .textAlign(TextAlign.Start)
+
+      // 添加分割线
+      Divider()
+        .strokeWidth(0.5)
+        .color('#1A000000')
+        .margin({ bottom: 12 })
+
+      Text(this.book.description || $r('app.string.no_briefly'))
+        .fontSize(12)
+        .lineHeight(20)
+        .fontColor('#E5000000')
+        .maxLines(3)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .width('100%')
+
+      Blank()
+      // 书籍类别标签
+      Row() {
+        Text(this.book.category || $r('app.string.no_classify'))
+          .fontSize(14)
+          .fontFamily('HarmonyHeiTi')
+          .fontWeight(400)
+          .letterSpacing(0)
+          .textAlign(TextAlign.Center)
+          .fontColor('rgba(0, 0, 0, 0.9)')
+          .padding({ left: 12, right: 12 })
+      }
+      .width(76)
+      .height(28)
+      .backgroundColor('rgba(0, 0, 0, 0.05)')
+      .borderRadius(14)
+      .justifyContent(FlexAlign.Center)
+    }
+    .width(328)
+    .height(161)
+    .backgroundColor('#FFFFFF')
+    .borderRadius(16)
+    .padding(16)
+    .alignItems(HorizontalAlign.Start)
+  }
+
+  // 精彩书评
+  @Builder
+  buildWonderfulReviewCard() {
+    Column() {
+      Row() {
+        Text($r('app.string.wonderful_book_reviews'))
+          .fontSize(16)
+          .lineHeight(21)
+          .fontFamily('HarmonyHeiTi')
+          .fontWeight(FontWeight.Medium)
+          .fontColor('#E5000000')
+
+        Blank()
+
+        Row({ space: 4 }) {
+          Text($r('app.string.more_book_reviews'))
+            .fontSize(12)
+            .fontColor('#99000000')
+
+          Image($r('app.media.ic_public_right_arrow'))
+            .width(16)
+            .height(16)
+            .fillColor('#99000000')
+        }
+        .onClick(() => {
+          TCRouter.push(Constants.WONDERFUL_REVIEW_ROUTE, {
+            bookName: this.book.name,
+            fromCompleted: false
+          });
+        })
+      }
+      .width('100%')
+      .margin({ bottom: 16 })
+
+      if (this.wonderfulReviews.length > 0) {
+        Column() {
+          ForEach(this.wonderfulReviews, (review: ReviewInfo, index: number) => {
+            Column() {
+              Row() {
+                Image(review.avatar)
+                  .width(32)
+                  .height(32)
+                  .borderRadius(16)
+                  .margin({ right: 12 })
+
+                Text(review.content.toString())
+                  .fontSize(12)
+                  .lineHeight(18)
+                  .fontColor('#E5000000')
+                  .maxLines(2)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .alignItems(VerticalAlign.Top)
+
+              if (index < this.wonderfulReviews.length - 1) {
+                Divider()
+                  .strokeWidth(0.5)
+                  .color('#1A000000')
+                  .margin({ top: 12, bottom: 12 })
+              }
+            }
+            .width('100%')
+            .alignItems(HorizontalAlign.Start)
+          }, (review: ReviewInfo) => review.id)
+        }
+        .layoutWeight(1)
+      } else {
+        Text('暂无评论')
+          .fontSize(14)
+          .fontColor('#99000000')
+          .layoutWeight(1)
+          .textAlign(TextAlign.Center)
+      }
+    }
+    .width(328)
+    .height(183)
+    .backgroundColor('#FFFFFF')
+    .borderRadius(16)
+    .padding(16)
+    .alignItems(HorizontalAlign.Start)
   }
 
   build() {
@@ -48,114 +349,32 @@ export struct BookCoverCard {
         isMainPage: true,
       })
 
-      Stack() {
-        Image($r(this.book.coverUrl?.toString()))
-          .objectFit(ImageFit.Auto)
-          .borderRadius(10)
-      }.width(168)
-      .height(232)
+      Scroll() {
+        Column({ space: 16 }) {
+          // 书籍信息
+          this.buildBookInfoCard()
+          // 书籍简介
+          this.buildBookDescriptionCard()
+          // 精彩书评
+          this.buildWonderfulReviewCard()
 
-      .margin({ top: 10 })
-
-
-      Column() {
-        // 黑色加粗
-        Row() {
-          Text(this.book.name)
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-            .fontColor($r('sys.color.font_primary'))
-            .textAlign(TextAlign.Start)
-            .height(50)
-
-          Image(this.isAddSuccess ? $r('app.media.ic_add_book_shelf_success') : $r('app.media.ic_add_book_shelf'))
-            .width(32)
-            .height(32)
-            .onClick(async () => {
-              if (!this.isAddSuccess) {
-                await this.addBook2Shelf(true, $r('app.string.add_shelf_success'));
-              } else if (this.isAddSuccess) {
-                //   再次点击从书架删除
-                await this.addBook2Shelf(false, $r('app.string.del_shelf_success'));
-              }
-            })
+          Text($r('app.string.start_reading'))
+            .fontSize(14)
+            .fontColor('#99000000')
+            .margin({ top: 24, bottom: 40 })
+            .textAlign(TextAlign.Center)
+            .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+            .backgroundColor('rgba(0, 0, 0, 0.05)')
+            .borderRadius(14)
         }
         .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
-
-
-        // 灰色
-        Text(this.book.author)
-          .fontSize($r('sys.float.Body_M'))
-          .fontColor($r('sys.color.font_secondary'))
-          .textAlign(TextAlign.Start)
-          .width(Constants.FULL_SIZE)
-          .height(20)
-
-        Row({ space: 50 }) {
-          Column({ space: 5 }) {
-            Row() {
-              Text(this.book.rate)
-                .fontSize(15)
-                .fontColor($r('sys.color.font_primary'))
-              Text(' ')
-              Text($r('app.string.rating_point'))
-                .fontSize(12)
-                .fontColor($r('sys.color.font_secondary'))
-            }
-
-            Text($r('app.string.popular'))
-              .fontSize(12)
-              .fontColor($r('sys.color.font_secondary'))
-          }
-
-          Column({ space: 5 }) {
-            Row() {
-              Text(this.book.count)
-                .fontSize(15)
-                .fontColor($r('sys.color.font_primary'))
-              Text(' ')
-              Text($r('app.string.ten_thousand_words'))
-                .fontSize(12)
-                .fontColor($r('sys.color.font_secondary'))
-            }
-
-            Text($r('app.string.publishing_house'))
-              .fontSize(12)
-              .fontColor($r('sys.color.font_secondary'))
-          }
-
-          Column({ space: 5 }) {
-            Row() {
-              Text(this.book.popular)
-                .fontSize(15)
-                .fontColor($r('sys.color.font_primary'))
-              Text(' ')
-                .fontSize(12)
-                .fontColor($r('sys.color.font_secondary'))
-              Text($r('app.string.ten_thousand'))
-                .fontSize(12)
-                .fontColor($r('sys.color.font_secondary'))
-            }
-
-            Text($r('app.string.popular'))
-              .fontSize(12)
-              .fontColor($r('sys.color.font_secondary'))
-          }
-        }
-        .width(Constants.FULL_SIZE)
-        .justifyContent(FlexAlign.Center)
-        .padding({ top: 25 })
+        .padding({ left: 16, right: 16, top: 20 })
       }
-      .width(Constants.FULL_SIZE)
-      .height(200)
-      .padding({ top: 20, left: 30, right: 30 })
-      .alignItems(HorizontalAlign.Start)
-
-      Blank()
-        .height(200)
-      Text($r('app.string.start_reading'))
-    }.width(Constants.FULL_SIZE)
+      .layoutWeight(1)
+      .edgeEffect(EdgeEffect.Spring)
+    }
+    .width(Constants.FULL_SIZE)
     .height(Constants.FULL_SIZE)
+    .backgroundColor('#F3F4F5')
   }
 }

@@ -1,11 +1,11 @@
-import { CommonHeader, StoreMap } from 'componentlib';
+import { CommonHeader } from 'componentlib';
+import { StoreMap } from 'module_store_map';
 import { LocationVM } from '../viewmodels/LocationPageVM';
 
 @Builder
 export function locationPageBuilder() {
   LocationPage();
 }
-
 
 @ComponentV2
 export struct LocationPage {
@@ -19,6 +19,7 @@ export struct LocationPage {
           StoreMap({
             storeInfo: this.vm.storeInfo,
             showInfoWindow: false,
+            showUserLocation: true,
             mapHeight: '100%',
           });
         }

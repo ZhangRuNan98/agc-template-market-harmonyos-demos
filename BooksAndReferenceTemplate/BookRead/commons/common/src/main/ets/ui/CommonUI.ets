@@ -1,7 +1,7 @@
 import { Constants } from '../constant/Constants'
 import { TCRouter } from '../comp/TCRouter'
 import { MathUtil } from '../utils/MathUtil'
-import { TSearch } from '../../../../Index';
+import { DialogParams, TSearch } from '../../../../Index';
 import { SymbolGlyphModifier } from '@kit.ArkUI';
 
 function getFreeText(isFree?: string): string | null {
@@ -52,6 +52,45 @@ export function BookCover(image?: PixelMap | ResourceStr | DrawableDescriptor, i
     .padding({ bottom: 110, left: 45 })
   }
 }
+
+
+@Builder
+export function BookLikeCover(image?: PixelMap | ResourceStr | DrawableDescriptor, isFree?: string) {
+
+  Stack() {
+    Image($r(image?.toString()))
+      .height(120)
+      .width(88)
+      .objectFit(ImageFit.Auto)
+      .borderRadius(10)
+    Column() {
+      Text(getFreeText(isFree))
+        .fontSize(10)
+        .fontColor(Color.White)
+        .textAlign(TextAlign.Center)
+        .height(20)
+        .width(35)
+        .backgroundColor(getFreeColor(isFree))
+        .borderRadius(10)
+    }
+    .padding({ bottom: 110, left: 45 })
+  }
+}
+
+@Builder
+export function BookGroupCover(image?: PixelMap | ResourceStr | DrawableDescriptor) {
+
+  Stack() {
+    Image($r(image?.toString()))
+      .width('100%')
+      .height('100%')
+      .objectFit(ImageFit.Auto)
+      .borderRadius(5)
+      .backgroundColor(Color.White)
+
+  }
+}
+
 
 @ComponentV2
 export struct ReturnButton {
@@ -120,17 +159,17 @@ export struct NavHeaderBar {
     Menu() {
       MenuItemGroup({ header: '书籍管理' }) {
         MenuItem({
-          startIcon:$r('app.media.ic_grid'),
+          startIcon: $r('app.media.ic_grid'),
           content: '宫格模式',
           builder: this.gridSheet
         })
         MenuItem({
-          startIcon:$r('app.media.ic_list'),
+          startIcon: $r('app.media.ic_list'),
           content: '列表模式',
           builder: this.listSheet
         })
         MenuItem({
-          startIcon:$r('app.media.ic_trash'),
+          startIcon: $r('app.media.ic_trash'),
           content: '删除',
           builder: this.trashSheet
         })
@@ -141,7 +180,7 @@ export struct NavHeaderBar {
   build() {
     Column() {
       Row() {
-        Row(){
+        Row() {
           if (this.hasBackButton) {
             Image(this.backImg)
               .width(40)
@@ -157,6 +196,7 @@ export struct NavHeaderBar {
             .fontWeight(FontWeight.Medium)
             .margin({ left: 12 })
         }
+
         if (this.isSearch) {
           TSearch({ widthLength: '208' })
             .margin({ left: 24, right: 8 })
@@ -164,7 +204,8 @@ export struct NavHeaderBar {
             .height(40)
             .width(40)
             .onClick(() => {
-              this.tabsController.changeIndex(this.currentIndexTab - 1)
+              this.currentIndexTab = 0;
+              this.tabsController.changeIndex(0)
               this.isHistory = true
             })
         }
@@ -180,11 +221,11 @@ export struct NavHeaderBar {
             Image($r('app.media.icon_filled'))
               .height(40)
               .width(40)
-              .onClick(()=>{
+              .onClick(() => {
                 this.isShown = true
               })
-              .bindContextMenu(this.isShown,this.selectMenu(),{
-                aboutToDisappear:()=>{
+              .bindContextMenu(this.isShown, this.selectMenu(), {
+                aboutToDisappear: () => {
                   this.isShown = false
                 }
               })
@@ -203,4 +244,91 @@ export struct NavHeaderBar {
     .width(Constants.FULL_SIZE)
     .backgroundColor(this.hasBgColor ? $r('sys.color.background_primary') : '#00000000')
   }
+}
+
+/*
+ * 弹窗
+ * */
+@Builder
+export function dialogView(params: DialogParams) {
+
+  Column() {
+    Column() {
+      Text(params.title)
+        .fontSize(20)
+        .fontColor('#323233')
+        .width(263)
+        .textAlign(TextAlign.Center)
+
+      if (params.input) {
+        TextInput({ text: params.content, placeholder: '请输入分组名称（最多12个文字）' })
+          .width('100%')
+          .maxLength(12)
+          .onChange((value: string) => {
+            params.content = value
+          })
+          .margin({ top: 15, bottom: 8 });
+      } else {
+        Text(params.content)
+          .fontSize(14)
+          .width('100%')
+          .fontColor('#969799')
+          .textAlign(TextAlign.Center)
+          .margin({ top: 27, bottom: 12 })
+      }
+
+    }
+
+    Row() {
+
+      Button(params.leftButtonText)
+        .fontSize($r('sys.float.Body_L'))
+        .fontWeight(FontWeight.Medium)
+        .fontColor($r('sys.color.font_primary'))
+        .backgroundColor($r('sys.color.white'))
+        .padding({
+          left: 50,
+          right: 50,
+          top: 12,
+          bottom: 12
+        })
+        .onClick(() => {
+          params.leftEvent();
+        });
+      Button(params.rightButtonText)
+        .fontSize($r('sys.float.Body_L'))
+        .fontWeight(FontWeight.Medium)
+        .fontColor($r('sys.color.font_on_primary'))
+        .backgroundColor($r('app.color.font_overdue'))
+        .padding({
+          left: 50,
+          right: 50,
+          top: 12,
+          bottom: 12
+        })
+        .onClick(() => {
+          if (params.input) {
+            params.rightEvent(params.content);
+          } else{
+            params.rightEvent();
+          }
+
+        });
+    }
+    .padding({
+      left: 4,
+      right: 4
+    })
+    .justifyContent(FlexAlign.SpaceBetween)
+    .width('100%')
+  }
+  .width(328)
+  .padding({
+    top: 16,
+    bottom: 16,
+    right: 12,
+    left: 12
+  })
+  .backgroundColor($r('sys.color.white'))
+  .borderRadius(16);
 }

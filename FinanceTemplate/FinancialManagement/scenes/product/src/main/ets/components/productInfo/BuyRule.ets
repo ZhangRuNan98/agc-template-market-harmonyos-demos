@@ -1,7 +1,6 @@
-import { FormatUtil, RouterMap } from 'commonlib'
+import { FormatUtil, RouterMap, CommonRow } from 'module_base'
 import { ProductInfoVM } from '../../viewModels/ProductInfoVM'
 import { CommonHeaderRule } from './CommonHeaderRule'
-import { CommonRowRule } from './CommonRowRule'
 
 @ComponentV2
 export struct BuyRule {
@@ -15,14 +14,14 @@ export struct BuyRule {
         }
       })
 
-      CommonRowRule({
+      CommonRow({
         text: '购买金额', value: this.vm.productBuyRule?.minimumPurchaseAmount + '元起购，' +
           this.vm.productBuyRule?.minimumPurchaseAmount + '元递增'
       })
 
-      CommonRowRule({ text: '认购费率', value: this.vm.productBuyRule?.purchaseRate + '%' })
+      CommonRow({ text: '认购费率', value: this.vm.productBuyRule?.purchaseRate + '%' })
 
-      CommonRowRule({ text: '申购费率', value: this.vm.productBuyRule?.subscriptionRate + '%' })
+      CommonRow({ text: '申购费率', value: this.vm.productBuyRule?.subscriptionRate + '%' })
 
       Row() {
         Row() {

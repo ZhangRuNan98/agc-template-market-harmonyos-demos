@@ -1,27 +1,16 @@
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { loginComponentManager, LoginWithHuaweiIDButton } from '@kit.AccountKit';
-import { dealAllError, ErrorCode } from '../mine/common/Constants';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { connection } from '@kit.NetworkKit';
-import { showToast } from '../mine/common/ShowToast';
 import { common } from '@kit.AbilityKit';
-import { buffer, HashMap } from '@kit.ArkTS';
-import { PersistenceV2, router } from '@kit.ArkUI';
-import { QuickLoginInfo } from './clazz/QuickLoginInfo';
-import { User, UserInfo } from '@ohos_agcit/common_component';
-
-const PRIVACY_URL = 'privacy_url';
+import { buffer } from '@kit.ArkTS';
+import {  showToast, AccountUtil, CommonConstants, CommonModel } from '@ohos_agcit/common_component';
+import { dealAllError,ErrorCode } from '../../common/LoginConstants';
+import { router } from '@kit.ArkUI';
 
 @Entry
 @ComponentV2
 export struct QuickLoginPage {
-  @Local userInfo: UserInfo = PersistenceV2.connect(UserInfo, () => new UserInfo())!;
-
-  aboutToAppear(): void {
-    let quickLoginAnonymousPhone: QuickLoginInfo = router.getParams() as QuickLoginInfo;
-  }
-
-  @Local quickLoginAnonymousPhone: QuickLoginInfo = router.getParams() as QuickLoginInfo;
   logTag: string = 'QuickLoginPage';
   domainId: number = 0x0000;
   // File used to configure the link to the HUAWEI ID User Authentication Agreement.
@@ -31,25 +20,26 @@ export struct QuickLoginPage {
     {
       text: $r('app.string.read_and_agree'),
       type: loginComponentManager.TextType.PLAIN_TEXT,
+    },
+    {
+      text: $r('app.string.app_user_agreement'),
+      type: loginComponentManager.TextType.RICH_TEXT,
+      // Change the link to that of your own privacy policy.
+      // ...
+      tag: '',
     }, {
-    text: $r('app.string.app_user_agreement'),
-    type: loginComponentManager.TextType.RICH_TEXT,
-    // Change the link to that of your own privacy policy.
-    // ...
-    tag: '',
-  }, {
     text: $r('app.string.app_privacy_policy'),
     type: loginComponentManager.TextType.RICH_TEXT,
     // Change the link to that of your own privacy policy.
     // ...
-    tag: '',
+    tag: 'privacy_policy',
   }, {
     text: $r('app.string.and'),
     type: loginComponentManager.TextType.PLAIN_TEXT,
   }, {
     text: $r('app.string.huaweiId_user_authentication_protocol'),
     type: loginComponentManager.TextType.RICH_TEXT,
-    tag: this.getProtocolUrl(PRIVACY_URL),
+    tag: this.getProtocolUrl('privacy_url'),
   }, {
     text: $r('app.string.end'),
     type: loginComponentManager.TextType.PLAIN_TEXT,
@@ -62,17 +52,38 @@ export struct QuickLoginPage {
       .setAgreementStatus(loginComponentManager.AgreementStatus.NOT_ACCEPTED)
       .onClickLoginWithHuaweiIDButton((error: BusinessError, response: loginComponentManager.HuaweiIDCredential) => {
         // Process the logic of a tap on the one-tap sign-in button.
-        this.handleLoginWithHuaweiIDButton(error, response);
+
+        // 如果错误，进入mock登录，真实场景需要删除if分支
         if (error) {
-          dealAllError(error);
+          if (this.isSelected) {
+            AccountUtil.getAccountInfo().openID = '1';
+            AccountUtil.getAccountInfo().unionID = '1';
+            AccountUtil.getAccountInfo().idToken = '1';
+            AccountUtil.getAccountInfo().authorizationCode = '1';
+            AccountUtil.getUserInfo().nickname = $r('app.string.huawei_user')
+            router.back();
+          } else {
+            // If the agreements are not accepted, a pop-up message is displayed.
+            this.showPopUp = true;
+          }
+
+        } else{
+          this.handleLoginWithHuaweiIDButton(error, response);
+          if (error) {
+            dealAllError(error);
+          }
         }
       });
+  @Local quickLoginAnonymousPhone: string = '';
   // Specify whether to accept the agreements.
   @Local isSelected: boolean = false;
   // Specify whether to display a message asking the user to accept the agreements.
   @Local showPopUp: boolean = false;
   // Variable that determines whether the agreement and checkbox are unavailable for tapping during the sign-in process.
   @Local enableStatus: boolean = true;
+
+  vm: CommonModel = CommonModel.instance;
+
 
   // Method that processes a tap on the one-tap sign-in button.
   handleLoginWithHuaweiIDButton(error: BusinessError | undefined, response: loginComponentManager.HuaweiIDCredential) {
@@ -94,33 +105,16 @@ export struct QuickLoginPage {
         if (response) {
           hilog.info(this.domainId, this.logTag, 'Succeeded in clicking LoginWithHuaweiIDButton.');
           const authCode = response.authorizationCode;
-          const idToken = response.idToken;
           const openID = response.openID;
           const unionID = response.unionID;
-
-          if (this.userInfo.users.get(unionID) === undefined) {
-            let newUser: User = new User()
-            newUser.openID = openID
-            newUser.unionID = unionID
-            newUser.nickname = '华为用户'
-            this.userInfo.users.set(unionID, newUser)
-            this.userInfo.nickname = '华为用户'
-            this.userInfo.avatar = ''
-          } else {
-            let user = this.userInfo.users.get(unionID) as User
-            this.userInfo.nickname = user.nickname
-            this.userInfo.avatar = user.avatar
-          }
-          this.userInfo.unionID = unionID
-          this.userInfo.isLogin = true
-          // After sign-in to the app is successful, process the server sign-in execution logic here.
-          // After sign-in on the server is successful, the data to be displayed on the main screen is returned.
-          // ...
-          // In this example, after a successful sign-in, the personal information screen is displayed.
-          // this.appPathStack?.pushPathByName('PersonalInfoPage', null, true);
-          // this.appPathStack.pop();
-          router.back()
-
+          const idToken = response.idToken;
+          AccountUtil.getAccountInfo().openID = openID;
+          AccountUtil.getAccountInfo().unionID = unionID;
+          AccountUtil.getAccountInfo().idToken = idToken;
+          AccountUtil.getAccountInfo().authorizationCode = authCode;
+          AccountUtil.getUserInfo().nickname = $r('app.string.huawei_user')
+          // todo 待实现
+          router.back();
         }
       } else {
         // If the agreements are not accepted, a pop-up message is displayed.
@@ -137,6 +131,17 @@ export struct QuickLoginPage {
 
   // Redirect to the HUAWEI ID User Authentication Agreement page.
   jumpToPrivacyWebView(privacyText: loginComponentManager.PrivacyText) {
+    if (!this.enableStatus) {
+      return;
+    }
+    if (privacyText.tag === 'privacy_policy') {
+      // 直接跳转到隐私协议页面
+      router.pushUrl({
+        url: 'pages/mine/PrivacyAgreement',
+        params: {}
+      }, router.RouterMode.Standard);
+      return;
+    }
     const hasNet: boolean = connection.hasDefaultNetSync();
     if (!hasNet) {
       const hint: string = getContext().resourceManager.getStringSync($r('app.string.hwid_no_internet_connect'));
@@ -149,11 +154,7 @@ export struct QuickLoginPage {
       hilog.info(this.domainId, this.logTag, `systemLanguage is ${systemLanguage}`);
       const params: Record<string, Object> = { 'protocolUrl': privacyText.tag + systemLanguage };
       // Concatenate link parameters.
-      // this.appPathStack?.pushPathByName('PrivacyAgreement', params);
-      router.replaceUrl({
-        url: 'pages/mine/common/Constants/PrivacyAgreement',
-        params: params
-      }, router.RouterMode.Standard)
+      this.vm.navStack.pushPathByName('PrivacyAgreement', params);
     }
   }
 
@@ -171,175 +172,194 @@ export struct QuickLoginPage {
     }
   }
 
+  onPageShow() {
+    const params = router.getParams() as Record<string, string>;
+    if (params?.anonymousPhone) {
+      this.quickLoginAnonymousPhone = params.anonymousPhone;
+      hilog.info(this.domainId, this.logTag, `Received phone: ${this.quickLoginAnonymousPhone}`);
+    }
+  }
+
   build() {
     Column() {
-      Column() {
-        Row() {
-          Image($r('app.media.app_icon'))
-            .width(100)
-            .aspectRatio(1)
-            .draggable(false)
-            .copyOption(CopyOptions.None)
-            .borderRadius(20)
-            .onComplete(() => {
-              hilog.info(this.domainId, this.logTag, 'Succeeded in loading appIcon.');
-            })
+      Scroll(){
+        Column(){
+          Column() {
+            Row() {
+              Image($r('app.media.app_icon'))
+                .width(100)
+                .aspectRatio(1)
+                .draggable(false)
+                .copyOption(CopyOptions.None)
+                .borderRadius(20)
+                .onComplete(() => {
+                  hilog.info(this.domainId, this.logTag, 'Succeeded in loading appIcon.');
+                })
+                .padding({
+                  top: 10,
+                })
+                .onError(() => {
+                  hilog.error(this.domainId, this.logTag, 'Failed to load appIcon.');
+                });
+            }
             .padding({
-              top: 10,
-            })
-            .onError(() => {
-              hilog.error(this.domainId, this.logTag, 'Failed to load appIcon.');
+              top: 100,
             });
-        }
-        .padding({
-          top: 50,
-        });
 
-        // Mobile number and its description.
-        Column() {
-          Text(this.quickLoginAnonymousPhone.quickLoginAnonymousPhone)
-            .fontSize(36)
-            .fontColor($r('sys.color.ohos_id_color_text_primary'))
-            .fontFamily($r('sys.string.ohos_id_text_font_family_medium'))
-            .fontWeight(FontWeight.Bold)
-            .lineHeight(48)
-            .height(48)
-            .textAlign(TextAlign.Center)
-            .maxLines(1)
-            .constraintSize({ maxWidth: '100%', minHeight: 48 });
+            // Mobile number and its description.
+            Column() {
+              Text(this.quickLoginAnonymousPhone)
+                .fontSize(36)
+                .fontColor($r('sys.color.ohos_id_color_text_primary'))
+                .fontFamily($r('sys.string.ohos_id_text_font_family_medium'))
+                .fontWeight(FontWeight.Bold)
+                .lineHeight(48)
+                .height(48)
+                .textAlign(TextAlign.Center)
+                .maxLines(1)
+                .constraintSize({ maxWidth: '100%', minHeight: 48 });
 
-          Text($r('app.string.bind_huaweiId_number'))
-            .fontSize($r('app.float.font_size_12'))
-            .fontColor($r('sys.color.ohos_id_color_text_secondary'))
-            .fontFamily($r('sys.string.ohos_id_text_font_family_regular'))
-            .fontWeight(FontWeight.Regular)
-            .lineHeight(16)
-            .height(16)
-            .textAlign(TextAlign.Center)
-            .maxLines(1)
-            .constraintSize({ maxWidth: '100%' })
-            .margin({ top: 8 });
-        }
-        .margin({ top: 50 });
-      }
-      .width('100%');
-
-      Column() {
-        // One-tap sign-in.
-        Column() {
-          LoginWithHuaweiIDButton({
-            params: {
-              style: loginComponentManager.Style.BUTTON_RED,
-              extraStyle: {
-                buttonStyle: new loginComponentManager.ButtonStyle().loadingStyle({
-                  show: true,
-                }),
-              },
-              loginType: loginComponentManager.LoginType.QUICK_LOGIN,
-            },
-            controller: this.controller,
-          }).id('login_with_huaweiId_button');
-        }
-        .height(40)
-        .width('100%')
-        .constraintSize({ maxWidth: 448 })
-        .margin({ top: 50 });
-
-        Flex({
-          justifyContent: FlexAlign.Center,
-          alignItems: ItemAlign.Start,
-        }) {
-          Row() {
-            Checkbox({ name: 'privacyCheckbox', group: 'privacyCheckboxGroup' })
-              .width(24)
-              .height(24)
-              .focusable(true)
-              .focusOnTouch(true)
-              .selectedColor('#CE0E2D')
-              .select(this.isSelected)
-              .enabled(this.enableStatus)
-              .margin({ top: 0 })
-              .onChange((value: boolean) => {
-                hilog.info(this.domainId, this.logTag, `agreementChecked: ${value}`);
-                if (value) {
-                  this.isSelected = true;
-                  this.showPopUp = false;
-                  // Set the agreement status to ACCEPTED.
-                  this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.ACCEPTED);
-                } else {
-                  this.isSelected = false;
-                  // Set the agreement status to NOT_ACCEPTED.
-                  this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.NOT_ACCEPTED);
-                }
-              });
+              Text('华为账号绑定号码')
+                .fontSize(12)
+                .fontColor($r('sys.color.ohos_id_color_text_secondary'))
+                .fontFamily($r('sys.string.ohos_id_text_font_family_regular'))
+                .fontWeight(FontWeight.Regular)
+                .lineHeight(16)
+                .height(16)
+                .textAlign(TextAlign.Center)
+                .maxLines(1)
+                .constraintSize({ maxWidth: '100%' })
+                .margin({ top: 8 });
+            }
+            .margin({ top: 50 })
           }
-          .padding({ right: 12 })
-          .bindPopup(this.showPopUp, {
-            message: getContext().resourceManager.getStringSync($r('app.string.read_and_agree_protocol')),
-            onStateChange: (event) => {
-              this.showPopUp = event.isVisible;
-            },
-            mask: false,
-          });
+          .height('30%')
+          .align(Alignment.Bottom)
+          .width('100%');
 
-          Row() {
-            Text() {
-              if (this.privacyText && this.privacyText.length > 0) {
-                ForEach(this.privacyText, (item: loginComponentManager.PrivacyText) => {
-                  if (item?.type === loginComponentManager.TextType.PLAIN_TEXT && item?.text) {
-                    Span(item?.text)
-                      .fontColor($r('sys.color.ohos_id_color_text_secondary'))
-                      .fontFamily($r('sys.string.ohos_id_text_font_family_regular'))
-                      .fontWeight(FontWeight.Regular)
-                      .fontSize($r('sys.float.ohos_id_text_size_body3'));
-                  } else if (item?.type === loginComponentManager.TextType.RICH_TEXT && item?.text) {
-                    Span(item?.text)
-                      .fontColor($r('sys.color.ohos_id_color_text_primary'))
-                      .fontFamily($r('sys.string.ohos_id_text_font_family_medium'))
-                      .fontWeight(FontWeight.Medium)
-                      .fontSize($r('sys.float.ohos_id_text_size_body3'))
-                      .focusable(true)
-                      .focusOnTouch(true)
-                      .enabled(this.enableStatus)
-                      .id('quickLoginProtocolUrlSpan')
-                      .onClick(() => {
-                        hilog.info(this.domainId, this.logTag, 'Click protocol url');
-                        if (this.enableStatus) {
-                          try {
-                            // this.appPathStack?.pushPathByName('PrivacyAgreement', undefined);
-                            // this.jumpToPrivacyWebView(item);
-                          } catch (error) {
-                            const code: number = error.code;
-                            const message: string = error.message;
-                            hilog.error(this.domainId, this.logTag,
-                              `Failed to jump privacy webview. errCode is ${code}, errMessage is ${message}`);
-                          }
-                        }
-                      });
-                  }
-                }, (item: loginComponentManager.PrivacyText, index: number) => `${item.text}_${index}}`);
+          Column() {
+            // One-tap sign-in.
+            Column() {
+              LoginWithHuaweiIDButton({
+                params: {
+                  style: loginComponentManager.Style.BUTTON_RED,
+                  extraStyle: {
+                    buttonStyle: new loginComponentManager.ButtonStyle().loadingStyle({
+                      show: true,
+                    })
+                  },
+                  loginType: loginComponentManager.LoginType.QUICK_LOGIN,
+                },
+                controller: this.controller,
+              }).id('login_with_huaweiId_button')
+            }
+            .height(40)
+            .width('100%')
+            .margin({ top: 130 });
+            Blank()
+
+            Flex({
+              justifyContent: FlexAlign.Center,
+              alignItems: ItemAlign.Start,
+            })
+            {
+              Row() {
+                Checkbox({ name: 'privacyCheckbox', group: 'privacyCheckboxGroup' })
+                  .width(24)
+                  .height(24)
+                  .focusable(true)
+                  .focusOnTouch(true)
+                  .selectedColor('#CE0E2D')
+                  .select(this.isSelected)
+                  .enabled(this.enableStatus)
+                  .margin({ top: 0 })
+                  .onChange((value: boolean) => {
+                    hilog.info(this.domainId, this.logTag, `agreementChecked: ${value}`);
+                    if (value) {
+                      this.isSelected = true;
+                      this.showPopUp = false;
+                      // Set the agreement status to ACCEPTED.
+                      this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.ACCEPTED);
+                    } else {
+                      this.isSelected = false;
+                      // Set the agreement status to NOT_ACCEPTED.
+                      this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.NOT_ACCEPTED);
+                    }
+                  });
               }
-            };
+              .padding({ right: 12 })
+              .bindPopup(this.showPopUp, {
+                message: '请先阅读并同意协议',
+                onStateChange: (event) => {
+                  this.showPopUp = event.isVisible;
+                },
+                mask: false,
+              });
+
+              Row() {
+                Text() {
+                  if (this.privacyText && this.privacyText.length > 0) {
+                    ForEach(this.privacyText, (item: loginComponentManager.PrivacyText) => {
+                      if (item?.type === loginComponentManager.TextType.PLAIN_TEXT && item?.text) {
+                        Span(item?.text)
+                          .fontColor($r('sys.color.ohos_id_color_text_secondary'))
+                          .fontFamily($r('sys.string.ohos_id_text_font_family_regular'))
+                          .fontWeight(FontWeight.Regular)
+                          .fontSize($r('sys.float.ohos_id_text_size_body3'));
+                      } else if (item?.type === loginComponentManager.TextType.RICH_TEXT && item?.text) {
+                        Span(item?.text)
+                          .fontColor($r('sys.color.ohos_id_color_text_primary'))
+                          .fontFamily($r('sys.string.ohos_id_text_font_family_medium'))
+                          .fontWeight(FontWeight.Medium)
+                          .fontSize($r('sys.float.ohos_id_text_size_body3'))
+                          .focusable(true)
+                          .focusOnTouch(true)
+                          .enabled(this.enableStatus)
+                          .id('quickLoginProtocolUrlSpan')
+                          .onClick(() => {
+                            hilog.info(this.domainId, this.logTag, 'Click protocol url');
+                            if (this.enableStatus) {
+                              try {
+                                // this.appPathStack?.pushPathByName('PrivacyAgreement', undefined);
+                                this.jumpToPrivacyWebView(item);
+                              } catch (error) {
+                                const code: number = error.code;
+                                const message: string = error.message;
+                                hilog.error(this.domainId, this.logTag,
+                                  `Failed to jump privacy webview. errCode is ${code}, errMessage is ${message}`);
+                              }
+                            }
+                          });
+                      }
+                    }, (item: loginComponentManager.PrivacyText, index: number) => `${item.text}_${index}}`);
+                  }
+                };
+              }
+              .constraintSize({ minHeight: 24 });
+            }
+            .width('100%')
+            .margin({ bottom: 30 });
           }
-          .constraintSize({ minHeight: 24 });
+          .width('100%')
+          .height('70%')
+          .justifyContent(FlexAlign.SpaceBetween)
+          .margin({
+            bottom: 30
+          })
         }
-        .width('100%')
-        .margin({ bottom: 16 });
+        .height('100%')
       }
-      .width('100%')
-      .height('60%')
-      .justifyContent(FlexAlign.SpaceBetween);
+      .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring)
     }
     .padding({
-      left: 16,
-      right: 16,
-      top: 36,
-      bottom: 28,
+      left: '4%',
+      right: '4%',
     })
     .justifyContent(FlexAlign.SpaceBetween)
-    .backgroundColor('#F1F3F5')
+    .backgroundColor($r('sys.color.background_secondary'))
     .width('100%')
-    .height('100%');
+    .height('100%')
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 }
-

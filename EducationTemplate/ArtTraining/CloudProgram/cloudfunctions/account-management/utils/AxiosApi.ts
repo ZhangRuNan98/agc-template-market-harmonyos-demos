@@ -6,9 +6,10 @@ export interface ResponseUserInfo {
   avatar: string;
 }
 
-export async function getPhoneNumber(authorizationCode: string, logger): Promise<ResponseUserInfo> {
+export async function getPhoneNumber(authorizationCode: string): Promise<ResponseUserInfo> {
   let data = {
     grant_type: 'authorization_code',
+    // todo: client_id和client_secret配置，用于获取真实手机号，使用前需参考README申请scope权限
     client_id: 'xxx', //填写应用OAuth 2.0客户端ID（凭据）的clientId
     client_secret: 'xxx', //填写应用OAuth 2.0客户端ID（凭据）的client Secret
     code: authorizationCode,

@@ -2,7 +2,6 @@ import { abilityAccessCtrl, bundleManager, common, Permissions } from '@kit.Abil
 import { BusinessError } from '@kit.BasicServicesKit';
 import { Logger } from './Logger';
 
-
 const TAG: string = '[PermissionUtil]';
 
 enum PermissionStatus {
@@ -15,7 +14,7 @@ export class PermissionUtil {
   private static _atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
   private static _context: Context;
 
-  public static async requestPermissions(permissions: Permissions[]) {
+  public static async requestPermissions(permissions: Permissions[], secondary: boolean = false) {
     const needAuthorized: Permissions[] = [];
     for (let permission of permissions) {
       const isGranted: boolean = await PermissionUtil._checkPermissions(permission);
@@ -30,7 +29,8 @@ export class PermissionUtil {
       PermissionUtil._context = getContext() as common.UIAbilityContext;
     }
     // 向用户申请授权
-    return await PermissionUtil._atManager.requestPermissionsFromUser(PermissionUtil._context, needAuthorized)
+    return await PermissionUtil._atManager
+      .requestPermissionsFromUser(PermissionUtil._context, needAuthorized)
       .then((data) => {
         let grantStatus: number[] = data.authResults;
         let length: number = grantStatus.length;
@@ -39,7 +39,7 @@ export class PermissionUtil {
           if (grantStatus[i] === PermissionStatus.GRANTED) {
             Logger.info(TAG, 'request permission success::' + needAuthorized[i]);
             break;
-          } else if (grantStatus[i] === PermissionStatus.DENIED) {
+          } else if (secondary && grantStatus[i] === PermissionStatus.DENIED) {
             PermissionUtil._requestPermissionsOnSetting(needAuthorized[i]);
             break;
           } else {
@@ -60,13 +60,16 @@ export class PermissionUtil {
 
   // 用户首次拒绝后二次申请授权
   private static async _requestPermissionsOnSetting(permissions: Permissions) {
-    PermissionUtil._atManager.requestPermissionOnSetting(PermissionUtil._context, [permissions])
+    PermissionUtil._atManager
+      .requestPermissionOnSetting(PermissionUtil._context, [permissions])
       .then((data: abilityAccessCtrl.GrantStatus[]) => {
         Logger.info(TAG, 'request permission on setting success::' + JSON.stringify(data));
       })
       .catch((err: BusinessError) => {
-        Logger.error(TAG,
-          `Failed to request permissions on setting from user. Code is ${err.code}, message is ${err.message}`);
+        Logger.error(
+          TAG,
+          `Failed to request permissions on setting from user. Code is ${err.code}, message is ${err.message}`,
+        );
       });
   }
 
@@ -83,8 +86,9 @@ export class PermissionUtil {
     let grantStatus: abilityAccessCtrl.GrantStatus = abilityAccessCtrl.GrantStatus.PERMISSION_DENIED;
     let tokenId: number = 0;
     try {
-      let bundleInfo: bundleManager.BundleInfo =
-        bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
+      let bundleInfo: bundleManager.BundleInfo = bundleManager.getBundleInfoForSelfSync(
+        bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION,
+      );
       let appInfo: bundleManager.ApplicationInfo = bundleInfo.appInfo;
       tokenId = appInfo.accessTokenId;
     } catch (error) {

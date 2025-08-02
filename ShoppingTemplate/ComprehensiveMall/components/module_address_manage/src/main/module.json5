@@ -3,7 +3,7 @@
     "name": "module_address_manage",
     "type": "har",
     "deviceTypes": [
-      "default"
+      "phone"
     ],
     "routerMap": "$profile:route_map"
   }

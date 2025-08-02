@@ -1,5 +1,5 @@
-import { FormatUtil, RouterMap } from 'commonlib'
-import { ITransactionItem } from 'network/src/main/ets/types/responseTypes/GetTransactionRecordListResp'
+import { FormatUtil, RouterMap } from 'module_base'
+import { ITransactionItem } from 'lib_foundation'
 import { TransactionSearchVM } from '../viewModels/TransactionSearchVM'
 
 @Builder
@@ -99,9 +99,11 @@ struct TransactionSearch {
               })
             }
             .margin({ top: 10 })
-          }, (item: ITransactionItem[]) => JSON.stringify(item))
+          }, (item: ITransactionItem) => JSON.stringify(item))
         }
         .layoutWeight(1)
+        .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
       }
       .alignItems(HorizontalAlign.Start)
     }

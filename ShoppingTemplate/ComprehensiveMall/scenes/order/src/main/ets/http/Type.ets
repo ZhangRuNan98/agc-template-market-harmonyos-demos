@@ -1,3 +1,5 @@
+import { Address } from 'lib_foundation';
+
 export interface LogisticsItemDto {
   icon: string;
   status: string;
@@ -9,7 +11,7 @@ export interface OrderSkuDto {
   skuCode: string;
   skuDesc: string;
   count: number;
-  banner: string;
+  banner: ResourceStr;
   title: string;
   serviceDesc: string;
   price: number;
@@ -17,7 +19,7 @@ export interface OrderSkuDto {
 }
 
 @ObservedV2
-export class Address {
+export class AddressModel implements Address {
   @Trace
   name: string = '';
   @Trace
@@ -33,8 +35,8 @@ export interface OrderCardDto {
   skuList: OrderSkuDto[];
   logisticsInfo: LogisticsItemDto[];
   totalPrice: number;
+  address: AddressModel;
   time: string;
-  address: Address;
   remark: string;
   remainingTime?: string;
   refundTime?: string;
@@ -73,7 +75,7 @@ export class OrderCardVM {
   @Trace
   refundTime: string = '';
   @Trace
-  address: Address = {
+  address: AddressModel = {
     name: '',
     cellphone: '',
     address: '',
@@ -82,4 +84,6 @@ export class OrderCardVM {
   receivingMethod: string = '';
   @Trace
   public remark: string = '';
+  @Trace
+  public discount?: number = 0;
 }

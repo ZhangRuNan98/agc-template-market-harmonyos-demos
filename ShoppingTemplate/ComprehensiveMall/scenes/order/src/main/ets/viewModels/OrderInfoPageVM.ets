@@ -1,5 +1,5 @@
 import { routerStack } from 'lib_foundation';
-import { Address, OrderCardVM } from '../http/Type';
+import { AddressModel, OrderCardVM } from '../http/Type';
 import { common } from '@kit.AbilityKit';
 import { paymentService } from '@kit.PaymentKit';
 import { OrderApi } from '../http/Api';
@@ -9,11 +9,12 @@ import { formatTime } from '../utils';
 export class OrderInfoPageVM {
   private static _instance: OrderInfoPageVM;
   @Trace orderInfo: OrderCardVM | undefined;
-  @Trace address: Address = new Address();
+  @Trace address: AddressModel = new AddressModel();
   @Trace time: string = '00:30:00';
   @Trace timer: number = 0;
-  @Trace oldPrice: number = 0
-  @Trace tempShopPhone: string = ''
+  @Trace oldPrice: number = 0;
+  @Trace discount: number = 0;
+  @Trace tempShopPhone: string = '';
 
   init() {
     const params: OrderCardVM[] = routerStack.getParamByName(
@@ -24,12 +25,13 @@ export class OrderInfoPageVM {
       this.address.name = this.orderInfo.address.name;
       this.address.cellphone = this.orderInfo.address.cellphone;
       this.address.address = this.orderInfo.address.address;
-      this.time = this.orderInfo.remainingTime
+      this.time = this.orderInfo.remainingTime;
       this.orderInfo.skuList.forEach((item) => {
         if (item.oldPrices) {
-          this.oldPrice += item.oldPrices
+          this.oldPrice += item.oldPrices;
         }
-      })
+      });
+      this.discount = this.orderInfo.discount ?? 0;
       this.setTime();
     }
   }

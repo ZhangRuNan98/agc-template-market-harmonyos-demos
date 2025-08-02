@@ -1,5 +1,15 @@
 import { ProductWaterFlow } from 'module_product_waterflow';
-import { iData, PreOrderItem, PreOrderRequest, routerStack, RouterMap } from 'lib_foundation';
+import {
+  iData,
+  PreOrderItem,
+  PreOrderRequest,
+  routerStack,
+  RouterMap,
+  BreakpointSystem,
+  BreakpointStorage,
+  BreakpointTypeEnum,
+  Style,
+} from 'lib_foundation';
 
 import { CartPageLogic } from '../logic/CartPageLogic';
 import { ShoppingCart } from 'module_shopping_cart';
@@ -10,10 +20,17 @@ import { Product } from 'module_shopping_cart/src/main/ets/commons/Model';
 struct CartPage {
   @Param
   public pageName?: string = undefined;
-
   private logic: CartPageLogic = new CartPageLogic();
-
   @Local isChildRoute: boolean = false;
+  @Local curBreakpoint: BreakpointStorage = BreakpointSystem.currentBreakpoint
+
+  @Computed
+  get waterFlowTemplate() {
+    if (this.curBreakpoint.value === BreakpointTypeEnum.SM) {
+      return '1fr 1fr'
+    }
+    return '1fr 1fr 1fr'
+  }
 
   aboutToAppear(): void {
     this.isChildRoute = Boolean(this.pageName);
@@ -48,12 +65,12 @@ struct CartPage {
         isLogin: this.logic.global.isLogin,
         customContentBuilder: () => {
           // 自定义组件  推荐商品
-          this.recommendedProductSection()
+          this.recommendedProductSection();
         },
         onLogin: () => {
           // 登录逻辑
-          routerStack.pushPathByName('HuaweiQuickLoginPage', ()=> {
-            this.logic.global.isLogin = iData.global.isLogin
+          routerStack.pushPathByName('HuaweiQuickLoginPage', () => {
+            this.logic.global.isLogin = iData.global.isLogin;
           });
         },
         onCardClick: (id: string) => {
@@ -64,12 +81,12 @@ struct CartPage {
           });
         },
         onBack: () => {
-          routerStack.pop()
+          routerStack.pop();
         },
         onCheckout: (selectedGoodList: Product[]) => {
           // 结算逻辑
-          this.handleCheckout(selectedGoodList)
-        }
+          this.handleCheckout(selectedGoodList);
+        },
       })
     }
     .hideTitleBar(true)
@@ -89,6 +106,8 @@ struct CartPage {
     buildSpecialDivider();
     Column() {
       ProductWaterFlow({
+        customColumnTemplate: this.waterFlowTemplate,
+        bgColor:Style.BACKGROUND_COLOR,
         handleProductClick: (id) => {
           routerStack.pushPath({
             name: RouterMap.PRODUCT_INFO_NEW,
@@ -97,7 +116,7 @@ struct CartPage {
         },
       })
     }
-    .padding({left: 12, right: 12, top: 12})
+    .padding({ left: 12, right: 12, top: 12 })
     .backgroundColor(Color.White)
   }
 }

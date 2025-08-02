@@ -1,7 +1,5 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, } from 'commonlib';
-import { IPositionInfo } from 'network/src/main/ets/types/responseTypes/GetPositionInfoResp';
-import { IDataset, IProfile } from 'network/src/main/ets/types/responseTypes/GetProductResp';
+import { https, IPositionInfo, IDataset, IProfile } from 'lib_foundation';
+import { RouterMap, RouterModule, } from 'module_base';
 import { positionInfoData } from '../constants';
 
 const TAG = '[PositionInfoVM]';

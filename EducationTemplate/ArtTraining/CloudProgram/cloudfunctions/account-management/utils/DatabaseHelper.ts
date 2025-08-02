@@ -39,6 +39,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   public async unbindPhone() {
@@ -61,6 +62,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   public async getUserInfo() {
@@ -76,11 +78,15 @@ export class DatabaseHelper {
         const userResp = this._getUserInfoResp(userData[0]);
         return userResp;
       } else {
-        this.logger.error(LOGGER_TAG + 'cannot find user');
+        this.logger.info(LOGGER_TAG + 'create new user ');
+        const updateData: UserInfo = new UserInfo();
+        updateData.setUserId(this.userId);
+        await this.userList.upsert(updateData);
       }
     } catch (err) {
       this.logger.error(LOGGER_TAG + `error: ${err}`);
     }
+    return;
   }
 
   public async updateUserInfo(params: UpdateUserInfoReq) {
@@ -106,6 +112,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + ` error: ${err}`);
     }
+    return;
   }
 
   private async _createUser(authCode: string, createMock: boolean = false, userResp: GetUserInfoResp | undefined) {
@@ -119,7 +126,7 @@ export class DatabaseHelper {
           avatar: '',
         };
       } else {
-        initData = await getPhoneNumber(authCode, this.logger);
+        initData = await getPhoneNumber(authCode);
       }
       const studentID = new Date().getTime().toString();
       const user = new UserInfo();
@@ -134,6 +141,7 @@ export class DatabaseHelper {
     } catch (err) {
       this.logger.error(LOGGER_TAG + `error: ${err}`);
     }
+    return;
   }
 
   private _getUserInfoResp(item: UserInfo) {

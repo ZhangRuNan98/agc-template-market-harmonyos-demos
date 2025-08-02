@@ -2,6 +2,7 @@ import {
   AvoidArea,
   CommonConstants,
   FavoriteDatabase,
+  JobListItem,
   LeftReturnComponent,
   promptFun,
   TitleBar
@@ -14,7 +15,13 @@ export struct MyFavorite {
   @Local avoidArea: AvoidArea = AppStorageV2.connect(AvoidArea, () => new AvoidArea(0, 0))!;
   @Local favoriteDatabase: FavoriteDatabase =
     PersistenceV2.connect(FavoriteDatabase, () => new FavoriteDatabase())!;
-  favoriteListMirror: Array<string> = this.favoriteDatabase.favoriteList.slice()
+  favoriteListMirror: Array<string> = this.favoriteDatabase.favoriteList.slice();
+
+  @Local allData: JobListItem[] = CommonConstants.JOB_LIST
+
+  getItem(id:string):JobListItem {
+    return this.allData.filter((item:JobListItem) => item.id === id)[0];
+  }
 
   build() {
     Column() {
@@ -22,51 +29,54 @@ export struct MyFavorite {
         LeftReturnComponent()
           .onClick(() => {
             router.back();
-          })
-        TitleBar({ text: '我的收藏' })
+          });
+        TitleBar({ text: '我的收藏' });
       }
-      .height('5%')
-      .width(CommonConstants.FULL_WIDTH)
+      .height(56)
       .alignItems(VerticalAlign.Center)
+      .width(CommonConstants.FULL_WIDTH)
+      .alignItems(VerticalAlign.Center);
 
-      List({ space: '2%' }) {
-        ForEach(this.favoriteListMirror, (jobId: string) => {
+      List({ space: 12 }) {
+        ForEach(this.favoriteListMirror, (id: string) => {
           ListItem() {
             Row() {
               Column() {
-                Text(CommonConstants.JOB_LIST_MAP.get(jobId)?.jobName)
-                  .fontWeight(CommonConstants.FONT_WEIGHT_600)
-                  .fontSize($r('app.float.font_size_18'))
-                Text(CommonConstants.ADDRESS_MAP.get(CommonConstants.JOB_LIST_MAP.get(jobId)?.address) + ' · ' +
-                  CommonConstants.JOB_LIST_MAP.get(jobId)?.jobType)
-                  .fontSize($r('app.float.font_size_14'))
-                  .fontColor($r('app.color.common_gray'))
+                Text(this.getItem(id)?.name)
+                  .fontSize(16)
+                  .fontColor('rgba(0,0,0,0.90)')
+                  .fontWeight(FontWeight.Medium)
+                Text(CommonConstants.ADDRESS_MAP.get(CommonConstants.JOB_LIST_MAP.get(id)?.address) + ' · ' +
+                  CommonConstants.JOB_LIST_MAP.get(id)?.jobType)
+                  .fontSize(14)
+                  .fontColor('rgba(0,0,0,0.60)')
                   .margin({ top: '3%' })
+
               }
               .width('70%')
               .alignItems(HorizontalAlign.Start)
               .onClick(() => {
                 router.pushUrl({
                   url: 'pages/jobRoute/JobDetail',
-                  params: CommonConstants.JOB_LIST_MAP.get(jobId)
+                  params: this.getItem(id)
                 }, router.RouterMode.Standard)
               })
 
               Blank()
 
-              Image(this.favoriteDatabase.favoriteList.includes(jobId) ?
+              Image(this.favoriteDatabase.favoriteList.includes(id) ?
               $r('app.media.active_collection_star') :
               $r('app.media.star'))
                 .objectFit(ImageFit.Contain)
                 .width('10%')
                 .height('30%')
                 .onClick(() => {
-                  if (this.favoriteDatabase.favoriteList.includes(jobId)) {
-                    this.favoriteDatabase.favoriteList.splice(this.favoriteDatabase.favoriteList.indexOf(jobId), 1)
+                  if (this.favoriteDatabase.favoriteList.includes(id)) {
+                    this.favoriteDatabase.favoriteList.splice(this.favoriteDatabase.favoriteList.indexOf(id), 1)
                     promptFun('取消收藏', 1500)
                     return;
                   }
-                  this.favoriteDatabase.favoriteList.push(jobId)
+                  this.favoriteDatabase.favoriteList.push(id)
                   promptFun('收藏成功', 1500)
                 })
 
@@ -80,20 +90,21 @@ export struct MyFavorite {
               bottom: 5
             })
             .width('100%')
-            .height('10%')
+            .height(72)
           }
-        })
+        }, (id: string) => id)
       }
-      .padding({ top: '8%', left: '2%', right: '2%' })
-      .height('95%')
+      .edgeEffect(EdgeEffect.Spring)
+      .scrollBar(BarState.Off)
+      .padding({ top: 16 })
       .width('100%')
-
+      .layoutWeight(1)
     }
     .backgroundColor($r('app.color.common_background'))
     .padding({
-      top: px2vp(this.avoidArea.topRectHeight) + 10,
-      left: '6%',
-      right: '6%'
+      top: px2vp(this.avoidArea.topRectHeight),
+      left: '4%',
+      right: '4%'
     })
 
   }

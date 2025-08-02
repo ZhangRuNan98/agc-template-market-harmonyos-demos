@@ -1,8 +1,11 @@
+import { AppStorageV2, promptAction, window } from '@kit.ArkUI';
+import {
+  LoginModel,
+  RouterMap,
+  RouterModule,
+  WindowModel
+} from 'commonlib';
 import { HomePageVM } from '../viewModels/HomePageVM';
-import { promptAction, window } from '@kit.ArkUI';
-import { RouterMap, RouterModule } from 'commonlib';
-
-const NEWS_TIME_MAX_LINES: number = 1;
 
 class NewsData {
   title: string = ''
@@ -13,49 +16,6 @@ class NewsData {
   collect: boolean = false
   share: number = 0
 }
-
-@CustomDialog
-struct Heart {
-  @Prop heartFlag: boolean
-  controller: CustomDialogController
-
-  build() {
-    Column() {
-      if (this.heartFlag === true) {
-        Text('点赞成功')
-          .height('40vp')
-          .onClick(() => {
-            this.heartFlag = !this.heartFlag;
-          })
-      } else {
-        Text('取消点赞')
-          .height('40vp')
-      }
-    }
-  }
-}
-
-@CustomDialog
-struct Collect {
-  @Prop collectFlag: boolean
-  controller: CustomDialogController
-
-  build() {
-    Column() {
-      if (this.collectFlag === true) {
-        Text('收藏成功')
-          .height('40vp')
-          .onClick(() => {
-            this.collectFlag = !this.collectFlag
-          })
-      } else {
-        Text('取消收藏')
-          .height('40vp')
-      }
-    }
-  }
-}
-
 
 @Builder
 export function newsDetailBuilder() {
@@ -74,19 +34,9 @@ export struct NewsDetail {
   @Local num: number = 0.4
   @Local newsData: NewsData = new NewsData();
   textAreaController: TextAreaController = new TextAreaController();
-  dialogController3: CustomDialogController = new CustomDialogController({
-    builder: Heart({ heartFlag: this.heartFlag }),
-    alignment: DialogAlignment.Bottom,
-    width: '30%',
-    height: '40vp',
-    offset: { dx: 0, dy: -80 },
-    maskColor: Color.Transparent,
-    shadow: ShadowStyle.OUTER_DEFAULT_MD
-  })
 
-  aboutToAppear(): void {
-
-  }
+  windowModel: WindowModel = AppStorageV2.connect(WindowModel, () => new WindowModel())!;
+  loginInfo: LoginModel = AppStorageV2.connect(LoginModel, () => new LoginModel())!
 
   aboutToDisappear(): void {
     window.getLastWindow(getContext(this)).then((windowClass) => {
@@ -98,19 +48,20 @@ export struct NewsDetail {
   ContentTitle() {
     Column() {
       Text('华为鸿蒙智家持续进化，做未来空间智能化的领导者')
-        .fontSize(`${16 + this.vm.changeFontSize}`)
+        .fontSize(`${16 + this.windowModel.fontSize}`)
         .fontFamily('鸿蒙黑体')
         .fontWeight('bold')
+        .fontColor($r('app.color.news_title_fontColor'))
 
       Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceBetween }) {
         Row() {
           Text('xx新闻')
-            .fontSize(`${12 + this.vm.changeFontSize}`)
+            .fontSize(`${12 + this.windowModel.fontSize}`)
             .fontWeight('regular')
             .fontFamily('鸿蒙黑体')
             .fontColor($r('app.color.news_time_fontColor'))
           Text('2025-04-06 21.00.00')
-            .fontSize(`${12 + this.vm.changeFontSize}`)
+            .fontSize(`${12 + this.windowModel.fontSize}`)
             .fontWeight('regular')
             .margin({ left: 8 })
             .fontFamily('鸿蒙黑体')
@@ -129,8 +80,9 @@ export struct NewsDetail {
             '“主动节能”等多维度场景化方案，为消费者提供更优质、更高级、更专业的多样化智能选择。在冷暖新风领域，华为和生态合作伙伴突破传统' +
             '暖通对接方式，联合发布《华为鸿蒙智家暖通网关新风对接白皮书》，引领行业标准化发展。')
             .fontFamily('鸿蒙黑体')
-            .fontSize(`${14 + this.vm.changeFontSize}`)
-            .lineHeight(`${21 + this.vm.changeFontSize}`)
+            .fontSize(`${14 + this.windowModel.fontSize}`)
+            .fontColor($r('app.color.news_content_fontColor'))
+            .lineHeight(`${21 + this.windowModel.fontSize}`)
         }
 
         Row() {
@@ -138,7 +90,6 @@ export struct NewsDetail {
             .borderRadius(8)
         }
         .margin({ top: 24, bottom: 18, left:2 })
-
 
         Row() {
           Text('2024年，华为智选势能持续提升，爆品迭出。本次峰会，华为智选与伙伴一起预告了多款新品，致力为消费者提供高品质的纯净用水体验；' +
@@ -148,8 +99,9 @@ export struct NewsDetail {
             '更快、更好、跟高效的做好产品。小艺语音全面开放覆盖全流程，赋能伙伴打造全景式语音交互能力；统一标准构筑场景和语音的一致体验，' +
             '缺省支持鸿蒙智家。持续优化认证流程和套件，平滑支持HarmonyOS 5。')
             .fontFamily('鸿蒙黑体')
-            .fontSize(`${14 + this.vm.changeFontSize}`)
-            .lineHeight(`${21 + this.vm.changeFontSize}`)
+            .fontSize(`${14 + this.windowModel.fontSize}`)
+            .fontColor($r('app.color.news_content_fontColor'))
+            .lineHeight(`${21 + this.windowModel.fontSize}`)
         }
       }
       .margin({ top: 24 })
@@ -162,14 +114,13 @@ export struct NewsDetail {
     Row() {
       TextArea({ placeholder: '发表评论' })
         .height(40)
-        .backgroundColor('#0D000000')
+        .placeholderColor($r('app.color.news_time_fontColor'))
+        .backgroundColor($r('app.color.input_bg'))
         .width('60%')
         .focusOnTouch(false)
         .margin({
-          left: 16, top: 8, bottom: 36
+          left: 16, top: 10, bottom: 30
         })
-          // 通过选定的半模态接口，绑定模态展示界面，style中包含两个参数，一个是设置半模态的高度，不设置时默认高度是Large，一个是是否显示
-          // 控制条DragBar，默认是true显示控制条，通过onDisappear控制状态变量变换。
         .bindSheet(this.isShowSheet, this.CommentSheet(), {
           height: this.customHeight,
           dragBar: false,
@@ -186,11 +137,13 @@ export struct NewsDetail {
 
       Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center }) {
         Image($r('app.media.text_clipboard')).width(24).height(24).margin({ right: 18 })
+          .fillColor($r('sys.color.icon_primary'))
           .onClick(() => {
             RouterModule.push({ url: RouterMap.COMMENT_DETAIL, param: null });
           })
 
         Image(this.collectFlag ? $r('app.media.star_fill') : $r('app.media.star')).width(24).height(24)
+          .fillColor(this.collectFlag ? $r('app.color.collect_icon_active') : $r('sys.color.icon_primary'))
           .margin({ right: 18 })
           .onClick(() => {
             this.collectFlag = !this.collectFlag;
@@ -202,6 +155,7 @@ export struct NewsDetail {
           })
 
         Image($r('app.media.share')).width(24).height(24)
+          .fillColor($r('sys.color.icon_primary'))
           .margin({ right: 18 }).onClick(() => {
           promptAction.showToast({
             message: '分享成功',
@@ -216,7 +170,7 @@ export struct NewsDetail {
       })
     }
     .height(88)
-    .backgroundColor('#FCFCFC')
+    .backgroundColor($r('app.color.comment_view_bg'))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 
@@ -224,14 +178,12 @@ export struct NewsDetail {
   CommentSheet() {
     Column() {
       TextArea({ placeholder: '我来说两句...', text: this.vm.comment, controller: this.textAreaController })
-        .backgroundColor(Color.White)
+        .backgroundColor($r('app.color.input_bg'))
         .maxLength(300)
         .height(140)
         .margin({ left: 16, right: 16 })
         .showCounter(true,
-          { thresholdPercentage: 0, highlightBorder: true })//计数器显示效果为用户当前输入字符数/最大字符限制数。最大字符限制数通过maxLength()接口设置。
-          //如果用户当前输入字符数达到最大字符限制乘50%（thresholdPercentage）。字符计数器显示。
-          //用户设置highlightBorder为false时，配置取消红色边框。不设置此参数时，默认为true。
+          { thresholdPercentage: 0, highlightBorder: true })
         .onFocus(() => {
           this.customHeight = 500
         })
@@ -280,6 +232,8 @@ export struct NewsDetail {
           this.ContentTitle()
         }
         .width('100%')
+        .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring)
         this.Comment()
       }
       .height('100%')

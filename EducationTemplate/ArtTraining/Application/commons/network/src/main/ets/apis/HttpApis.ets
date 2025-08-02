@@ -1,6 +1,10 @@
-import { AccountUtil, CheckInActivity, CheckInRecord, CourseInfo, OrderInfo, StoreConfig, UserInfo } from 'commonlib';
+import { deviceInfo } from '@kit.BasicServicesKit';
+import { CheckInActivity, CheckInRecord, CourseInfo, OrderInfo, StoreConfig, UserInfo } from 'commonlib';
+import { CheckInActivityDB } from '../clouddb/CheckInActivityDB';
+import { CourseInfoDB } from '../clouddb/CourseInfoDB';
+import request from '../cloudfunc/CloudHttpModel';
 import { CloudFuncMap, RequestUrl } from '../constants/NetworkEnums';
-import request from '../models/CloudHttpModel';
+import { httpsMock } from '../mocks/HttpApisMock';
 import {
   CheckInTaskOrderReq,
   CourseOrderReq,
@@ -9,7 +13,6 @@ import {
   GetOrderListReq,
   GetCourseListReq,
   GetUserCheckInRecordListReq,
-  PageQueryReq,
   GetCourseListOrderedReq,
   GetOrderDetailReq,
 } from '../types/RequestTypes';
@@ -24,7 +27,12 @@ import {
 
 @ObservedV2
 class HttpApi {
-  @Trace private _accountInfo = AccountUtil.getAccountInfo();
+  private _openMock: boolean;
+
+  constructor(openMock: boolean = false) {
+    let productModelInfo: string = deviceInfo.productModel;
+    this._openMock = productModelInfo ? openMock : true;
+  }
 
   public bindPhone(authCode: string, createMock: boolean = false): Promise<BaseResp<UserInfo>> {
     return request.call({
@@ -32,7 +40,6 @@ class HttpApi {
       cloudFuncName: CloudFuncMap.ACCOUNT,
       data: {
         trigger: RequestUrl.BIND_PHONE,
-        userId: this._accountInfo.openID,
         authCode,
         createMock,
       },
@@ -45,7 +52,6 @@ class HttpApi {
       cloudFuncName: CloudFuncMap.ACCOUNT,
       data: {
         trigger: RequestUrl.UNBIND_PHONE,
-        userId: this._accountInfo.openID,
       },
     });
   }
@@ -56,7 +62,6 @@ class HttpApi {
       cloudFuncName: CloudFuncMap.ACCOUNT,
       data: {
         trigger: RequestUrl.USER_GET_INFO,
-        userId: this._accountInfo.openID,
       },
     });
   }
@@ -67,58 +72,10 @@ class HttpApi {
       cloudFuncName: CloudFuncMap.ACCOUNT,
       data: {
         trigger: RequestUrl.USER_UPDATE_INFO,
-        userId: this._accountInfo.openID,
-        avatar:data.avatar,
-        nickname:data.nickname,
-        wechat:data.wechat,
-        birthday:data.birthday,
-      },
-    });
-  }
-
-  public getStoreConfig(): Promise<BaseResp<StoreConfig>> {
-    return request.call({
-      url: RequestUrl.GET_STORE_CONFIG,
-      cloudFuncName: CloudFuncMap.COURSE,
-      data: {
-        userId: this._accountInfo.openID,
-      },
-    });
-  }
-
-  public getCourseList(data?: GetCourseListReq): Promise<BaseResp<GetCourseListResp>> {
-    return request.call({
-      url: RequestUrl.GET_COURSE_LIST,
-      cloudFuncName: CloudFuncMap.COURSE,
-      data: {
-        trigger: RequestUrl.GET_COURSE_LIST,
-        userId: this._accountInfo.openID,
-        type: data?.type,
-        keyword: data?.keyword,
-      },
-    });
-  }
-
-  public getCourseDetail(data: GetCourseDetailReq): Promise<BaseResp<CourseInfo>> {
-    return request.call({
-      url: RequestUrl.GET_COURSE_DETAIL,
-      cloudFuncName: CloudFuncMap.COURSE,
-      data: {
-        trigger: RequestUrl.GET_COURSE_DETAIL,
-        userId: this._accountInfo.openID,
-        courseId: data.courseId,
-      },
-    });
-  }
-
-  public getCourseListOrdered(data: GetCourseListOrderedReq): Promise<BaseResp<GetCourseListResp>> {
-    return request.call({
-      url: RequestUrl.GET_COURSE_LIST_ORDERED,
-      cloudFuncName: CloudFuncMap.COURSE,
-      data: {
-        trigger: RequestUrl.GET_COURSE_LIST_ORDERED,
-        userId: this._accountInfo.openID,
-        courseStatus: data.courseStatus,
+        avatar: data.avatar,
+        nickname: data.nickname,
+        wechat: data.wechat,
+        birthday: data.birthday,
       },
     });
   }
@@ -129,7 +86,6 @@ class HttpApi {
       cloudFuncName: CloudFuncMap.ORDER,
       data: {
         trigger: RequestUrl.CREATE_COURSE_ORDER,
-        userId: this._accountInfo.openID,
         courseId: data.courseId,
         paymentMethod: data.paymentMethod,
         student: data.student,
@@ -147,7 +103,6 @@ class HttpApi {
       data: {
         trigger: RequestUrl.CANCEL_COURSE_ORDER,
         orderNo: data.orderNo,
-        userId: this._accountInfo.openID,
       },
     });
   }
@@ -159,7 +114,6 @@ class HttpApi {
       data: {
         trigger: RequestUrl.REQUEST_REFUND_COURSE_ORDER,
         orderNo: data.orderNo,
-        userId: this._accountInfo.openID,
       },
     });
   }
@@ -171,7 +125,6 @@ class HttpApi {
       data: {
         trigger: RequestUrl.CANCEL_REFUND_COURSE_ORDER,
         orderNo: data.orderNo,
-        userId: this._accountInfo.openID,
       },
     });
   }
@@ -183,7 +136,6 @@ class HttpApi {
       data: {
         trigger: RequestUrl.DELETE_COURSE_ORDER,
         orderNo: data.orderNo,
-        userId: this._accountInfo.openID,
       },
     });
   }
@@ -195,7 +147,6 @@ class HttpApi {
       data: {
         trigger: RequestUrl.GET_ORDER_LIST,
         orderStatus: data.orderStatus,
-        userId: this._accountInfo.openID,
       },
     });
   }
@@ -207,99 +158,85 @@ class HttpApi {
       data: {
         trigger: RequestUrl.GET_ORDER_DETAIL,
         orderNo: data.orderNo,
-        userId: this._accountInfo.openID,
       },
     });
+  }
+
+  public getStoreConfig(): Promise<BaseResp<StoreConfig>> {
+    if (this._openMock) {
+      return httpsMock.getStoreConfig();
+    }
+    return CourseInfoDB.getStoreConfig();
+  }
+
+  public getCourseList(data?: GetCourseListReq): Promise<BaseResp<GetCourseListResp>> {
+    if (this._openMock) {
+      return httpsMock.getCourseList(data);
+    }
+    return CourseInfoDB.getCourseList(data);
+  }
+
+  public getCourseDetail(data: GetCourseDetailReq): Promise<BaseResp<CourseInfo>> {
+    if (this._openMock) {
+      return httpsMock.getCourseDetail(data);
+    }
+    return CourseInfoDB.getCourseInfoDetail(data) as Promise<BaseResp<CourseInfo>>;
+  }
+
+  public getCourseListOrdered(data: GetCourseListOrderedReq): Promise<BaseResp<GetCourseListResp>> {
+    if (this._openMock) {
+      return httpsMock.getCourseListOrdered(data);
+    }
+    return CourseInfoDB.getCourseListOrdered(data);
   }
 
   public getCheckInActivityList(): Promise<BaseResp<GetCheckInActivityListRsp>> {
-    return request.call({
-      url: RequestUrl.GET_CHECKIN_ACTIVITY_LIST,
-      cloudFuncName: CloudFuncMap.CHECK_IN_ACTIVITY,
-      data: {
-        trigger: RequestUrl.GET_CHECKIN_ACTIVITY_LIST,
-        userId: this._accountInfo.openID,
-      },
-    });
+    if (this._openMock) {
+      return httpsMock.getCheckInActivityList();
+    }
+    return CheckInActivityDB.getCheckInActivityList();
   }
 
   public getCheckInActivityDetail(data: GetCheckInActivityReq): Promise<BaseResp<CheckInActivity>> {
-    return request.call({
-      url: RequestUrl.GET_CHECKIN_ACTIVITY_DETAIL,
-      cloudFuncName: CloudFuncMap.CHECK_IN_ACTIVITY,
-      data: {
-        trigger: RequestUrl.GET_CHECKIN_ACTIVITY_DETAIL,
-        userId: this._accountInfo.openID,
-        activityId: data.activityId,
-      },
-    });
+    if (this._openMock) {
+      return httpsMock.getCheckInActivityDetail(data);
+    }
+    return CheckInActivityDB.getCheckInActivityDetail(data) as Promise<BaseResp<CheckInActivity>>;
   }
 
-  public createCheckInActivityOrder(data: CheckInTaskOrderReq): Promise<BaseResponse> {
-    return request.call({
-      url: RequestUrl.CREATE_CHECKIN_ACTIVITY_ORDER,
-      cloudFuncName: CloudFuncMap.CHECK_IN_ACTIVITY,
-      data: {
-        trigger: RequestUrl.CREATE_CHECKIN_ACTIVITY_ORDER,
-        userId: this._accountInfo.openID,
-        activityId: data.activityId,
-      },
-    });
+  public createCheckInActivityOrder(data: CheckInTaskOrderReq): Promise<BaseResp<number>> {
+    if (this._openMock) {
+      return httpsMock.createCheckInActivityOrder(data);
+    }
+    return CheckInActivityDB.createCheckInActivityOrder(data);
   }
 
   public cancelCheckInActivityOrder(data: CheckInTaskOrderReq): Promise<BaseResponse> {
-    return request.call({
-      url: RequestUrl.CANCEL_CHECKIN_ACTIVITY_ORDER,
-      cloudFuncName: CloudFuncMap.CHECK_IN_ACTIVITY,
-      data: {
-        trigger: RequestUrl.CANCEL_CHECKIN_ACTIVITY_ORDER,
-        userId: this._accountInfo.openID,
-        activityId: data.activityId,
-      },
-    });
+    if (this._openMock) {
+      return httpsMock.cancelCheckInActivityOrder(data);
+    }
+    return CheckInActivityDB.cancelCheckInActivityOrder(data);
   }
 
-  public getCheckInActivityListOrdered(data?: PageQueryReq): Promise<BaseResp<GetCheckInActivityListRsp>> {
-    return request.call({
-      url: RequestUrl.GET_CHECKIN_ACTIVITY_LIST_ORDERED,
-      cloudFuncName: CloudFuncMap.CHECK_IN_ACTIVITY,
-      data: {
-        trigger: RequestUrl.GET_CHECKIN_ACTIVITY_LIST_ORDERED,
-        userId: this._accountInfo.openID,
-        fromPage:data?.fromPage,
-        pageSize:data?.pageSize,
-      },
-    });
+  public getCheckInActivityListOrdered(): Promise<BaseResp<GetCheckInActivityListRsp>> {
+    if (this._openMock) {
+      return httpsMock.getCheckInActivityListOrdered();
+    }
+    return CheckInActivityDB.getCheckInActivityListOrdered();
   }
 
   public commitUserCheckIn(data: CheckInRecord): Promise<BaseResponse> {
-    return request.call({
-      url: RequestUrl.COMMIT_USER_CHECKIN,
-      cloudFuncName: CloudFuncMap.CHECK_IN_ACTIVITY,
-      data: {
-        trigger: RequestUrl.COMMIT_USER_CHECKIN,
-        userId: this._accountInfo.openID,
-        taskId:data.taskId,
-        activityId:data.activityId,
-        textDetail:data.textDetail,
-        pictureDetail:data.pictureDetail,
-        audioDetail:data.audioDetail,
-        videoDetail:data.videoDetail,
-        createTime:data.createTime,
-      },
-    });
+    if (this._openMock) {
+      return httpsMock.commitUserCheckIn(data);
+    }
+    return CheckInActivityDB.commitUserCheckIn(data);
   }
 
   public getUserCheckInRecordList(data: GetUserCheckInRecordListReq): Promise<BaseResp<GetUserCheckInRecordListRsp>> {
-    return request.call({
-      url: RequestUrl.GET_USER_CHECKIN_RECORD_LIST,
-      cloudFuncName: CloudFuncMap.CHECK_IN_ACTIVITY,
-      data: {
-        trigger: RequestUrl.GET_USER_CHECKIN_RECORD_LIST,
-        userId: this._accountInfo.openID,
-        activityId: data.activityId,
-      },
-    });
+    if (this._openMock) {
+      return httpsMock.getUserCheckInRecordList(data);
+    }
+    return CheckInActivityDB.getUserCheckInRecordList(data);
   }
 }
 

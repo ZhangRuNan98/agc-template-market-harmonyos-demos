@@ -4,6 +4,7 @@ import {
   CourseDetailRouterInfo,
   FormatUtil, RouterMap, RouterModule, ScheduleConfigUtil, ScheduleFlag } from 'commonlib';
 import { CardWrapper, ComponentConst, NavigateBar } from 'componentlib';
+import { goToCheckinPage } from 'module_secure_checkin';
 import { promptAction } from '@kit.ArkUI';
 
 @Extend(Divider) function verticalDividerStyle() {
@@ -48,6 +49,7 @@ struct CourseDetailPage {
         })
         .width(ComponentConst.FULL_PARENT)
         .height('25%')
+        .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
 
       Column({ space: ComponentConst.CARD_SPACE_LARGE }) {
         // 标题
@@ -76,7 +78,11 @@ struct CourseDetailPage {
             })
             .onClick(() => {
               if (AccountUtil.getUserInfo().avatar) {
-                RouterModule.push({ url: RouterMap.CLASS_SIGN_IN });
+                goToCheckinPage(RouterModule.getStack(), {
+                  studentId: '',
+                  courseId: '',
+                  courseName: this.courseInfo?.courseName ?? ''
+                });
               } else {
                 RouterModule.getStack().clear(false);
                 this.mainTabController.changeIndex(1);
@@ -109,6 +115,7 @@ struct CourseDetailPage {
     .width(ComponentConst.FULL_PARENT)
     .height(ComponentConst.FULL_PARENT)
     .backgroundColor($r('sys.color.background_secondary'))
+    .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
   @Builder courseInfoBuilder() {

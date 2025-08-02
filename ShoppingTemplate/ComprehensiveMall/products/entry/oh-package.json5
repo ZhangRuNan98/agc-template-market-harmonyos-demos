@@ -12,6 +12,7 @@
     "lib_network": "file:../../commons/lib_network",
     "module_address_manage": "file:../../components/module_address_manage",
     "module_login": "file:../../components/module_login",
-    "module_product_waterflow": "file:../../components/module_product_waterflow"
+    "module_product_waterflow": "file:../../components/module_product_waterflow",
+    "module_coupons": "file:../../components/module_coupons"
   }
 }

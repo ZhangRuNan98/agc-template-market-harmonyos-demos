@@ -1,0 +1,7 @@
+export enum FormType {
+  ACCESS_SETTING,
+  IMAGE_SETTING,
+  NAV,
+  TEXT_SETTING,
+  TEXT_SHOW
+}

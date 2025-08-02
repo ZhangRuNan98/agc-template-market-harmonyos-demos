@@ -13,4 +13,6 @@ export interface BookInfo {
   count?: string
   popular?: string
   gender?:string // 区分男生女生频道 '1':女生 '2':男生
+  groupName: string //分组名字
+  groupType: string //是否在分组中 0不在 1在
 }

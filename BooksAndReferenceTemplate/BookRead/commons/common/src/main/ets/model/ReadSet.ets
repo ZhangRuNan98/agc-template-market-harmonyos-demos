@@ -18,6 +18,6 @@ export class ReadSet {
     scaledDensity: display.getDefaultDisplaySync().scaledDensity > 0 ? display.getDefaultDisplaySync().scaledDensity :
       1,
     viewPortWidth: WindowUtils.getWindowWidth(),
-    viewPortHeight: WindowUtils.getWindowHeight()
+    viewPortHeight: WindowUtils.getWindowHeight(),
   }
 }

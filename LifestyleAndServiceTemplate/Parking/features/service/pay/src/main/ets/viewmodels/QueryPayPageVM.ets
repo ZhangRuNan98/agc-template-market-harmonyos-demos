@@ -1,4 +1,5 @@
 import {
+  AccountUtil,
   FormatUtil,
   IOrder,
   LicenseModel,
@@ -6,11 +7,9 @@ import {
   Logger,
   RouterMap,
   RouterModule,
-  UsedLicenseModel,
-  UsedLicenseUtil,
   WidgetUtil,
-} from 'commonlib';
-import { getId, Https } from 'network';
+} from 'common';
+import { Https } from 'network';
 import { promptAction } from '@kit.ArkUI';
 import { BusinessError, emitter } from '@kit.BasicServicesKit';
 import { paymentService } from '@kit.PaymentKit';
@@ -21,8 +20,6 @@ import { formBindingData, formProvider } from '@kit.FormKit';
 export class QueryPayPageVM {
   // 车牌信息
   @Trace licenseInfo: LicenseModel = LicenseUtil.getLicenseInfo();
-  // 最近使用
-  @Trace usedLicenses: UsedLicenseModel = UsedLicenseUtil.getLicenses();
   // 当前车牌
   @Trace license: string = '';
   // 是否完整
@@ -42,12 +39,6 @@ export class QueryPayPageVM {
     return QueryPayPageVM._instance;
   }
 
-  /** 重置查询页面参数 **/
-  public resetQueryParams() {
-    this.isFull = false;
-    this.license = '';
-  }
-
   /** 重置支付页面参数 **/
   public resetPayParams() {
     this.order = undefined;
@@ -55,22 +46,9 @@ export class QueryPayPageVM {
     this.license = RouterModule.getNavParam({ url: RouterMap.PAY_PAGE }) as string;
   }
 
-
-  /** 去查询车辆入场 **/
-  public goToQuery() {
-    if (!this.isFull) {
-      promptAction.showToast({ message: '请补充完整车牌' });
-      return;
-    }
-    RouterModule.push({ url: RouterMap.PAY_PAGE, param: this.license });
-    if (LicenseUtil.findIndex(this.license) === -1 && UsedLicenseUtil.findIndex(this.license) === -1) {
-      UsedLicenseUtil.addLicense(this.license);
-    }
-  }
-
   /** 查询入场订单 **/
   public queryParking() {
-    Https.queryParking({ id: getId(), license: this.license }).then(res => {
+    Https.queryParking({ id: AccountUtil.getId(), license: this.license }).then(res => {
       if (res.code === 404) {
         promptAction.showToast({ message: res.msg });
         this.refresh = false;
@@ -86,7 +64,7 @@ export class QueryPayPageVM {
           };
           WidgetUtil.getFormIds(getContext()).forEach(id => {
             formProvider.updateForm(id, formBindingData.createFormBindingData(formData));
-          })
+          });
         }
       }
       this.refresh = false;
@@ -100,7 +78,7 @@ export class QueryPayPageVM {
       return;
     }
     const res = await Https.payParking({
-      id: getId(),
+      id: AccountUtil.getId(),
       orderId: this.order.orderId,
       siteId: this.order.siteId,
       license: this.order.license,

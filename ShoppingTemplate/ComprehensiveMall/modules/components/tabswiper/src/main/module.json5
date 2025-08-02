@@ -1,9 +1,0 @@
-{
-  "module": {
-    "name": "tabswiper",
-    "type": "har",
-    "deviceTypes": [
-      "phone"
-    ]
-  }
-}

@@ -78,11 +78,11 @@
     },
     {
       "name": "sign_day_color_on",
-      "value": "#61860B"
+      "value": "#ED6F21"
     },
     {
       "name": "sign_day_color_off",
-      "value": "#ED6F21"
+      "value": "#99000000"
     }
   ]
 }

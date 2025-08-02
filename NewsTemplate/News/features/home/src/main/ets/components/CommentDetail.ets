@@ -1,9 +1,7 @@
 import { HomePageVM } from '../viewModels/HomePageVM';
 import { mediaquery, promptAction, window } from '@kit.ArkUI';
 
-const NEWS_TIME_MAX_LINES: number = 1;
-
-class NewsData{
+class NewsData {
   title:string=''
   content:string=''
   image?: Resource
@@ -12,8 +10,6 @@ class NewsData{
   collect:boolean=false
   share:number=0
 }
-
-
 
 @Builder
 export function commentDetailBuilder() {
@@ -36,10 +32,6 @@ export struct CommentDetail {
   @Local likeFlag: boolean = false;
   textAreaController: TextAreaController = new TextAreaController();
 
-  aboutToAppear(): void {
-
-  }
-
   aboutToDisappear(): void {
     window.getLastWindow(getContext(this)).then((windowClass)=>{
       windowClass.setPreferredOrientation(window.Orientation.PORTRAIT)
@@ -55,13 +47,13 @@ export struct CommentDetail {
             Image($r('app.media.ic_person'))
               .width(20)
               .height(20)
-              .borderRadius('24vp')
+              .borderRadius(24)
                 Text(this.vm.userInfo.name || '网友7890')
                   .fontSize(`${12 + this.vm.changeFontSize}`)
                   .margin({left:8})
                   .textAlign(TextAlign.Start)
                   .height(20)
-                  .fontColor('#99000000')
+                  .fontColor($r('sys.color.ohos_id_color_text_primary'))
           }
           .width('100%')
           Row() {
@@ -85,23 +77,28 @@ export struct CommentDetail {
                 }
                 .width('50%')
 
-                Row(){
-                  Image(this.likeFlag ? $r('app.media.hand_thumbsup_fill') : $r('app.media.hand_thumbsup'))
-                    .width(16)
-                    .height(16)
-                    .margin({right:6})
+                Row({space: 6}){
+                  if (this.likeFlag) {
+                    Image($r('app.media.hand_thumbsup_fill'))
+                      .width(16)
+                      .height(16)
+                  } else {
+                    Image($r('app.media.hand_thumbsup'))
+                      .width(16)
+                      .height(16)
+                      .fillColor($r('sys.color.icon_primary'))
+                  }
                   Text(JSON.stringify(this.counts))
-                    .onClick(() => {
-                      this.likeFlag = !this.likeFlag;
-                      if(this.likeFlag) {
-                        this.counts ++;
-                      } else {
-                        this.counts --;
-                      }
-
-                    })
                 }
                 .width('15%')
+                .onClick(() => {
+                  this.likeFlag = !this.likeFlag;
+                  if(this.likeFlag) {
+                    this.counts ++;
+                  } else {
+                    this.counts --;
+                  }
+                })
               }
           }
           .margin({top: 10,left:30})
@@ -118,6 +115,7 @@ export struct CommentDetail {
         Row() {
           Text('住建部称住宅层高标准将提至不低于3米，层高低的房子不值钱了？')
             .fontSize(`${16 + this.vm.changeFontSize}`)
+            .fontColor($r('app.color.news_title_fontColor'))
             .fontFamily('鸿蒙黑体')
             .fontWeight('bold')
             .maxLines(2)
@@ -128,12 +126,13 @@ export struct CommentDetail {
         Divider()
           .margin({ top: 12 })
           .strokeWidth(8)
-          .color('#F1F3F5')
+          .color($r('app.color.bgc'))
         Row() {
           Text('评论·99')
             .fontSize(`${18 + this.vm.changeFontSize}`)
             .fontFamily('鸿蒙黑体')
             .fontWeight('bold')
+            .fontColor($r('app.color.news_title_fontColor'))
         }
         .margin({top: 20, left:30})
         .width('100%')

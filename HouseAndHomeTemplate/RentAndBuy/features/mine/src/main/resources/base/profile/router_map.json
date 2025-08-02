@@ -1,0 +1,68 @@
+{
+  "routerMap": [
+    {
+      "name": "Mine",
+      "pageSourceFile": "src/main/ets/pages/Mine.ets",
+      "buildFunction": "MineBuilder",
+      "data": {
+        "description": "this is Mine"
+      }
+    },
+    {
+      "name": "QuickLoginPage",
+      "pageSourceFile": "src/main/ets/pages/QuickLoginPage.ets",
+      "buildFunction": "QuickLoginPageBuilder",
+      "data": {
+        "description": "this is QuickLoginPage"
+      }
+    },
+    {
+      "name": "MyFollow",
+      "pageSourceFile": "src/main/ets/pages/MyFollow.ets",
+      "buildFunction": "MyFollowBuilder",
+      "data": {
+        "description": "this is MyFollow"
+      }
+    },
+    {
+      "name": "History",
+      "pageSourceFile": "src/main/ets/pages/History.ets",
+      "buildFunction": "HistoryBuilder",
+      "data": {
+        "description": "this is History"
+      }
+    },
+    {
+      "name": "Setting",
+      "pageSourceFile": "src/main/ets/pages/Setting.ets",
+      "buildFunction": "SettingBuilder",
+      "data": {
+        "description": "this is History"
+      }
+    },
+    {
+      "name": "PrivacyPolicyPage",
+      "pageSourceFile": "src/main/ets/pages/PrivacyPolicyPage.ets",
+      "buildFunction": "PrivacyPolicyPageBuilder",
+      "data": {
+        "description": "this is PrivacyPolicyPage"
+      }
+    },
+    {
+      "name": "TermsOfServicePage",
+      "pageSourceFile": "src/main/ets/pages/TermsOfServicePage.ets",
+      "buildFunction": "TermsOfServicePageBuilder",
+      "data": {
+        "description": "this is TermsOfServicePage"
+      }
+    },
+    {
+      "name": "UserProfile",
+      "pageSourceFile": "src/main/ets/pages/UserProfile.ets",
+      "buildFunction": "UserProfileBuilder",
+      "data": {
+        "description": "this is UserProfile"
+      }
+    }
+  ]
+}

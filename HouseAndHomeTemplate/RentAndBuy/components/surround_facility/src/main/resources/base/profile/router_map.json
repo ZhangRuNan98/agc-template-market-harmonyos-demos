@@ -1,0 +1,12 @@
+{
+  "routerMap": [
+    {
+      "name": "FullSurrounding",
+      "pageSourceFile": "src/main/ets/pages/FullSurrounding.ets",
+      "buildFunction": "FullSurroundingBuilder",
+      "data": {
+        "description": "this is FullSurrounding"
+      }
+    }
+  ]
+}

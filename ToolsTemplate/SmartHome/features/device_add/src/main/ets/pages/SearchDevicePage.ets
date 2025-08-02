@@ -1,13 +1,12 @@
 import { Constants } from 'utils';
-import { BleScanView } from '../view/BleScanView'
-import { BleScanViewModel } from '../viewmodel/BleScanViewModel';
-import { DeviceBaseInfoView } from 'uicomponents'
+import { DeviceBaseInfoView } from 'uicomponents';
 import { SearchDeviceViewModel } from '../viewmodel/SearchDeviceViewModel';
-import { BleScannedDevicesView } from '../view/BleScannedDevicesView';
+import { BleScannedDevicesView, BleScanView, BleScanViewModel, ScannedDeviceViewModel } from 'bluetooth_scan';
+import { AdapterModel } from 'external_interactions';
 
 @Builder
 export function SearchDevicePageBuilder(name: string, param: Object) {
-  SearchDevicePage({deviceName: param as string})
+  SearchDevicePage({ deviceName: param as string })
 }
 
 @ComponentV2
@@ -19,11 +18,17 @@ export struct SearchDevicePage {
 
   build() {
     NavDestination() {
-      DeviceBaseInfoView({image: this.searchDeviceViewModel.deviceImage, name: this.searchDeviceViewModel.deviceName})
-      BleScanView({pathStack: this.pathStack, bleScanViewModel: this.bleScanViewModel})
-        .margin({top: 20})
-      BleScannedDevicesView({pathStack : this.pathStack, bleClientViewModel: this.bleScanViewModel})
-        .margin({top: 20})
+      DeviceBaseInfoView({ image: this.searchDeviceViewModel.deviceImage, name: this.searchDeviceViewModel.deviceName })
+      BleScanView({ pathStack: this.pathStack, bleScanViewModel: this.bleScanViewModel })
+        .margin({ top: 20 })
+      BleScannedDevicesView({
+        pathStack: this.pathStack,
+        bleScanViewModel: this.bleScanViewModel,
+        getDeviceImage: (bleClientViewModel: ScannedDeviceViewModel) => {
+          return AdapterModel.getInstance().getDeviceInfo(bleClientViewModel.deviceName).deviceInfo.deviceImage
+        }
+      })
+        .margin({ top: 20 })
     }
     .title('搜索设备')
     .onReady((context: NavDestinationContext) => {

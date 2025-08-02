@@ -73,7 +73,6 @@ export class RouterModule {
     } catch (err) {
       Logger.error(TAG, `navigation stack open dialog [${name}] failed::` + JSON.stringify(err));
     }
-
   }
 
   // 关闭全局弹窗
@@ -83,7 +82,6 @@ export class RouterModule {
     } catch (err) {
       Logger.error(TAG, 'close dialog failed::' + JSON.stringify(err));
     }
-
   }
 
   // 清除栈中的所有页面

@@ -7,7 +7,8 @@ import {
   OrderCardDto,
   Any,
   ApiResponse,
-  iResourceMgr, iData,
+  iResourceMgr,
+  iData,
 } from 'lib_foundation';
 import { MockDatabase } from './mock/MockDatabase';
 import { MockDataMgr } from './mock/MockDataMgr';
@@ -219,6 +220,7 @@ export class MockServer {
                 title: product.title,
                 serviceDesc: product.serviceDesc,
                 price: product.price,
+                dashPrice: product.dashPrice ?? product.price,
               };
               skuList.push(sku);
               totalPrice = totalPrice + product.price * item.quantity;
@@ -335,9 +337,9 @@ export class MockServer {
      * 拦截其它任何可能的请求并响应 400 错误码
      */
     this.mock.onAny().reply(() =>
-      Promise.resolve<MockResponse>({
-        status: HttpStatusCode.BadRequest,
-      }),
+    Promise.resolve<MockResponse>({
+      status: HttpStatusCode.BadRequest,
+    }),
     );
   }
 

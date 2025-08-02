@@ -1,5 +1,5 @@
 // 账号工具
-export { AccountUtil, UserInfoModel, HUAWEIAccountModel, MemberInfoModel } from './src/main/ets/utils/AccountUtil';
+export { AccountUtil, UserInfoModel, LoginModel } from './src/main/ets/utils/AccountUtil';
 
 // 日志工具
 export { Logger } from './src/main/ets/utils/Logger';
@@ -39,4 +39,7 @@ export { NewsTypeModel } from './src/main/ets/model/NewsTypeModel';
 
 export { NewsViewModel } from './src/main/ets/model/NewsViewModel';
 
-export { HomeConstants } from './src/main/ets/constants/HomeConstants';
+// window管理
+export { WindowModel } from './src/main/ets/model/WindowModel';
+
+export { HuaweiIDResp } from './src/main/ets/types/Types'

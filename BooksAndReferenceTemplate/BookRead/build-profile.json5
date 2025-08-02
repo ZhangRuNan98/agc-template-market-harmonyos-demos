@@ -13,6 +13,12 @@
           "strictMode": {
             "caseSensitiveCheck": true,
             "useNormalizedOHMUrl": true
+          },
+          "externalNativeOptions": {
+            "abiFilters": [
+              "arm64-v8a",
+              "x86_64"
+            ],
           }
         }
       }
@@ -74,6 +80,18 @@
     {
       "name": "base_common",
       "srcPath": "./components/base_common",
+    },
+    {
+      "name": "aggregated_payment",
+      "srcPath": "./components/aggregated_payment"
+    },
+    {
+      "name": "custom_push",
+      "srcPath": "./components/custom_push"
+    },
+    {
+      "name": "incentive_ad",
+      "srcPath": "./components/incentive_ad"
     }
   ]
 }

@@ -188,7 +188,7 @@ export struct BorrowDetailInfoPage {
               top: 10,
               bottom: 10,
             })
-        }.scrollBar(BarState.Off)
+        }.scrollBar(BarState.Off).edgeEffect(EdgeEffect.Spring)
       }
       .width(Constants.FULL_SIZE)
       .backgroundColor($r('sys.color.comp_background_list_card'))

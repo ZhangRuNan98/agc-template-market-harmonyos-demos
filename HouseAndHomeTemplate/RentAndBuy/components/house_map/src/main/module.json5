@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "house_map",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ],
+    "routerMap": "$profile:router_map"
+  }
+}

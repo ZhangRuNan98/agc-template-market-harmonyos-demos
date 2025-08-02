@@ -18,7 +18,7 @@
       "rights": ["Read", "Upsert", "Delete"]
     }
   ],
-  "objectTypeName": "CheckInRecord",
+  "objectTypeName": "CloudCheckInRecord",
   "fields": [
     {
       "isNeedEncrypt": false,

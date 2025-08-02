@@ -7,7 +7,7 @@ class UserInfo {
   getFieldTypeMap() {
     let fieldTypeMap = new Map();
     fieldTypeMap.set('userId', 'String');
-    fieldTypeMap.set('avatar', 'String');
+    fieldTypeMap.set('avatar', 'Text');
     fieldTypeMap.set('nickname', 'String');
     fieldTypeMap.set('phone', 'String');
     fieldTypeMap.set('studentID', 'String');

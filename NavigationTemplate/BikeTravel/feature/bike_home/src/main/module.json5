@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "bike_home",
+    "type": "har",
+    "deviceTypes": [
+      "phone"
+    ]
+  }
+}

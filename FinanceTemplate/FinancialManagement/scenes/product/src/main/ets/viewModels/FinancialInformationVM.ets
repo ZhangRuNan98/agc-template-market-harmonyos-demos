@@ -1,8 +1,4 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, } from 'commonlib';
-import { INoticeItem } from 'network/src/main/ets/types/responseTypes/NoticeResp';
-
-const TAG = '[FinancialInformationVM]';
+import { https, INoticeItem } from 'lib_foundation';
 
 @ObservedV2
 export class FinancialInformationVM {

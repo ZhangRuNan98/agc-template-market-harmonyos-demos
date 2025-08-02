@@ -73,6 +73,15 @@ export class AddressVM {
       .join(' ');
   }
 
+  public clearRegion(): void {
+    this.countryCode = '';
+    this.country = '';
+    this.province = '';
+    this.city = '';
+    this.district = '';
+    this.street = '';
+  }
+
   public assignFromDTO(address: AddressDTO): void {
     this.id = address.id ?? '';
     this.name = address.name ?? '';

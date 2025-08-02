@@ -1,4 +1,5 @@
 import cryptoFramework from '@ohos.security.cryptoFramework';
+import { GroupBook } from '../model/Book';
 
 export class MathUtil {
   private static readonly INT32_BYTE_SIZE: number = 4;
@@ -31,4 +32,22 @@ export class MathUtil {
     }
     return result;
   }
+
+  public static sortFav(items: GroupBook[]): Array<GroupBook> {
+    return items.sort((a, b) => {
+      // 首先比较name字段，有值的排在前面
+      const aHasName = a.groupName !== '';
+      const bHasName = b.groupName !== '';
+
+      if (aHasName && !bHasName) {
+        return -1; // a有name，b没有，a排在前面
+      } else if (!aHasName && bHasName) {
+        return 1;  // a没有name，b有，b排在前面
+      }
+
+      // name状态相同的情况下，比较时间戳，时间更近的排在前面
+      return b.timestamp - a.timestamp;
+    });
+  }
+
 }

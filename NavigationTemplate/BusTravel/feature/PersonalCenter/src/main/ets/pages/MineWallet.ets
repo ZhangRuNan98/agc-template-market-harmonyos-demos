@@ -1,8 +1,6 @@
-import { RouteEntryVM } from 'common'
+import { CardInfoList, getDataFromJSON, RouteEntryVM } from 'common'
 import { ExpendSet } from '../model/ExpendSet'
-import { getDataFromJSON } from 'common';
-import { PageHeader } from '../components/PageHeader';
-import { CardInfoList } from 'common'
+
 
 @Builder
 export function MineWalletBuilder() {
@@ -24,7 +22,6 @@ export struct MineWallet {
 
   aboutToAppear(): void {
     this.initDataSource()
-    console.log('============' + JSON.stringify(this.userBusConsumption))
   }
 
   initDataSource() {
@@ -46,12 +43,14 @@ export struct MineWallet {
           this.buildNanjingBus()
           this.buildCardId()
           this.buildExpendDetail()
+          Blank()
+            .layoutWeight(1)
         }
-        .height('100%')
         .width('100%')
         .backgroundImageSize(ImageSize.Auto)
         .backgroundColor('#F1F3F5')
       }
+      .layoutWeight(1)
       .scrollable(ScrollDirection.Vertical)
       .scrollBar(BarState.Auto)
       .scrollBarWidth('0vp')

@@ -25,8 +25,8 @@ export class MyCheckInVM {
 
   public jumpToTaskPage(task: CheckInActivity) {
     RouterModule.push({
-      url:RouterMap.ACTIVITY_TASK,
-      param:task.activityId,
+      url: RouterMap.ACTIVITY_TASK,
+      param: task.activityId,
     });
   }
 }

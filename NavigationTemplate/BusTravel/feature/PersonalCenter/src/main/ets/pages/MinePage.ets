@@ -1,13 +1,10 @@
-import { SettingItem } from '../model/SettingItem';
-import { getDataFromJSON } from 'common'
-import { UserInfo } from 'common';
-import { RouteEntryVM } from 'common'
 import { FunctionalButton, functionalButtonComponentManager } from '@hms.core.atomicserviceComponent.atomicserviceUi';
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import { url } from '@kit.ArkTS';
 import { call, observer } from '@kit.TelephonyKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { CardInfoList } from 'common'
+import { CardInfoList, getDataFromJSON, RouteEntryVM, UserInfo } from 'common'
+import { SettingItem } from '../model/SettingItem'
+
 
 @Builder
 export function MinePageBuilder() {
@@ -49,13 +46,12 @@ export struct MinePage {
 
         }
         .width('100%')
-        .height('100%')
         .padding({ left: 16, right: 16 })
         .constraintSize({ minHeight: '100%' })
         .alignItems(HorizontalAlign.Start)
       }
       .width('100%')
-      .height('100%')
+      .layoutWeight(1)
       .align(Alignment.TopStart)
       .backgroundImageSize(ImageSize.Auto)
       .scrollable(ScrollDirection.Vertical)

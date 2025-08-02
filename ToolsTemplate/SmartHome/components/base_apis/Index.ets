@@ -1,0 +1,1 @@
+export { prompt, jumpToAppSettings } from './src/main/ets/apis/Tools'

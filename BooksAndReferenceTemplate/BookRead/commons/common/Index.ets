@@ -10,23 +10,19 @@ export { TCLogger } from './src/main/ets/comp/TCLogger';
 
 export { TCRouter } from './src/main/ets/comp/TCRouter';
 
-export { rankListInfo } from './src/main/ets/model/Book';
-
-export { BookInfo } from './src/main/ets/model/Book';
+export * from './src/main/ets/model/Book';
 
 export { BorrowInfo, StatusInfo, BorrowStatus } from './src/main/ets/model/BorrowInfo';
 
 export { FeedbackItemType, FeedbackItem, FeedbackRecord } from './src/main/ets/model/FeedbackRecordModel';
 
-export { NavHeaderBar, BookCover, ReturnButton } from './src/main/ets/ui/CommonUI';
+export * from './src/main/ets/ui/CommonUI';
 
 export { UserInfoModel } from './src/main/ets/model/UserInfoModel';
 
 export { MemberPackage, RechargePackage, RechargeRecord } from './src/main/ets/model/Member';
 
 export { ReadSet } from './src/main/ets/model/ReadSet';
-
-export { BookBigCard, BookLittleCard } from './src/main/ets/ui/BookCard';
 
 export { EpubUtils } from './src/main/ets/utils/EpubUtils';
 
@@ -48,15 +44,6 @@ export * from './src/main/ets/ui/BookCard'
 
 export { UserInfoUtil } from './src/main/ets/utils/UserInfoUtil';
 
-// 支付相关导出
-export { ChannelType, WxExtraInfo, ChannelInfo } from './src/main/ets/model/PaymentModels';
+export * from './src/main/ets/model/WelfareModel'
 
-export { AggregatedPaymentPicker } from './src/main/ets/comp/AggregatedPaymentPicker';
-
-export { MockApi } from './src/main/ets/utils/payment/MockApi';
-
-export { AggregatedPaymentVM } from './src/main/ets/utils/payment/AggregatedPaymentVM';
-
-
-
-
+export * from './src/main/ets/utils/DialogUtil'

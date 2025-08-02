@@ -2,9 +2,10 @@ import { Information } from './Information';
 import { Job } from './Job';
 import { Mine } from './Mine';
 import { AvoidArea } from '@ohos_agcit/common_component';
-import { AppStorageV2 } from '@kit.ArkUI';
+import { AppStorageV2, ComponentContent } from '@kit.ArkUI';
+import { common } from '@kit.AbilityKit';
+import { checkUpdate, DialogController, findNewVersion, Params } from 'check_app_update';
 
-//  资讯，主页面
 @Entry
 @ComponentV2
 struct Index {
@@ -12,6 +13,30 @@ struct Index {
   @Local currentIndex: number = 0
   private controller: TabsController = new TabsController()
   private tabsController: TabsController = new TabsController()
+  private ctx: UIContext = this.getUIContext();
+
+  aboutToAppear(): void {
+    checkUpdate(this.getUIContext().getHostContext() as common.UIAbilityContext)
+      .then(version => {
+        // 0 不存在新版本， 1 存在新版本
+        if (version === 1) {
+          this.showDialog(version);
+        } else {
+          // mock 新版本
+          this.showDialog(version);
+        }
+      })
+  }
+
+  showDialog(version: number) {
+    let contentNode: ComponentContent<object> =
+      new ComponentContent(this.ctx, wrapBuilder(findNewVersion), new Params(version))
+    DialogController.setContext(this.ctx);
+    DialogController.setContentNode(contentNode);
+    DialogController.setOptions({alignment:DialogAlignment.Center,offset:{dx:0, dy:0}})
+    DialogController.openDialog();
+  }
+
 
   @Builder
   tabBuilder(title: Resource, index: number, selectedImg: Resource, normalImg: Resource) {
@@ -44,7 +69,6 @@ struct Index {
         .tabBar(this.tabBuilder($r('app.string.app_information'), 0, $r('app.media.active_home'), $r('app.media.home')))
 
         TabContent() {
-          // Job()
           Job()
         }
         .tabBar(this.tabBuilder($r('app.string.app_job'), 1, $r('app.media.active_job'), $r('app.media.job')))
@@ -64,9 +88,6 @@ struct Index {
       })
       .backgroundColor('#F1F3F5')
       .scrollable(false)
-      .onContentWillChange((currentIndex, comingIndex) => {
-        return true
-      })
     }
     .width('100%')
     .height('100%')

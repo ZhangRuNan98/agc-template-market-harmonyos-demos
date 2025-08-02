@@ -1,4 +1,5 @@
 import { BusinessError } from '@kit.BasicServicesKit';
+import { Logger } from '../logger'
 import { bufferToString } from './BufferUtil';
 
 export function getDataFromJSON<T>(rawFileName: string, component?: Object): T[] {
@@ -9,7 +10,7 @@ export function getDataFromJSON<T>(rawFileName: string, component?: Object): T[]
   } catch (error) {
     let code = (error as BusinessError).code;
     let message = (error as BusinessError).message;
-    console.error(`getRawFileContentSync failed, error code: ${code}, message: ${message}.`);
+    Logger.error(`getRawFileContentSync failed, error code: ${code}, message: ${message}.`)
   }
 
   return result;

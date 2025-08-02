@@ -95,7 +95,8 @@ export struct BookHomePage {
       .barMode(BarMode.Fixed)
       .padding({ bottom: 18 })
       .animationDuration(0)
-      .onAnimationStart((index: number, targetIndex: number) => {
+      .scrollable(false)
+      .onAnimationStart((targetIndex: number) => {
         this.currentIndexTab = targetIndex;
       })
     }

@@ -1,9 +1,19 @@
+export class Config {
+
+  // 是否为开发模式
+  public static readonly IS_DEV: boolean = true;
+
+  // 地址解析文本的字符数限制
+  public static readonly ADDRESS_PARSE_TEXT_CHAR_LIMIT: number = 150;
+
+}
+
 export class RouteMap {
   // 地址管理页面
-  public static ADDRESS_MANAGE_PAGE: string = 'AddressManagePage';
+  public static readonly ADDRESS_MANAGE_PAGE: string = 'AddressManagePage';
 
   // 地址编辑页面
-  public static ADDRESS_EDIT_PAGE: string = 'AddressEditPage';
+  public static readonly ADDRESS_EDIT_PAGE: string = 'AddressEditPage';
 }
 
 export class IStyle {
@@ -71,18 +81,21 @@ export class IColor {
 
   // 黑色 90% 透明
   public static readonly BLACK_TRANSPARENT_90: ResourceStr = '#E6000000';
+
+  // 亮橙色 (用于仅在开发模式下弹出的 Toast 背景色)
+  public static readonly DEV_TOAST_BG_COLOR: ResourceStr = '#FFFF9800';
 }
 
 export class IFontSize {
-  public static readonly TITLE: string = '18vp';
+  public static readonly TITLE: Dimension = '18vp';
 
-  public static readonly SUB_TITLE: string = '16vp';
+  public static readonly SUB_TITLE: Dimension = '16vp';
 
-  public static readonly BODY: string = '14vp';
+  public static readonly BODY: Dimension = '14vp';
 
-  public static readonly CAPTION: string = '12vp';
+  public static readonly CAPTION: Dimension = '12vp';
 
-  public static readonly TINY: string = '10vp';
+  public static readonly TINY: Dimension = '10vp';
 }
 
 export enum Operation {
@@ -100,4 +113,14 @@ export enum LoadMode {
   INIT = 'INIT',
   REFRESH = 'REFRESH',
   LOAD_MORE = 'LOAD_MORE',
+}
+
+export enum ShippingAddressErrorCode {
+  INTERNAL_ERROR = 1008100001,
+  NETWORK_ERROR = 1008100002,
+  ACCOUNT_NOT_LOGGED_IN = 1008100003,
+  PACKAGE_FINGERPRINT_CHECK_ERROR = 1008100004,
+  PERMISSION_CHECK_ERROR = 1008100005,
+  USER_CANCELED = 1008100006,
+  UNSUPPORTED = 1008100007
 }

@@ -1,6 +1,6 @@
-import { Logger } from '@hw-agconnect/ui-base'
-import { BookInfo } from '../model/Book'
-import { LazyDataVM } from '../model/LazyDataVM'
+import { Logger } from '@hw-agconnect/ui-base';
+import { BookInfo } from '../model/Book';
+import { LazyDataVM } from '../model/LazyDataVM';
 
 
 @ComponentV2

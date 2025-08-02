@@ -13,7 +13,7 @@
     "metadata": [
       {
         "name": "client_id",
-        "value": "xxx"
+        "value": "xxx" // todo: 填写正确的 Client Id
       }
     ],
     "requestPermissions": [

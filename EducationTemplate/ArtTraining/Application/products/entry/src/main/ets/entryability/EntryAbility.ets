@@ -1,6 +1,6 @@
 import { UIAbility, Want } from '@kit.AbilityKit';
 import { window } from '@kit.ArkUI';
-import { FrameworkUtil, Logger, RouterMap, RouterModule, TabsIndexMap } from 'commonlib';
+import { FrameworkUtil, Logger, RouterMap, RouterModule, TabsIndexMap, WindowUtil } from 'commonlib';
 import { buffer } from '@kit.ArkTS';
 import auth from '@hw-agconnect/auth';
 
@@ -14,24 +14,30 @@ export default class EntryAbility extends UIAbility {
     auth.init(this.context, json);
 
     // 获取router事件中传递的targetPage参数
-    Logger.info(TAG, `Ability onCreate: ${JSON.stringify(want?.parameters)}`);
     if (want?.parameters?.params) {
-      let params: Record<string, Object> = JSON.parse(want.parameters.params as string);
-      const cardType = params.cardType as string;
-      const message = params.message as string;
-      this.handleWantInfo(cardType, message);
+      try {
+        let params: Record<string, Object> = JSON.parse(want.parameters.params as string);
+        const cardType = params.cardType as string;
+        const message = params.message as string;
+        this.handleWantInfo(cardType, message);
+      } catch (err) {
+        Logger.error(TAG, 'handle want info failed. error:' + JSON.stringify(err));
+      }
     }
   }
 
   // 如果UIAbility已在后台运行，在收到Router事件后会触发onNewWant生命周期回调
   public onNewWant(want: Want): void {
-    Logger.info(TAG, `Ability onNewWant: ${JSON.stringify(want?.parameters)}`);
     if (want?.parameters?.params) {
-      let params: Record<string, Object> = JSON.parse(want.parameters.params as string);
-      const cardType = params.cardType as string;
-      const message = params.message as string;
-      const data = params.data as string;
-      this.handleWantInfo(cardType, message, data);
+      try {
+        let params: Record<string, Object> = JSON.parse(want.parameters.params as string);
+        const cardType = params.cardType as string;
+        const message = params.message as string;
+        const data = params.data as string;
+        this.handleWantInfo(cardType, message, data);
+      } catch (err) {
+        Logger.error(TAG, 'handle want info failed. error:' + JSON.stringify(err));
+      }
     }
   }
 
@@ -43,6 +49,7 @@ export default class EntryAbility extends UIAbility {
         Logger.error(TAG, 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
         return;
       }
+      WindowUtil.initWindowUtil(windowStage.getMainWindowSync());
       Logger.info(TAG, 'Succeeded in loading the content.');
     });
   }

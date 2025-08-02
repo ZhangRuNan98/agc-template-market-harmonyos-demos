@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -15,32 +16,57 @@
 |----------------------------------------------|----------------------------------------------|
 | <img src="screenshots/list.jpg" width="300"> | <img src="screenshots/edit.jpg" width="300"> |
 
-## 使用
+## 约束与限制
+
+### 环境
+
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+
+### 权限
+
+* 网络权限：ohos.permission.INTERNET
+
+### 服务
+
+* 华为账号收货地址管理服务：组件支持获取华为账号收货地址，使用此功能需满足一定条件。详细参考：[收货地址服务开发前提](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-choose-address-dev#section1061219267293)。
+
+## 快速入门
 
 1. 安装组件。
 
-   将模板工程根目录的components下[module_address_manage](../module_address_manage)目录拷贝至您工程根目录的components/，并添加依赖和module声明。
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
 
-```
-// entry/oh-package.json5
-"dependencies": {
-  "module_address_manage": "file:../components/module_address_manage"
-}
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
 
-// build-profile.json5
-"modules": [
-  {
-    "name": "module_address_manage",
-    "srcPath": "./components/module_address_manage"
-  }
-]
-```
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加module_address_manage模块。
+
+   ```
+   // 项目根目录下build-profile.json5填写module_address_manage路径。其中XXX为组件存放的目录名
+   "modules": [
+     {
+       "name": "module_address_manage",
+       "srcPath": "./XXX/module_address_manage"
+     }
+   ]
+   ```
+
+   ```
+   // 在项目根目录oh-package.json5中添加依赖
+   "dependencies": {
+     "module_address_manage": "file:./XXX/module_address_manage"
+   }
+   ```
 
 2. 引入组件。
 
-```
-import { AddressManage, AddressDTO } from 'module_address_manage';
-```
+   ```
+   import { AddressManage, AddressDTO } from 'module_address_manage';
+   ```
 
 ## API参考
 

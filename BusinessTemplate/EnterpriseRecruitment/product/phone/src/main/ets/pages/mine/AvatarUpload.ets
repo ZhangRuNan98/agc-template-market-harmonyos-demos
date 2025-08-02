@@ -2,8 +2,9 @@ import { image } from '@kit.ImageKit';
 import { fileUri, fileIo as fs, picker } from '@kit.CoreFileKit';
 import Matrix4 from '@ohos.matrix4';
 import { AppStorageV2, PersistenceV2, router } from '@kit.ArkUI';
-import { AvoidArea, getCurrentLocalTime, UserInfo, User } from '@ohos_agcit/common_component';
+import { AvoidArea, UserInfo, User } from '@ohos_agcit/common_component';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { getCurrentLocalTime } from 'file_management';
 
 @Entry
 @ComponentV2

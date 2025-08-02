@@ -1,0 +1,1 @@
+export { SpotsTab } from './src/main/ets/views/SpotsTab';

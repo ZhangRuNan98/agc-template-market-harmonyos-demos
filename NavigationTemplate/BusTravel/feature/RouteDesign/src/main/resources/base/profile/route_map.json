@@ -1,9 +1,9 @@
 {
   "routerMap": [
     {
-      "name": "RouteDetail",
-      "pageSourceFile": "src/main/ets/page/routeDetail.ets",
-      "buildFunction": "RouteDetailBuilder",
+      "name": "RouteDetailPage",
+      "pageSourceFile": "src/main/ets/page/routeDetailPage.ets",
+      "buildFunction": "RouteDetailPageBuilder",
       "data": {
         "description": ""
       }

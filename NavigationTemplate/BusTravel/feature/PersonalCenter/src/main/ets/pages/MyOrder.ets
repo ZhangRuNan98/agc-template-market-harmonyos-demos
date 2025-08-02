@@ -1,7 +1,5 @@
-import { RouteEntryVM } from 'common'
-import { getDataFromJSON } from 'common';
+import { getDataFromJSON, RouteEntryVM } from 'common'
 import { OrderSet } from '../model/ExpendSet'
-import { PageHeader } from '../components/PageHeader';
 
 
 @Builder
@@ -29,8 +27,9 @@ export struct MyOrder {
         Column() {
           this.buildMyOrder()
 
+          Blank()
+            .layoutWeight(1)
         }
-        .height('100%')
         .width('100%')
         .backgroundImageSize(ImageSize.Auto)
         .backgroundColor('#F1F3F5')

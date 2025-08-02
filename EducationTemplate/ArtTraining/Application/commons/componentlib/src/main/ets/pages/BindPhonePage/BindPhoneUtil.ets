@@ -1,8 +1,8 @@
+import { promptAction } from '@kit.ArkUI';
+import { BusinessError } from '@kit.BasicServicesKit';
 import { Logger, AccountUtil, RouterModule, DialogInfo, DialogMap } from 'commonlib';
 import { https } from 'network';
-import { promptAction } from '@kit.ArkUI';
 import { ConfirmParam } from '../../dialog/CommonConfirmDialog';
-import { BusinessError } from '@kit.BasicServicesKit';
 
 const TAG = '[BindPhoneUtil]';
 
@@ -15,24 +15,11 @@ export class BindPhoneUtil {
       return;
     }
     if (!code) {
-      RouterModule.push({
-        url: DialogMap.COMMON_CONFIRM,
-        param: {
-          title: '提示',
-          message: '元服务未获取phone权限或用户授权，点击确定将根据openId创建一个mock账号。',
-        },
-        onPop: (value) => {
-          const result = value.result as DialogInfo<ConfirmParam>;
-          if (result.param?.isConfirm) {
-            BindPhoneUtil._bindPhoneMock();
-          }
-        },
-      });
+      BindPhoneUtil._bindPhoneMock();
     } else {
       BindPhoneUtil._bindPhone(code);
     }
   }
-
 
   public static async unbindPhone() {
     RouterModule.push({
@@ -52,18 +39,32 @@ export class BindPhoneUtil {
   }
 
   private static async _bindPhoneMock() {
-    try {
-      const bindRes = await https.bindPhone('', true);
-      if (bindRes.ret.code === 0) {
-        AccountUtil.setUserInfo(bindRes.result);
-        Logger.info(TAG, 'succeeded in getting phone number. ');
-        promptAction.showToast({ message: '手机号绑定成功！当前手机号为mock数据，非华为账号真实手机号' });
-        RouterModule.pop();
-      }
-    } catch (err) {
-      promptAction.showToast({ message: '手机号绑定失败，请稍后重试' });
-      Logger.error(TAG, 'bind phone and get user info error::' + JSON.stringify(err));
-    }
+    RouterModule.push({
+      url: DialogMap.COMMON_CONFIRM,
+      param: {
+        title: '提示',
+        message: '元服务未获取phone权限或用户授权，点击确定将根据openId创建一个mock账号。',
+      },
+      onPop: async (value) => {
+        const result = value.result as DialogInfo<ConfirmParam>;
+        if (result.param?.isConfirm) {
+          try {
+            const bindRes = await https.bindPhone('', true);
+            if (bindRes.ret.code === 0) {
+              AccountUtil.setUserInfo(bindRes.result);
+              Logger.info(TAG, 'succeeded in getting phone number. ');
+              promptAction.showToast({
+                message: '手机号绑定成功！当前手机号为mock数据，非华为账号真实手机号',
+              });
+              RouterModule.pop();
+            }
+          } catch (err) {
+            promptAction.showToast({ message: '手机号绑定失败，请稍后重试' });
+            Logger.error(TAG, 'bind phone and get user info error::' + JSON.stringify(err));
+          }
+        }
+      },
+    });
   }
 
   private static async _bindPhone(code: string) {
@@ -74,6 +75,10 @@ export class BindPhoneUtil {
         Logger.info(TAG, 'succeeded in getting phone number. ');
         promptAction.showToast({ message: '手机号绑定成功！' });
         RouterModule.pop();
+      } else {
+        promptAction.showToast({ message: '云端访问失败' });
+        BindPhoneUtil._bindPhoneMock();
+        Logger.error(TAG, 'get phone number failed. error:' + JSON.stringify(bindRes.ret));
       }
     } catch (err) {
       promptAction.showToast({ message: '手机号绑定失败，请稍后重试' });

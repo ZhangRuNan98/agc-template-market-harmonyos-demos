@@ -1,4 +1,4 @@
-import { NavBarView } from './NavBarView';
+import { FormBar, FormType } from 'form_bar';
 import { Constants } from 'utils';
 
 export interface NavBarInfo {
@@ -14,10 +14,11 @@ export struct NavBarListView {
 
   @Builder
   BuildEachBar(item: NavBarInfo) {
-    NavBarView({
+    FormBar({
+      formType: FormType.NAV,
       pathStack: this.pathStack,
-      image: item.image,
-      text: item.text,
+      startImage: item.image,
+      name: item.text,
       pageName: item.pageName,
     });
   }

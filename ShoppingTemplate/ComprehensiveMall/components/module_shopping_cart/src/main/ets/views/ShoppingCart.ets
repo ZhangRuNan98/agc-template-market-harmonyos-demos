@@ -14,15 +14,18 @@ export struct ShoppingCart {
   // 自定义模块
   @BuilderParam customContentBuilder: CustomBuilder;
   // 登录事件回调
-  @Event onLogin: () => void = () => {};
+  @Event onLogin: () => void = () => {
+  };
   // 结算事件回调
   @Event
-  public onCheckout: (selectedGoodList: Product[]) => void = () => {};
+  public onCheckout: (selectedGoodList: Product[]) => void = () => {
+  };
   // 作为子页面时，返回事件回调
-  @Event onBack: () => void = () => {};
+  @Event onBack: () => void = () => {
+  };
   // 商品卡片事件回调
-  @Event onCardClick: (id: string) => void = () => {};
-
+  @Event onCardClick: (id: string) => void = () => {
+  };
   vm: CartPageVM = new CartPageVM();
 
   aboutToAppear(): void {
@@ -101,14 +104,14 @@ export struct ShoppingCart {
                   .justifyContent(FlexAlign.Start)
                   .expandSafeArea(
                     [SafeAreaType.SYSTEM, SafeAreaType.CUTOUT],
-                    this.isChildRoute ? [SafeAreaEdge.BOTTOM] : []
+                    this.isChildRoute ? [SafeAreaEdge.BOTTOM] : [],
                   )
                 }
                 .height('100%')
                 .scrollBar(BarState.Off)
                 .expandSafeArea(
                   [SafeAreaType.SYSTEM, SafeAreaType.CUTOUT],
-                  this.isChildRoute ? [SafeAreaEdge.BOTTOM] : []
+                  this.isChildRoute ? [SafeAreaEdge.BOTTOM] : [],
                 )
               }
               .layoutWeight(1)
@@ -135,6 +138,7 @@ export struct ShoppingCart {
               // 用来清空步进器的焦点
               this.getUIContext().getFocusController().clearFocus();
             })
+
             // 底部结算面板
             if (this.vm.cartCards.length) {
               CartControlPanel({
@@ -184,36 +188,48 @@ export struct ShoppingCart {
   @Builder
   unauthenticatedBuilder() {
     Column() {
-      Image($r('app.media.empty_status_logo'))
-        .width(160)
-        .height(160)
-        .draggable(false)
-        .objectFit(ImageFit.Cover)
-        .margin({ bottom: 12 })
-      Text('登录后可同步购物车中的商品')
-        .fontSize(14)
-        .fontColor($r('sys.color.mask_secondary'))
-        .margin({ bottom: 12 })
-      Button() {
-        Text('登录')
-          .fontSize(14)
-          .fontColor(Color.White)
-          .fontWeight(600)
-      }
-      .width(100)
-      .height(38)
-      .type(ButtonType.Normal)
-      .backgroundColor('#FFE64566')
-      .borderRadius(21)
-      .onClick(() => {
-        this.onLogin && this.onLogin();
+      CartPageHeader({
+        isChildRoute: this.isChildRoute,
+        showEdit: false,
+        onBack: () => {
+          this.onBack && this.onBack();
+        },
       })
+      Column() {
+        Image($r('app.media.empty_status_logo'))
+          .width(160)
+          .height(160)
+          .draggable(false)
+          .objectFit(ImageFit.Cover)
+          .margin({ bottom: 12 })
+        Text('登录后可同步购物车中的商品')
+          .fontSize(14)
+          .fontColor($r('sys.color.mask_secondary'))
+          .margin({ bottom: 12 })
+        Button() {
+          Text('登录')
+            .fontSize(14)
+            .fontColor(Color.White)
+            .fontWeight(600)
+        }
+        .width(100)
+        .height(38)
+        .type(ButtonType.Normal)
+        .backgroundColor('#FFE64566')
+        .borderRadius(21)
+        .onClick(() => {
+          this.onLogin && this.onLogin();
+        })
+      }
+      .layoutWeight(1)
+      .justifyContent(FlexAlign.Center)
+      .margin({ bottom: 80 })
     }
     .width('100%')
     .height('100%')
     .borderRadius(12)
     .alignItems(HorizontalAlign.Center)
-    .justifyContent(FlexAlign.Center)
+    .justifyContent(FlexAlign.Start)
     .backgroundColor(Color.White)
   }
 
@@ -246,7 +262,7 @@ export struct ShoppingCart {
       }
     }
     .align(Alignment.Bottom)
-    .padding({top: 16, bottom: 16})
+    .padding({ top: 16, bottom: 16 })
     .clip(true)
     .constraintSize({ minHeight: 32 })
     .width('100%')
@@ -260,15 +276,15 @@ export struct ShoppingCart {
         .height(160)
         .draggable(false)
         .objectFit(ImageFit.Cover)
-        .margin({ bottom: 15 })
+        .margin({ bottom: 16 })
       Text('购物车空空如也，去逛逛吧~')
         .fontSize(13)
         .fontColor($r('sys.color.mask_secondary'))
-        .margin({ bottom: 15 })
+        .margin({ bottom: 24 })
     }
     .width('100%')
     .height('45%')
-    .borderRadius(12)
+    .constraintSize({ minHeight: 200 })
     .alignItems(HorizontalAlign.Center)
     .justifyContent(FlexAlign.Center)
     .backgroundColor(Color.White)

@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "module_license_keyboard",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

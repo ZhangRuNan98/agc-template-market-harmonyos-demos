@@ -17,7 +17,7 @@ export struct PrivacyPage {
         })
         Column({space: 12}){
           this.privacyOptionView('隐私协议',Constants.PRIVACY_POLICY_ROUTE)
-          this.privacyOptionView('第三方信息共享清单',Constants.DATA_SHARING_ROUTE)
+          this.privacyOptionView('第三方共享信息清单',Constants.DATA_SHARING_ROUTE)
           this.privacyOptionView('个人信息收集清单',Constants.DATA_COLLECTION_ROUTE)
         }
         .width(Constants.FULL_SIZE)

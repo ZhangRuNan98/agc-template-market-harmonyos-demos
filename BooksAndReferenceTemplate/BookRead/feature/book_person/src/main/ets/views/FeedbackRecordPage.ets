@@ -99,6 +99,7 @@ export struct FeedbackRecordPage {
         }
         .width('100%')
         .margin({ bottom: 100 })
+        .edgeEffect(EdgeEffect.Spring)
       }
       .height('100%')
       .width('100%')

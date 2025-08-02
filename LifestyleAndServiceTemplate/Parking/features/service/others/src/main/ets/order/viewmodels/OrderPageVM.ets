@@ -1,5 +1,5 @@
-import { IOrder, Logger } from 'commonlib';
-import { getId, Https } from 'network';
+import { AccountUtil, IOrder, Logger } from 'common';
+import { Https } from 'network';
 
 @ObservedV2
 export class OrderPageVM {
@@ -15,7 +15,7 @@ export class OrderPageVM {
 
   /** 获取所有订单 **/
   public async getAllOrder() {
-    const res = await Https.getAllOrder({ id: getId() });
+    const res = await Https.getAllOrder({ id: AccountUtil.getId() });
     if (res.code === 0 && res.data.info) {
       this.sortedMap = this._groupByYearMonth(res.data.info);
     }

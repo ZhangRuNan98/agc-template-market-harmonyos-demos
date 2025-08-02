@@ -1,0 +1,11 @@
+{
+  "module": {
+    "name": "bike_home_test",
+    "type": "feature",
+    "deviceTypes": [
+      "phone"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false
+  }
+}

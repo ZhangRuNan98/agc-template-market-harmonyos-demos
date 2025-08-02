@@ -1,4 +1,4 @@
-import { IPositionInfo } from 'network/src/main/ets/types/responseTypes/GetPositionInfoResp';
+import { IPositionInfo } from 'lib_foundation';
 import { IRedemptionButton } from '../types';
 
 export enum Gender {

@@ -8,7 +8,8 @@ import {
 } from '@ohos/mqtt';
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { LogUtil } from 'utils';
-import { prompt, ObserverMngModel } from 'utils';
+import { ObserverMngModel } from 'utils';
+import { prompt } from 'base_apis';
 
 export enum MQTT_STATE {
   INITIALIZE,

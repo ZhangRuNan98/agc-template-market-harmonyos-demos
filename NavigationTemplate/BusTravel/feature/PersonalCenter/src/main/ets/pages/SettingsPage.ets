@@ -1,15 +1,17 @@
-import { abilityAccessCtrl, common, PermissionRequestResult, Permissions, Want } from '@kit.AbilityKit'
+import { abilityAccessCtrl, bundleManager, common, PermissionRequestResult, Permissions, Want } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { fileIo, storageStatistics } from '@kit.CoreFileKit';
-import { RouteEntryVM } from 'common';
-import { bundleManager } from '@kit.AbilityKit';
+import { Logger, RouteEntryVM } from 'common';
+
 
 @Builder
 export function SettingsPageBuilder() {
   SettingsPage()
 }
+
 const TAG: string = '[PublishOperation]';
 const DOMAIN_NUMBER: number = 0xFF00;
+
 @Component
 export struct SettingsPage {
   @State notifyToggle: boolean = false;
@@ -20,7 +22,8 @@ export struct SettingsPage {
   private context = getContext(this) as common.UIAbilityContext;
   localPermissions: Array<Permissions> = ['ohos.permission.LOCATION', 'ohos.permission.APPROXIMATELY_LOCATION'];
   vm: RouteEntryVM = RouteEntryVM.instance;
-  async aboutToAppear(): Promise<void>{
+
+  async aboutToAppear(): Promise<void> {
     this.localToggle = await this.checkPermissions(this.localPermissions)
     this.getCache()
   }
@@ -37,7 +40,6 @@ export struct SettingsPage {
     for (let i = 0; i < length; i++) {
       if (grantStatus[i] === 0) {
         // 用户授权，可以继续访问目标操作
-        console.log('授权成功')
       } else {
         // 用户拒绝授权，提示用户必须授权才能访问当前页面的功能，并引导用户到系统设置中打开相应的权限
         let secondData: Array<abilityAccessCtrl.GrantStatus> =
@@ -72,13 +74,13 @@ export struct SettingsPage {
     let tokenId: number = 0;
     let bundleInfo: bundleManager.BundleInfo =
       await bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
-    console.info('Succeeded in getting Bundle.');
+    Logger.info('Succeeded in getting Bundle.')
     let appInfo: bundleManager.ApplicationInfo = bundleInfo.appInfo;
     tokenId = appInfo.accessTokenId;
 
     // 校验应用是否被授予权限
     grantStatus = await atManager.checkAccessToken(tokenId, permission);
-    console.info('Succeeded in checking access token.');
+    Logger.info('Succeeded in checking access token.')
     return grantStatus;
   }
 
@@ -91,12 +93,9 @@ export struct SettingsPage {
   getCache() {
     storageStatistics.getCurrentBundleStats((error: BusinessError, bundleStats: storageStatistics.BundleStats) => {
       if (error) {
-        console.error('getCurrentBundleStats failed with error:' + JSON.stringify(error));
+        Logger.error('getCurrentBundleStats failed with error:' + JSON.stringify(error))
       } else {
-        console.info('getCurrentBundleStats successfully:' + JSON.stringify(bundleStats));
-        console.info('appsize :' + bundleStats.appSize);
-        console.info('cacheSize :' + bundleStats.cacheSize);
-        console.info('dataSize :' + bundleStats.dataSize);
+        Logger.info('getCurrentBundleStats successfully:' + JSON.stringify(bundleStats))
         this.appCache = this.byteToM(bundleStats.cacheSize)
       }
     });
@@ -110,22 +109,22 @@ export struct SettingsPage {
     fileIo.listFile(cacheDir).then((filenames) => {
       for (let i = 0; i < filenames.length; i++) {
         let dirPath = cacheDir + '/' + filenames[i];
-        console.log(dirPath);
+        Logger.info(dirPath)
         // 判断是否为文件夹
         let isDirectory: boolean = false;
         try {
           isDirectory = fileIo.statSync(dirPath).isDirectory();
         } catch (e) {
-          console.error('==========aaaa' + JSON.stringify(e));
+          Logger.error('==========aaaa' + JSON.stringify(e))
         }
 
         if (isDirectory) {
           fileIo.rmdirSync(dirPath);
         } else {
           fileIo.unlink(dirPath).then(() => {
-            console.info('remove file succeed');
+            Logger.info('remove file succeed')
           }).catch((err: Error) => {
-            console.error('remove file failed with error message: ' + err.message);
+            Logger.error('remove file failed with error message: ' + err.message)
           });
         }
       }
@@ -133,40 +132,48 @@ export struct SettingsPage {
   }
 
   build() {
-    NavDestination(){
-      Column(){
-        Column(){
-          this.buildPersonalInfo()
-          this.buildLocation()
-          this.buildClearCache()
-        }
+    NavDestination() {
+      Scroll() {
+        Column() {
+          Column() {
+            this.buildPersonalInfo()
+            this.buildLocation()
+            this.buildClearCache()
+          }
 
-        if (this.isLogin) {
-          Button('退出登录')
-            .width('90%')
-            .height('40vp')
-            .backgroundColor('#E5E5EA')
-            .fontColor($r('sys.color.font_primary'))
-            .fontSize($r('sys.float.Body_L'))
-            .margin({ bottom: '40vp' })
-            .onClick(() => {
-              AppStorage.setOrCreate('isLogin', false)
-              AppStorage.setOrCreate('userInfo', '')
-              this.vm.pop()
-            });
-        }
+          Blank()
+            .layoutWeight(1)
 
+          if (this.isLogin) {
+            Button('退出登录')
+              .width('90%')
+              .height('40vp')
+              .backgroundColor('#E5E5EA')
+              .fontColor($r('sys.color.font_primary'))
+              .fontSize($r('sys.float.Body_L'))
+              .margin({ bottom: '40vp' })
+              .onClick(() => {
+                AppStorage.setOrCreate('isLogin', false)
+                AppStorage.setOrCreate('userInfo', '')
+                this.vm.pop()
+              });
+          }
+
+        }
+        .height('100%')
+        .width('100%')
+        .backgroundColor('#F1F3F5')
+        .justifyContent(FlexAlign.SpaceBetween)
       }
-      .height('100%')
-      .width('100%')
-      .backgroundColor('#F1F3F5')
-      .justifyContent(FlexAlign.SpaceBetween)
+      .scrollable(ScrollDirection.Vertical)
+      .scrollBar(BarState.Auto)
+      .scrollBarWidth('0vp')
     }
     .title('设置')
   }
 
   @Builder
-  buildPersonalInfo(){
+  buildPersonalInfo() {
     Row() {
       Text('个人信息')
       Image($r('app.media.icon_right'))
@@ -174,15 +181,20 @@ export struct SettingsPage {
         .width(24)
     }
     .width('90%')
-    .padding({ left: 16, right: 16, top: 20, bottom: 20 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 20,
+      bottom: 20
+    })
     .backgroundColor($r('sys.color.white'))
     .borderRadius($r('sys.float.corner_radius_level8'))
     .justifyContent(FlexAlign.SpaceBetween)
-    .margin({top:12,bottom:12})
-    .onClick(()=>{
+    .margin({ top: 12, bottom: 12 })
+    .onClick(() => {
       if (this.isLogin === false) {
         this.vm.toRouteDetail('Login')
-      }else{
+      } else {
         this.vm.toRouteDetail('PersonalSetting')
       }
 
@@ -191,39 +203,44 @@ export struct SettingsPage {
 
   @Builder
   buildLocation() {
-      Row() {
-        Text('地理位置')
-          .fontColor($r('sys.color.black'))
-          .fontSize(16)
-          .fontWeight(400)
+    Row() {
+      Text('地理位置')
+        .fontColor($r('sys.color.black'))
+        .fontSize(16)
+        .fontWeight(400)
 
-        Toggle({ type: ToggleType.Switch, isOn: $$this.localToggle })
-          .selectedColor(($r('app.color.system_color_green')))
-          .margin({ right: '12lpx' })
-          .onClick(async () => {
-            if (!this.localToggle) {
-              let res = await this.reqPermissionsFromUser(this.localPermissions)
-              this.localToggle = res
-            } else {
-              let want: Want = {
-                bundleName: 'com.huawei.hmos.settings',
-                abilityName: 'com.huawei.hmos.settings.MainAbility',
-                uri: 'application_info_entry',
-                parameters: {
-                  pushParams: this.context.abilityInfo.bundleName // 应用包名
-                }
-              };
-              await this.context.startAbility(want)
-              this.localToggle = await this.checkPermissions(this.localPermissions)
-            }
-          })
-      }
-      .width('90%')
-      .padding({ left: 16, right: 12, top: 20, bottom: 20 })
-      .justifyContent(FlexAlign.SpaceBetween)
-      .backgroundColor($r('app.color.background_color_white'))
-      .borderRadius($r('sys.float.corner_radius_level8'))
-      .margin({ bottom: 12 })
+      Toggle({ type: ToggleType.Switch, isOn: $$this.localToggle })
+        .selectedColor(($r('app.color.system_color_green')))
+        .margin({ right: '12lpx' })
+        .onClick(async () => {
+          if (!this.localToggle) {
+            let res = await this.reqPermissionsFromUser(this.localPermissions)
+            this.localToggle = res
+          } else {
+            let want: Want = {
+              bundleName: 'com.huawei.hmos.settings',
+              abilityName: 'com.huawei.hmos.settings.MainAbility',
+              uri: 'application_info_entry',
+              parameters: {
+                pushParams: this.context.abilityInfo.bundleName // 应用包名
+              }
+            };
+            await this.context.startAbility(want)
+            this.localToggle = await this.checkPermissions(this.localPermissions)
+          }
+        })
+    }
+    .width('90%')
+    .padding({
+      left: 16,
+      right: 12,
+      top: 20,
+      bottom: 20
+    })
+    .justifyContent(FlexAlign.SpaceBetween)
+    .backgroundColor($r('app.color.background_color_white'))
+    .borderRadius($r('sys.float.corner_radius_level8'))
+    .margin({ bottom: 12 })
   }
 
   @Builder
@@ -247,14 +264,19 @@ export struct SettingsPage {
         Image($r('app.media.icon_right'))
           .height(24)
           .width(24)
-          .margin({left:4})
+          .margin({ left: 4 })
       }
     }
     .width('90%')
     .justifyContent(FlexAlign.SpaceBetween)
     .backgroundColor($r('app.color.background_color_white'))
     .borderRadius($r('sys.float.corner_radius_level8'))
-    .padding({ left: 16, right: 16, top: 20, bottom: 20 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 20,
+      bottom: 20
+    })
     .onClick(() => {
       this.isShow = true
     })
@@ -302,5 +324,4 @@ export struct SettingsPage {
       .margin({ top: '32lpx' })
     }
   }
-
 }

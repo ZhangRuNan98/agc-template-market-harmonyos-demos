@@ -74,7 +74,8 @@
         "format": [
           "camelCase",
           "UPPER_CASE"
-        ]
+        ],
+        "leadingUnderscore": "on"
       },
       {
         // 私有成员以下划线为前缀

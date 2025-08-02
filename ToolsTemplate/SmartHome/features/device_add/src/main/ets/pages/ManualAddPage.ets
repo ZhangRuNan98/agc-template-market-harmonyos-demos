@@ -1,4 +1,4 @@
-import { TwoLevelListView } from '../view/TwoLevelListView'
+import { TwoLevelListView } from 'category_list'
 import { ProductListViewModel } from '../viewmodel/ProductListViewModel'
 
 @Builder

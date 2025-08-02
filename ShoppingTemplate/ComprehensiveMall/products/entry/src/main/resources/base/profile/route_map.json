@@ -19,6 +19,11 @@
       "name": "EditProfilePage",
       "pageSourceFile": "src/main/ets/pages/EditProfilePage.ets",
       "buildFunction": "buildEditProfilePage"
+    },
+    {
+      "name": "CouponPage",
+      "pageSourceFile": "src/main/ets/pages/CouponPage.ets",
+      "buildFunction": "buildCouponPage"
     }
   ]
 }

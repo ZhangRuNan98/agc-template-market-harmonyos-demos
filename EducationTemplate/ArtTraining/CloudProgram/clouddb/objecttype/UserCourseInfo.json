@@ -1,160 +1,168 @@
 {
-  "indexes": [],
+  "objectTypeName": "CloudUserCourseInfo",
   "permissions": [
     {
       "role": "World",
-      "rights": ["Read"]
+      "rights": []
     },
     {
       "role": "Authenticated",
-      "rights": ["Read"]
+      "rights": []
     },
     {
       "role": "Creator",
-      "rights": ["Read", "Upsert", "Delete"]
+      "rights": [
+        "Read",
+        "Upsert"
+      ]
     },
     {
       "role": "Administrator",
-      "rights": ["Read", "Upsert", "Delete"]
+      "rights": [
+        "Read",
+        "Upsert",
+        "Delete"
+      ]
     }
   ],
-  "objectTypeName": "UserCourseInfo",
+  "indexes": [
+  ],
   "fields": [
     {
-      "isNeedEncrypt": false,
       "fieldName": "id",
-      "notNull": true,
-      "isSensitive": false,
+      "fieldType": "String",
       "belongPrimaryKey": true,
-      "fieldType": "String"
+      "notNull": true,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "courseId",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "Integer",
       "belongPrimaryKey": false,
-      "fieldType": "Integer"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "userId",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "String",
       "belongPrimaryKey": false,
-      "fieldType": "String"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "type",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "Integer",
       "belongPrimaryKey": false,
-      "fieldType": "Integer"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "name",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "String",
       "belongPrimaryKey": false,
-      "fieldType": "String"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "summary",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "String",
       "belongPrimaryKey": false,
-      "fieldType": "String"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "detail",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "Text",
       "belongPrimaryKey": false,
-      "fieldType": "Text"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "mainDiagram",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "String",
       "belongPrimaryKey": false,
-      "fieldType": "String"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "price",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "Float",
       "belongPrimaryKey": false,
-      "fieldType": "Float"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "expireType",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "Integer",
       "belongPrimaryKey": false,
-      "fieldType": "Integer"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "startTime",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "String",
       "belongPrimaryKey": false,
-      "fieldType": "String"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "endTime",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "String",
       "belongPrimaryKey": false,
-      "fieldType": "String"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "orderTime",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "String",
       "belongPrimaryKey": false,
-      "fieldType": "String"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "classHour",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "Integer",
       "belongPrimaryKey": false,
-      "fieldType": "Integer"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "status",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "Integer",
       "belongPrimaryKey": false,
-      "fieldType": "Integer"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "currentHour",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "Integer",
       "belongPrimaryKey": false,
-      "fieldType": "Integer"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     },
     {
-      "isNeedEncrypt": false,
       "fieldName": "timetable",
-      "notNull": false,
-      "isSensitive": false,
+      "fieldType": "String",
       "belongPrimaryKey": false,
-      "fieldType": "String"
+      "notNull": false,
+      "isNeedEncrypt": false,
+      "isSensitive": false
     }
   ]
 }

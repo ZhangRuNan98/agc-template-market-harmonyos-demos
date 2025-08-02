@@ -1,4 +1,4 @@
-import { IRevenueItem } from 'network/src/main/ets/types/responseTypes/GetRevenueInfoResp'
+import { IRevenueItem } from 'lib_foundation'
 import { RevenueInfoVM } from '../viewModels/RevenueInfoVM'
 
 @Builder
@@ -103,7 +103,7 @@ struct RevenueInfo {
                 }
                 .width('100%')
                 .margin({ bottom: 8 })
-              }, (item: IRevenueItem[]) => JSON.stringify(item))
+              }, (item: IRevenueItem) => JSON.stringify(item))
             }
             .backgroundColor(Color.White)
             .padding({ left: 16, top: 16, bottom: 8 })
@@ -112,6 +112,7 @@ struct RevenueInfo {
         }
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
     }
     .backgroundColor($r('sys.color.background_secondary'))
     .title('收益明细')

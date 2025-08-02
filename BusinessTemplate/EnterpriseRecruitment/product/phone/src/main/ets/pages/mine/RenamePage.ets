@@ -14,12 +14,13 @@ struct RenamePage {
         LeftReturnComponent()
           .onClick(() => {
             router.back();
-          })
-        TitleBar({ text: '修改昵称' })
+          });
+        TitleBar({ text: '修改昵称' });
       }
-      .height('5%')
-      .width(CommonConstants.FULL_WIDTH)
+      .height(56)
       .alignItems(VerticalAlign.Center)
+      .width(CommonConstants.FULL_WIDTH)
+      .alignItems(VerticalAlign.Center);
       
       Column() {
         TextInput({ text: this.userInfo.nickname, placeholder: 'input your resume...'})
@@ -66,7 +67,7 @@ struct RenamePage {
     .height('100%')
     .width('100%')
     .padding({
-      top: px2vp(this.avoidArea.topRectHeight) + 10,
+      top: px2vp(this.avoidArea.topRectHeight),
       bottom: px2vp(this.avoidArea.bottomRectHeight),
       left: '6%',
       right: '6%'

@@ -1,9 +1,5 @@
-import { https } from 'network';
-import { AccountUtil, UserInfoModel } from 'commonlib';
-import { IMonthTransactionItem, } from 'network/src/main/ets/types/responseTypes/GetTransactionRecordListResp';
-import { ISettingData } from 'network/src/main/ets/mocks/Constants';
-
-const TAG = '[TransactionListVM]';
+import { https, IMonthTransactionItem, ISettingData } from 'lib_foundation';
+import { AccountUtil, UserInfoModel } from 'module_base';
 
 @ObservedV2
 export class TransactionListVM {
@@ -17,7 +13,9 @@ export class TransactionListVM {
   @Trace public selectTransactionDateList: SelectOption[] = []
   @Trace public searchText: string = ''
   @Trace public transactionType: number = 1
+  @Trace public tempTransactionType: number = 1
   @Trace public transactionDate: number = 1
+  @Trace public tempTransactionDate: number = 1
   @Trace public isSelecting: boolean = false
 
   public static get instance() {

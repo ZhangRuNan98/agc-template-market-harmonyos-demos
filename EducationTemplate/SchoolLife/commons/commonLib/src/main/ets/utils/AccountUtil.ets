@@ -74,33 +74,34 @@ export class AccountUtil {
   }
 
   // 绑定华为账号
-  public static async connectHuaweiAccount(context: Context): Promise<string | undefined> {
+  public static async connectHuaweiAccount(context: Context): Promise<string> {
     // 创建授权请求，并设置参数
-    const authRequest = new authentication.HuaweiIDProvider().createAuthorizationWithHuaweiIDRequest();
+    const req: authentication.AuthorizationWithHuaweiIDRequest =
+      new authentication.HuaweiIDProvider().createAuthorizationWithHuaweiIDRequest();
     // 获取手机号需要传如下scope，传参数之前需要先申请对应scope权限,才能返回对应数据
-    authRequest.scopes = ['phone'];
+    req.scopes = ['phone'];
     // 获取code需传如下permission
-    authRequest.permissions = ['serviceauthcode'];
+    req.permissions = ['serviceauthcode'];
     // 用户是否需要登录授权，该值为true且用户未登录或未授权时，会拉起用户登录或授权页面
-    authRequest.forceAuthorization = true;
+    req.forceAuthorization = true;
     // 用于防跨站点请求伪造
-    authRequest.state = util.generateRandomUUID();
+    req.state = util.generateRandomUUID();
     try {
-      const controller = new authentication.AuthenticationController(context);
-      const data = await controller.executeRequest(authRequest);
-      const authorizationWithHuaweiIDResponse = data as authentication.AuthorizationWithHuaweiIDResponse;
-      const state = authorizationWithHuaweiIDResponse.state;
-      if (state !== undefined && authRequest.state !== state) {
-        hilog.error(0x0000, 'testTag', `Failed to authorize. The state is different, response state: ${state}`);
-        return undefined;
+      const controller: authentication.AuthenticationController =
+        new authentication.AuthenticationController(context);
+      const res: authentication.AuthorizationWithHuaweiIDResponse = await controller.executeRequest(req);
+      const state: Nullable<string> = res.state;
+      const code: Nullable<string> = res.data?.authorizationCode;
+      if (!state || req.state !== state) {
+        throw new Error(`Failed to authorize. The state is different, response state: ${state}`);
+      }
+      if (!code) {
+        throw new Error('Internal error.');
       }
       hilog.info(0x0000, 'testTag', 'Succeeded in authentication.');
-      const authorizationWithHuaweiIDCredential = authorizationWithHuaweiIDResponse.data!;
-      const code = authorizationWithHuaweiIDCredential.authorizationCode;
       return code;
     } catch (error) {
-      AccountUtil._dealAllError(error);
-      return undefined;
+      return Promise.reject(error);
     }
   }
 

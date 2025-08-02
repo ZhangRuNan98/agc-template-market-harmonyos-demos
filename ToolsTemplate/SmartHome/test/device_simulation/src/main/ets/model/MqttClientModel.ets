@@ -6,8 +6,8 @@ import {
   MqttResponse,
   MqttSubscribeOptions,
 } from '@ohos/mqtt';
+import { prompt } from 'base_apis';
 import { LogUtil } from './LogUtil';
-import { prompt } from 'utils';
 
 export enum MQTT_STATE {
   INITIALIZE,

@@ -1,17 +1,17 @@
-import { FormatUtil, RouterModule, RouterMap, PreferencesUtil, Logger } from 'commonlib';
-import { QuitLoginDialog } from '../viewModels/QuitLoginDialog';
-import { MainPageVM, UserInfoStorage } from '../viewModels/MainPageVM';
-import {NavHeaderBar} from '../components/NavHeaderBar'
 import { FunctionalButton, functionalButtonComponentManager } from '@kit.ScenarioFusionKit';
-import { hilog } from '@kit.PerformanceAnalysisKit';
 import fs from '@ohos.file.fs';
 import { util } from '@kit.ArkTS';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { authentication } from '@kit.AccountKit';
-import { PersistenceV2, promptAction } from '@kit.ArkUI';
+import { AppStorageV2, promptAction } from '@kit.ArkUI';
+import { RouterModule, RouterMap, PreferencesUtil, Logger, UserInfoModel, LoginModel, AccountUtil } from 'commonlib';
+import { BaseTitle, GlobalDialog } from 'componentlib';
 import { GetUserInfoResp, HttpRequestApi } from 'network';
+import { QuitLoginDialog } from '../viewModels/QuitLoginDialog';
+import { MainPageVM } from '../viewModels/MainPageVM';
 import { maskPhone } from '../utils/Util';
-import { GlobalDialog } from '../components/GlobalDialog';
+
+const TAG = '[MinePage]'
 
 @Builder
 export function minePageBuilder() {
@@ -20,7 +20,6 @@ export function minePageBuilder() {
 
 @ComponentV2
 struct MinePage {
-  vm: MainPageVM = MainPageVM.instance;
   dialog: CustomDialogController = new CustomDialogController({
     builder: QuitLoginDialog({
       cancel: () => {
@@ -45,32 +44,38 @@ struct MinePage {
   }
 
   build() {
-    Stack({ alignContent: Alignment.TopStart }) {
-      Column() {
-        NavHeaderBar({
-        })
-        Scroll() {
-          Column() {
-            UserMsgCard().margin({ top: 10 })
-            HelpCenter()
-          }
-        }.layoutWeight(1).scrollBar(BarState.Off).align(Alignment.Top);
-
-      }
-      .alignItems(HorizontalAlign.Start)
-      .width('100%')
-      .padding({
-        left: 12,
-        right: 12,
+    Column({space: 10}) {
+      BaseTitle({
+        customTitle: () => {
+          this.MineTitleBuilder()
+        },
       })
+      Scroll() {
+        Column() {
+          UserMsgCard()
+          HelpCenter()
+        }
+      }
+      .width('100%')
+      .layoutWeight(1)
+      .scrollBar(BarState.Off)
+      .align(Alignment.Top);
     }
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
     .width('100%')
     .height('100%')
-    .backgroundColor($r('sys.color.background_secondary'))
+    .padding({
+      left: 12,
+      right: 12,
+    })
+    .backgroundColor($r('app.color.bgc'));
   }
 
-
+  @Builder
+  MineTitleBuilder() {
+    Text('我的')
+      .fontSize(24)
+      .fontWeight(FontWeight.Bold)
+  }
 }
 
 @ComponentV2
@@ -81,32 +86,31 @@ struct UserMsgCard {
   @Local userName: string = ''
   @Local userIconPath: string = ''
   @Local userTel: string = ''
-  @Local isRelative: boolean = false
-  @Local userInfoStorage: UserInfoStorage = PersistenceV2.connect(UserInfoStorage, 'UserInfoStorage', () => new UserInfoStorage())!
+  @Local userInfo: UserInfoModel = AppStorageV2.connect(UserInfoModel, () => new UserInfoModel())!;
+  @Local loginInfo: LoginModel = AppStorageV2.connect(LoginModel, () => new LoginModel())!
 
   aboutToAppear(): void {
     this.change()
   }
 
   change() {
-    if (this.userInfoStorage.phoneNumber) {
-      let phone = this.userInfoStorage.phoneNumber
-      this.userInfoStorage.phoneNumber = maskPhone(phone)
+    if (this.userInfo.phoneNumber) {
+      let phone = this.userInfo.phoneNumber
+      this.userInfo.phoneNumber = maskPhone(phone)
     }
-    this.isRelative = !!this.userInfoStorage.phoneNumber
   }
 
   getUserAvatar(): ResourceStr {
-    if (this.userInfoStorage.avatar) {
+    if (this.userInfo.avatar) {
       // 判断是否是沙箱路径
-      if (this.userInfoStorage.avatar.startsWith('file://')) {
-        let sandboxPath = this.userInfoStorage.avatar.split('file://')[1]
+      if (this.userInfo.avatar.startsWith('file://')) {
+        let sandboxPath = this.userInfo.avatar.split('file://')[1]
         // 判断沙箱路径的图片是否存在，不存在，则使用默认头像
         if (!fs.accessSync(sandboxPath)) {
           return $r('app.media.ic_default_hd')
         }
       }
-      return this.userInfoStorage.avatar || $r('app.media.ic_default_hd')
+      return this.userInfo.avatar || $r('app.media.ic_default_hd')
     }
     return $r('app.media.ic_default_hd')
   }
@@ -114,7 +118,7 @@ struct UserMsgCard {
   build() {
     Row() {
       Row() {
-        if (this.isRelative) {
+        if (this.loginInfo.isLogin) {
           FunctionalButton({
             params: {
               // OpenType.CHOOSE_AVATAR表示Button为选择头像类型
@@ -137,21 +141,21 @@ struct UserMsgCard {
               data) => {
               if (err) {
                 // 错误日志处理
-                hilog.error(0x0000, 'testTag', 'error： %{public}d %{public}s', err.code, err.message);
+                Logger.error(TAG, 'error： %{public}d %{public}s', err.message)
                 return;
               }
               // 成功日志处理
-              hilog.info(0x0000, 'testTag', 'succeeded in choosing avatar');
+              Logger.info(TAG, 'succeeded in choosing avatar')
               let file: fs.File = null!;
               try {
                 file = fs.openSync(data.avatarUri, fs.OpenMode.READ_ONLY)
                 this.userIconPath = `${util.generateRandomUUID(false)}.jpg`
                 let imagePath = `${getContext().filesDir}/${this.userIconPath}`
                 fs.copyFileSync(file.fd, imagePath)
-                this.userInfoStorage.avatar = 'file://' + imagePath
+                this.userInfo.avatar = 'file://' + imagePath
               } catch (error) {
                 let err: BusinessError = error as BusinessError;
-                console.error(`PhotoViewPicker failed with err: ${err.code}, ${err.message}`);
+                Logger.error(TAG, 'PhotoViewPicker error： %{public}d %{public}s', err.message)
               } finally {
                 fs.closeSync(file);
               }
@@ -165,19 +169,20 @@ struct UserMsgCard {
         }
 
         Column() {
-          if (this.isRelative) {
-            Text(this.userInfoStorage.userName)
+          if (this.loginInfo.isLogin) {
+            Text(this.userInfo.name)
               .fontSize(`${ this.vm.changeFontSize + 18 }`)
               .fontWeight(FontWeight.Medium)
               .fontColor($r('sys.color.font_primary'))
 
             Row() {
               Image($r('app.media.icon_phone')).width(16)
-              Text(this.userInfoStorage.phoneNumber)
+              Text(this.userInfo.phoneNumber)
                 .fontSize(`${ this.vm.changeFontSize + 12 }`)
                 .fontColor($r('sys.color.font_secondary'))
                 .margin({ left: 2 })
             }.margin({ top: 12, left: 1 })
+            .visibility(this.vm.userInfo.isAssociate ? Visibility.Visible : Visibility.None)
           } else {
             Text('华为用户').fontSize(18)
               .fontWeight(FontWeight.Medium)
@@ -187,7 +192,7 @@ struct UserMsgCard {
         .alignItems(HorizontalAlign.Start)
         .margin({ left: 12 })
         .onClick(() => {
-          if (this.isRelative) {
+          if (this.loginInfo.isLogin) {
             RouterModule.push({
               url: RouterMap.USER_INFO_SETTING
             })
@@ -197,13 +202,13 @@ struct UserMsgCard {
 
       Row() {
         Row() {
-          Image(this.isRelative ? $r('app.media.ic_relatived') : $r('app.media.connect'))
+          Image(this.vm.userInfo.isAssociate ? $r('app.media.ic_relatived') : $r('app.media.connect'))
             .width(12)
             .height(12)
             .margin({ right: 4 })
-          Text(this.isRelative ? '解除关联' : '关联账号')
+          Text(this.vm.userInfo.isAssociate ? '解除关联' : '关联账号')
             .fontSize(`${ this.vm.changeFontSize + 12 }`)
-            .fontColor(this.isRelative ? $r('sys.color.font_on_primary') : $r('sys.color.comp_background_emphasize'))
+            .fontColor(this.vm.userInfo.isAssociate ? $r('sys.color.font_on_primary') : $r('sys.color.comp_background_emphasize'))
         }
         .padding({
           left: 10,
@@ -212,24 +217,31 @@ struct UserMsgCard {
           bottom: 6,
         })
         .borderRadius(14)
-        .backgroundColor(this.isRelative ? $r('sys.color.comp_background_emphasize') : $r('sys.color.background_secondary'))
+        .backgroundColor(this.vm.userInfo.isAssociate ? $r('sys.color.comp_background_emphasize') : $r('sys.color.background_secondary'))
         .onClick(() => {
-          if (this.isRelative) {
+          if (this.vm.userInfo.isAssociate) {
             GlobalDialog.showTextDialog({
               title: '账号解除关联',
               content: '请确认是否解除账号关联？',
               primaryButName: '确定',
               secondaryButName: '取消',
-              primaryButAction: () => {
+              primaryButAction: async () => {
                 this.loading = true
                 this.cancelRelative()
-                GlobalDialog.close()
+                // 关闭账号关联弹框
+                await GlobalDialog.close()
+                // loading弹框
+                await GlobalDialog.showLoadingDialog()
               },
               secondaryButAction: () => {
                 GlobalDialog.close()
               },
             })
           } else {
+            // 关闭账号关联弹框
+            GlobalDialog.close()
+            // loading弹框
+            GlobalDialog.showLoadingDialog()
             this.getQuickLoginAnonymousPhone()
           }
         })
@@ -268,10 +280,10 @@ struct UserMsgCard {
         const authorizationWithHuaweiIDResponse = data as authentication.AuthorizationWithHuaweiIDResponse;
         const state = authorizationWithHuaweiIDResponse.state;
         if (state !== undefined && authRequest.state !== state) {
-          hilog.error(0x0000, 'testTag', `Failed to authorize. The state is different, response state: ${state}`);
+          Logger.error(TAG, `Failed to authorize. The state is different, response state: ${state}`)
           return;
         }
-        hilog.info(0x0000, 'testTag', 'Succeeded in authentication.');
+        Logger.info(TAG, 'Succeeded in authentication.')
         const authorizationWithHuaweiIDCredential = authorizationWithHuaweiIDResponse.data!;
         const code = authorizationWithHuaweiIDCredential.authorizationCode;
         this.authCode = code ?? '';
@@ -280,25 +292,43 @@ struct UserMsgCard {
           HttpRequestApi.getOpenLoginHm(encodeURIComponent(code)).then((res) => {
             if (res.status === 1) {
               let tel = res.userTel  as string ?? ''
-              this.userInfoStorage.phoneNumber = maskPhone(tel)
-              this.userInfoStorage.userName = this.userInfoStorage.userName || res.name
-              this.isRelative = true
+              this.userInfo.phoneNumber = maskPhone(tel)
+              this.userInfo.name = this.userInfo.name || res.name
+              this.vm.userInfo.isAssociate = true
             } else {
               promptAction.showToast({ message: '账号关联失败，请重试~' })
             }
+            GlobalDialog.close()
           }).catch(() => {
             promptAction.showToast({ message: '账号关联失败' })
+            GlobalDialog.close()
           })
         } else {
           promptAction.showToast({ message: '账号关联失败' })
+          GlobalDialog.close()
         }
       }).catch((err: BusinessError<Object>) => {
-        this.dealAllError(err);
+        // 为了不阻塞模板体验，不做失败拦截
+        AccountUtil.onGetPhoneNumberFail((type) => {
+          if (type === 1) {
+            HttpRequestApi.getOpenLoginHm(encodeURIComponent('123')).then((res) => {
+              if (res.status === 1) {
+                let tel = res.userTel  as string ?? ''
+                this.userInfo.phoneNumber = maskPhone(tel)
+                this.userInfo.name = this.userInfo.name || res.name
+                this.vm.userInfo.isAssociate = true
+              } else {
+                promptAction.showToast({ message: '账号关联失败，请重试~' })
+              }
+              GlobalDialog.close()
+            })
+          }
+          GlobalDialog.close()
+        })
       });
     } catch (error) {
       this.dealAllError(error);
     }
-
   }
 
   cancelRelative() {
@@ -311,31 +341,36 @@ struct UserMsgCard {
       const controller = new authentication.AuthenticationController(getContext(this));
       controller.executeRequest(cancelRequest, (error: BusinessError<Object>, data) => {
         if (error) {
-          this.dealAllError(error);
+          // 为了不阻塞模板体验，不做失败拦截
+          HttpRequestApi.getCloseLoginHm()
+            .then((resp: GetUserInfoResp) => {
+              this.vm.userInfo.isAssociate = false
+              this.userInfo.phoneNumber = ''
+              GlobalDialog.close()
+            })
           return;
         }
         const cancelAuthorizationResponse = data as authentication.CancelAuthorizationResponse;
         const state = cancelAuthorizationResponse.state;
         if (state && cancelRequest.state !== state) {
-          hilog.error(0x0000, 'testTag', `Failed to cancel. The state is different, response state: ${state}`);
+          Logger.error(TAG, `Failed to cancel. The state is different, response state: ${state}`)
           return;
         }
-        hilog.info(0x0000, 'testTag', 'Succeeded in canceling.');
+        Logger.info(TAG, 'Succeeded in canceling.');
         HttpRequestApi.getCloseLoginHm()
           .then((resp: GetUserInfoResp) => {
-            this.isRelative = false
-            this.userInfoStorage.phoneNumber = ''
+            this.vm.userInfo.isAssociate = false
+            this.userInfo.phoneNumber = ''
             if (resp) {
               console.info(`getCancelLoginUtil resp:${JSON.stringify(resp)}.`);
-
             } else {
               console.error(`getCancelLoginUtil error: ${JSON.stringify(resp)}.`);
-
             }
+            GlobalDialog.close()
           })
           .catch((e: BusinessError) => {
             console.error(`getCancelLoginUtil error: ${JSON.stringify(e)}.`);
-
+            GlobalDialog.close()
           })
       });
     } catch (error) {
@@ -345,9 +380,9 @@ struct UserMsgCard {
 
   // 错误处理
   dealAllError(error: BusinessError<Object>): void {
-    hilog.error(0x0000, 'testTag',
-      `Failed to login, errorCode is ${error.code}, errorMessage is ${error.message}`);
+    Logger.error(TAG, `Failed to login, errorCode is ${error.code}, errorMessage is ${error.message}`)
     promptAction.showToast({ message: '账号关联失败' })
+    GlobalDialog.close()
   }
 }
 
@@ -365,90 +400,56 @@ struct HelpCenter {
 
   build() {
     Column() {
+      Row() {
+        Row() {
+          Text('常用服务')
+            .fontSize(`${ this.vm.changeFontSize + 18 }`)
+            .fontColor($r('sys.color.font_primary'))
+            .fontWeight(FontWeight.Bold)
+        }
+      }
+      .width('100%')
+      .padding({top: 10, bottom: 8})
+
       Column() {
-        Row() {
-          Row() {
-            Text('常用服务')
-              .fontSize(`${ this.vm.changeFontSize + 18 }`)
-              .fontColor($r('sys.color.font_primary'))
-              .fontWeight(FontWeight.Bold)
+        CardItem({
+          img: $r('app.media.my_collect'),
+          label: '我的收藏',
+          changeFontSize: this.vm.changeFontSize,
+          onClickEvent: () => {
+            RouterModule.push({ url: RouterMap.HISTORY_RECORD, param: '我的收藏' });
           }
-        }
-        .width('100%')
-        .padding({top:18,bottom:18})
-
-        Row() {
-          Row() {
-            Image($r('app.media.my_collect')).width(24).height(24)
-            Text('我的收藏')
-              .fontSize(`${ this.vm.changeFontSize + 16 }`)
-              .fontColor($r('sys.color.font_primary'))
-              .margin({ left: 12 })
-          }
-
-          Image($r('app.media.right_arrow')).width(16).height(16)
-        }
-        .width('100%')
-        .padding({top:18,bottom:18})
-        .justifyContent(FlexAlign.SpaceBetween)
-        .onClick(() => {
-          RouterModule.push({ url: RouterMap.HISTORY_RECORD, param: '我的收藏' });
         })
         Divider().margin({ left: 28, top: 6, bottom: 6 })
-        Row() {
-          Row() {
-            Image($r('app.media.my_comment')).width(24).height(24)
-            Text('我的评论')
-              .fontSize(`${ this.vm.changeFontSize + 16 }`)
-              .fontColor($r('sys.color.font_primary'))
-              .margin({ left: 12 })
-          }
 
-          Image($r('app.media.right_arrow')).width(16).height(16)
-        }
-        .width('100%')
-        .height(56)
-        .justifyContent(FlexAlign.SpaceBetween)
-        .onClick(() => {
-          //跳转到评论
-          RouterModule.push({ url: RouterMap.MY_COMMENT, param: null });
+        CardItem({
+          img: $r('app.media.my_comment'),
+          label: '我的评论',
+          changeFontSize: this.vm.changeFontSize,
+          onClickEvent: () => {
+            //跳转到评论
+            RouterModule.push({ url: RouterMap.MY_COMMENT, param: null });
+          }
         })
-
         Divider().margin({ left: 28, top: 6, bottom: 6 })
-        Row() {
-          Row() {
-            Image($r('app.media.my_record')).width(22).height(26)
-            Text('浏览记录')
-              .fontSize(`${ this.vm.changeFontSize + 16 }`)
-              .fontColor($r('sys.color.font_primary'))
-              .margin({ left: 12 })
+
+        CardItem({
+          img: $r('app.media.my_record'),
+          label: '浏览记录',
+          changeFontSize: this.vm.changeFontSize,
+          onClickEvent: () => {
+            RouterModule.push({ url: RouterMap.HISTORY_RECORD, param: '浏览记录' });
           }
-          Image($r('app.media.right_arrow')).width(16).height(16)
-        }
-        .width('100%')
-        .height(56)
-        .justifyContent(FlexAlign.SpaceBetween)
-        .onClick(() => {
-          RouterModule.push({ url: RouterMap.HISTORY_RECORD, param: '浏览记录' });
         })
-
         Divider().margin({ left: 28, top: 6, bottom: 6 })
-        Row() {
-          Row() {
-            Image($r('app.media.my_setting')).width(24).height(24)
-            Text('设置')
-              .fontSize(`${ this.vm.changeFontSize + 16 }`)
-              .fontColor($r('sys.color.font_primary'))
-              .margin({ left: 12 })
-          }
 
-          Image($r('app.media.right_arrow')).width(16).height(16)
-        }
-        .width('100%')
-        .height(56)
-        .justifyContent(FlexAlign.SpaceBetween)
-        .onClick(() => {
-          RouterModule.push({ url: RouterMap.MY_SETTINGS, param: null });
+        CardItem({
+          img: $r('app.media.my_setting'),
+          label: '设置',
+          changeFontSize: this.vm.changeFontSize,
+          onClickEvent: () => {
+            RouterModule.push({ url: RouterMap.MY_SETTINGS, param: null });
+          }
         })
       }
       .padding(12)
@@ -457,5 +458,35 @@ struct HelpCenter {
       .backgroundColor($r('sys.color.comp_background_list_card'))
       .borderRadius(16)
     }.margin({ top: 16 }).alignItems(HorizontalAlign.Start)
+  }
+}
+
+@ComponentV2
+struct CardItem {
+  @Param @Require label: ResourceStr
+  @Param @Require img: ResourceStr
+  @Param @Require changeFontSize: number
+  @Event onClickEvent: () => void = () => {}
+  vm: MainPageVM = MainPageVM.instance;
+
+  build() {
+    Row() {
+      Row() {
+        Image(this.img).width(24).height(24)
+          .fillColor($r('sys.color.icon_primary'))
+        Text(this.label)
+          .fontSize(`${ this.changeFontSize + 16 }`)
+          .fontColor($r('sys.color.font_primary'))
+          .margin({ left: 12 })
+      }
+      Image($r('app.media.right_arrow')).width(16).height(16)
+        .fillColor($r('sys.color.icon_primary'))
+    }
+    .width('100%')
+    .padding({ top:14, bottom:14})
+    .justifyContent(FlexAlign.SpaceBetween)
+    .onClick(() => {
+      this.onClickEvent?.()
+    })
   }
 }

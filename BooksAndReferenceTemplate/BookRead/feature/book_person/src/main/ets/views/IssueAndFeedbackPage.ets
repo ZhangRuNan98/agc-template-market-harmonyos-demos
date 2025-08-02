@@ -1,4 +1,4 @@
-import { Constants, NavHeaderBar, ReturnButton, TCRouter } from 'common';
+import { Constants, NavHeaderBar } from 'common';
 import { OptionView } from '../comp/OptionView';
 
 @ComponentV2
@@ -22,6 +22,7 @@ export struct IssueAndFeedbackPage {
             }
           }.layoutWeight(1)
           .scrollBar(BarState.Off)
+          .edgeEffect(EdgeEffect.Spring)
           .align(Alignment.Top)
           .padding({
             left: 12,

@@ -1,11 +1,6 @@
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, UserInfoModel, } from 'commonlib';
-import {
-  IInvestmentRecordItem,
-  IRegularInvestmentInfo,
-} from 'network/src/main/ets/types/responseTypes/GetRegularInvestmentResp';
+import { AccountUtil, RouterMap, RouterModule, UserInfoModel, } from 'module_base';
+import { IInvestmentRecordItem, IRegularInvestmentInfo, } from 'lib_foundation';
 import { IInvestmentParam } from '../types';
-
-const TAG = '[InvestmentRecordInfoVM]';
 
 @ObservedV2
 export class InvestmentRecordInfoVM {

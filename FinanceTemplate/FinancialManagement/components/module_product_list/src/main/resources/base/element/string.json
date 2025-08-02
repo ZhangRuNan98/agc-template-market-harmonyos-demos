@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "page_show",
+      "value": "page from package"
+    },
+    {
+      "name": "agcit_huawei_financial_management_module_product_list",
+      "value": "1.0.0"
+    },
+    {
+      "name": "agcittype_huawei_financial_management_module_product_list",
+      "value": "serviceComponent"
+    },
+    {
+      "name": "agcitkid_huawei_financial_management_module_product_list",
+      "value": "agcit_huawei_financial_management_module_base/1.0.0"
+    }
+  ]
+}

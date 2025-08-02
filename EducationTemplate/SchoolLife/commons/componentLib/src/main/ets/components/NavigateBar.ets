@@ -6,7 +6,6 @@ export struct NavigateBar {
   @Param title: string | Resource = '';
   @Param enableBackward: boolean = false;
   @Local barHeight: number = 56;
-  @Consumer('windowConfig') windowConfig: WindowConfig = new WindowConfig();
 
   build() {
     Column() {
@@ -35,9 +34,6 @@ export struct NavigateBar {
             .margin({ left: $r('app.string.margin_xs') })
         }
       }
-      .margin({
-        top: this.windowConfig.windowTopHeight,
-      })
       .padding({
         left: $r('app.string.padding_xm'),
         right: $r('app.string.padding_xm'),
@@ -45,7 +41,7 @@ export struct NavigateBar {
       .width(ComponentConst.FULL_PARENT)
       .height(this.barHeight)
     }
-    .height(this.barHeight + this.windowConfig.windowTopHeight)
+    .height(this.barHeight)
     .width(ComponentConst.FULL_PARENT)
   }
 }

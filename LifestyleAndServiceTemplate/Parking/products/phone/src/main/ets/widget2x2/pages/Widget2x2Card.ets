@@ -1,11 +1,16 @@
 const storageLocal2 = new LocalStorage();
 
+class ButtonConstant {
+  static readonly BG_COLOR: ResourceColor = '#ffffff';
+  static readonly FULL_WIDTH: Length = '100%';
+  static readonly HEIGHT: Length = 28;
+}
+
 @Entry(storageLocal2)
 @Component
 struct Widget2x2Card {
   @LocalStorageProp('default') default: string = '';
   @LocalStorageProp('duration') duration: string = '';
-  fontColor: ResourceStr = $r('sys.color.background_emphasize');
   readonly actionType: string = 'router';
   readonly abilityName: string = 'EntryAbility';
 
@@ -91,12 +96,12 @@ struct Widget2x2Card {
       }
 
       Button('查询缴费')
-        .fontColor(this.fontColor)
         .fontWeight(FontWeight.Medium)
+        .fontColor($r('sys.color.font_emphasize'))
         .fontSize($r('sys.float.Body_M'))
-        .backgroundColor($r('app.color.system_color_background_white'))
-        .width('100%')
-        .height(28)
+        .backgroundColor(ButtonConstant.BG_COLOR)
+        .width(ButtonConstant.FULL_WIDTH)
+        .height(ButtonConstant.HEIGHT)
         .onClick(() => {
           this.nextDo();
         })

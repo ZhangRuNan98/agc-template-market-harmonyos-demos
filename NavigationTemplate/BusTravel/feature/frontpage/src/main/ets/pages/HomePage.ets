@@ -1,6 +1,7 @@
+import { RouteEntryVM } from 'common'
 import {newsData,swiperData} from '../mock/MockData'
 import {newsItem,SwiperInterface} from '../model/Interface'
-import { RouteEntryVM } from 'common'
+
 @Builder
 export function HomePageBuilder() {
   HomePage()

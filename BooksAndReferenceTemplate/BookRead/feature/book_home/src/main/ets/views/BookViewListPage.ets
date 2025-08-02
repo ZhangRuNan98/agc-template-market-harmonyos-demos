@@ -38,7 +38,7 @@ export struct BookViewListPage {
                 }
               }, (item: string) => item)
             }
-            .scrollBar(BarState.Off).cachedCount(3)
+            .scrollBar(BarState.Off).cachedCount(3).edgeEffect(EdgeEffect.Spring)
           }
 
           .layoutWeight(1)

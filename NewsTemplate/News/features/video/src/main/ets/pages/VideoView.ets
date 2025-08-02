@@ -4,6 +4,8 @@ import { VideoModel } from '../viewModels/VideoModel';
 import { CommonDataSource } from '../utils/CommonDataSource';
 import { BaseTitle, GlobalDialog } from 'componentlib';
 import { VideoPlayer } from '../components/VideoPlayer';
+import { GetTableInfoResp, GetVideoInfoResp, HttpRequestApi } from 'network';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 @Builder
 export function videoViewBuilder() {
@@ -24,6 +26,7 @@ export struct VideoView {
   @Local showUpBtn: boolean = false
   @Local videoList: VideoModel[] = []
   @Local playIdx: number[] = []
+  private videoInfo: VideoModel[] = []
 
   aboutToAppear(): void {
     GlobalDialog.showLoadingDialog()
@@ -37,19 +40,30 @@ export struct VideoView {
 
   getList() {
     setTimeout(() => {
-      for (let index = 0; index < 20; index++) {
-        let item: VideoModel = new VideoModel()
-        item.title = 'OpenAI最强模型惨遭“剖脑”，不写代码耍心机被当场抓包' + index
-        item.videoUrl = this.videoUrl
-        item.previewUri = $r('app.media.preview')
-        item.videoController = new VideoController()
-        this.videoList.push(item)
-      }
-      this.dataSource.setData(this.videoList)
+      HttpRequestApi.getTableInfo('')
+        .then((resp: GetVideoInfoResp) => {
+          if (resp) {
+            this.videoInfo = resp as VideoModel[];
+            for (let index = 0; index < 5; index++) {
+              let item: VideoModel = new VideoModel()
+              item.title = this.videoInfo[index].title
+              item.videoUrl = this.videoUrl
+              item.previewUri = this.videoInfo[index].previewUri
+              item.videoController = new VideoController()
+              this.videoList.push(item)
+            }
+            this.dataSource.setData(this.videoList)
+            this.isRefreshing = false
+            GlobalDialog.close()
+            this.isLoading = false
+          } else {
+            console.error(`videoModelMockData error: ${JSON.stringify(resp)}.`);
+          }
+        })
+        .catch((e: BusinessError) => {
+          console.error(`videoModelMockData error: ${JSON.stringify(e)}.`);
+        })
 
-      this.isRefreshing = false
-      GlobalDialog.close()
-      this.isLoading = false
     }, 500)
   }
 
@@ -72,8 +86,9 @@ export struct VideoView {
       })
 
       Row() {
-        Text('OpenAI最强模型惨遭“剖脑”，不写代码耍心机被当场抓包')
+        Text(item.title)
           .fontSize(`${16 + this.vm.changeFontSize}`)
+          .fontColor($r('app.color.video_title'))
           .fontWeight(FontWeight.Medium)
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -86,10 +101,10 @@ export struct VideoView {
       Row({ space: 12 }) {
         Text('xx新闻')
           .fontSize(`${12 + this.vm.changeFontSize}`)
-          .fontColor('#66000000')
+          .fontColor('#FF989898')
         Text('2小时前')
           .fontSize(`${12 + this.vm.changeFontSize}`)
-          .fontColor('#66000000')
+          .fontColor('#FF989898')
       }
       .justifyContent(FlexAlign.Start)
       .width('100%')
@@ -135,10 +150,17 @@ export struct VideoView {
               // 模拟新数据加载。
               setTimeout(() => {
                 let newList: VideoModel[] = []
-                for (let i = 0; i < 4; i++) {
-                  newList.push(this.dataSource.getData(0))
+                for (let i = 0; i < 5; i++) {
+                  let item: VideoModel = new VideoModel()
+                  item.title = this.videoInfo[i].title
+                  item.videoUrl = this.videoUrl
+                  item.previewUri = this.videoInfo[i].previewUri
+                  item.videoController = new VideoController()
+                  this.videoList.push(item)
+                  newList.push(item)
                 }
                 this.dataSource.pushDataArray(...newList)
+                console.log('pushDataArray:' + JSON.stringify(this.dataSource))
                 this.isLoadingMore = false;
               }, 700)
             }
@@ -186,7 +208,7 @@ export struct VideoView {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(Color.White)
+    .backgroundColor($r('app.color.bgc'));
   }
 
   @Builder

@@ -1,13 +1,8 @@
-import { https, IUserInfo } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, UserInfoModel, } from 'commonlib';
-import { IPositionRedemptionInfo } from 'network/src/main/ets/types/responseTypes/GetPositionRedemptionResp';
-import { IUserAccount } from 'network/src/main/ets/types/responseTypes/GetUserAccountResp';
-import { IRedemptionButton } from '../types';
-import { MockStorageMap } from 'network/src/main/ets/mocks/Constants';
-import { redemptionButtonData } from '../constants';
 import { promptAction } from '@kit.ArkUI';
-
-const TAG = '[RedemptionVM]';
+import { https, IUserInfo, MockStorageMap, IUserAccount, IPositionRedemptionInfo } from 'lib_foundation';
+import { RouterMap, RouterModule } from 'module_base';
+import { IRedemptionButton } from '../types';
+import { redemptionButtonData } from '../constants';
 
 @ObservedV2
 export class RedemptionVM {
@@ -175,13 +170,11 @@ export class RedemptionVM {
   public checkVerificationCode(): boolean {
     if (!this.verificationCode) {
       return true
-    } else {
-      if (this.isVerificationCodeRight) {
-        return true
-      } else {
-        return false
-      }
     }
+    if (this.isVerificationCodeRight) {
+      return true
+    }
+    return false
   }
 
   public async submit(): Promise<boolean> {

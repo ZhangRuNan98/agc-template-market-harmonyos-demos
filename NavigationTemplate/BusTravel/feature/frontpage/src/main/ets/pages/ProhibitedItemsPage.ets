@@ -62,7 +62,7 @@ export struct ProhibitedItemsPage {
       .scrollBarColor(Color.Gray) // 滚动条颜色
       .scrollBarWidth(0) // 滚动条宽度
       .friction(0.6)
-      .edgeEffect(EdgeEffect.None)
+      .edgeEffect(EdgeEffect.Spring)
       .onWillScroll((xOffset: number, yOffset: number, scrollState: ScrollState) => {
         console.info(xOffset + ' ' + yOffset)
       })

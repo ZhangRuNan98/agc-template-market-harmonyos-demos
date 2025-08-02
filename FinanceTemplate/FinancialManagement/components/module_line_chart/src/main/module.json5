@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "module_line_chart",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

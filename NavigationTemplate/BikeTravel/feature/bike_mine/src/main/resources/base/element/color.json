@@ -1,0 +1,20 @@
+{
+  "color": [
+    {
+      "name": "font_gray",
+      "value": "#99000000"
+    },
+    {
+      "name": "font_orange",
+      "value": "#ED6F21"
+    },
+    {
+      "name": "divider_gray",
+      "value": "#1A000000"
+    },
+    {
+      "name": "button_gray",
+      "value": "#D1D1D6"
+    }
+  ]
+}

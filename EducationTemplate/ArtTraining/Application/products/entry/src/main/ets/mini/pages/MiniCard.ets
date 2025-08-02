@@ -1,6 +1,6 @@
 @Entry
 @Component
-export struct MiniCard {
+struct MiniCard {
   readonly ACTION_TYPE: string = 'router';
 
   readonly ABILITY_NAME: string = 'EntryAbility';

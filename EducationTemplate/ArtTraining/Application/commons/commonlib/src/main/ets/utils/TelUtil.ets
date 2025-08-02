@@ -1,7 +1,7 @@
 import { promptAction } from '@kit.ArkUI';
-import { Logger } from './Logger';
-import { call } from '@kit.TelephonyKit';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { call } from '@kit.TelephonyKit';
+import { Logger } from './Logger';
 
 const TAG = '[TelUtil]';
 

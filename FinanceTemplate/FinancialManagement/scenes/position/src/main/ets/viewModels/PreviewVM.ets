@@ -1,7 +1,4 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, UserInfoModel, } from 'commonlib';
-
-const TAG = '[PreviewVM]';
+import { RouterMap, RouterModule, } from 'module_base';
 
 @ObservedV2
 export class PreviewVM {

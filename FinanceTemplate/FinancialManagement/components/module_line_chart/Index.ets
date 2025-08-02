@@ -1,0 +1,1 @@
+export { CommonCharts } from './src/main/ets/components/Chart'

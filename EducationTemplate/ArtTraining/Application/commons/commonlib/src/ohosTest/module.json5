@@ -3,8 +3,7 @@
     "name": "commonlib_test",
     "type": "feature",
     "deviceTypes": [
-      "default",
-      "tablet"
+      "phone"
     ],
     "deliveryWithInstall": true,
     "installationFree": true

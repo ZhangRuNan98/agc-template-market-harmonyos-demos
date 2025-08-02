@@ -1,6 +1,7 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 export default class PhoneAbility extends UIAbility {
   // windowStage: window.WindowStage | undefined
@@ -15,10 +16,14 @@ export default class PhoneAbility extends UIAbility {
     // 更新资源、数据
 
     if (want?.parameters?.params) {
-      // want.parameters.params 对应 postCardAction() 中 params 内容
-      let params: Record<string, Object> = JSON.parse(want.parameters.params as string);
-      let targetDeviceId = params.deviceId as string;
-      AppStorage.setOrCreate('targetDeviceId', targetDeviceId); //将参数存贮在AppStorage中
+      try {
+        // want.parameters.params 对应 postCardAction() 中 params 内容
+        let params: Record<string, Object> = JSON.parse(want.parameters.params as string);
+        let targetDeviceId = params.deviceId as string;
+        AppStorage.setOrCreate('targetDeviceId', targetDeviceId); //将参数存贮在AppStorage中
+      } catch (error) {
+        console.error(`ErrorCode: ${(error as BusinessError).code},  Message: ${(error as BusinessError).message}`);
+      }
       // hilog.info(DOMAIN_NUMBER, TAG, `onNewWant selectPage: ${this.selectPage}`);
     } else {
       AppStorage.setOrCreate('targetDeviceId', '');

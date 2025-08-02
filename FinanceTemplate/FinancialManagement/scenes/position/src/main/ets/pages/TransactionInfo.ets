@@ -1,8 +1,8 @@
-import { TransactionInfoVM } from '../viewModels/TransactionInfoVM'
-import { State } from 'network/src/main/ets/types/responseTypes/GetTransactionRecordInfoResp';
-import { CommonTimeLine } from 'componentlib';
+import { State } from 'lib_foundation';
+import { FormatUtil } from 'module_base'
+import { CommonTimeLine } from 'module_time_line';
 import { TransactionInfo } from '../components/TransactionInfo';
-import { FormatUtil } from 'commonlib'
+import { TransactionInfoVM } from '../viewModels/TransactionInfoVM'
 
 @Builder
 export function TransactionRecordInfoBuilder() {
@@ -28,10 +28,8 @@ struct TransactionRecordInfo {
                   .fontSize(14)
                   .fontWeight(FontWeight.Medium)
                   .fontColor($r('sys.color.font_primary'))
-                List() {
-                  ForEach(this.vm.timeLineList, (item: object, index: number) => {
-                    CommonTimeLine({ bean: item, index: index, totalSize: this.vm.totalSize })
-                  }, (item: object[]) => JSON.stringify(item))
+                Row() {
+                  CommonTimeLine({ timeLineList: this.vm.timeLineList, totalSize: this.vm.totalSize })
                 }
                 .margin({ top: 28 })
               } else {
@@ -67,7 +65,7 @@ struct TransactionRecordInfo {
               top: 24,
               bottom: 16,
               left: 12,
-              right: 12
+              right: 12,
             })
             .margin({ top: 8, bottom: 12 })
             .backgroundColor(Color.White)
@@ -77,7 +75,7 @@ struct TransactionRecordInfo {
               productName: this.vm.transactionInfo.productName,
               amount: this.vm.transactionInfo.amount,
               date: this.vm.transactionInfo.date,
-              bankCardNo: this.vm.transactionInfo.bankCardNumber
+              bankCardNo: this.vm.transactionInfo.bankCardNumber,
             })
           }
 
@@ -85,6 +83,7 @@ struct TransactionRecordInfo {
         .padding({ left: 16, right: 16 })
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
     }
     .title('交易详情')
     .backgroundColor($r('sys.color.background_secondary'))

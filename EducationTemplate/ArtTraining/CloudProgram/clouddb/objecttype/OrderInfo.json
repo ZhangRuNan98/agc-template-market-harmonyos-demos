@@ -94,6 +94,14 @@
     },
     {
       "isNeedEncrypt": false,
+      "fieldName": "remark",
+      "notNull": false,
+      "isSensitive": false,
+      "belongPrimaryKey": false,
+      "fieldType": "String"
+    },
+    {
+      "isNeedEncrypt": false,
       "fieldName": "courseInfo",
       "notNull": false,
       "isSensitive": false,

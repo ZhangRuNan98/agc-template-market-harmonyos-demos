@@ -14,7 +14,7 @@ export class StoreConfigMock {
     phoneNumber: '+86 25 1234 5678',
     email: 'info@musicacademy.com',
     logoUrl: '',
-    bannerImg:'',
+    bannerImg: '',
     desc: '',
     businessTime: '9:00 - 20:00',
   };

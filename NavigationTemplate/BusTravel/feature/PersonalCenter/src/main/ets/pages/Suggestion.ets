@@ -1,11 +1,9 @@
-import { RouteEntryVM } from 'common'
-import { common } from '@kit.AbilityKit';
 import fs from '@ohos.file.fs';
-import { BusinessError, request } from '@kit.BasicServicesKit';
+import { BusinessError } from '@kit.BasicServicesKit'
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { image } from '@kit.ImageKit';
-import { PageHeader } from '../components/PageHeader';
 import { promptAction } from '@kit.ArkUI';
+import { RouteEntryVM } from 'common'
 
 @Builder
 export function SuggestionBuilder() {
@@ -46,13 +44,13 @@ export struct Suggestion {
   }
 
   async getPixelMap(url: string) {
-    let file :fs.File = fs.openSync(url, fs.OpenMode.READ_ONLY);
+    let file: fs.File = fs.openSync(url, fs.OpenMode.READ_ONLY);
     try {
       this.pixelMap?.push(await image.createImageSource(file.fd).createPixelMap())
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      if(file){
+      if (file) {
         fs.closeSync(await file);
       }
     }
@@ -64,61 +62,65 @@ export struct Suggestion {
 
   build() {
     NavDestination() {
-      Column() {
-        Row() {
-          Polyline({ width: 11, height: 19 })
-            .points([[11, 0], [0, 9.5], [11, 19]])
-            .fillOpacity(0)
-            .stroke('#19191999')
-            .strokeWidth('1px')
+      Scroll() {
+        Column() {
+          Row() {
+            Polyline({ width: 11, height: 19 })
+              .points([[11, 0], [0, 9.5], [11, 19]])
+              .fillOpacity(0)
+              .stroke('#19191999')
+              .strokeWidth('1px')
+              .onClick(() => {
+                this.vm.pop()
+              })
+              .margin({ left: '18vp' })
+
+            Text('意见建议')
+              .fontSize(20)
+              .fontColor('#191919')
+              .textAlign(TextAlign.Center)
+
+            Row()
+              .width(11)
+              .height(19)
+              .margin({ right: '18vp' })
+          }
+          .width('100%')
+          .height('60vp')
+          .padding({ left: '24.5vp' })
+          .alignItems(VerticalAlign.Center)
+          .justifyContent(FlexAlign.SpaceBetween)
+
+          this.buildDescribe()
+          Button('提交')
+            .width('90%')
+            .height(35)
+            .backgroundColor($r('app.color.system_color_green'))
+            .fontSize($r('sys.float.Body_M'))
+            .fontColor($r('sys.color.font_on_primary'))
             .onClick(() => {
-              this.vm.pop()
+              if (this.text) {
+                promptAction.showToast({
+                  message: '您已提交成功',
+                  duration: 1500,
+                  bottom: '80vp',
+                });
+                this.vm.pop();
+              } else {
+                promptAction.showToast({
+                  message: '请填写问题描述',
+                  duration: 1500,
+                  bottom: '80vp',
+                });
+              }
             })
-            .margin({ left: '18vp' })
-
-          Text('意见建议')
-            .fontSize(20)
-            .fontColor('#191919')
-            .textAlign(TextAlign.Center)
-
-          Row()
-            .width(11)
-            .height(19)
-            .margin({ right: '18vp' })
+            .margin({ top: 200 })
         }
-        .width('100%')
-        .height('60vp')
-        .padding({ left: '24.5vp' })
-        .alignItems(VerticalAlign.Center)
-        .justifyContent(FlexAlign.SpaceBetween)
-
-        this.buildDescribe()
-        Button('提交')
-          .width('90%')
-          .height(35)
-          .backgroundColor($r('app.color.system_color_green'))
-          .fontSize($r('sys.float.Body_M'))
-          .fontColor($r('sys.color.font_on_primary'))
-          .onClick(() => {
-            if(this.text){
-              promptAction.showToast({
-                message: '您已提交成功',
-                duration: 1500,
-                bottom: '80vp',
-              });
-              this.vm.pop();
-            }else{
-              promptAction.showToast({
-                message: '请填写问题描述',
-                duration: 1500,
-                bottom: '80vp',
-              });
-            }
-          })
-          .margin({ top: 200 })
+        .backgroundColor('#F1F3F5')
       }
-      .height('100%')
-      .backgroundColor('#F1F3F5')
+      .scrollable(ScrollDirection.Vertical)
+      .scrollBar(BarState.Auto)
+      .scrollBarWidth('0vp')
     }.hideTitleBar(true)
   }
 
@@ -142,7 +144,7 @@ export struct Suggestion {
       })
         .caretColor($r('app.color.system_color_green'))
         .selectedBackgroundColor($r('app.color.system_color_green'))
-        .placeholderFont({ size: $r('sys.float.ohos_id_text_size_body3') , weight: 400 })
+        .placeholderFont({ size: $r('sys.float.ohos_id_text_size_body3'), weight: 400 })
         .fontSize(12)
         .fontColor('#999999')
         .maxLength(100)
@@ -187,7 +189,7 @@ export struct Suggestion {
             .onClick(() => {
               this.pixelMap.splice(index, 1)
             })
-          },(item: image.PixelMap)=>new Date().toString())
+          }, (item: image.PixelMap) => new Date().toString())
           if (this.pixelMap.length < 4) {
             ListItem() {
               Image($r('app.media.ic_question_plus')).width('80lpx').height('80lpx').borderRadius('8lpx')

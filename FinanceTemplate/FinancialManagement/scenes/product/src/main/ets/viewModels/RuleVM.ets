@@ -1,18 +1,10 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, } from 'commonlib';
-import {
-  IBuyRule,
-  IProcess,
-  IProductInfo,
-  IRedemptionRule,
-} from 'network/src/main/ets/types/responseTypes/GetProductResp';
+import { https, IBuyRule, IProcess, IProductInfo, IRedemptionRule } from 'lib_foundation';
+import { RouterMap, RouterModule } from 'module_base';
 
 interface IParamData {
   id: number,
   index: number
 }
-
-const TAG = '[RuleVM]';
 
 @ObservedV2
 export class RuleVM {

@@ -3,14 +3,26 @@
 ## 目录
 
 - [功能介绍](#功能介绍)
-- [环境要求](#环境要求)
+- [约束和限制](#约束和限制)
 - [快速入门](#快速入门)
 - [示例效果](#示例效果)
-- [权限要求](#权限要求)
 - [开源许可协议](#开源许可协议)
 
 
 ## 功能介绍
+
+您可以基于此模板直接定制应用，也可以挑选此模板中提供的多种组件使用，从而降低您的开发难度，提高您的开发效率。
+
+此模板提供如下组件，所有组件存放在工程根目录的components下，如果您仅需使用组件，可参考对应组件的指导链接；如果您使用此模板，请参考本文档。
+
+| 组件                      | 描述                                       | 使用指导                                       |
+|-------------------------|------------------------------------------|--------------------------------------------|
+| 蓝牙扫描组件（bluetooth_scan）  | 本组件提供蓝牙扫描的能力，包括蓝牙扫描，设备信息展示等。             | [使用指导](components/bluetooth_scan/README.md)      |
+| 二级联动列表组件（category_list） | 本组件提供了二级分类列表展示的能力，支持传入自定义构建样式            | [使用指导](components/category_list/README.md) |
+| 简易表单组件（form_bar）        | 本组件提供了各类表单组件能力，包括选择图片、路由跳转、文字展示等         | [使用指导](components/form_bar/README.md)      |
+| 消息列表组件（message_list）    | 本组件提供了消息列表展示的能力，包括消息内容，消息日期和时间等          | [使用指导](components/message_list/README.md)  |
+| wifi扫描选择组件（wifi_scan）   | 本组件提供了wifi选择的能力，包括wifi列表展示选择，密码输入，支持点击回调 | [使用指导](components/wifi_scan/README.md)     |
+
 
 本模板构建了一款包含设备添加、设备管理的智能家居应用，并构建了设备模拟端，实现与该模板的蓝牙、MQTT交互，从而整体功能的闭环展示。模板主要分首页、产品和我的三大模块：
 
@@ -263,73 +275,77 @@ SmartHome
                              Index.ets                          // Index
 ```
 
-## 环境要求
+## 约束和限制
 
-### 软件
-* DevEco Studio版本：DevEco Studio 5.0.0 Release及以上
-* HarmonyOS SDK版本：HarmonyOS 5.0.0 Release SDK及以上
-### 硬件
+### 环境
+
+* DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
 * 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.0 Release及以上
+* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
 
+### 权限
 
+* 蓝牙权限：ohos.permission.ACCESS_BLUETOOTH
+* 网络权限：ohos.permission.INTERNET
+* wifi查询权限：ohos.permission.GET_WIFI_INFO
+
+### 调试
+本模板使用蓝牙不支持使用模拟器调试，请使用真机进行调试。
 
 ## 快速入门
 
 运行此模板需要使用两台手机，一台运行模拟灯程序，一台运行模板应用，具体操作如下：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建应用，将包名配置到模板中。
 
-2. 在AppGallery Connect创建应用，将包名配置到模板中。
-
-   a. 参考[创建HarmonyOS应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建APPID，并进行关联。
+   a. 参考[创建HarmonyOS应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建APP ID，并将APP ID与应用进行关联。
 
    b. 返回应用列表页面，查看应用的包名。
 
    c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建应用的包名。
 
-3. 连接模拟灯的手机和PC。
+2. 连接模拟灯的手机和PC。
 
-4. 对应用进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-signing-V5#section297715173233)
+3. 对应用进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-signing-V5#section297715173233)
    因为需要运行两台手机，所以在注册调试设备时，需要添加两个设备，然后在申请调试Profile时，将两个调试设备都选中。
 
-5. 配置华为账号服务。
+4. 配置华为账号服务。
 
-   a. 将元服务的client ID配置到phone模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/account-client-id-V5)。
+   a. 将应用的client ID配置到products/phone/src/main路径下的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/account-client-id-V5)。
 
    b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
 
-   c. 如需获取用户真实手机号及华为账号一键登录，需要申请phone权限和quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/account-config-permissions-V5)。
+   c. 申请华为账号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/account-config-permissions-V5)。
 
-6. 安装模拟灯程序，选择device_simulation运行。
+5. 将模拟灯手机的蓝牙名称修改为“模拟灯”，在Run Configurations选择device_simulation运行模拟灯程序，安装到模拟灯手机。
 
    ![run_device_simulation](screenshots/run_device_simulation.PNG)
 
-7. 打开模拟灯手机中的蓝牙开关。
+6. 打开模拟灯手机中的蓝牙开关。
 
    ![device_ble_on](screenshots/device_ble_on.jpg)
 
-8. 连接运行模板的手机和PC。
+7. 连接运行模板的手机和PC。
 
-9. 安装模板应用，选择phone运行。
+8. 安装模板应用，选择phone运行。
 
    ![run_phone](screenshots/run_phone.PNG)
-
-10. 在安装模板应用的手机上，点击“添加设备”，将自动扫描到模拟灯，点击模拟灯的“连接”进行Wi-Fi配置，配置完成后，首页将添加模拟灯的卡片，卡片右上角指示灯为绿色，表示已与模拟灯建立网络连接。
+9. 在安装模板应用的手机上，点击“添加设备”，将自动扫描到模拟灯，点击模拟灯的“连接”进行Wi-Fi配置，配置完成后，首页将添加模拟灯的卡片，卡片右上角指示灯为绿色，表示已与模拟灯建立网络连接。
 
 	![homePage](screenshots/homePage.jpg)  ![scan_device](screenshots/scan_device.jpg)  ![set_wifi](screenshots/set_wifi.jpg)  ![device_added](screenshots/device_added.jpg)
 
-11. 在模拟灯的手机上打开“灯开关”，模板应用的模拟灯卡片将显示“开”。
+10. 在模拟灯的手机上打开“灯开关”，模板应用的模拟灯卡片将显示“开”。
 
-	![device_all_on](screenshots/device_all_on.jpg)  ![device_turn_on](screenshots/device_turn_on.jpg)
+    <img src="screenshots/device_all_on.jpg" alt="homePage" height="464" width="200">  <img src="screenshots/device_turn_on.jpg" alt="device_turn_on" height="464" width="200">
 
-12. 在模板应用中点击模拟灯卡片，进入设备详情页，关闭灯，则模拟灯手机上的模拟灯也将关闭。
+11. 在模板应用中点击模拟灯卡片，进入设备详情页，关闭灯，则模拟灯手机上的模拟灯也将关闭。
 
-	![device_turn_off](screenshots/device_turn_off.jpg)   ![device_off](screenshots/device_off.jpg)
+   <img src="screenshots/device_turn_off.jpg" alt="device_turn_off" height="464" width="200">  <img src="screenshots/device_off.jpg" alt="device_off" height="464" width="200">	
 
 【注意】
 
-当前模板基于免费的公共MQTT服务器仅做功能展示，切勿在生产环境中使用，若出现连接失败等情况请尝试重新运行。
+当前模板基于免费的公共MQTT服务器仅做功能展示，切勿在生产环境中使用，若出现连接失败等情况请尝试重启蓝牙重新运行。
 
 公共MQTT broker: https://www.emqx.com/zh/mqtt/public-mqtt5-broker
 
@@ -337,14 +353,6 @@ SmartHome
 ## 示例效果
 
 [功能展示录屏](./screenshots/sample.avi)
-
-
-## 权限要求
-
-* 蓝牙权限：ohos.permission.ACCESS_BLUETOOTH
-* 网络权限：ohos.permission.INTERNET
-* wifi查询权限：ohos.permission.GET_WIFI_INFO
-
 
 ## 开源许可协议
 

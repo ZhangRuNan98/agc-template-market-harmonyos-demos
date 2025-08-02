@@ -1,5 +1,13 @@
-import { CommonConstants, FormatUtil, OrderStatus, WindowUtil } from 'commonlib';
-import { CommonButton, CommonHeader, AssociateUtil } from 'componentlib';
+import {
+  CommonButton,
+  CommonConstants,
+  CommonHeader,
+  CONTAINER_STYLE_CALC_WIDTH,
+  FormatUtil,
+  OrderStatus,
+  WindowUtil,
+} from 'common';
+import { AssociateUtil } from 'network';
 import { QueryPayPageVM } from '../viewmodels/QueryPayPageVM';
 
 @ComponentV2
@@ -103,7 +111,7 @@ export struct PayPage {
         this.itemBuilder('停留时间',
           FormatUtil.durationDisplay(this.vm.order?.start ?? Date.now(), this.vm.order?.end ?? Date.now()))
         this.itemBuilder('本次应付', '¥ ' + this.vm.order?.cost?.toFixed(2), true)
-      }.containerStyle()
+      }.attributeModifier(CONTAINER_STYLE_CALC_WIDTH)
     }
   }
 
@@ -116,14 +124,6 @@ export struct PayPage {
     .width(CommonConstants.FULL_WIDTH)
     .justifyContent(FlexAlign.SpaceBetween)
   }
-
-  @Styles
-  containerStyle() {
-    .padding($r('app.string.padding_12'))
-    .borderRadius($r('app.string.border_radius_16'))
-    .backgroundColor($r('app.color.system_color_background_white'))
-    .width('calc(100% - 32vp)')
-  }
 }
 
 @Extend(Text)
@@ -134,6 +134,6 @@ function textStyle(medium: boolean, red: boolean) {
 }
 
 @Builder
-export function PayPageBuilder() {
+export function payPageBuilder() {
   PayPage()
 }

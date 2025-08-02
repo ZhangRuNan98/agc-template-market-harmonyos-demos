@@ -175,6 +175,7 @@ export struct SearchPage {
                     }, (item: string) => JSON.stringify(item))
                   }
                   .scrollBar(BarState.Off)
+                  .edgeEffect(EdgeEffect.Spring)
                   .layoutWeight(1)
                 }
                 .padding({ top: '20vp' })
@@ -217,6 +218,7 @@ export struct SearchPage {
                   }, (item: string) => JSON.stringify(item))
                 }
                 .scrollBar(BarState.Off)
+                .edgeEffect(EdgeEffect.Spring)
                 .layoutWeight(1)
                 .padding({ top: '20vp' })
               }
@@ -307,6 +309,7 @@ export struct SearchPage {
     }
     .listDirection(Axis.Horizontal) // 排列方向
     .scrollBar(BarState.Off)
+    .edgeEffect(EdgeEffect.Spring)
     .margin({ top: 24, bottom: 24 })
     .cachedCount(3)
     .layoutWeight(1)

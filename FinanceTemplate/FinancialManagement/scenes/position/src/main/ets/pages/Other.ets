@@ -1,7 +1,6 @@
-import { CustomContentDialog } from '@kit.ArkUI';
-import { FormatUtil } from 'commonlib';
-import { RouterMap } from 'commonlib/src/main/ets/constants/CommonEnum';
+import { FormatUtil, RouterMap } from 'module_base';
 import { OtherVM } from '../viewModels/OtherVM';
+import { TipsDialog } from '@kit.ArkUI';
 
 @Builder
 export function OtherBuilder() {
@@ -12,179 +11,105 @@ export function OtherBuilder() {
 @ComponentV2
 struct Other {
   vm: OtherVM = OtherVM.instance
-  dialogControllerOther: CustomDialogController = new CustomDialogController({
-    builder: CustomContentDialog({
-      contentBuilder: () => {
-        this.buildContent();
-      },
-      buttons: [
-        {
-          value: '取消',
-          buttonStyle: ButtonStyleMode.TEXTUAL,
-          action: () => {
-            this.vm.isOn = true
-          }
+  dialogControllerLogout: CustomDialogController = new CustomDialogController({
+    builder: TipsDialog({
+      content: '是否确认退出登录?',
+      primaryButton: {
+        value: '取消',
+        action: () => {
+
         },
-        {
-          value: '确认',
-          buttonStyle: ButtonStyleMode.TEXTUAL,
-          role: ButtonRole.ERROR,
-          action: () => {
-            this.vm.isOn = false
-            this.vm.cancelRelated()
-          }
+      },
+      secondaryButton: {
+        value: '确认',
+        role: ButtonRole.ERROR,
+        action: () => {
+          this.vm.logout()
         }
-      ],
-    }),
-  })
-  dialogControllerPurchase: CustomDialogController = new CustomDialogController({
-    builder: CustomContentDialog({
-      contentBuilder: () => {
-        this.openBuildContent();
-      }
+      },
     }),
   })
 
   build() {
     NavDestination() {
       Column() {
-        Column() {
-          Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
-            Text('我的理财账号')
-              .fontSize(16)
-              .fontWeight(FontWeight.Medium)
-            Image($r('app.media.icc_arrow_right'))
-              .width(7)
-              .height(14)
-          }
-          .width('100%')
-          .height(48)
-          .onClick(() => {
-            FormatUtil.jumpToNext(RouterMap.FINANCIAL_ACCOUNT)
-          })
+        Scroll() {
+          Column() {
+            Column() {
+              this.contentBuilder('我的理财账号', () => {
+                FormatUtil.jumpToNext(RouterMap.FINANCIAL_ACCOUNT)
+              })
 
-          Divider().color($r('sys.color.comp_divider'))
+              Divider().color($r('sys.color.comp_divider'))
 
-          Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
-            Text('我的理财协议')
-              .fontSize(16)
-              .fontWeight(FontWeight.Medium)
-            Image($r('app.media.icc_arrow_right'))
-              .width(7)
-              .height(14)
+              this.contentBuilder('我的理财协议', () => {
+                FormatUtil.jumpToNext(RouterMap.FINANCIAL_AGREEMENT)
+              })
+            }
+            .borderRadius(16)
+            .backgroundColor(Color.White)
+            .padding({ left: 12, right: 12 })
+            .margin({ bottom: 12 })
+
+            Column() {
+              this.contentBuilder('隐私协议', () => {
+                FormatUtil.jumpToNext(RouterMap.PRIVACY, '隐私协议')
+              })
+
+              Divider().color($r('sys.color.comp_divider'))
+
+              this.contentBuilder('个人信息', () => {
+                FormatUtil.jumpToNext(RouterMap.PERSONAL_INFORMATION_PAGE)
+              })
+            }
+            .borderRadius(16)
+            .backgroundColor(Color.White)
+            .padding({ left: 12, right: 12 })
+            .margin({ bottom: 12 })
           }
-          .width('100%')
-          .height(48)
-          .onClick(() => {
-            FormatUtil.jumpToNext(RouterMap.FINANCIAL_AGREEMENT)
-          })
+          .padding({ left: 16, right: 16 })
         }
-        .borderRadius(16)
-        .backgroundColor(Color.White)
-        .padding({ left: 12, right: 12 })
-        .margin({ bottom: 12 })
-
-        Column() {
-          Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
-            Text('隐私协议')
-              .fontSize(16)
-              .fontWeight(FontWeight.Medium)
-            Image($r('app.media.icc_arrow_right'))
-              .width(7)
-              .height(14)
-          }
-          .width('100%')
-          .height(48)
-          .onClick(() => {
-            FormatUtil.jumpToNext(RouterMap.PRIVACY, '隐私协议')
-          })
-        }
-        .borderRadius(16)
-        .backgroundColor(Color.White)
-        .padding({ left: 12, right: 12 })
-        .margin({ bottom: 12 })
+        .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
       }
-      .padding({ left: 16, right: 16, top: 12 })
+      .height('calc(100% - 40vp)')
+
+      Row() {
+        Button('退出登录')
+          .fontColor('#E4480C')
+          .fontSize(16)
+          .fontWeight(FontWeight.Medium)
+          .backgroundColor($r('sys.color.comp_background_tertiary'))
+          .width('100%')
+          .borderRadius(20)
+          .onClick(() => {
+            this.dialogControllerLogout.open()
+          });
+      }
+      .width('100%')
+      .padding({ left: 16, right: 16 })
     }
-    .title('其他')
+    .title('设置')
     .backgroundColor($r('sys.color.background_secondary'))
     .onShown(() => {
       this.vm.init()
     })
   }
 
-  // 自定义弹出框的内容区
   @Builder
-  buildContent(): void {
-    Column() {
-      Text('解除关联')
-        .fontSize(20)
-        .fontWeight(FontWeight.Bold)
-        .margin({ bottom: 15 })
-      Text('请确认是否解除账号关联？')
+  contentBuilder(label: string, func: Function) {
+    Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
+      Text(label)
         .fontSize(16)
-        .fontWeight(FontWeight.Regular)
+        .fontWeight(FontWeight.Medium)
+      Image($r('app.media.icc_arrow_right'))
+        .width(7)
+        .height(14)
     }
     .width('100%')
-  }
-
-  // 自定义弹出框的内容区
-  @Builder
-  openBuildContent(): void {
-    Column() {
-      Row() {
-        Text('关联账号')
-          .fontSize(16)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r('sys.color.font_primary'))
-      }
-      .width('100%')
-      .margin({ bottom: 16 })
-
-      Column() {
-        Text(FormatUtil.encryptPhoneNo(this.vm.userInfo.cellphone))
-          .fontSize(14)
-          .fontWeight(FontWeight.Regular)
-          .fontColor($r('sys.color.font_primary'))
-        Text('华为账号绑定手机号')
-          .fontSize(14)
-          .fontWeight(FontWeight.Regular)
-          .fontColor($r('sys.color.font_secondary'))
-      }
-      .width('100%')
-      .padding(16)
-      .borderRadius(16)
-      .alignItems(HorizontalAlign.Start)
-      .backgroundColor(Color.White)
-
-      Row() {
-        Row() {
-          Text('取消')
-        }
-        .width('50%')
-        .height(40)
-        .justifyContent(FlexAlign.Center)
-        .onClick(() => {
-          this.vm.isOn = false
-          this.dialogControllerPurchase.close()
-        })
-
-        Row() {
-          Button('确认')
-            .width('100%')
-            .height(40)
-            .backgroundColor('#E4480C')
-        }
-        .width('50%')
-        .height(40)
-        .onClick(() => {
-          this.vm.isOn = true
-          this.vm.getUserAccount(this.vm.userInfo.id)
-          this.dialogControllerPurchase.close()
-        })
-      }
-      .margin({ top: 28 })
-    }
-    .width('100%')
+    .height(48)
+    .onClick(() => {
+      func()
+    })
   }
 }

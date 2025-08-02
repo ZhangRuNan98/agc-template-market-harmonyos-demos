@@ -1,5 +1,13 @@
-import { AddressModel, AddressType, AddressUtil, CommonAddressListModel, RouterMap, RouterModule } from 'commonlib';
-import { getId, Https } from 'network';
+import {
+  AccountUtil,
+  AddressModel,
+  AddressType,
+  AddressUtil,
+  CommonAddressListModel,
+  RouterMap,
+  RouterModule,
+} from 'common';
+import { Https } from 'network';
 
 @ObservedV2
 export class AddressPageVM {
@@ -68,7 +76,7 @@ export class AddressPageVM {
 
   /** 删除地址 **/
   private async _deleteAddress(siteId: string) {
-    const res = await Https.deleteCommonAddresses({ id: getId(), siteId: siteId });
+    const res = await Https.deleteCommonAddresses({ id: AccountUtil.getId(), siteId: siteId });
 
     if (res.code === 0) {
       AddressUtil.deleteAddress(siteId);
@@ -78,7 +86,7 @@ export class AddressPageVM {
   /** 清空地址 **/
   private async _clearAddress(type: AddressType) {
     const res = await Https.updateCommonAddresses({
-      id: getId(),
+      id: AccountUtil.getId(),
       siteId: '',
       oldSiteId: '',
       name: '',

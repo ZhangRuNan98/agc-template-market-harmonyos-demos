@@ -27,7 +27,7 @@ export class HomePageVM {
     ScheduleConfigUtil.initSchedule(mapCourseScheduleConfigResp(resp.data));
 
     // 查询今日，明日课表
-    const semester = 4; // TODO: 后续根据学生入学年份和当天日期算出
+    const semester = 4;
     await Promise.all([
       this.queryDayCourse(semester),
       // 查询学期全部课表并缓存

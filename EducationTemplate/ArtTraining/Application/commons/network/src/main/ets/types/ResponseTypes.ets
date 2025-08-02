@@ -1,11 +1,4 @@
-import {
-  CheckInRecord,
-  CheckInActivity,
-  CourseInfo,
-  OrderInfo,
-  StoreInfo,
-  SwiperItem,
-} from 'commonlib';
+import { CheckInRecord, CheckInActivity, CourseInfo, OrderInfo, StoreInfo, SwiperItem } from 'commonlib';
 
 export interface BaseRet {
   code: number;
@@ -33,7 +26,6 @@ export interface GetCourseListResp {
   courseList: CourseInfo[];
 }
 
-
 export interface GetOrderListResp {
   totalCount: number;
   returnCount: number;
@@ -45,7 +37,6 @@ export interface GetCheckInActivityListRsp {
   returnCount: number;
   list: CheckInActivity[];
 }
-
 
 export interface GetUserCheckInRecordListRsp {
   totalCount: number;

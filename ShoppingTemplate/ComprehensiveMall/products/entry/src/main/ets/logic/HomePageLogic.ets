@@ -40,11 +40,11 @@ export class HomePageLogic {
         switch (k) {
           case 'global.rootPageActiveTabId':
             const id: string = v.now as string;
-            isShow = (id === 'HomePage' && iData.global.isNavPathStackEmpty);
+            isShow = id === 'HomePage' && iData.global.isNavPathStackEmpty;
             break;
           case 'global.isNavPathStackEmpty':
             const isEmpty: boolean = v.now as boolean;
-            isShow = (isEmpty && iData.global.rootPageActiveTabId === 'HomePage');
+            isShow = isEmpty && iData.global.rootPageActiveTabId === 'HomePage';
             break;
         }
       }

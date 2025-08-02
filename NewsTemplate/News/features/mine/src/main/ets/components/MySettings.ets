@@ -34,23 +34,6 @@ export struct MySettings {
     });
   }
 
-  @Builder
-  Title() {
-    Row() {
-      Row() {
-        Image($r('app.media.chevron_backward')).width(9).height(16)
-          .margin({ left: 30, top: 48, bottom: 18})
-          .onClick(() => {
-          })
-      }.justifyContent(FlexAlign.Start)
-      .width('10%')
-    }
-    .width('100%')
-    .backgroundColor('#E84026')
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
-  }
-
-
   build() {
     NavDestination(){
       Column() {

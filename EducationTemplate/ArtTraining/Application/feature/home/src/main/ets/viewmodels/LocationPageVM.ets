@@ -1,12 +1,11 @@
-import { PermissionUtil, RouterMap, RouterModule, StoreInfo } from 'commonlib';
-import { StoreMapVM } from 'componentlib';
+import { RouterMap, RouterModule, StoreInfo } from 'commonlib';
+import { MapUtil } from 'module_store_map';
 
 @ObservedV2
 export class LocationVM {
   @Trace storeInfo: StoreInfo | null = null;
   @Trace isLoading: boolean = false;
   private static _instance: LocationVM;
-  mapVM: StoreMapVM = StoreMapVM.instance;
 
   public static get instance() {
     if (!LocationVM._instance) {
@@ -22,18 +21,14 @@ export class LocationVM {
     if (param) {
       this.storeInfo = param;
     }
-    this.requestLocationPermission();
   }
-
-  public requestLocationPermission() {
-    PermissionUtil.requestPermissions(['ohos.permission.APPROXIMATELY_LOCATION', 'ohos.permission.LOCATION'])
-      .then(() => {
-        this.mapVM.setUserLocation();
-      });
-  }
-
 
   public jumpToGuide() {
-    this.mapVM.handleClickGuide();
+    if (this.storeInfo) {
+      MapUtil.handleClickGuide({
+        latitude: this.storeInfo.latitude,
+        longitude: this.storeInfo.longitude,
+      });
+    }
   }
 }

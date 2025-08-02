@@ -1,5 +1,5 @@
+import { Address, OrderCardDto } from 'lib_foundation';
 import { assign, formatFullDate } from '../utils';
-import { Address, OrderCardDto } from './Type';
 
 export class OrderApi {
   public static readonly ORDER_LIST: OrderCardDto[] = [
@@ -18,6 +18,7 @@ export class OrderApi {
           title: '时尚轻商务系列针织打底纯羊毛内搭',
           serviceDesc: '运费险｜7天无理由',
           price: 188,
+          dashPrice:200,
         },
         {
           skuCode: 'sku_100003',
@@ -27,6 +28,7 @@ export class OrderApi {
           title: '时尚轻商务系列针织打底纯羊毛内搭',
           serviceDesc: '运费险｜7天无理由',
           price: 600,
+          dashPrice:600,
         },
       ],
       logisticsInfo: [
@@ -55,7 +57,7 @@ export class OrderApi {
         cellphone: '12345678901',
         address: '江苏省南京市雨花台区铁心桥街道软件大道101号',
       },
-      receivingMethod: '快递物流'
+      receivingMethod: '快递物流',
     },
     {
       type: 2,
@@ -72,6 +74,7 @@ export class OrderApi {
           title: '时尚轻商务系列针织打底纯羊毛内搭',
           serviceDesc: '运费险｜7天无理由',
           price: 564,
+          dashPrice:600,
         },
       ],
       logisticsInfo: [],
@@ -81,7 +84,7 @@ export class OrderApi {
         cellphone: '12345678901',
         address: '江苏省南京市雨花台区铁心桥街道软件大道101号',
       },
-      receivingMethod: '快递物流'
+      receivingMethod: '快递物流',
     },
     {
       type: 3,
@@ -98,6 +101,7 @@ export class OrderApi {
           title: '时尚轻商务系列针织打底纯羊毛内搭',
           serviceDesc: '运费险｜7天无理由',
           price: 940,
+          dashPrice:1000,
         },
       ],
       logisticsInfo: [],
@@ -107,7 +111,7 @@ export class OrderApi {
         cellphone: '12345678901',
         address: '江苏省南京市雨花台区铁心桥街道软件大道101号',
       },
-      receivingMethod: '快递物流'
+      receivingMethod: '快递物流',
     },
     {
       type: 5,
@@ -124,6 +128,7 @@ export class OrderApi {
           title: '时尚轻商务系列针织打底纯羊毛内搭',
           serviceDesc: '运费险｜7天无理由',
           price: 188,
+          dashPrice:200,
         },
       ],
       logisticsInfo: [],
@@ -133,7 +138,7 @@ export class OrderApi {
         cellphone: '12345678901',
         address: '江苏省南京市雨花台区铁心桥街道软件大道101号',
       },
-      receivingMethod: '快递物流'
+      receivingMethod: '快递物流',
     },
     {
       type: 6,
@@ -150,6 +155,7 @@ export class OrderApi {
           title: '时尚轻商务系列针织打底纯羊毛内搭',
           serviceDesc: '运费险｜7天无理由',
           price: 376,
+          dashPrice:400,
         },
       ],
       logisticsInfo: [],
@@ -160,7 +166,7 @@ export class OrderApi {
         address: '江苏省南京市雨花台区铁心桥街道软件大道101号',
       },
       refundTime: '2025-06-01 05:27:19',
-      receivingMethod: '快递物流'
+      receivingMethod: '快递物流',
     },
     {
       type: 1,
@@ -177,7 +183,7 @@ export class OrderApi {
           title: '时尚轻商务系列针织打底纯羊毛内搭',
           serviceDesc: '运费险｜7天无理由',
           price: 188,
-          oldPrices: 125,
+          dashPrice:200,
         },
       ],
       logisticsInfo: [],
@@ -188,7 +194,7 @@ export class OrderApi {
         cellphone: '12345678901',
         address: '江苏省南京市雨花台区铁心桥街道软件大道101号',
       },
-      receivingMethod: '快递物流'
+      receivingMethod: '快递物流',
     },
   ];
 
@@ -251,7 +257,7 @@ export class OrderApi {
     if (index !== -1) {
       OrderApi.ORDER_LIST[index].type = 2;
       OrderApi.ORDER_LIST[index].statusDesc = '待发货';
-      OrderApi.ORDER_LIST[index].remainingTime = ''
+      OrderApi.ORDER_LIST[index].remainingTime = '';
     }
     return Promise.resolve(true);
   }
@@ -288,9 +294,9 @@ export class OrderApi {
       (v) => v.orderCode === orderCode,
     );
     if (index !== -1) {
-      OrderApi.ORDER_LIST[index].address.name = address.name;
-      OrderApi.ORDER_LIST[index].address.cellphone = address.cellphone;
-      OrderApi.ORDER_LIST[index].address.address = address.address;
+      OrderApi.ORDER_LIST[index].address!.name = address.name;
+      OrderApi.ORDER_LIST[index].address!.cellphone = address.cellphone;
+      OrderApi.ORDER_LIST[index].address!.address = address.address;
     }
     return Promise.resolve(true);
   }

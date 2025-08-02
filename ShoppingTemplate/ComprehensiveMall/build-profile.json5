@@ -5,7 +5,7 @@
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "5.0.1(13)",
+        "compatibleSdkVersion": "5.0.4(16)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
@@ -72,6 +72,18 @@
     {
       "name": "module_login",
       "srcPath": "./components/module_login",
+    },
+    {
+      "name": "module_coupons",
+      "srcPath": "./components/module_coupons",
+    },
+    {
+      "name": "module_product_share",
+      "srcPath": "./components/module_product_share",
+    },
+    {
+      "name": "module_product_search",
+      "srcPath": "./components/module_product_search",
     }
   ]
 }

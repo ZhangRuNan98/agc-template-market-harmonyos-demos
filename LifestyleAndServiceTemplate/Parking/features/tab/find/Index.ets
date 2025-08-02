@@ -1,1 +1,1 @@
-export { FindPageBuilder } from './src/main/ets/pages/FindPage';
+export { findPageBuilder as FindPageBuilder } from './src/main/ets/pages/FindPage';

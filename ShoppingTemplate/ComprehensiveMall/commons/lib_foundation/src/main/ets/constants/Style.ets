@@ -43,7 +43,9 @@ export class Style {
   public static readonly BACKGROUND_COLOR_GREY = '#f1f3f5';
   public static readonly BACKGROUND_COLOR_THEME = '#1ae64566';
   public static readonly BACKGROUND_COLOR_GREY_2 = '#0D000000';
+  public static readonly ICON_COLOR_GREY = '#33000000';
   public static readonly BORDER_RADIUS_4 = '4vp';
+  public static readonly BORDER_RADIUS_8 = '8vp';
   public static readonly BORDER_RADIUS_16 = '16vp';
   public static readonly BORDER_RADIUS_CAPSULE = '99vp';
 }

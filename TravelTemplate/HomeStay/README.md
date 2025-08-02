@@ -1,4 +1,4 @@
-# 生活服务(美业)行业模板
+# 旅游（民宿）应用模板快速入门
 
 ## 目录
 
@@ -11,270 +11,275 @@
 
 ## 功能介绍
 
-本模板为美容行业（美甲美睫）类元服务提供了常用功能的开发样例，模板主要分首页和我的两大模块：
+您可以基于此[模板](#模板)直接定制应用/元服务，也可以挑选此模板中提供的多种[组件](#组件)使用，从而降低您的开发难度，提高您的开发效率。
 
-- 首页：提供商品卡、团购、推荐商品的展示，支持购买和预约。
-- 我的：展示会员卡信息，支持订单、商品卡、团购信息的管理。
+### 模板
 
-本模板已集成华为账号、推送、华为支付等服务，只需做少量配置和定制即可快速实现华为账号的登录、预约提醒、购买商品等功能。
+本模板为民宿住宿类应用提供了常用功能的开发样例，模板主要分首页、发现、地图、商城和我的五大模块：
 
-| 首页                                                  | 我的                                                  |
-|-----------------------------------------------------|-----------------------------------------------------|
-| <img src="screenshots/首页.jpg" alt="首页" width="300"> | <img src="screenshots/我的.jpg" alt="我的" width="300"> |
+* 首页：提供民宿轮播展示、民宿信息查看、入住时间选择、热门房型选择。
+* 发现：展示发现列表，展示发现详情。
+* 地图：提供民宿地理位置展示、民宿导航。
+* 商城：展示商城商品列表、商品详情和商品购买。
+* 我的：提供订单入口，支持旅客信息、投诉建议、客服列表、关于我们。
+
+本模板已集成华为账号、通话、地图、华为支付等服务，只需做少量配置和定制即可快速实现华为账号的登录、一键拨打服务电话、民宿位置定位导航、订房下单、购买商品等功能。
+
+| 首页                             | 发现                            | 地图                                       | 商城                                       | 我的                                      |
+|--------------------------------|-------------------------------|------------------------------------------|------------------------------------------|-----------------------------------------|
+| ![image](screenshots/home.jpg) | ![image](screenshots/discovery.jpg) | ![image](screenshots/map.jpg) | ![image](screenshots/shop.jpg) | ![image](screenshots/mine.jpg) |
+
 
 本模板主要页面及核心功能如下所示：
 
 ```ts
-美业模板
- |-- 华为账号登录
- |    |-- 授权
- |    └-- 解绑
+民宿旅游
  |-- 首页
- |    |-- Banner
- |    |-- 店铺信息
- |    |-- 开通会员
- |    |-- 次卡
- |    |     |-- 次卡详情
- |    |     |-- 提交订单
- |    |     └-- 下单成功
- |    |-- 团购
- |    |     |-- 团购详情
- |    |     |-- 提交订单
- |    |     └-- 下单成功
+ |    |-- 顶部轮播
+ |    |-- 民宿信息
+ |    |    └-- 民宿基本信息
+ |    |-- 入离时间
+ |    |    └-- 入离时间选择
+ |    |-- 热门房型
+ |    |    |-- 热门房型详情
+ |    |         └-- 热门房型下单
+ |    |    |-- 全部房型
+ |    |         └-- 房型详情
+ |    |              └-- 房型下单
+ |-- 发现
+ |    └-- 发现列表
+ |         └-- 发现详情
+ |         └-- 发现搜索
+ |-- 地图
+ |    └-- 民宿信息
+ |    └-- 民宿导航
+ |-- 商城
  |    └-- 商品列表
- |          |-- 商品详情
- |          |-- 预约页面
- |          └-- 预约成功
+ |         └-- 商品详情
+ |              └-- 商品下单
  └-- 我的
-      |-- 用户信息
-      |     |-- 个人信息
-      |     |-- 积分
-      |     └-- 会员卡
       |-- 我的订单
-      |     |-- 已预约
-      |     └-- 已完成
-      |-- 服务与工具
-      |     |-- 次卡管理
-      |     └-- 团购管理
-      └-- 商品列表
+      |    └-- 住宿订单
+      |    └-- 商品订单
+      |-- 常用旅客
+      |    └-- 游客列表
+      |         └-- 新增游客 
+      |-- 客服
+      |    └-- 常见问题列表
+      └-- 投诉建议
+           └-- 新增投诉建议
 ```
 
 本模板工程代码结构如下所示：
 
+```ts
+HomeStay
+  |- common                                       // 公共层                                      
+  |  |- component/src/main/ets/pages              // 公共组件模块(har)
+  |  |    |- AgreementDialog.ets                  // 用户协议弹窗 
+  |  |    |- CommonBlank.ets                      // 公共空白组件 
+  |  |    |- PaySuccess.ets                       // 支付成功组件
+  |  |    └- TitleBar.ets                         // 标题组件
+  |  |    └- ConfirmDialog.ets                    // 公共确认弹窗
+  |  |- constant/src/main/ets                     // 公共模块(har)
+  |  |     |- common 
+  |  |          Constants.ets                     // 公共常量             
+  |  └- type/src/main/ets                         // 类型定义模块(har)
+  |  |      |- models                             // 公共类型   
+  |  └- util/src/main/ets                         // 工具模块(har) 
+  |        |- utils                               // 工具类
+  |  |          Index.ets                         // 公共方法类
+  |  |          LazyDataSource.ets                // 懒加载公共类 
+  |  |          Logger.ets                        // 日志类 
+  |  |          ObservedArray.ets                 // 懒加载公共类 
+  |  |          Storage.ets                       // 本地状态管理类 
+  |
+  |- main                                         // 主包(hap) 
+  |  └- main/src/main/ets                                                                             
+  |        |- entryability                                                                                                                            
+  |        |- pages                              
+  |        |    Main.ets                          // 主页面
+  |        |    CustomTabBar.ets                  // 导航栏自定义页面
+  |        |- model                               // 类型定义
+  |        |- viewmodel                           // 与页面一一对应的vm层          
+  |      
+  |- components                                   // 可分可合组件层
+  |   |- calendar_select/src/main/ets             // 日历组件(har)
+  |   |    |- components                          // 组件页面
+  |   |    |    CustomCalendarPickerDialog.ets    // 日历弹窗
+  |   |    |    DateInfo.ets                      // 日历组件 
+  |   |    |- constant                            // 日历组件常量
+  |   |    |- model                               // 日历组件模型  
+  |   |    |- utils                               // 日历组件工具类             
+  |   |    
+  |   |- travel_discovery/src/main/ets            // 游记组件(har)
+  |   |    |- components                          // 组件
+  |   |    |    ContentCard.ets                   // 游记卡片  
+  |   |    |- constant                            // 游记组件常量
+  |   |    |- model                               // 游记组件模型     
+  |   |    |- pages                              
+  |   |    |    PageDetail.ets                    // 游记详情页面
+  |   |    |    PageSearch.ets                    // 游记搜索页面
+  |   |    |    PageWaterFlow.ets                 // 游记瀑布流页面
+  |   |    └- utils                               // 日历工具类 
+  |   |- travel_map/src/main/ets                  // 地图组件(har)
+  |   |    |- components                          // 组件页面
+  |   |    |    Map.ets                           // 地图  
+  |   |    |- model                               // 地图组件模型
+  |                                           
+  |- function                                     // 特性层
+  |   |- account/src/main/ets                     // 账号维护模块(hsp)
+  |   |    |- AccountUtil                         // 账号信息维护类                  
+  |   |
+  |   |- network/src/main/ets                     // 网络请求模块(hsp)
+  |   |    |- api                                 // 接口请求方法类   
+  |   |    |- mock                                 
+  |   |    |    Mock.ets                          // mock数据
+  |   |    |- models                              // class类型定义    
+  |   |    |- types                               // 接口类型定义      
+  |   |
+  |- tab                                          // tab特性层
+  |   |- discovery/src/main/ets                   // 发现模块(har)
+  |   |    |- components                          // 抽离组件
+  |   |    |    ContentCard.ets                   // 发现卡片组件
+  |   |    |- constant                              
+  |   |    |    Index.ets                         // 常量
+  |   |    |- model      
+  |   |    |    Index.ets                         // 模型
+  |   |    |    IRequest.ets                      // 请求模型
+  |   |    |    IResponse.ets                     // 返回模型
+  |   |    |- pages                              
+  |   |    |    PageSearch.ets                    // 发现搜索页
+  |   |    |    PageDetail.ets                    // 发现详情页
+  |   |    |    PageWaterFlow.ets                 // 发现列表页
+  |   |    └- util                                // 请求工具
+  |   |- home/src/main/ets                        // 首页模块(hsp)
+  |   |    |- components                          // 抽离组件 
+  |   |    |- model                               // class类型定义 
+  |   |    |- mapper                              // 类型映射
+  |   |    |- pages                              
+  |   |    |    Home.ets                          // 首页
+  |   |    |    Hotel.ets                         // 民宿信息页
+  |   |    |    HotelDetail.ets                   // 民宿详情页
+  |   |    |    Reserve.ets                       // 民宿预订页
+  |   |    |    Rooms.ets                         // 房型列表页
+  |   |    └- viewmodel                           // 与页面一一对应的vm层   
+  |   |- map/src/main/ets                         // 地图模块(hsp)
+  |   |    |- pages                              
+  |   |    |    MapPage.ets                       // 地图展示页
+  |   |- personal/src/main/ets                    // 我的模块(hsp)
+  |   |    |- components                          // 抽离组件 
+  |   |    |- model                               // class类型定义 
+  |   |    |- pages                              
+  |   |    |    About.ets                         // 关于我们页
+  |   |    |    AddGuest.ets                      // 添加旅客页
+  |   |    |    CommodityOrderDetail.ets          // 商品订单详情页
+  |   |    |    Complaint.ets                     // 反馈建议页
+  |   |    |    Customer.ets                      // 客服页
+  |   |    |    Guests.ets                        // 旅客列表页
+  |   |    |    OrderList.ets                     // 订单列表页
+  |   |    |    OtherService.ets                  // 其他服务页
+  |   |    |    Personal.ets                      // 我的页
+  |   |    |    PersonalInfo.ets                  // 个人信息页
+  |   |    |    RoomOrderDetail.ets               // 住宿订单页
+  |   |    |    PrivacyPolicyPage.ets             // 隐私政策页
+  |   |    |    QuickLoginPage.ets                // 住宿订单页
+  |   |    |    TermsOfServicePage.ets            // 用户协议页
+  |   |    └- viewmodel                           // 与页面一一对应的vm层    
+  |   |- shop/src/main/ets                        // 商城模块(hsp)
+  |   |    |- components                          // 抽离组件 
+  |   |    |- model                               // class类型定义 
+  |   |    |- mapper                              // 接口数据到页面数据类型映射
+  |   |    |- pages                              
+  |   |    |    CommodityDetail.ets               // 商品详情页
+  |   |    |    CommodityList.ets                 // 商品列表页
+  |   |    |    Purchase.ets                      // 商品购买页
+  |   |    |    Shop.ets                          // 商城页
+  |   |    └- viewmodel                           // 与页面一一对应的vm层           
 ```
-LifeBeauty
-  ├─commons/utils/src/main
-  │  ├─ets
-  │  │  ├─common
-  │  │  │      Constant.ets                  // 公共常量
-  │  │  │      LoadingUtils.ets              // 加载方法
-  │  │  │      Logger.ets                    // 日志打印
-  │  │  │      PopViewUtils.ets              // 公共弹窗
-  │  │  │      Utils.ets                     // 公共方法
-  │  │  ├─http
-  │  │  │      ApiManage.ets                 // 服务端接口管理
-  │  │  │      AxiosBase.ets                 // 请求基础能力
-  │  │  │      MockApi.ets                   // 接口Mock
-  │  │  │      MockData.ets                  // 数据Mock
-  │  │  ├─model
-  │  │  │      IRequest.ets                  // 数据请求模型
-  │  │  │      IResponse.ets                 // 数据响应模型
-  │  │  │      Model.ets                     // UI监听数据模型
-  │  │  ├─router
-  │  │  │      RouterModule.ets              // 路由模块
-  │  │  └─uicomponent
-  │  │         DialogBindPhone.ets           // 关联手机号弹窗
-  │  │         DialogCancelBind.ets          // 取消关联手机号弹窗
-  │  │         DialogReBind.ets              // 换绑手机号弹窗
-  │  │         GoodCard.ets                  // 商品卡片
-  │  │         Login.ets                     // 登录模块
-  │  │         NoticeDialog.ets              // 通知弹窗
-  │  │         UIBackBtn.ets                 // 通用的返回按钮组件
-  │  │         UIEmpty.ets                   // 通用的空页面组件
-  │  │         UIOrderPart.ets               // 通用的订购组件
-  │  └─resources                             
-  │                                           
-  │─features/home/src/main                     
-  │  ├─ets                                    
-  │  │  ├─common                              
-  │  │  │      Constant.ets                  // 常量 
-  │  │  │      UIComponent.ets               // 通用组件
-  │  │  │      Utils.ets                     // 工具类
-  │  │  ├─components                          
-  │  │  │      ActiveMemberModule.ets        // 开通会员卡 
-  │  │  │      DialogBookSuccess.ets         // 预约成功
-  │  │  │      DialogBusiness.ets            // 营业执照弹窗
-  │  │  │      DialogCall.ets                // 拨号弹窗
-  │  │  │      GroupModule.ets               // 首页团购
-  │  │  │      SingleVisitModule.ets         // 首页次卡
-  │  │  │      StoreList.ets                 // 店铺列表
-  │  │  ├─pages                               
-  │  │  │      BookGood.ets                  // 预约服务
-  │  │  │      GoodDetail.ets                // 商品详情页
-  │  │  │      GroupDetail.ets               // 团购详情页
-  │  │  │      HomePage.ets                  // 首页
-  │  │  │      SingleCardDetail.ets          // 次卡详情页
-  │  │  │      SubmitOrder.ets               // 下单页面
-  │  │  │      SuccessPay.ets                // 付款成功页面
-  │  │  └─viewmodel                           
-  │  │         HomeBaseVM.ets                // 首页VM
-  │  └─resources                              
-  │                                           
-  │─features/mine/src                         
-  │    ├─ets                                    
-  │    │  ├─common                              
-  │    │  │    Constant.ets                  // 常量 
-  │    │  ├─components                          
-  │    │  │    BookCard.ets                  // 预约管理卡片 
-  │    │  │    DialogCancelAppointment.ets   // 取消预约弹窗
-  │    │  │    DialogQRCode.ets              // 二维码弹窗
-  │    │  └─pages                              
-  │    │       AppointmentList.ets           // 我的预约列表
-  │    │       BookGroupDetail.ets           // 我的团购详情
-  │    │       GroupList.ets                 // 我的团购列表
-  │    │       Mine.ets                      // 我的
-  │    │       SingleVisitList.ets           // 我的次卡列表
-  │    └─resources                             
-  │
-  └─products/entry/src/main                           
-      ├─ets                                   
-      │  ├─entryability                        
-      │  │      EntryAbility.ets              // 应用入口Ability
-      │  ├─entryformability                   
-      │  │      EntryFormAbility.ets          // 卡片入口Ability
-      │  ├─pages                              
-      │  │      Index.ets                     // 入口页面
-      │  │      Main.ets                      // 主页面
-      │  └─simplewidget/pages
-      │         SimpleWidgetCard.ets          // 卡片页面 
-      └─resources  
-```
+
+### 组件
+本模板中提供了多种组件，您可以按需选择合适的组件进行使用，所有组件存放在工程根目录的components下。
+
+| 组件                | 描述 | 使用指导 |
+| ------------------- | ---- | -------- |
+| 日历组件（calendar_select） |  提供入住、离开日期选择的功能。    |[使用指导](components/calendar_select/README.md)|
+|      游记组件（travel_discovery）               |   提供游记浏览搜索、详情查看及评论等功能。   |  [使用指导](components/travel_discovery/README.md)        |
+|      地图（定位选点）组件（travel_map）               |   提供地图展示能力，并支持地图定位和选点定制功能。   |  [使用指导](components/travel_map/README.md)        |
 
 ## 环境要求
 
 ### 软件
-
 * DevEco Studio版本：DevEco Studio 5.0.0 Release及以上
 * HarmonyOS SDK版本：HarmonyOS 5.0.0 Release SDK及以上
-
 ### 硬件
-
 * 设备类型：华为手机（直板机）
 * HarmonyOS版本：HarmonyOS 5.0.0 Release及以上
 
+
 ## 快速入门
 
-### 配置工程
-
+###  配置工程
 在运行此模板前，需要完成以下配置：
 
-1. 在AppGallery Connect创建元服务，将包名配置到模板中。
+1. 在DevEco Studio中打开此模板。
 
-   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APP ID，并将APP ID与元服务进行关联。
+2. 在AppGallery Connect创建应用，将包名配置到模板中。
 
-   b. 返回应用列表页面，查看元服务的包名。
+   a. 参考[创建应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建APPID，并进行关联。
 
-   c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建元服务的包名。
+   b. 返回应用列表页面，查看应用的包名。
 
-   d. 将commons/utils/src/main/ets/common/Constant.ets文件中的BUNDLE_NAME替换为创建元服务的包名。
-   ```
-   export enum CurAppInfo {
-     BUNDLE_NAME = 'com.atomicservice.xxx',// 包名
-   }
-   ```
+   c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建应用的包名。
 
-2. 配置华为账号服务。
+3. 配置华为账号服务。
 
-   a. 将元服务的Client ID配置到entry模块下的products/entry/src/main/module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
+   a. 将应用的client ID配置到main模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
-   b. 将元服务的Client ID配置到commons/utils/src/main/ets/common/Constant.ets文件中。
+   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
 
-   ```
-   export enum CurAppInfo {
-     CLIENT_ID = 'xxxxxxxx', // client_id
-   }
-   ```
-   c.获取华为账号相关授权，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)。
+4. 配置地图服务。
 
+   a. 将应用的client ID配置到main模块的module.json5文件，如果华为账号服务已配置，可跳过此步骤。
 
-3. 配置推送服务。
+   b. 添加公钥指纹，如果华为账号服务已配置，可跳过此步骤。
 
-   a. [开通推送服务](https://developer.huawei.com/consumer/cn/doc/atomic-guides/push-as-prepare)。
+   c. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
 
-   b. 开通服务并选择订阅模板，获取模板ID，详细参考：[开通服务通知并选择订阅模板](https://developer.huawei.com/consumer/cn/doc/atomic-guides/push-as-service-noti)。
+5. 配置支付服务。
 
-   c.将模板ID填充到commons/utils/src/main/ets/common/Constant.ets中。
+   华为支付当前仅支持商户接入，在使用服务前，需要完成商户入网、开发服务等相关配置，本模板仅提供了端侧集成的示例。详细参考：[支付服务接入准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/payment-preparations)。
 
-   ```
-   export enum CurAppInfo {
-     PUSH_TEMPLATE_ID = 'xxxxxxxxxxxx',// 推送服务通知模板ID
-   }
-   ```
-   [说明]
-   本模板只包含客户端侧代码的实现，如需完整体验推送能力，还需要补充服务端开发。详细参考：[推送基于账号的订阅消息](https://developer.huawei.com/consumer/cn/doc/atomic-guides/push-as-send-sub-noti)。
-
-4. （可选）如使用支付能力，需要配置支付服务。
-
-   a. 华为支付当前仅支持商户接入，在使用服务前，需要完成商户入网、开通服务等相关配置。更多详细内容参考：[支付服务接入准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/payment-preparations)。
-
-   b. 当前模板仅提供端侧集成示例，真实调用华为支付场景下，修改端侧文件：features/home/src/main/ets/pages/SubmitOrder.ets，主要修改点如下：
-
-   ```
-   // todo: 设置参数为false，使得不绕过华为支付
-   private ignoreRequestPayment: boolean = false;
-   
-   // 调用华为支付客户端
-   requestPaymentPromise(): Promise<void> {
-      if (this.ignoreRequestPayment) {
-         return new Promise((resolve) => resolve());
-      }
-      // todo: 补充订购信息
-      const orderStr = '{}';
-      return paymentService.requestPayment(this.context, orderStr)
-         .then(() => {
-            console.info('succeeded in paying');
-         })
-         .catch((error: BusinessError) => {
-            console.error(`failed to pay, error.code: ${error.code}, error.message: ${error.message}`);
-            this.getUIContext().getPromptAction().showToast({ message: '拉起支付失败' });
-         });
-   }
-   ```
-
-5. （可选）配置服务器域名。
-
-   a. 当前模板接口均采用mock数据，若是使用服务端接口请求，需要改造http请求的相关代码：commons/utils/src/main/ets/http/AxiosBase.ets。
-
-   b. [配置服务器域名](https://developer.huawei.com/consumer/cn/doc/atomic-guides/agc-help-harmonyos-server-domain)
-   ，“httpRequest合法域名”需要配置为：`https://agc-storage-drcn.platform.dbankcloud.cn`
-
-
-6. 对元服务进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
-
-7. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)
-
-### 运行调试工程
-
+###  运行调试工程
 1. 连接调试手机和PC。
 
-2. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
+2. 对应用签名：由于模板中集成了华为账号、地图等服务，所以需要采用[手动签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
+
+3. 配置多模块调试：由于本模板存在多个模块，运行时需确保所有模块安装至调试设备。
+
+   a. 在DevEco Studio菜单选择“Run > Edit Configurations”，进入“Run/Debug Configurations”界面。
+
+   b. 左侧导航选择“main”模块，选择“Deploy Multi Hap”页签，勾选上模板中所有模块。
+
+   c. 点击"Run"，运行模板工程。
+
 
 ## 示例效果
 
-1. 订购和预约
+1. 住宿预订
 
-   [点击观看视频](screenshots/订购和预约.mp4)
+   [住宿预订展示](./screenshots/reserve.mp4)
 
-2. 我的管理
+2. 商品购买
 
-   [点击观看视频](screenshots/我的管理.mp4)
+   [商品购买展示](./screenshots/purchase.mp4)
 
 ## 权限要求
 
-- 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION、ohos.permission.LOCATION
-- 日历日程读写权限：ohos.permission.READ_CALENDAR、ohos.permission.WRITE_CALENDAR
+- 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION、ohos.permission.LOCATION。
 - 网络权限：ohos.permission.INTERNET
 
 ## 开源许可协议
 
 该代码经过[Apache 2.0 授权许可](http://www.apache.org/licenses/LICENSE-2.0)。
+

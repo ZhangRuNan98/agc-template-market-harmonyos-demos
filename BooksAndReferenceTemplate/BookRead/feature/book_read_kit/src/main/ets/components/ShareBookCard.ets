@@ -5,11 +5,12 @@ import { BusinessError } from '@kit.BasicServicesKit';
 import { common } from '@kit.AbilityKit';
 import { Logger } from '@hw-agconnect/ui-base';
 import { BookInfo } from 'common';
+import { hilog } from '@kit.PerformanceAnalysisKit';
 
 @ComponentV2
 export struct ShareBookCard {
   @Param @Require book: BookInfo;
-
+  @Param isShelf?: boolean = false;
   setShareData() {
     const contextFaker: Context = getContext(this);
     let bookUri = `${this.book.id}.png`
@@ -47,19 +48,40 @@ export struct ShareBookCard {
     try {
       let writeLen = fs.writeSync(file.fd, (resUri as Uint8Array).buffer);
       Logger.info('write data to file succeed and size is:' + writeLen);
-    } catch (e) {
-      Logger.info('err====')
+    } catch (err) {
+      let e: BusinessError = err as BusinessError;
+      hilog.error(0x0000, 'testTag', 'catch error: %{public}d %{public}s', e.code, e.message);
     } finally {
       fs.closeSync(file);
     }
   }
 
   build() {
-    Image($r('app.media.ic_share'))
-      .width(35)
-      .height(35)
-      .onClick(() => {
+    if (this.isShelf) {
+      Column({space:5}){
+        Image($r('app.media.ic_share'))
+          .height(24)
+          .width(24)
+          .margin({ top: 5 })
+
+        Text($r('app.string.share'))
+          .fontSize($r('sys.float.Caption_L'))
+          .fontColor($r('sys.color.font_primary'))
+          .fontWeight(FontWeight.Regular)
+      }
+      .onClick(()=>{
         this.setShareData()
       })
+    } else {
+      Image($r('app.media.ic_share'))
+        .width(35)
+        .height(35)
+        .onClick(() => {
+          this.setShareData()
+        })
+    }
+
+
+
   }
 }

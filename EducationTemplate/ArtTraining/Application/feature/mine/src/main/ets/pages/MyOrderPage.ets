@@ -46,7 +46,8 @@ export struct MyOrderPage {
                     };
                   }, (item: OrderInfo) => item.orderNo);
                 }
-                .layoutWeight(1);
+                .layoutWeight(1)
+                .scrollBar(BarState.Off)
               } else {
                 Column() {
                   Image($r('app.media.ic_order_empty'))

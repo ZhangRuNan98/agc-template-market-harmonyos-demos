@@ -1,16 +1,8 @@
-/* eslint-disable */
-import {
-  AccountModel,
-  AccountUtil,
-  FullLoading,
-  UserInfo,
-  UserInfoModel,
-  WindowUtil,
-} from 'commonlib';
-import { UIContext } from '@kit.ArkUI';
-import { TabListItem } from '../types/index';
+import { AccountModel, AccountUtil, FullLoading, RouterModule, UserInfo, UserInfoModel, WindowUtil } from 'common';
+import { AppStorageV2, UIContext } from '@kit.ArkUI';
+import { FormModel, TabListItem } from '../types/Types';
 import { GetUserInfoResp, Https, UserLoginResp } from 'network';
-import { TAB_CONFIG } from '../constants';
+import { TAB_CONFIG } from '../constants/Constatns';
 
 @ObservedV2
 export class MainEntryVM {
@@ -20,6 +12,22 @@ export class MainEntryVM {
   @Trace userInfo: UserInfoModel = AccountUtil.getUserInfo();
   // 账号信息
   @Trace accountInfo: AccountModel = AccountUtil.getAccountInfo();
+  // 卡片模型
+  @Trace formInfo: FormModel = AppStorageV2.connect(FormModel, () => new FormModel())!;
+
+  @Monitor('formInfo.url')
+  public pageJump() {
+    if (this.formInfo.url) {
+      if (RouterModule.popToName(this.formInfo.url) !== -1) {
+        RouterModule.replace({ url: this.formInfo.url, param: this.formInfo.license }, false);
+      } else {
+        RouterModule.push({ url: this.formInfo.url, param: this.formInfo.license }, false);
+      }
+      this.formInfo.url = '';
+      this.formInfo.license = '';
+    }
+  }
+
   public controller: TabsController = new TabsController();
   public tabList: TabListItem[] = TAB_CONFIG;
   private static _instance: MainEntryVM;
@@ -42,29 +50,29 @@ export class MainEntryVM {
       WindowUtil.setFullWindow();
     });
     AccountUtil.silentLogin().then(() => {
-      this.getLoginUserInfo();
+      this._getLoginUserInfo();
     });
   }
 
   /** 获取登录用户信息 **/
-  private async getLoginUserInfo() {
+  private async _getLoginUserInfo() {
     const loginToken = this.accountInfo.loginToken;
     if (!loginToken) {
       const res = await Https.userLogin();
       if (res.code === 0) {
         this.accountInfo.loginToken = res.data.loginToken;
-        this.initUserInfo(res.data);
+        this._initUserInfo(res.data);
       }
     } else {
       const res = await Https.getUserInfo();
       if (res.code === 0) {
-        this.initUserInfo(res.data);
+        this._initUserInfo(res.data);
       }
     }
   }
 
   /** 更新用户信息 **/
-  private initUserInfo(data: UserLoginResp | GetUserInfoResp) {
+  private _initUserInfo(data: UserLoginResp | GetUserInfoResp) {
     const info: UserInfo = {
       avatar: data.avatar,
       nickname: data.nickname,

@@ -1,6 +1,6 @@
-import { RedemptionVM } from '../viewModels/RedemptionVM';
 import { CustomContentDialog } from '@kit.ArkUI';
-import { FormatUtil, RouterMap } from 'commonlib';
+import { FormatUtil, RouterMap } from 'module_base';
+import { RedemptionVM } from '../viewModels/RedemptionVM';
 import { IRedemptionButton } from '../types';
 
 @Builder
@@ -8,7 +8,6 @@ export function RedemptionBuilder() {
   Redemption()
 }
 
-@Entry
 @ComponentV2
 struct Redemption {
   vm: RedemptionVM = RedemptionVM.instance
@@ -117,7 +116,7 @@ struct Redemption {
                         this.vm.getRedemptionButton(item.index)
                         this.vm.selectedMoneyIndex = item.index
                       })
-                  }, (item: IRedemptionButton[]) => JSON.stringify(item))
+                  }, (item: IRedemptionButton) => JSON.stringify(item))
                 }
               }
               .padding({
@@ -130,6 +129,7 @@ struct Redemption {
             }
           }
           .scrollBar(BarState.Off)
+          .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
         }
         .height('calc(100% - 40vp)')
 
@@ -297,7 +297,7 @@ struct Redemption {
                 .fontWeight(FontWeight.Regular)
                 .fontColor('rgba(0,0,0,0.40)')
               } else {
-                Text('验证码不正确，请重新输入123456')
+                Text('验证码不正确，请重新输入')
                   .fontSize(12)
                   .fontWeight(FontWeight.Regular)
                   .fontColor('#E84026')

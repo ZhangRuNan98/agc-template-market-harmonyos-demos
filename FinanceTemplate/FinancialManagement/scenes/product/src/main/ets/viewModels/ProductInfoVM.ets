@@ -1,19 +1,17 @@
-import { https } from 'network';
-import { AccountUtil, AppStorageMap, FormatUtil, Logger, RouterMap, RouterModule, } from 'commonlib';
+import { RouterMap, RouterModule, } from 'module_base';
 import {
+  https,
   IBuyRule,
   IDataset,
   IHistoricalPerformance,
   IProcess,
   IProductInfo,
   IRedemptionRule,
-} from 'network/src/main/ets/types/responseTypes/GetProductResp';
-import { IUserAccount } from 'network/src/main/ets/types/responseTypes/GetUserAccountResp';
-import { IProfile } from 'network/src/main/ets/types/responseTypes/GetProductResp';
+  IUserAccount,
+  IProfile,
+  MockStorageMap
+} from 'lib_foundation';
 import { dateButton, initProductInfoData } from '../constants';
-import { MockStorageMap } from 'network/src/main/ets/mocks/Constants';
-
-const TAG = '[ProductInfoVM]';
 
 @ObservedV2
 export class ProductInfoVM {

@@ -9,6 +9,7 @@ export interface OrderInfoResp {
   student: string;
   phone: string;
   courseInfo: CourseInfoResp;
+  remark?:string;
 }
 
 export interface CourseInfoResp {
@@ -26,7 +27,7 @@ export interface CourseInfoResp {
   classHour: number;
   status: number; // 1未上课 2在读中 3已结课
   currentHour: number; // 当前课时
-  timetable: CourseTimetable;
+  timetable: CourseTimetable
 }
 
 export interface CourseTimetable {

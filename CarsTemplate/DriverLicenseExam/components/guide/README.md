@@ -3,8 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
-- [权限要求](#权限要求)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -20,27 +20,41 @@
 
 <img src="screenshots/guide.jpg" width="300">
 
+## 约束与限制
+### 环境
+* DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.1(13) Release SDK及以上
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.1 Release及以上
 
-## 使用
+## 快速入门
 
 1. 安装组件。
 
-   将模板根目录的components下[guide](../guide)目录拷贝至您工程根目录components/，并添加依赖和module声明。
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
 
-    ```
-    // entry/oh-package.json5
-    "dependencies": {
-      "@ohos_agcit/driver_license_exam_guide": "file:../components/guide"
-    }
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
 
-    // build-profile.json5
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的XXX目录下。
+
+   b. 在项目根目录build-profile.json5添加guide模块。
+
+    ```typescript
+    // 在项目根目录build-profile.json5填写guide路径。其中XXX为组件存放的目录名
     "modules": [
-      {
-        "name": "guide",
-        "srcPath": "./components/guide"
-      }
+        {
+          "name": "guide",
+          "srcPath": "./XXX/guide",
+        }
     ]
     ```
+   c. 在项目根目录oh-package.json5中添加依赖。
+    ```typescript
+    // XXX为组件存放的目录名称
+    "dependencies": {
+      "@ohos_agcit/driver_license_exam_guide": "file:./XXX/guide"
+    }
+   ```
 
 2. 引入组件。
 
@@ -48,6 +62,49 @@
     import { GuideService, licenseTypeName } from '@ohos_agcit/driver_license_exam_guide'
     ```
 
+3. 调用组件，详细参数配置说明参见[API参考](#API参考)。
+
+```typescript
+import { GuideView, GuideService, licenseTypeName, GuideData } from '@ohos_agcit/driver_license_exam_guide'
+import { promptAction } from '@kit.ArkUI';
+
+@Entry
+@ComponentV2
+struct DrivingTestPage {
+   private guideService: GuideService = GuideService.instance;
+
+   // 跳转城市选择页面
+   goCitySelectPage() {
+      promptAction.showToast({
+         message: '需要跳转城市选择页面',
+         duration: 1500,
+      })
+      // 选择城市后需要更新城市选择数据
+      this.guideService.updateCity('北京')
+   }
+
+   // 登记引导完成回调
+   onComplete() {
+      promptAction.showToast({
+         message: '登记引导完成',
+         duration: 1500,
+      })
+      const data = this.guideService.getGuideData();
+      console.log('引导数据', JSON.stringify(data))
+   }
+
+   build() {
+      Column() {
+         GuideView({
+            goCitySelectPage: this.goCitySelectPage,
+            completed: this.onComplete
+         })
+      }
+      .width('100%')
+         .height('100%')
+   }
+}
+```
 
 
 

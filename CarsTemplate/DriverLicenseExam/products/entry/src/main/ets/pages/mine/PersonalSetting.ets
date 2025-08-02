@@ -146,7 +146,6 @@ struct PersonalSetting {
     .padding({
       top: px2vp(this.topRectHeight) + 10,
     })
-
   }
 }
 

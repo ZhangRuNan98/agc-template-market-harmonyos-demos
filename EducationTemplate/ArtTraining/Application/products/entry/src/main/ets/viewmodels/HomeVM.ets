@@ -10,10 +10,10 @@ import {
   DialogMap,
 } from 'commonlib';
 import { https } from 'network';
+import { MapUtil } from 'module_store_map';
 import { MainServiceMap, StoreInfoTypeMap } from '../constants/Enums';
 import { MainEntryVM } from './MainEntryVM';
 import { MineVM } from './MineVM';
-import { StoreMapVM } from './StoreMapVM';
 
 @ObservedV2
 export class HomeVM {
@@ -26,7 +26,6 @@ export class HomeVM {
   // 商铺信息
   @Trace storeInfo: StoreInfo | null = null;
   private readonly _mainVM: MainEntryVM = MainEntryVM.instance;
-  private readonly _mapVM: StoreMapVM = StoreMapVM.instance;
   private readonly _mineVM: MineVM = MineVM.instance;
   private static _instance: HomeVM;
 
@@ -99,7 +98,12 @@ export class HomeVM {
   public handleClickStoreInfo(type: StoreInfoTypeMap) {
     switch (type) {
       case StoreInfoTypeMap.LOCATION:
-        this._mapVM.handleClickGuide();
+        if (this.storeInfo) {
+          MapUtil.handleClickGuide({
+            latitude: this.storeInfo.latitude,
+            longitude: this.storeInfo.longitude,
+          });
+        }
         break;
       case StoreInfoTypeMap.PHONE:
         RouterModule.push({

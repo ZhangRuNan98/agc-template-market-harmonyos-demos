@@ -1,4 +1,3 @@
-import { IHistoricalPerformance } from 'network/src/main/ets/types/responseTypes/GetProductResp';
 import { HistoricalPerformanceList } from '../components/productInfo/HistoricalPerformanceList';
 import { HistoricalPerformanceVM } from '../viewModels/HistoricalPerformanceVM';
 
@@ -42,7 +41,7 @@ struct HistoricalPerformance {
             top: 16,
             bottom: 8,
             left: 12,
-            right: 12
+            right: 12,
           })
           .margin({ bottom: 16 })
           .borderRadius(16)
@@ -65,7 +64,7 @@ struct HistoricalPerformance {
             top: 9,
             bottom: 12,
             left: 8,
-            right: 8
+            right: 8,
           })
           .alignItems(HorizontalAlign.Start)
         }
@@ -73,13 +72,14 @@ struct HistoricalPerformance {
           left: 12,
           right: 12,
           top: 16,
-          bottom: 12
+          bottom: 12,
         })
         .alignItems(HorizontalAlign.Start)
         .margin({ bottom: 12 })
         .borderRadius(16)
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
     }
     .title('历史业绩')
     .backgroundColor($r('sys.color.background_secondary'))

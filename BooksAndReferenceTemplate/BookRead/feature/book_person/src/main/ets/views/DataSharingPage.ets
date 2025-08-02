@@ -10,7 +10,7 @@ export struct DataSharingPage {
     NavDestination() {
       Column() {
         NavHeaderBar({
-          title: '第三方信息共享清单',
+          title: '第三方共享信息清单',
           hasBackButton: true,
           hasBgColor: false,
           isMainPage: false,

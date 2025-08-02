@@ -2,7 +2,7 @@ import { OrderInfoPageVM } from '../viewModels/OrderInfoPageVM';
 import { emitter } from '@kit.BasicServicesKit';
 import { CustomContentDialog, promptAction, TipsDialog } from '@kit.ArkUI';
 import { OrderApi } from '../http/Api';
-import { OrderSkuDto } from '../http/Type'
+import { OrderSkuDto } from '../http/Type';
 import { CallButton, iResourceMgr, PreOrderItem, PreOrderRequest, routerStack, Style, TitleBar } from 'lib_foundation';
 import { AddressManage } from 'module_address_manage';
 import { CommonButton } from '../components/CommonButton';
@@ -12,14 +12,14 @@ import { OrderType } from '../common';
 
 @ComponentV2
 struct OrderInfoPage {
-  vm: OrderInfoPageVM = OrderInfoPageVM.instance
+  vm: OrderInfoPageVM = OrderInfoPageVM.instance;
   dialogControllerCancel: CustomDialogController = new CustomDialogController({
     builder: TipsDialog({
       content: '是否取消当前订单?',
       primaryButton: {
         value: '取消',
         action: () => {
-          console.info('Callback when the first button is clicked')
+          console.info('Callback when the first button is clicked');
         },
       },
       secondaryButton: {
@@ -30,24 +30,24 @@ struct OrderInfoPage {
             const eventData: emitter.EventData = {
               data: {
                 'content': 'content',
-              }
+              },
             };
-            emitter.emit('updateOrder', eventData)
-            promptAction.showToast({ message: '取消成功！', alignment: Alignment.Center })
-            routerStack.pop()
-          })
-          this.dialogControllerCancel.close()
-        }
+            emitter.emit('updateOrder', eventData);
+            promptAction.showToast({ message: '取消成功！', alignment: Alignment.Center });
+            routerStack.pop();
+          });
+          this.dialogControllerCancel.close();
+        },
       },
     }),
-  })
+  });
   dialogControllerConfirm: CustomDialogController = new CustomDialogController({
     builder: TipsDialog({
       content: '是否确认收货?',
       primaryButton: {
         value: '取消',
         action: () => {
-          console.info('Callback when the first button is clicked')
+          console.info('Callback when the first button is clicked');
         },
       },
       secondaryButton: {
@@ -59,16 +59,16 @@ struct OrderInfoPage {
               const eventData: emitter.EventData = {
                 data: {
                   'content': 'content',
-                }
+                },
               };
-              emitter.emit('updateOrder', eventData)
-              this.vm.getOrderInfo()
-            })
-          this.dialogControllerCancel.close()
-        }
+              emitter.emit('updateOrder', eventData);
+              this.vm.getOrderInfo();
+            });
+          this.dialogControllerCancel.close();
+        },
       },
     }),
-  })
+  });
   payDialogController: CustomDialogController = new CustomDialogController({
     builder: CustomContentDialog({
       contentBuilder: () => {
@@ -81,33 +81,17 @@ struct OrderInfoPage {
       topLeft: 32,
       topRight: 32,
       bottomLeft: 0,
-      bottomRight: 0
+      bottomRight: 0,
     },
     alignment: DialogAlignment.Bottom,
-  })
-  editDialogController: CustomDialogController = new CustomDialogController({
-    builder: CustomContentDialog({
-      contentBuilder: () => {
-        this.buildContent();
-      },
-      contentAreaPadding: {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0
-      }
-    }),
-    cancel: () => {
-      this.vm.tempShopPhone = ''
-    },
-  })
+  });
 
   aboutToAppear(): void {
-    this.vm.init()
+    this.vm.init();
   }
 
   aboutToDisappear(): void {
-    this.vm.clear()
+    this.vm.clear();
   }
 
   build(): void {
@@ -115,27 +99,28 @@ struct OrderInfoPage {
       Column() {
         TitleBar({
           barPadding: { right: Style.MENU_BAR_MARGIN_RIGHT },
-          barColor: Color.White
+          barColor: Color.White,
         }) {
-          this.titleBar()
+          this.titleBar();
         }
 
         Column() {
           Scroll() {
             Column() {
-              this.buildStateCard()
+              this.buildStateCard();
               if (this.vm.orderInfo?.type === OrderType.REFUND) {
-                this.buildRefundCard()
+                this.buildRefundCard();
               } else {
-                this.buildAddressCard()
-                this.buildGoodsCard()
-                this.buildPriceCard()
-                this.buildOrderInfoCard()
+                this.buildAddressCard();
+                this.buildGoodsCard();
+                this.buildPriceCard();
+                this.buildOrderInfoCard();
               }
             }
             .margin({ bottom: 12 })
             .constraintSize({ minHeight: '100%' })
           }
+          .edgeEffect(EdgeEffect.Spring)
           .scrollBar(BarState.Off)
           .height('100%')
         }
@@ -143,7 +128,7 @@ struct OrderInfoPage {
         .backgroundColor('#F1F3F5')
         .padding({
           left: 12,
-          right: 12
+          right: 12,
         })
 
         Row() {
@@ -157,7 +142,7 @@ struct OrderInfoPage {
               .borderColor('rgba(0,0,0,0.40)')
               .margin({ left: 8 })
               .onClick(() => {
-                this.dialogControllerCancel.open()
+                this.dialogControllerCancel.open();
               })
           }
           if (this.vm.orderInfo?.type === OrderType.PENDING_PAY) {
@@ -168,7 +153,7 @@ struct OrderInfoPage {
               .backgroundColor('#E64566')
               .margin({ left: 8 })
               .onClick(() => {
-                this.payDialogController.open()
+                this.payDialogController.open();
               })
           }
           if (this.vm.orderInfo?.type === OrderType.PENDING_GET) {
@@ -179,7 +164,7 @@ struct OrderInfoPage {
               .backgroundColor('#E64566')
               .margin({ left: 8 })
               .onClick(() => {
-                this.dialogControllerConfirm.open()
+                this.dialogControllerConfirm.open();
               })
           }
           if (this.vm.orderInfo?.type === OrderType.SUCCESS || this.vm.orderInfo?.type === OrderType.CANCEL ||
@@ -196,13 +181,13 @@ struct OrderInfoPage {
                   for (let sku of this.vm.orderInfo.skuList) {
                     const preOrderItem: PreOrderItem = {
                       skuCode: sku.skuCode,
-                      quantity: sku.count
+                      quantity: sku.count,
                     };
                     items.push(preOrderItem);
                   }
                   const preOrderRequest: PreOrderRequest = {
                     items: items,
-                    removeFromCart: true
+                    removeFromCart: true,
                   };
                   routerStack.pushPathByName('OrderSubmitPage', preOrderRequest);
                 }
@@ -238,9 +223,6 @@ struct OrderInfoPage {
       if (this.vm.orderInfo?.statusDesc) {
         Text() {
           Span(this.vm.orderInfo.statusDesc)
-          if (this.vm.orderInfo.type === OrderType.PENDING_PAY || this.vm.orderInfo.type === OrderType.PENDING_SEND) {
-            Span('...')
-          }
           if (this.vm.orderInfo.type === OrderType.REFUND) {
             Span('￥' + this.vm.orderInfo.totalPrice.toString())
           }
@@ -343,11 +325,11 @@ struct OrderInfoPage {
             navPathStack: routerStack,
             isSelectMode: true,
             onSelect: (data) => {
-              this.vm.address!.name = data.name
-              this.vm.address!.cellphone = data.phone
-              this.vm.address!.address = data.province + data.city + data.district + data.street + data.detail
-              OrderApi.updateOrderAddressByCode(this.vm.orderInfo!.orderCode, this.vm.address)
-            }
+              this.vm.address!.name = data.name;
+              this.vm.address!.cellphone = data.phone;
+              this.vm.address!.address = data.province + data.city + data.district + data.street + data.detail;
+              OrderApi.updateOrderAddressByCode(this.vm.orderInfo!.orderCode, this.vm.address);
+            },
           }) {
             Button('修改')
               .controlSize(ControlSize.SMALL)
@@ -385,14 +367,6 @@ struct OrderInfoPage {
                     .fontSize(12)
                     .fontWeight(FontWeight.Medium)
                     .fontColor('#E64566')
-
-                  Image($r('app.media.edit'))
-                    .width(12)
-                    .height(12)
-                    .margin({ left: 4 })
-                    .onClick(() => {
-                      this.editDialogController.open()
-                    })
                 }
                 .margin({ top: 10 })
               }
@@ -413,7 +387,7 @@ struct OrderInfoPage {
       top: 16,
       bottom: 16,
       left: 12,
-      right: 12
+      right: 12,
     })
     .margin({ bottom: 8 })
   }
@@ -421,7 +395,7 @@ struct OrderInfoPage {
   @Builder
   buildGoodsCard() {
     Column() {
-      this.buildGoods()
+      this.buildGoods();
       CallButton() {
         Row() {
           Image($r('app.media.tel'))
@@ -442,7 +416,7 @@ struct OrderInfoPage {
       top: 16,
       bottom: 12,
       left: 12,
-      right: 12
+      right: 12,
     })
     .margin({ bottom: 8 })
   }
@@ -450,11 +424,12 @@ struct OrderInfoPage {
   @Builder
   buildPriceCard() {
     Column() {
-      this.buildPriceContent('商品金额', '', this.vm.orderInfo!.totalPrice, 12, $r('sys.color.font_secondary'))
-      if (this.vm.oldPrice !== 0) {
-        this.buildPriceContent('优惠', '- ', this.vm.oldPrice, 12, '#E84026')
+      this.buildPriceContent('商品金额', '', this.vm.orderInfo!.totalPrice + this.vm.discount, 12,
+        $r('sys.color.font_secondary'));
+      if (this.vm.discount !== 0) {
+        this.buildPriceContent('优惠', '- ', this.vm.discount, 12, '#E84026');
       }
-      this.buildPriceContent('实付金额', '', this.vm.orderInfo!.totalPrice, 12, $r('sys.color.font_secondary'))
+      this.buildPriceContent('实付金额', '', this.vm.orderInfo!.totalPrice, 12, $r('sys.color.font_secondary'));
     }
     .borderRadius(8)
     .backgroundColor(Color.White)
@@ -462,7 +437,7 @@ struct OrderInfoPage {
       top: 18,
       bottom: 4,
       left: 12,
-      right: 12
+      right: 12,
     })
     .margin({ bottom: 8 })
   }
@@ -481,10 +456,10 @@ struct OrderInfoPage {
       Divider().height(1).color('#CCCCCC').margin({ bottom: 12 })
 
       Column() {
-        this.buildCopyRow()
-        this.buildInfoContent('下单时间', this.vm.orderInfo?.time ?? '')
-        this.buildInfoContent('配送方式', this.vm.orderInfo?.receivingMethod ?? '')
-        this.buildInfoContent('用户备注', this.vm.orderInfo?.remark ?? '')
+        this.buildCopyRow();
+        this.buildInfoContent('下单时间', this.vm.orderInfo?.time ?? '');
+        this.buildInfoContent('配送方式', this.vm.orderInfo?.receivingMethod ?? '');
+        this.buildInfoContent('用户备注', this.vm.orderInfo?.remark ?? '');
       }
     }
     .borderRadius(8)
@@ -510,10 +485,10 @@ struct OrderInfoPage {
       .margin({ bottom: 15 })
 
       Divider().width('100%').height(1).color('#CCCCCC').margin({ bottom: 16 })
-      this.buildGoods()
-      this.buildInfoContent('退款原因', '多拍/错拍')
-      this.buildInfoContent('申请时间', this.vm.orderInfo!.refundTime)
-      this.buildCopyRow()
+      this.buildGoods();
+      this.buildInfoContent('退款原因', '多拍/错拍');
+      this.buildInfoContent('申请时间', this.vm.orderInfo!.refundTime);
+      this.buildCopyRow();
 
       Divider().width('100%').height(1).color('#CCCCCC').margin({ bottom: 12 })
 
@@ -536,7 +511,7 @@ struct OrderInfoPage {
       top: 16,
       bottom: 16,
       left: 12,
-      right: 12
+      right: 12,
     })
     .borderRadius(8)
   }
@@ -547,7 +522,7 @@ struct OrderInfoPage {
       ForEach(this.vm.orderInfo?.skuList, (sku: OrderSkuDto) => {
         Column() {
           Row() {
-            Image(iResourceMgr.resolveUri(sku.banner))
+            Image(iResourceMgr.resolveUri(sku.banner as string))
               .width(65)
               .height(65)
               .draggable(false)
@@ -677,7 +652,7 @@ struct OrderInfoPage {
           .fontSize(10)
           .backgroundColor(Color.White)
           .onClick(() => {
-            copyText(this.vm.orderInfo?.orderCode ?? 'ON000000000000000000000')
+            copyText(this.vm.orderInfo?.orderCode ?? 'ON000000000000000000000');
           })
       }
     }
@@ -714,11 +689,11 @@ struct OrderInfoPage {
 
           CommonButton({
             cancelFunc: () => {
-              this.payDialogController.close()
+              this.payDialogController.close();
             }, saveButton: () => {
-              this.vm.prepay()
-              this.payDialogController.close()
-            }
+              this.vm.prepay();
+              this.payDialogController.close();
+            },
           })
         }
         .width('100%')
@@ -726,86 +701,7 @@ struct OrderInfoPage {
           top: 24,
           bottom: 16,
           left: 24,
-          right: 24
-        })
-        .backgroundColor('rgba(255,255,255,0.80)')
-      }
-      .scrollBar(BarState.Off)
-    }
-  }
-
-  // 自定义弹出框的内容区
-  @Builder
-  buildContent(): void {
-    Column() {
-      Scroll() {
-        Column() {
-          Row() {
-            Text('修改预留号码')
-              .fontSize(16)
-              .fontWeight(FontWeight.Medium)
-              .fontColor($r('sys.color.font_primary'))
-          }
-          .justifyContent(FlexAlign.Center)
-          .width('100%')
-          .margin({ bottom: 12 })
-
-          Row() {
-            TextInput({ text: $$this.vm.tempShopPhone, placeholder: '请输入预留号码' })
-              .placeholderColor('#999999')
-              .placeholderFont({ size: 14, weight: FontWeight.Regular })
-              .height(40)
-              .fontSize(14)
-              .backgroundColor(Color.Transparent)
-              .maxLength(11)
-              .type(InputType.Number)
-              .onChange((value: string) => {
-                if (!/^\d+$$/.test(value)) {
-                  // 如果包含非数字字符，可以将输入恢复为只包含数字
-                }
-              })
-          }
-          .width('100%')
-          .height(40)
-          .padding({ left: 12, right: 12 })
-          .margin({ bottom: 18 })
-          .backgroundColor('rgba(0,0,0,0.05)')
-          .borderRadius(8)
-
-          Row() {
-            Row() {
-              Text('取消')
-            }
-            .width('50%')
-            .height(40)
-            .justifyContent(FlexAlign.Center)
-            .onClick(() => {
-              this.vm.tempShopPhone = ''
-              this.editDialogController.close()
-            })
-
-            Row() {
-              Button('确认')
-                .width('100%')
-                .height(40)
-                .backgroundColor('#0A59F7')
-            }
-            .width('50%')
-            .height(40)
-            .onClick(async () => {
-              this.vm.orderInfo!.address.cellphone = this.vm.tempShopPhone
-              this.vm.address.cellphone = this.vm.tempShopPhone
-              this.editDialogController.close()
-            })
-          }
-          .margin({ top: 28 })
-        }
-        .width('100%')
-        .padding({
-          top: 24,
-          bottom: 16,
-          left: 24,
-          right: 24
+          right: 24,
         })
         .backgroundColor('rgba(255,255,255,0.80)')
       }

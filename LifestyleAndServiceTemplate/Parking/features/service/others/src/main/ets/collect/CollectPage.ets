@@ -3,13 +3,13 @@ import {
   BasicParkInfoModel,
   CollectListModel,
   CollectUtil,
-  CommonConstants,
+  CommonHeader,
+  CONTAINER_STYLE,
   EmitterConstants,
   RouterMap,
   RouterModule,
   WindowUtil,
-} from 'commonlib';
-import { CommonHeader } from 'componentlib';
+} from 'common';
 import { emitter } from '@kit.BasicServicesKit';
 
 @ComponentV2
@@ -89,22 +89,14 @@ export struct CollectPage {
       }
     }
     .height(60)
-    .containerStyle()
+    .attributeModifier(CONTAINER_STYLE)
     .onClick(() => {
       RouterModule.push({ url: RouterMap.SITE_DETAIL, param: info });
     })
   }
-
-  @Styles
-  containerStyle() {
-    .padding($r('app.string.padding_12'))
-    .borderRadius($r('app.string.border_radius_16'))
-    .backgroundColor($r('app.color.system_color_background_white'))
-    .width(CommonConstants.FULL_WIDTH)
-  }
 }
 
 @Builder
-export function CollectPageBuilder() {
+export function collectPageBuilder() {
   CollectPage()
 }

@@ -102,6 +102,7 @@ export struct HomePage {
       }
       .scrollBar(BarState.Off)
     }
+    .mode(NavigationMode.Stack)
     .hideTitleBar(true);
   }
 }

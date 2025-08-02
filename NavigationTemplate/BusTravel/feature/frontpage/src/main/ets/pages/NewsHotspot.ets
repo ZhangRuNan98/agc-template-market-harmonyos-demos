@@ -1,7 +1,7 @@
+import { RouteEntryVM } from 'common'
 import {HotNewsSegmentInterface} from '../model/Interface'
 import {hotNewsPiece} from '../mock/MockData'
-import { RouteEntryVM } from 'common'
-import { common } from '@kit.AbilityKit';
+
 
 @Builder
 export function NewsHotspotBuilder() {
@@ -30,7 +30,7 @@ export struct NewsHotspot{
       .scrollable(ScrollDirection.Vertical)
       .scrollBar(BarState.Auto)
       .scrollBarWidth('0vp')
-      .edgeEffect(EdgeEffect.None)
+      .edgeEffect(EdgeEffect.Spring)
       .backgroundColor('#F5F5F5')
     }
     .hideTitleBar(false)

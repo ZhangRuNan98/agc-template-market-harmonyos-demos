@@ -26,16 +26,12 @@
     "DE_back": "connect-ws-dre.hispace.dbankcloud.com"
   },
   "client": {
-
   },
   "oauth_client": {
-
   },
   "app_info": {
-
   },
   "code": {
-
   },
   "service": {
     "analytics": {
@@ -51,10 +47,9 @@
       "mlservice_url": "ml-api-drcn.ai.dbankcloud.com,ml-api-drcn.ai.dbankcloud.cn"
     },
     "cloudstorage": {
-
     },
     "search": {
-
+      "url": "https://search-drcn.cloud.huawei.com"
     },
     "edukit": {
       "edu_url": "edukit.cloud.huawei.com.cn",
@@ -64,6 +59,5 @@
   "region": "CN",
   "configuration_version": "3.0",
   "appInfos": [
-
   ]
 }

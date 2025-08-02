@@ -6,11 +6,15 @@
     },
     {
       "name": "agcit_huawei_financial_management",
-      "value": "1.0.0"
+      "value": "1.0.1"
     },
     {
       "name": "agcittype_huawei_financial_management",
       "value": "industryTemplate"
+    },
+    {
+      "name": "agcitkid_huawei_financial_management",
+      "value": "agcit_huawei_financial_management_module_line_chart/1.0.0,agcit_huawei_financial_management_module_notice_board/1.0.0,agcit_huawei_financial_management_module_product_list/1.0.0,agcit_huawei_financial_management_module_time_line/1.0.0"
     }
   ]
 }

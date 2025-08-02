@@ -13,8 +13,11 @@
     "routerMap": "$profile:route_map",
     "metadata": [
       {
+        /**
+         * todo
+         */
         "name": "client_id",
-        "value": "xxx"
+        "value": "xx"
       }
     ],
     "requestPermissions": [

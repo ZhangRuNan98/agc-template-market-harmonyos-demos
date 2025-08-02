@@ -1,7 +1,7 @@
 import { BorrowInfo } from '../model/BorrowInfo';
 import { Constants } from '../constant/Constants';
 import { TCInvoke } from '../comp/TCInvoke';
-import { BookInfo, rankListInfo } from '../model/Book';
+import { BookInfo, GroupBook, rankListInfo } from '../model/Book';
 import { UserInfo } from 'base_common';
 import App from '@system.app';
 import { BookCategory } from '../model/BookSortInfo';
@@ -28,6 +28,10 @@ export interface GetFavBookRsp {
 
 export interface GetBookHistoryRsp {
   books: Array<BookInfo>
+}
+
+export interface GetBookGroupRsp {
+  books: Array<GroupBook>
 }
 
 export interface GetBookCategoryRsp {
@@ -80,8 +84,19 @@ export class BookApi {
   public static async getBooksShelfList(bookListType: string, bookListPath: string,
     userId: string): Promise<GetBookHistoryRsp> {
     let books = AppStorage.get(bookListType) as BookInfo[];
-    if (books === undefined) {
+    if (!books) {
       let rsp = await BookApi.INVOKE.get<GetFavBookRsp>(bookListPath)
+      books = rsp.books
+      AppStorage.set(bookListType, books)
+    }
+    return { books: books }
+  }
+
+  public static async getBooksShelfGroup(bookListType: string, bookListPath: string,
+    userId: string): Promise<GetBookGroupRsp> {
+    let books = AppStorage.get(bookListType) as GroupBook[];
+    if (!books) {
+      let rsp = await BookApi.INVOKE.get<GetBookGroupRsp>(bookListPath)
       books = rsp.books
       AppStorage.set(bookListType, books)
     }

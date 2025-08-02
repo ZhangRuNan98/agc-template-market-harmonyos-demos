@@ -4,7 +4,7 @@ import { AllCourseInfo, AppStorageMap,
   CourseDetail,
   CourseDetailRouterInfo,
   CourseUtil, RouterMap, RouterModule, ScheduleConfigUtil } from 'commonlib';
-import { ScheduleInfo, TimeInfo, UIScheduleFlow } from '@hw-agconnect/ui-schedule-flow';
+import { ScheduleInfo, TimeInfo, ScheduleFlow } from 'module_course_schedule';
 import { ComponentConst, NavigateBar } from 'componentlib';
 import { mappedCourseDetailList } from '../mapper/DataMapper';
 
@@ -19,7 +19,6 @@ export function courseSchedulePageBuilder() {
 
 @ComponentV2
 struct CourseSchedulePage {
-  @Local message: string = 'Hello CourseSchedulePage';
   @Local allCourseInfo: AllCourseInfo = AppStorageV2.connect(
     AllCourseInfo,
     AppStorageMap.ALL_COURSE_INFO,
@@ -65,7 +64,7 @@ struct CourseSchedulePage {
 
       // 课表展示组件
       Row() {
-        UIScheduleFlow({
+        ScheduleFlow({
           currentDate: new Date(),
           scheduleWeek: [
             ScheduleConfigUtil.getWeekRange(this.selectedDateTime).first,

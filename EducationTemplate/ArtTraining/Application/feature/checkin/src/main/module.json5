@@ -3,8 +3,7 @@
     "name": "checkin",
     "type": "har",
     "deviceTypes": [
-      "default",
-      "tablet"
+      "phone"
     ],
     "routerMap": "$profile:route_map_checkin"
   }

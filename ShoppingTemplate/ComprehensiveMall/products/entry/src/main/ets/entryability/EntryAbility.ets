@@ -1,7 +1,6 @@
 import ConfigurationConstant from '@ohos.app.ability.ConfigurationConstant';
 import UIAbility from '@ohos.app.ability.UIAbility';
 import { KeyboardAvoidMode } from '@ohos.arkui.UIContext';
-import { BusinessError } from '@ohos.base';
 import window from '@ohos.window';
 
 export default class EntryAbility extends UIAbility {
@@ -14,15 +13,11 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     windowStage.loadContent(
       'pages/Index',
-      (error: BusinessError<void>): void => {
+      (): void => {
         windowStage
           .getMainWindowSync()
           .getUIContext()
           .setKeyboardAvoidMode(KeyboardAvoidMode.OFFSET);
-        if (error.code) {
-          this.context.terminateSelf();
-          return;
-        }
       },
     );
   }

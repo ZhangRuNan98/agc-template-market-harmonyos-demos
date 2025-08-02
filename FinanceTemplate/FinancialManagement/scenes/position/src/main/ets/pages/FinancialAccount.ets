@@ -1,4 +1,4 @@
-import { FormatUtil } from 'commonlib';
+import { FormatUtil } from 'module_base';
 import { AccountVM } from '../viewModels/AccountVM';
 
 @Entry
@@ -70,6 +70,7 @@ struct FinancialAccount {
         .padding({ left: 16, right: 16 })
       }
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
     }
     .title('我的理财账号')
     .backgroundColor($r('sys.color.background_secondary'))

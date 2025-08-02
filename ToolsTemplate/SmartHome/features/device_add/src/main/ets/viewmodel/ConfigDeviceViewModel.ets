@@ -1,5 +1,5 @@
+import { BleClientModel } from 'bluetooth_scan';
 import { AdapterModel } from 'external_interactions';
-import { BleClientModel } from '../model/BleClientModel';
 
 @ObservedV2
 export class ConfigDeviceViewModel {

@@ -6,7 +6,7 @@
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "5.0.0(12)",
+        "compatibleSdkVersion": "5.0.4(16)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
@@ -73,6 +73,34 @@
     {
       "name": "uicomponents",
       "srcPath": "./commons/uicomponents",
+    },
+    {
+      "name": "login",
+      "srcPath": "./components/login",
+    },
+    {
+      "name": "category_list",
+      "srcPath": "./components/category_list",
+    },
+    {
+      "name": "form_bar",
+      "srcPath": "./components/form_bar",
+    },
+    {
+      "name": "base_apis",
+      "srcPath": "./components/base_apis",
+    },
+    {
+      "name": "message_list",
+      "srcPath": "./components/message_list"
+    },
+    {
+      "name": "bluetooth_scan",
+      "srcPath": "./components/bluetooth_scan"
+    },
+    {
+      "name": "wifi_scan",
+      "srcPath": "./components/wifi_scan",
     }
   ]
 }

@@ -1,6 +1,7 @@
-import { BookApi, Constants, GetUserInfoRsp, NavHeaderBar } from 'common';
-import { BorrowCard } from '../comp/BorrowCard';
+import { Constants, NavHeaderBar } from 'common';
 import { UserInfo } from 'base_common';
+import { BorrowCard } from '../comp/BorrowCard';
+
 @ComponentV2
 export struct BorrowPage {
   @Local userInfo: UserInfo | undefined = undefined;

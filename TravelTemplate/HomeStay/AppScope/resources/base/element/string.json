@@ -2,15 +2,19 @@
   "string": [
     {
       "name": "app_name",
-      "value": "LifeBeautyTemplate"
+      "value": "HomeStay"
     },
     {
-      "name": "agcit_huawei_life_beauty",
-      "value": "1.0.1"
+      "name": "agcit_huawei_home_stay",
+      "value": "1.0.2"
     },
     {
-      "name": "agcittype_huawei_life_beauty",
+      "name": "agcittype_huawei_home_stay",
       "value": "industryTemplate"
+    },
+    {
+      "name": "agcitkid_huawei_home_stay",
+      "value": "agcit_huawei_home_stay_travel_discovery/1.0.2,agcit_huawei_home_stay_travel_map/1.0.2,agcit_huawei_home_stay_calendar_select/1.0.2"
     }
   ]
 }

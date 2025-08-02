@@ -1,10 +1,11 @@
-import { TitleBar, buildSearchSuggestionCarousel, LoadingStatus } from 'lib_foundation';
+import { TitleBar, buildSearchSuggestionCarousel, LoadingStatus, Style } from 'lib_foundation';
 import { HomePageContent } from '../components/HomePageContent';
 import { HomePageLogic } from '../logic/HomePageLogic';
 
 @ComponentV2
 export struct HomePage {
   private logic: HomePageLogic = new HomePageLogic();
+  scroller: Scroller = new Scroller();
 
   build(): void {
     /**
@@ -30,8 +31,15 @@ export struct HomePage {
           right: 16,
         },
       }) {
-        buildSearchSuggestionCarousel(this.logic.searchSuggestionCarouselLogic);
+        Text('首页').fontColor(Style.FONT_COLOR_LEVEL1).fontSize(24).fontWeight(FontWeight.Bold)
       };
+
+      Row() {
+        buildSearchSuggestionCarousel(this.logic.searchSuggestionCarouselLogic);
+      }
+      .padding({ left: 16, right: 16, bottom: 16 })
+      .backgroundColor(Style.BACKGROUND_COLOR)
+
 
       /**
        * Refresh 容器用于实现下拉刷新
@@ -47,7 +55,7 @@ export struct HomePage {
          *
          * 例如在瀑布流区域上划时, 通常希望页面整体移动, 而不仅仅是瀑布流中内容移动
          */
-        Scroll() {
+        Scroll(this.scroller) {
           Stack({ alignContent: Alignment.TopStart }) {
             /**
              * 由于外层 Stack 的高度设置了 'auto', 当前 Column 用于实现以下效果
@@ -79,6 +87,7 @@ export struct HomePage {
             } else if (this.logic.loadingStatus === LoadingStatus.SUCCESS) {
               HomePageContent({
                 categoryList: this.logic.categoryList,
+                scroller: this.scroller,
                 handleClickCategory: (id) => {
                   this.logic.jumpToCategoryPage(id);
                 },
@@ -124,6 +133,10 @@ export struct HomePage {
           }
           .height('auto');
         }
+        .nestedScroll({
+          scrollForward: NestedScrollMode.PARENT_FIRST,
+          scrollBackward: NestedScrollMode.SELF_FIRST,
+        })
         .height('100%')
         .scrollBar(BarState.Off)
         .backgroundColor('#FFF1F3F5')

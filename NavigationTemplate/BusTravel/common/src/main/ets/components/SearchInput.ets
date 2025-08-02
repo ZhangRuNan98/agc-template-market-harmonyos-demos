@@ -1,7 +1,8 @@
+import { SymbolGlyphModifier } from '@kit.ArkUI'
 import { SearchSet } from '../model/commonInterface';
 import { getDataFromJSON } from '../utils/RawFileDealUtils';
 import { RouteEntryVM } from '../utils/RouteEntryVM';
-import { SymbolGlyphModifier } from '@kit.ArkUI';
+
 
 @Component
 export struct SearchInput { // 查找线路
@@ -21,7 +22,6 @@ export struct SearchInput { // 查找线路
 
   aboutToAppear(): void {
     this.initDataSource()
-    console.log('============' + JSON.stringify(this.listInfoItem))
   }
 
   initDataSource() {

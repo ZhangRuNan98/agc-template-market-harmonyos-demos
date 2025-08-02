@@ -1,19 +1,10 @@
-import {
-  CalendarUtil,
-  CourseInfo,
-  CourseStatusMap,
-  DialogInfo,
-  DialogMap,
-  FormatUtil,
-  RouterModule,
-} from 'commonlib';
+import { PersistenceV2, promptAction } from '@kit.ArkUI';
+import { CalendarUtil, CourseInfo, CourseStatusMap, DialogInfo, DialogMap, FormatUtil, RouterModule } from 'commonlib';
 import { ConfirmParam } from 'componentlib';
 import { https } from 'network';
-import { TimetableCourse } from '../types/Index';
-import { PersistenceV2, promptAction } from '@kit.ArkUI';
-import { CourseInCalendar, DateBarItemModel } from '../models/Index';
 import { WEEKDAY_MAP } from '../constants/Constants';
-
+import { CourseInCalendar, DateBarItemModel } from '../models/Index';
+import { TimetableCourse } from '../types/Index';
 
 @ObservedV2
 export class TimetableVM {
@@ -77,8 +68,8 @@ export class TimetableVM {
   public async getTimetable(index = 0) {
     this.currentIndex = index;
 
-    this.selectDayCourses = this.courseList.filter((item) =>
-    item.timetable?.weekdays?.includes(index))
+    this.selectDayCourses = this.courseList
+      .filter((item) => item.timetable?.weekdays?.includes(index))
       .map((item: TimetableCourse) => {
         if (this.courseInCalendar.list.includes(this._getCalendarDate(item).getTime())) {
           item.isAddCalendar = true;
@@ -96,7 +87,6 @@ export class TimetableVM {
         return 0;
       });
     }
-
   }
 
   public getCurrentMonthLabel() {

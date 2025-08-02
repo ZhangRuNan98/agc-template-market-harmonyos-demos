@@ -1,6 +1,5 @@
-import { FormatUtil } from 'commonlib'
-import { RouterMap } from 'commonlib/src/main/ets/constants/CommonEnum'
-import { IProductItem } from 'network/src/main/ets/types/responseTypes/GetProductResp'
+import { FormatUtil, RouterMap } from 'module_base'
+import { IProductItem } from 'lib_foundation'
 import { MyRegularChoiceVM } from '../viewModels/MyRegularChoiceVM'
 
 @Builder
@@ -40,7 +39,7 @@ struct MyRegularChoice {
                       top: 1,
                       bottom: 1,
                       left: 4,
-                      right: 4
+                      right: 4,
                     })
                     .margin({ top: 2 })
                     .borderWidth(1)
@@ -93,15 +92,17 @@ struct MyRegularChoice {
                 top: 16,
                 bottom: 16,
                 left: 12,
-                right: 12
+                right: 12,
               })
               .borderRadius(16)
               .margin({ bottom: 12 })
               .onClick(() => {
                 FormatUtil.jumpToNext(RouterMap.PRODUCT_INFO, product.id)
               })
-            }, (item: IProductItem[]) => JSON.stringify(item))
+            }, (item: IProductItem) => JSON.stringify(item))
           }
+          .scrollBar(BarState.Off)
+          .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
         }
       }
       .padding({ left: 16, right: 16 })

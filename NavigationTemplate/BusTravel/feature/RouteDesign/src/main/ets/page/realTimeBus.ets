@@ -1,18 +1,7 @@
-import { MapComponent } from '@hms.core.map.MapComponent';
-import { abilityAccessCtrl, bundleManager, common, PermissionRequestResult, Permissions } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
+import { SymbolGlyphModifier } from '@kit.ArkUI'
+import { getDataFromJSON, RouteEntryVM } from 'common'
+import { LineSet, SearchSet } from 'route_detail'
 import { LineSetInfo, RealTimeBusComponent } from '../components/BusInfo'
-import {
-  ItemRestriction,
-  SegmentButton,
-  SegmentButtonItemTuple,
-  SegmentButtonOptions,
-  SegmentButtonTextItem,
-  SymbolGlyphModifier
-} from '@kit.ArkUI';
-import { LineSet, SearchInput, SearchSet } from 'common';
-import { getDataFromJSON } from 'common';
-import { RouteEntryVM } from 'common';
 import { RandomCountdown } from '../components/RandomCountdown';
 import { RouterDetailParam } from '../viewmodels/RouterParams';
 
@@ -33,9 +22,9 @@ export struct RealTimeBus {
   @State busInfoListName: Array<string> = []
   @State busInfoListNameOri: Array<string> = []
   scroller: Scroller = new Scroller()
+
   aboutToAppear(): void {
     this.initDataSource()
-    console.log('============' + JSON.stringify(this.busSetItems))
   }
 
   initDataSource() {
@@ -48,12 +37,10 @@ export struct RealTimeBus {
     this.busInfoListNameOri = JSON.parse(JSON.stringify(this.busInfoListName))
     this.busInfoListAll.forEach(item => {
       let busTimer = new RandomCountdown(item.lineName)
-      // busTimer.countdown()
       this.busLineTimeList.set(item.lineName, busTimer)
     })
     this.busInfoList.forEach(item => {
       let busTimer = new RandomCountdown(item.lineName)
-      // busTimer.countdown()
       this.busLineTimeList.set(item.lineName, busTimer)
     })
   }
@@ -72,10 +59,11 @@ export struct RealTimeBus {
   }
 
   getSearchListInfo() {
-    if (this.changeValueLine) { // 判断用户是否输入了内容
-      this.busInfoListName = this.busInfoListNameOri.filter((item, index) => { // filter遍历listInfoItem
-        return item.indexOf(this.changeValueLine) !== -1 // 若indexOf()返回的结果不为-1即name中包含changeValue，则保留该项
-      }) // 筛选完后的值会被赋值到searchListInfoItem中
+    if (this.changeValueLine) {
+      // 判断用户是否输入了内容
+      this.busInfoListName = this.busInfoListNameOri.filter((item, index) => {
+        return item.indexOf(this.changeValueLine) !== -1
+      })
     }
   }
 
@@ -90,7 +78,8 @@ export struct RealTimeBus {
             .cancelButton({ style: CancelButtonStyle.INVISIBLE })
             .margin({ left: 20, right: 20, bottom: 20 })
             .onClick(() => {
-              this.vm.toSearchDetail(this.busInfoListNameOri, (popInfo: PopInfo) => { // 跳转SpecificContentSearch
+              this.vm.toSearchDetail(this.busInfoListNameOri, (popInfo: PopInfo) => {
+                // 跳转SpecificContentSearch
                 this.changeValueLine = `${popInfo.result}`
                 this.getSearchListInfo()
               })
@@ -112,58 +101,56 @@ export struct RealTimeBus {
 
           }
 
-        }.alignContent(Alignment.TopEnd)
-        Scroll(this.scroller) {
-          Column(){
+        }
+        .alignContent(Alignment.TopEnd)
+
+          Column() {
             Text('附近站点')
               .width('90%')
               .fontSize(16)
               .fontWeight(FontWeight.Medium)
               .align(Alignment.TopStart)
               .margin({bottom:16})
-
-            if (this.lineValueInfo.length) { // 根据changeValue的值判断
+            // 根据changeValue的值判断
+            if (this.lineValueInfo.length) {
               List({ space: 8 }) {
                 ForEach(this.lineValueInfo, (item: LineSetInfo) => {
                   RealTimeBusComponent({ busInfo: item, busTimer: this.busLineTimeList.get(item.lineName) })
-                    .onClick(() => { // 跳转到对应路线
-                      this.vm.pushByParams('RouteDetail',
+                    .onClick(() => {
+                      // 跳转到对应路线
+                      this.vm.pushByParams('RouteDetailPage',
                         {
                           lineName: item.lineName,
                           busTimer: this.busLineTimeList.get(item.lineName)
                         } as RouterDetailParam)
                     })
-                },(item:LineSetInfo)=>item.lineName)
+                }, (item: LineSetInfo) => item.lineName)
               }
-              .height('100%')
+              .layoutWeight(1)
               .alignListItem(ListItemAlign.Center)
             } else {
               List({ space: '8lpx' }) {
                 ForEach(this.busInfoList, (item: LineSetInfo) => {
                   RealTimeBusComponent({ busInfo: item, busTimer: this.busLineTimeList.get(item.lineName) })
                     .onClick(() => {
-                      this.vm.pushByParams('RouteDetail',
+                      this.vm.pushByParams('RouteDetailPage',
                         {
                           lineName: item.lineName,
                           busTimer: this.busLineTimeList.get(item.lineName)
                         } as RouterDetailParam)
                     })
-                },(item:LineSetInfo)=>item.lineName)
+                }, (item: LineSetInfo) => item.lineName)
               }
+              .layoutWeight(1)
               .alignListItem(ListItemAlign.Center)
-              .height('100%')
             }
           }
+          .layoutWeight(1)
+
           // .padding({bottom:20})
-          }
-        .width('100%')
-        .scrollable(ScrollDirection.Vertical)
-        .scrollBar(BarState.Auto)
-        .scrollBarWidth('0vp')
-        .edgeEffect(EdgeEffect.None)
+
       }
       .backgroundColor('#F1F3F5')
-      .height('100%')
     }
     .hideTitleBar(true)
   }

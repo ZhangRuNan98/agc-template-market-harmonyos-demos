@@ -7,8 +7,9 @@
   "license": "Apache-2.0",
   "packageType": "InterfaceHar",
   "dependencies": {
-    commonlib: 'file:../../../commons/commonLib',
-    componentlib: 'file:../../../commons/componentLib',
+    common: "file:../../../commons/common",
     network: 'file:../../../commons/network',
+    module_parking_spots: "file:../../../components/module_parking_spots",
+    module_parking_map: "file:../../../components/module_parking_map",
   }
 }

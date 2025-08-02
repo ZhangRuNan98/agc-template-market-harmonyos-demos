@@ -1,6 +1,4 @@
-import { FormatUtil } from 'commonlib'
-import { RouterMap } from 'commonlib/src/main/ets/constants/CommonEnum'
-import { CommonProductProfile } from 'componentlib'
+import { FormatUtil, RouterMap, CommonProductProfile } from 'module_base'
 import { PositionIntroduction } from '../components/PositionInfo/PositionIntroduction'
 import { ProductReturns } from '../components/PositionInfo/PositionReturns'
 import { RedemptionRule } from '../components/PositionInfo/RedemptionRule'
@@ -115,6 +113,7 @@ struct PositionInfo {
       }
       .scrollBar(BarState.Off)
       .height('calc(100% - 56vp)')
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
 
       PurchaseBar()
     }

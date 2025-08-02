@@ -6,7 +6,6 @@ export class FrameworkUtil {
   @Trace static currentIndex: number = 0;
   static tabController: TabsController = new TabsController();
 
-
   public static switchTab(tab: TabsIndexMap) {
     FrameworkUtil.tabController?.changeIndex(tab);
     FrameworkUtil.currentIndex = tab;

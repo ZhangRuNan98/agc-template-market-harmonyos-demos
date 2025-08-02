@@ -128,6 +128,7 @@ export struct MemberAgreementPage {
             .backgroundColor($r('sys.color.comp_background_list_card'))
             .borderRadius(16)
           }
+          .edgeEffect(EdgeEffect.Spring)
           .width(Constants.FULL_SIZE)
           .padding({
             left: 12,

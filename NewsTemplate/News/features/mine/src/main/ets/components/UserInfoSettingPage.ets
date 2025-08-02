@@ -1,4 +1,4 @@
-import { RouterModule } from 'commonlib'
+import { RouterModule, UserInfoModel } from 'commonlib'
 import { BaseTitle, GlobalDialog } from 'componentlib'
 import { FunctionalButton, functionalButtonComponentManager } from '@kit.ScenarioFusionKit'
 import fs from '@ohos.file.fs';
@@ -6,7 +6,7 @@ import { util } from '@kit.ArkTS';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { maskPhone } from '../utils/Util';
 import { UserInfoStorage } from '../viewModels/MainPageVM';
-import { PersistenceV2 } from '@kit.ArkUI';
+import { AppStorageV2, PersistenceV2 } from '@kit.ArkUI';
 
 
 @Builder
@@ -16,24 +16,22 @@ export function userInfoSettingPageBuilder() {
 
 @ComponentV2
 export struct UserInfoSettingPage {
-  @Local userInfoStorage: UserInfoStorage = PersistenceV2.connect(UserInfoStorage, 'UserInfoStorage', () => new UserInfoStorage())!
+  @Local userInfo: UserInfoModel = AppStorageV2.connect(UserInfoModel, () => new UserInfoModel())!;
 
   getUserAvatar(): ResourceStr {
-    if (this.userInfoStorage.avatar) {
+    if (this.userInfo.avatar) {
       // 判断是否是沙箱路径
-      if (this.userInfoStorage.avatar.startsWith('file://')) {
-        let sandboxPath = this.userInfoStorage.avatar.split('file://')[1]
+      if (this.userInfo.avatar.startsWith('file://')) {
+        let sandboxPath = this.userInfo.avatar.split('file://')[1]
         // 判断沙箱路径的图片是否存在，不存在，则使用默认头像
         if (!fs.accessSync(sandboxPath)) {
           return $r('app.media.ic_default_hd')
         }
       }
-      return this.userInfoStorage.avatar || $r('app.media.ic_default_hd')
+      return this.userInfo.avatar || $r('app.media.ic_default_hd')
     }
     return $r('app.media.ic_default_hd')
   }
-
-
 
   build() {
     NavDestination() {
@@ -112,7 +110,7 @@ export struct UserInfoSettingPage {
             let avatar = `${util.generateRandomUUID(false)}.jpg`
             let imagePath = `${getContext().filesDir}/${avatar}`
             fs.copyFileSync(file.fd, imagePath)
-            this.userInfoStorage.avatar = 'file://' + imagePath
+            this.userInfo.avatar = 'file://' + imagePath
           } catch (error) {
             let err: BusinessError = error as BusinessError;
             console.error(`PhotoViewPicker failed with err: ${err.code}, ${err.message}`);
@@ -130,7 +128,7 @@ export struct UserInfoSettingPage {
   @Builder
   UserNameRightView() {
     Row({space: 4}) {
-      Text(this.userInfoStorage.userName)
+      Text(this.userInfo.name)
         .fontSize(14).fontWeight(FontWeight.Regular)
         .fontColor('#99000000')
       Image($r('app.media.right_arrow'))
@@ -141,13 +139,13 @@ export struct UserInfoSettingPage {
     .onClick(() => {
       GlobalDialog.showDialogWithInputBox({
         hint: '修改昵称',
-        content: this.userInfoStorage.userName,
+        content: this.userInfo.name,
         textLength: 10,
         placeholder: '请输入昵称',
         but1Name: '取消',
         but2Name: '确定',
         onConfirm: (value?: string) => {
-          this.userInfoStorage.userName = value ?? ''
+          this.userInfo.name = value ?? ''
           GlobalDialog.close()
         },
         onCancel: () => {
@@ -158,7 +156,7 @@ export struct UserInfoSettingPage {
   }
   @Builder
   PhoneRightView() {
-    Text(maskPhone(this.userInfoStorage.phoneNumber))
+    Text(maskPhone(this.userInfo.phoneNumber))
       .fontSize(14).fontWeight(FontWeight.Regular)
       .fontColor('#99000000')
   }

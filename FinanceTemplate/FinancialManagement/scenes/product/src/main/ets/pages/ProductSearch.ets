@@ -1,5 +1,5 @@
-import { FormatUtil, RouterMap } from 'commonlib'
-import { IProductItem } from 'network/src/main/ets/types/responseTypes/GetProductResp'
+import { FormatUtil, RouterMap } from 'module_base'
+import { IProductItem } from 'lib_foundation'
 import { ProductSearchVM } from '../viewModels/ProductSearchVM'
 
 @Builder
@@ -99,10 +99,11 @@ struct ProductSearch {
             .onClick(() => {
               FormatUtil.jumpToNext(RouterMap.PRODUCT_INFO, product.id)
             })
-          }, (item: IProductItem[]) => JSON.stringify(item))
+          }, (item: IProductItem) => JSON.stringify(item))
         }
         .layoutWeight(1)
         .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: false })
       }
       .alignItems(HorizontalAlign.Start)
     }

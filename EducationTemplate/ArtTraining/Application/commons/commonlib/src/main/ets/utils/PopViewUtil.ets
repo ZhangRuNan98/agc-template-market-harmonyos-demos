@@ -1,7 +1,7 @@
 import { ComponentContent, promptAction } from '@kit.ArkUI';
+import { BusinessError } from '@kit.BasicServicesKit';
 import { Logger } from './Logger';
 import { WindowUtil } from './WindowUtil';
-import { BusinessError } from '@kit.BasicServicesKit';
 
 const TAG: string = '[PopViewUtil]';
 
@@ -13,9 +13,11 @@ export class PopViewUtil {
     PopViewUtil._contentNode = node;
   }
 
-  public static openDialog<T extends Object>(builder: WrappedBuilder<[T]> | WrappedBuilder<[]>,
+  public static openDialog<T extends Object>(
+    builder: WrappedBuilder<[T]> | WrappedBuilder<[]>,
     options: promptAction.BaseDialogOptions,
-    args?: T) {
+    args?: T,
+  ) {
     if (!PopViewUtil._ctx) {
       PopViewUtil._ctx = WindowUtil.uiContext;
     }
@@ -26,7 +28,8 @@ export class PopViewUtil {
     }
 
     if (PopViewUtil._contentNode !== null) {
-      PopViewUtil._ctx.getPromptAction()
+      PopViewUtil._ctx
+        .getPromptAction()
         .openCustomDialog(PopViewUtil._contentNode, options)
         .then(() => {
           Logger.info(TAG, 'OpenCustomDialog complete.');
@@ -41,7 +44,8 @@ export class PopViewUtil {
 
   public static closeDialog() {
     if (PopViewUtil._contentNode !== null) {
-      PopViewUtil._ctx.getPromptAction()
+      PopViewUtil._ctx
+        .getPromptAction()
         .closeCustomDialog(PopViewUtil._contentNode)
         .then(() => {
           Logger.info(TAG, 'CloseCustomDialog complete.');
@@ -57,7 +61,8 @@ export class PopViewUtil {
 
   public static updateDialog(options: promptAction.BaseDialogOptions) {
     if (PopViewUtil._contentNode !== null) {
-      PopViewUtil._ctx.getPromptAction()
+      PopViewUtil._ctx
+        .getPromptAction()
         .updateCustomDialog(PopViewUtil._contentNode, options)
         .then(() => {
           Logger.info(TAG, 'UpdateCustomDialog complete.');

@@ -23,14 +23,6 @@
       "data": {
         "description": ""
       }
-    },
-    {
-      "name": "FullScreenMediaPage",
-      "pageSourceFile": "src/main/ets/pages/FullScreenMediaPage.ets",
-      "buildFunction": "fullScreenMediaPageBuilder",
-      "data": {
-        "description": ""
-      }
     }
   ]
 }

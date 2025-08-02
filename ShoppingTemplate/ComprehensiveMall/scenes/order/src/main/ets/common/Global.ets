@@ -1,6 +1,6 @@
 import { OrderApi } from '../http/Api';
-import { OrderCardDto } from '../http/Type';
 import { AppStorageV2 } from '@kit.ArkUI';
+import { OrderCardDto } from 'lib_foundation';
 
 @ObservedV2
 export class OrderList {

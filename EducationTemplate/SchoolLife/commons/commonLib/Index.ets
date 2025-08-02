@@ -39,3 +39,6 @@ export { ColorUtil } from './src/main/ets/utils/ColorUtil';
 
 // 文件处理工具
 export { FileUtil } from './src/main/ets/utils/FileUtil';
+
+// 弹窗工具
+export { SimpleDialog } from './src/main/ets/utils/SimpleDialog';

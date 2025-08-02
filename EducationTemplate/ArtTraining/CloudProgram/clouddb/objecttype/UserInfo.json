@@ -34,7 +34,7 @@
       "notNull": false,
       "isSensitive": false,
       "belongPrimaryKey": false,
-      "fieldType": "String"
+      "fieldType": "Text"
     },
     {
       "isNeedEncrypt": false,

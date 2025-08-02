@@ -1,8 +1,5 @@
-import { https } from 'network';
-import { RouterMap, RouterModule, } from 'commonlib';
-import { IProductItem, } from 'network/src/main/ets/types/responseTypes/GetProductResp';
-
-const TAG = '[ProductSearchVM]';
+import { https, IProductItem } from 'lib_foundation';
+import { RouterModule } from 'module_base';
 
 @ObservedV2
 export class ProductSearchVM {

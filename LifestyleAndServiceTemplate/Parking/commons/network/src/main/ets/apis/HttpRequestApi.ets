@@ -12,25 +12,24 @@ import {
   SetDefaultLicenseNumberRequest,
   UpdateCommonAddressesRequest,
 } from '../types/AxiosRequestParam';
-import { getId } from '../utils';
 import axiosClient from '../models/AxiosRequest';
-import {
-  AllCommonAddressesResp,
-  AllLicenseInfoResp,
-  AllOrderResp,
-  AssociateAccountResp,
-  DisassociateAccountResp,
-  GetDefaultLicenseNumberResp,
-  GetHomePageBannerResp,
-  GetParkingDetailResp,
-  GetUserInfoResp,
-  PayParkingResp,
-  SetDefaultLicenseNumberResp,
-  UserLoginResp,
-} from '../types/responseTypes';
 import { BaseResponse } from '../types/BaseResponse';
 import { AxiosRequestHeaders } from '@ohos/axios';
 import { RequestUrl } from '../mocks/Constants';
+import { UserLoginResp } from '../types/responseTypes/UserLoginResp';
+import { GetUserInfoResp } from '../types/responseTypes/GetUserInfoResp';
+import { AssociateAccountResp } from '../types/responseTypes/AssociateAccountResp';
+import { DisassociateAccountResp } from '../types/responseTypes/DiassociateAccountResp';
+import { GetHomePageBannerResp } from '../types/responseTypes/GetHomePageBannerResp';
+import { AllLicenseInfoResp } from '../types/responseTypes/AllLicenseNumbersResp';
+import { GetDefaultLicenseNumberResp } from '../types/responseTypes/GetDefaultLicenseNumberResp';
+import { SetDefaultLicenseNumberResp } from '../types/responseTypes/SetDefaultLicenseNumberResp';
+import { AllOrderResp } from '../types/responseTypes/AllOrderResp';
+import { PayParkingResp } from '../types/responseTypes/PayParkingResp';
+import { AllCommonAddressesResp } from '../types/responseTypes/AllCommonAddressesResp';
+import { GetParkingDetailResp } from '../types/responseTypes/GetParkingDetailResp';
+import { AccountUtil } from 'common';
+
 
 class HttpsApi {
   /** 用户登录信息 **/
@@ -40,7 +39,7 @@ class HttpsApi {
       showLoading: false,
       headers: {} as AxiosRequestHeaders,
       data: {
-        id: getId(),
+        id: AccountUtil.getId(),
       },
     });
   }
@@ -52,7 +51,7 @@ class HttpsApi {
       showLoading: false,
       headers: {} as AxiosRequestHeaders,
       params: {
-        id: getId(),
+        id: AccountUtil.getId(),
       },
     });
   }
@@ -92,7 +91,7 @@ class HttpsApi {
       showLoading: false,
       headers: {} as AxiosRequestHeaders,
       params: {
-        id: getId(),
+        id: AccountUtil.getId(),
       },
     });
   }
@@ -104,7 +103,7 @@ class HttpsApi {
       showLoading: false,
       headers: {} as AxiosRequestHeaders,
       params: {
-        id: getId(),
+        id: AccountUtil.getId(),
       },
     });
   }
@@ -187,7 +186,7 @@ class HttpsApi {
       showLoading: false,
       headers: {} as AxiosRequestHeaders,
       params: {
-        id: getId(),
+        id: AccountUtil.getId(),
       },
     });
   }

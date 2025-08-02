@@ -1,5 +1,13 @@
-import { AddressModel, CommonConstants, RouterMap, RouterModule, WindowUtil } from 'commonlib';
-import { CommonButton, CommonHeader } from 'componentlib';
+import {
+  AddressModel,
+  CommonButton,
+  CommonConstants,
+  CommonHeader,
+  CONTAINER_STYLE_CALC_WIDTH,
+  RouterMap,
+  RouterModule,
+  WindowUtil,
+} from 'common';
 import { CommonAddressListItem } from '../components/CommonAddressListItem';
 import { AddressPageVM } from '../viewmodels/AddressPageVM';
 
@@ -52,7 +60,7 @@ export struct CommonAddressPage {
     }
     .divider({ strokeWidth: 1, color: $r('sys.color.ohos_id_divider_color') })
     .margin({ bottom: $r('app.string.margin_12') })
-    .containerStyle()
+    .attributeModifier(CONTAINER_STYLE_CALC_WIDTH)
     .bindSheet($$this.vm.showBasicOpt, this.optionBuilder(true), { height: SheetSize.FIT_CONTENT })
   }
 
@@ -71,7 +79,7 @@ export struct CommonAddressPage {
       }
       .divider({ strokeWidth: 1, color: $r('sys.color.ohos_id_divider_color') })
     }
-    .containerStyle()
+    .attributeModifier(CONTAINER_STYLE_CALC_WIDTH)
     .bindSheet($$this.vm.showCustomOpt, this.optionBuilder(false), { height: SheetSize.FIT_CONTENT })
   }
 
@@ -121,17 +129,9 @@ export struct CommonAddressPage {
     })
     .backgroundColor($r('app.color.system_color_background_gray'))
   }
-
-  @Styles
-  containerStyle() {
-    .padding($r('app.string.padding_12'))
-    .borderRadius($r('app.string.border_radius_16'))
-    .backgroundColor($r('app.color.system_color_background_white'))
-    .width('calc(100% - 32vp)')
-  }
 }
 
 @Builder
-export function CommonAddressPageBuilder() {
+export function commonAddressPageBuilder() {
   CommonAddressPage()
 }

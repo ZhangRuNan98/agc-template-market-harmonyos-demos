@@ -14,7 +14,7 @@ export enum OrderType {
 @Builder
 export function buildSkuCard(sku: OrderSkuDto) {
   Row() {
-    Image(iResourceMgr.resolveUri(sku.banner))
+    Image(iResourceMgr.resolveUri(sku.banner as string))
       .width(65)
       .height(65)
       .draggable(false)

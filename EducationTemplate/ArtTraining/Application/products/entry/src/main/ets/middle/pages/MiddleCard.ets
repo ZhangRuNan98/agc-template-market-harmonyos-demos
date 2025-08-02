@@ -8,7 +8,7 @@ let middleStorage = new LocalStorage();
 
 @Entry(middleStorage)
 @Component
-export struct MiddleCard {
+struct MiddleCard {
   /*
    * The action type.
    */

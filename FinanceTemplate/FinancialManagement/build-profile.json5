@@ -1,12 +1,15 @@
 {
   "app": {
     "signingConfigs": [
+      /*
+      :todo 补充手动签名
+      */
     ],
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "5.0.1(13)",
+        "compatibleSdkVersion": "5.0.0(12)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
@@ -28,7 +31,7 @@
   "modules": [
     {
       "name": "entry",
-      "srcPath": "./entry",
+      "srcPath": "./products/entry",
       "targets": [
         {
           "name": "default",
@@ -37,18 +40,6 @@
           ]
         }
       ]
-    },
-    {
-      "name": "network",
-      "srcPath": "./commons/network",
-    },
-    {
-      "name": "commonlib",
-      "srcPath": "./commons/commonlib",
-    },
-    {
-      "name": "componentlib",
-      "srcPath": "./commons/componentlib",
     },
     {
       "name": "product",
@@ -75,28 +66,36 @@
       ]
     },
     {
-      "name": "home",
-      "srcPath": "./scenes/tab/home",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
+      "name": "module_notice_board",
+      "srcPath": "./components/module_notice_board",
     },
     {
-      "name": "mine",
-      "srcPath": "./scenes/tab/mine",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
+      "name": "module_base",
+      "srcPath": "./components/module_base",
+    },
+    {
+      "name": "module_line_chart",
+      "srcPath": "./components/module_line_chart"
+    },
+    {
+      "name": "module_time_line",
+      "srcPath": "./components/module_time_line",
+    },
+    {
+      "name": "business_home",
+      "srcPath": "./scenes/business_home",
+    },
+    {
+      "name": "business_mine",
+      "srcPath": "./scenes/business_mine",
+    },
+    {
+      "name": "lib_foundation",
+      "srcPath": "./commons/lib_foundation"
+    },
+    {
+      "name": "module_product_list",
+      "srcPath": "./components/module_product_list",
     }
   ]
 }

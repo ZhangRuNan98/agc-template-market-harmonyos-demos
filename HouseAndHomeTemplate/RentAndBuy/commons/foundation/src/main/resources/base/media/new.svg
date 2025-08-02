@@ -1,0 +1,31 @@
+<svg width="48.000000" height="48.000000" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs>
+		<filter id="filter_9_479_dd" x="9.559998" y="10.559998" width="28.880005" height="28.880005" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+			<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+			<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+			<feOffset dx="0" dy="1"/>
+			<feGaussianBlur stdDeviation="0.333333"/>
+			<feComposite in2="hardAlpha" operator="out" k2="-1" k3="1"/>
+			<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+			<feBlend mode="normal" in2="BackgroundImageFix" result="effect_dropShadow_1"/>
+			<feBlend mode="normal" in="SourceGraphic" in2="effect_dropShadow_1" result="shape"/>
+		</filter>
+		<clipPath id="clip9_478">
+			<rect width="32.000000" height="32.000000" transform="translate(8.000000 8.000000)" fill="white" fill-opacity="0"/>
+		</clipPath>
+		<linearGradient x1="24.000000" y1="0.000000" x2="24.000000" y2="48.000000" id="paint_linear_9_474_0" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#ED4835"/>
+			<stop offset="1.000000" stop-color="#DFA49E" stop-opacity="0.768627"/>
+		</linearGradient>
+	</defs>
+	<rect rx="16.000000" width="48.000000" height="48.000000" fill="url(#paint_linear_9_474_0)" fill-opacity="1.000000"/>
+	<g clip-path="url(#clip9_478)">
+		<path d="M33 19L25 19L25 35L35 35L35 21C35 19.8954 34.1046 19 33 19ZM32 23L28 23C27.7238 23 27.5 23.2239 27.5 23.5C27.5 23.7761 27.7238 24 28 24L32 24C32.2762 24 32.5 23.7761 32.5 23.5C32.5 23.2239 32.2762 23 32 23ZM28 26L32 26C32.2762 26 32.5 26.2239 32.5 26.5C32.5 26.7761 32.2762 27 32 27L28 27C27.7238 27 27.5 26.7761 27.5 26.5C27.5 26.2239 27.7238 26 28 26ZM32 29L28 29C27.7238 29 27.5 29.2239 27.5 29.5C27.5 29.7761 27.7238 30 28 30L32 30C32.2762 30 32.5 29.7761 32.5 29.5C32.5 29.2239 32.2762 29 32 29Z" clip-rule="evenodd" fill="#F4D2CC" fill-opacity="1.000000" fill-rule="evenodd"/>
+		<g filter="url(#filter_9_479_dd)">
+			<path d="M23.68 10.56L14.72 10.56C13.66 10.56 12.8 11.36 12.8 12.33L12.8 34.88L25.6 34.88L25.6 12.33C25.6 11.36 24.73 10.56 23.68 10.56ZM21.44 28.35L16.95 28.35C16.43 28.35 16 27.95 16 27.45C16 26.96 16.43 26.56 16.95 26.56L21.44 26.56C21.96 26.56 22.4 26.96 22.4 27.45C22.4 27.95 21.96 28.35 21.44 28.35ZM21.44 22.41L16.95 22.41C16.43 22.41 16 22.01 16 21.52C16 21.02 16.43 20.62 16.95 20.62L21.44 20.62C21.96 20.62 22.4 21.02 22.4 21.52C22.4 22.01 21.96 22.41 21.44 22.41ZM21.44 16.49L16.95 16.49C16.43 16.49 16 16.09 16 15.6C16 15.1 16.43 14.7 16.95 14.7L21.44 14.7C21.96 14.7 22.4 15.1 22.4 15.6C22.4 16.09 21.96 16.49 21.44 16.49ZM36.16 37.43L11.84 37.43C11.13 37.43 10.56 36.86 10.56 36.16C10.56 35.45 11.13 34.88 11.84 34.88L36.16 34.88C36.86 34.88 37.43 35.45 37.43 36.16C37.43 36.86 36.86 37.43 36.16 37.43Z" fill="#FFFFFF" fill-opacity="1.000000" fill-rule="nonzero"/>
+		</g>
+	</g>
+</svg>

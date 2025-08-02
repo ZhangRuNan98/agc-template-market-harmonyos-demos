@@ -1,5 +1,4 @@
 import { display, UIContext, window } from '@kit.ArkUI';
-import { BusinessError } from '@kit.BasicServicesKit';
 import { Logger } from './Logger';
 
 const TAG = '[WindowUtil]';
@@ -18,10 +17,10 @@ export class WindowUtil {
     return WindowUtil._avoidAreaSize;
   }
 
-  private static _currentWindow: window.Window;
+  private static _mainWindow: window.Window;
 
-  public static get currentWindow() {
-    return WindowUtil._currentWindow;
+  public static get mainWindow() {
+    return WindowUtil._mainWindow;
   }
 
   private static _display: display.Display;
@@ -30,9 +29,9 @@ export class WindowUtil {
     return WindowUtil._display;
   }
 
-  private static _context: Context;
+  private static _context: Context | undefined;
 
-  public static get context(): Context {
+  public static get context(): Context | undefined {
     return WindowUtil._context;
   }
 
@@ -42,62 +41,24 @@ export class WindowUtil {
     return WindowUtil._uiContext;
   }
 
-  public static updateDisplay() {
-    WindowUtil._display = display.getDefaultDisplaySync();
+  public static get promptAction() {
+    return WindowUtil._uiContext.getPromptAction();
   }
 
-  public static async initWindowUtil() {
-    await WindowUtil._getCurrentWindow();
-    WindowUtil._getWindowAvoidArea();
-    WindowUtil.updateDisplay();
-    WindowUtil._getContext();
-  }
-
-  public static setFullWindow(isFull: boolean = true) {
-    if (WindowUtil._currentWindow) {
-      WindowUtil._currentWindow
-        .setWindowLayoutFullScreen(isFull)
-        .then(() => {
-          Logger.info(TAG, 'set full window success');
-        })
-        .catch((error: BusinessError) => {
-          WindowUtil._dealAllError(error);
-        });
-    }
-  }
-
-  private static _getContext() {
-    if (WindowUtil._currentWindow) {
-      WindowUtil._context = getContext();
-      WindowUtil._uiContext = WindowUtil._currentWindow.getUIContext();
-    }
-  }
-
-  private static _getWindowAvoidArea() {
+  public static async initWindowUtil(mainWindow: window.Window) {
     try {
-      if (WindowUtil._currentWindow) {
-        const systemArea = WindowUtil._currentWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM);
-        WindowUtil._avoidAreaSize.top = px2vp(systemArea.topRect.height);
-        const bottomArea = WindowUtil._currentWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR);
-        WindowUtil._avoidAreaSize.bottom = px2vp(bottomArea.bottomRect.height);
+      WindowUtil._mainWindow = mainWindow;
+      WindowUtil._uiContext = mainWindow.getUIContext();
+      WindowUtil._context = mainWindow.getUIContext().getHostContext();
+      WindowUtil._display = display.getDefaultDisplaySync();
+      if (WindowUtil._mainWindow && WindowUtil._uiContext) {
+        const systemArea = WindowUtil._mainWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM);
+        WindowUtil._avoidAreaSize.top = WindowUtil._uiContext.px2vp(systemArea.topRect.height);
+        const bottomArea = WindowUtil._mainWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR);
+        WindowUtil._avoidAreaSize.bottom = WindowUtil._uiContext.px2vp(bottomArea.bottomRect.height);
       }
     } catch (err) {
-      console.error(err);
+      Logger.error(TAG, 'init window util failed. error:' + JSON.stringify(err));
     }
-  }
-
-  private static async _getCurrentWindow() {
-    return window
-      .getLastWindow(getContext())
-      .then((win) => {
-        WindowUtil._currentWindow = win;
-      })
-      .catch((error: BusinessError) => {
-        WindowUtil._dealAllError(error);
-      });
-  }
-
-  private static _dealAllError(error: BusinessError): void {
-    Logger.error(TAG, `errorCode: ${error.code}, errorMsg: ${error.message}`);
   }
 }

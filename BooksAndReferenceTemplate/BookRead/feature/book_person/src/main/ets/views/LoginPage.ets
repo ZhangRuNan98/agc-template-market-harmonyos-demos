@@ -3,7 +3,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { BusinessError, emitter } from '@kit.BasicServicesKit';
 import { promptAction } from '@kit.ArkUI';
 import { util } from '@kit.ArkTS';
-import { Constants, TCRouter } from 'common';
+import { Constants, ReturnButton, TCRouter } from 'common';
 import { AvatarIcon } from '../comp/SelectAvatarCard';
 import { UserInfo } from 'base_common';
 @ComponentV2
@@ -232,6 +232,13 @@ export struct LoginPage {
         Scroll() {
           Column() {
             Column() {
+              Row(){
+                ReturnButton()
+              }
+              .width(Constants.FULL_SIZE)
+              .padding({top:8, bottom:8})
+              .margin({top:36})
+
               Column() {
                 Image($r('app.media.startIcon'))
                   .width(48)
@@ -269,7 +276,7 @@ export struct LoginPage {
                     top: 8,
                   })
               }.margin({
-                top: 100
+                top: 44
               })
 
               Column() {
@@ -324,7 +331,7 @@ export struct LoginPage {
               }
               .height(40)
               .margin({
-                top: 56
+                top: 16
               })
             }.width('100%')
 
@@ -399,9 +406,12 @@ export struct LoginPage {
             right: 16
           })
         }
+        .edgeEffect(EdgeEffect.Spring)
         .padding({ bottom: 20 })
         .width(Constants.FULL_SIZE)
         .height(Constants.FULL_SIZE)
+        .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring)
       }
     }
     .hideTitleBar(true)
@@ -414,7 +424,8 @@ export struct LoginPage {
     // 恢复之前保存的会员状态和书币信息
 
     const savedMembershipStatus = AppStorage.get('membershipStatus') as boolean || false;
-    const savedBookCoins = AppStorage.get('bookCoins') as number || 100;
+    const savedBookCoinsValue = AppStorage.get('bookCoins') as number;
+    const savedBookCoins = typeof savedBookCoinsValue === 'number' ? savedBookCoinsValue : 100;
 
     this.userInfo = {
       id: openId,
@@ -427,7 +438,10 @@ export struct LoginPage {
       totalReading: 0,
       totalListening: 15,
       level: 1,
-      continuousBuy: false
+      continuousBuy: false,
+      reminderTime: 0,
+      fullScreen: false,
+      noTimeBattery: false
     }
     AppStorage.setOrCreate('userInfo', this.userInfo);
     emitter.emit(Constants.LOGIN_CHANGE);
@@ -441,7 +455,8 @@ export struct LoginPage {
   mockUserLogin() {
     // 恢复之前保存的会员状态和书币信息
     const savedMembershipStatus = AppStorage.get('membershipStatus') as boolean || false;
-    const savedBookCoins = AppStorage.get('bookCoins') as number || 10;
+    const savedBookCoinsValue = AppStorage.get('bookCoins') as number;
+    const savedBookCoins = typeof savedBookCoinsValue === 'number' ? savedBookCoinsValue : 100;
 
     //mock登录数据
     this.userInfo = {
@@ -455,7 +470,10 @@ export struct LoginPage {
       totalReading: 0,
       totalListening: 15,
       level: 1,
-      continuousBuy: false
+      continuousBuy: false,
+      reminderTime: 0,
+      fullScreen: false,
+      noTimeBattery: false
     }
     AppStorage.setOrCreate('userInfo', this.userInfo);
     emitter.emit(Constants.LOGIN_CHANGE);

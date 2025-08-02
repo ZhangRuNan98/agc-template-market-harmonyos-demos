@@ -44,7 +44,7 @@ export struct PrivacyPolicyDetailPage {
       .scrollable(ScrollDirection.Vertical)
       .scrollBar(BarState.Auto)
       .scrollBarWidth('0vp')
-      .edgeEffect(EdgeEffect.None)
+      .edgeEffect(EdgeEffect.Spring)
 
     }
     .title('隐私协议')

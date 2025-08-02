@@ -1,5 +1,6 @@
 import { Article } from './clazz/Article';
 import { webview } from '@kit.ArkWeb';
+import { router } from '@kit.ArkUI';
 
 @ComponentV2
 export struct AboutUs {
@@ -21,6 +22,12 @@ export struct AboutUs {
       ForEach(this.articleList, (item: Article) => {
         ArticleCard({ article: item })
           .margin({ bottom: 16 })
+          .onClick(() => {
+            router.pushUrl({
+              url: 'pages/homepage/CompanyIntroduction',
+              params: item.title
+            }, router.RouterMode.Standard)
+          })
       }, (item: Article) => item.id)
     }
     .width('100%')
@@ -35,8 +42,9 @@ struct ArticleCard {
   build() {
     Column() {
       Text(this.article.title)
-        .fontSize($r('app.float.font_size_16'))
-        .fontColor(Color.Black)
+        .fontSize(18)
+        .fontWeight(FontWeight.Bold)
+        .fontColor('rgba(0,0,0,0.90)')
         .margin({ bottom: 8 })
       Text(this.article.content)
         .fontSize($r('app.float.font_size_14'))
@@ -47,7 +55,6 @@ struct ArticleCard {
     .borderRadius(16)
     .backgroundColor('#FFFFFF')
     .justifyContent(FlexAlign.Start)
-
   }
 }
 

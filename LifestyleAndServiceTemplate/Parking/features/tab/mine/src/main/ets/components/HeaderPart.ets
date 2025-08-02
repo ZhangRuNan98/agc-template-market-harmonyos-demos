@@ -1,9 +1,9 @@
-import { CommonConstants, RouterMap, RouterModule } from 'commonlib';
-import { desensitizePhoneNumber } from '../utils';
+import { CONTAINER_STYLE, RouterMap, RouterModule } from 'common';
+import { desensitizePhoneNumber } from '../utils/Utils';
 import { MinePageVM } from '../viewmodels/MinePageVM';
-import { FunctionalButton, functionalButtonComponentManager } from '@kit.ScenarioFusionKit';
-import { ButtonStyle } from '../constants';
-import { AssociateUtil } from 'componentlib';
+import { ButtonStyle } from '../constants/Constants';
+import { AssociateUtil } from 'network';
+import { FunctionalButton, functionalButtonComponentManager } from '@hms.core.atomicserviceComponent.atomicserviceUi';
 
 @ComponentV2
 export struct HeadPart {
@@ -72,16 +72,8 @@ export struct HeadPart {
         })
       }
     }
-    .containerStyle()
     .alignItems(VerticalAlign.Top)
-    .width(CommonConstants.FULL_WIDTH)
     .justifyContent(FlexAlign.SpaceBetween)
-  }
-
-  @Styles
-  containerStyle() {
-    .padding($r('app.string.padding_12'))
-    .borderRadius($r('app.string.border_radius_16'))
-    .backgroundColor($r('app.color.system_color_background_white'))
+    .attributeModifier(CONTAINER_STYLE)
   }
 }

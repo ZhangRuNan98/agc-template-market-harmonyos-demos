@@ -11,6 +11,6 @@ export interface CheckInLogRouteParam {
   task: CheckInTaskItem;
 }
 
-export interface TaskCheckInPopParam{
+export interface TaskCheckInPopParam {
   needUpdate: boolean;
 }

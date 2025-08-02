@@ -4,6 +4,7 @@ export enum RouterMap {
   USER_LOGIN = 'HuaweiQuickLoginPage',
   USER_OTHER_LOGIN = 'OtherLoginPage',
   USER_PROFILE_EDIT = 'EditProfilePage',
+  USER_COUPON_PAGE = 'CouponPage',
 
   PRODUCT_SEARCH = 'ProductSearchPage',
   PRODUCT_SEARCH_RESULTS = 'ProductSearchResultsPage',

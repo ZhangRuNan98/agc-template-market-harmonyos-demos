@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "form_bar",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

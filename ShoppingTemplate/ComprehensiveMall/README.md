@@ -8,13 +8,21 @@
 - [权限要求](#权限要求)
 - [开源许可协议](#开源许可协议)
 
-
-
 ## 功能介绍
 
-您可以基于此[模板](#模板)直接定制应用/元服务，也可以挑选此模板中提供的多种[组件](#组件)使用，从而降低您的开发难度，提高您的开发效率。
+您可以基于此模板直接定制应用，也可以挑选此模板中提供的多种组件使用，从而降低您的开发难度，提高您的开发效率。
 
-### 模板
+本模板提供如下组件，所有组件存放在工程根目录的components下，如果您仅需使用组件，可参考对应组件的指导链接；如果您使用此模板，请参考本文档。
+
+| 组件                            | 描述                                             | 使用指导                                                 |
+|-------------------------------|------------------------------------------------|------------------------------------------------------|
+| 地址管理组件（module_address_manage） | 提供新增/编辑/删除地址相关的场景化组件                           | [使用指导](./components/module_address_manage/README.md) |
+| 优惠券组件（module_coupons）         | 提供了优惠券的浏览、选择能力                                 | [使用指导](./components/module_coupons/README.md)        |
+| 商品详情组件（module_product_detail） | 提供商品详情组件，支持详情展示和规格选择                           | [使用指导](./components/module_product_detail/README.md) |
+| 商品搜索组件（module_product_search） | 提供了查看并编辑搜索历史，查看并刷新推荐关键词，查看热搜榜的搜索页面组件           | [使用指导](./components/module_product_search/README.md) |
+| 商品分享组件（module_product_share）  | 支持保存商品为海报，复制商品链接，拉起华为系统分享和碰一碰分享功能              | [使用指导](./components/module_product_share/README.md)  |
+| 购物车组件（module_shopping_cart）   | 提供了购物车商品列表展示，商品选择、删除、增减商品数量、查看明细、结算等相关功能的场景化组件 | [使用指导](./components/module_shopping_cart/README.md)  |
+
 
 本模板为综合商城应用提供了常用功能的开发样例，模板主要分首页、分类、购物车、和我的四大模块：
 
@@ -24,12 +32,12 @@
 
 - 购物车：展示已添加的商品，支持商品数量的修改，商品删除、结算等操作。
 
-- 我的：展示个人信息、订单管理入口以及联系客服功能。
+- 我的：展示个人信息、订单管理、优惠券、地址管理、联系客服等功能。
 
 本模板已集成华为账号、通话、华为支付等服务，只需做少量配置和定制即可快速实现华为账号的登录、一键拨打服务电话、商品购买等功能。
 
-| 首页                                                   | 分类                                                       | 购物车                                                   | 我的                                                        |
-| ------------------------------------------------------ | ---------------------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------- |
+| 首页                                                   | 分类                                                       | 购物车                                                   | 我的                                                       |
+|------------------------------------------------------|----------------------------------------------------------|-------------------------------------------------------|----------------------------------------------------------|
 | <img src="screenshot/home.png" alt="首页" width="300"> | <img src="screenshot/category.png" alt="分类" width="300"> | <img src="screenshot/cart.png" alt="购物车" width="300"> | <img src="screenshot/profile.png" alt="购物车" width="300"> |
 
 本模板主要页面及核心功能如下所示：
@@ -73,6 +81,7 @@
 │   │   ├── constants                             // 常量定义
 │   │   ├── featurecomponents                     // 场景组件
 │   │   │   ├── callbutton                        // 拨号组件
+│   │   │   ├── dialog                            // 弹窗封装
 │   │   │   ├── search                            // 搜索组件
 │   │   │   └── tabsswiper                        // 标题栏组件
 │   │   ├── models                                // 数据模型定义
@@ -102,72 +111,14 @@
 │       └── MockServer.ets                        // Mock 服务器
 │
 ├── components
-│   ├── module_address_manage/src/main/ets        // 地址管理组件
-│   │   ├── common                                // 常量定义
-│   │   ├── http                                  // 接口定义
-│   │   ├── model                                 // 数据模型定义
-│   │   ├── pages
-│   │   │    ├── AddressEditPage.ets              // 地址编辑页
-│   │   │    └── AddressManagePage.ets            // 地址管理页
-│   │   └── viewmodel
-│   │   │    ├── AddressMgrVM.ets                 // 地址管理viewmodel
-│   │   │    └── AddressVM.ets                    // 地址类viewmodel
-│   │   └── AddressManage.ets                     // 地址管理组件封装
-│   │
-│   ├── module_login/src/main/ets                 // 登录组件
-│   │   ├── commons                               // 常量定义
-│   │   ├── models                                // 数据模型定义
-│   │   ├── pages
-│   │   │   └── HuaweiQuickLoginPage.ets          // 华为账号一键登录页
-│   │   └── utils
-│   │       └── LoginUtils.ets                    // 登录工具
-│   │
-│   ├── module_product_detail/src/main/ets        // 商品详情组件
-│   │   │── commons
-│   │   │   ├── Constants.ets                     // 常量定义
-│   │   │   ├── Enum.ets                          // 枚举类定义
-│   │   │   ├── Models.ets                        // 数据对象类型定义
-│   │   │   └── Types.ets                         // 数据接口定义
-│   │   │── components
-│   │   │   ├── ProductInfoCard.ets               // 商品信息卡片
-│   │   │   └── ProductSwiper.ets                 // 商品轮播
-│   │   │── https
-│   │   │   ├── Apis.ets                          // 接口定义
-│   │   │   └── MockData.ets                      // mock数据
-│   │   │── viewmodels
-│   │   │   └── ProductSelectorVM.ets             // 规格选择器viewmodel
-│   │   └── views
-│   │       ├── ProductDetail.ets                 // 商品详情
-│   │       └── ProductSelector.ets               // 商品规格选择器
-│   │
-│   ├── module_product_waterflow/src/main/ets     // 商品瀑布流
-│   │   ├── commons
-│   │   │   ├── Constants.ets                     // 常量定义
-│   │   │   ├── Enums.ets                         // 枚举类定义
-│   │   │   └── Types.ets                         // 数据接口定义
-│   │   ├── components
-│   │   │   └── ProductWaterFlow.ets              // 商品瀑布流组件
-│   │   ├── https
-│   │   │   ├── Apis.ets                          // 接口定义
-│   │   │   └── MockData.ets                      // mock数据
-│   │   │
-│   │   └── utils
-│   │       └── LazyDataSource.ets                // 懒加载工具类
-│   │
-│   └── module_shopping_cart/src/main/ets         // 购物车组件
-│       ├── commons                               // 常量定义
-│       ├── components
-│       │   ├── basic                             // 基础组件
-│       │   ├── CartCard.ets                      // 购物车商品卡片
-│       │   ├── CartControlPanel.ets              // 购物车管理面板
-│       │   ├── CartListView.ets                  // 购物车商品列表
-│       │   ├── CartPageHeader.ets                // 购物车页面标题
-│       │   └── PopupSheet.ets                    // 弹出框
-│       ├── http                                  // 接口定义
-│       ├──viewmodel
-│       │   └── CartPageVM.ets                    // 购物车页面viewmodel
-│       └── views
-│           └── ShoppingCart.ets                  // 购物车组件
+│   ├── module_address_manage                     // 地址管理组件
+│   ├── module_coupons                            // 优惠券组件
+│   ├── module_login                              // 登录组件
+│   ├── module_product_detail                     // 商品详情组件
+│   ├── module_product_search                     // 商品搜索组件
+│   ├── module_product_share                      // 商品分享组件
+│   ├── module_product_waterflow                  // 商品瀑布流
+│   └── module_shopping_cart                      // 购物车组件
 │
 ├── scenes                                        // 场景化模块
 │    ├── order/src/main/ets                       // 订单
@@ -186,44 +137,32 @@
 └── products
     └── entry/src/main/ets
        ├── components
-       │   ├──CategoryPageContent.ets             // 分类页详情
        │   ├──HomePageContent.ets                 // 首页详情
        │   └──IconTextTab.ets                     
        ├── pages
        │   ├── AgreementPage.ets                  // 隐私政策&用户协议页
        │   ├── CategoryPage.ets                   // 分类页
+       │   ├── CouponPage.ets                     // 个人优惠券
        │   ├── EditProfilePage.ets                // 用户信息编辑
        │   ├── HomePage.ets                       // 首页
        │   ├── Index.ets                          // 入口页
        │   ├── ProfilePage.ets                    // 我的页
-       │   ├── SettingPage.ets                    // 设置页
-       │   └── SubCategoryPage.ets                // 分类子页
+       │   └── SettingPage.ets                    // 设置页     
        └── widget                                 // 服务卡片
 
 ```
-
-### 组件
-
-本模板中提供了多种组件，您可以按需选择合适的组件进行使用，所有组件存放在工程根目录的components下。
-
-| 组件                                  | 描述                                                         | 使用指导                                                 |
-| ------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------- |
-| 地址管理组件（module_address_manage） | 提供新增/编辑/删除地址相关的场景化组件                       | [使用指导](./components/module_address_manage/README.md) |
-| 商品详情组件（module_product_detail） | 提供商品详情组件，支持详情展示和规格选择                     | [使用指导](./components/module_product_detail/README.md) |
-| 购物车组件（module_shopping_cart）    | 提供了购物车商品列表展示，商品选择、删除、增减商品数量、查看明细、结算等相关功能的场景化组件 | [使用指导](./components/module_shopping_cart/README.md)  |
-
 
 ## 环境要求
 
 ### 软件
 
-- DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
-- HarmonyOS SDK版本：HarmonyOS 5.0.1 Release SDK及以上
+- DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
+- HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
 
 ### 硬件
 
 - 设备类型：华为手机（直板机）
-- HarmonyOS版本：HarmonyOS 5.0.1 Release及以上
+- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
 
 ## 快速入门
 
@@ -237,28 +176,31 @@
 
    b. 返回应用列表页面，查看应用的包名。
 
-   c. 将AppScope/app.json5文件中的bundleName替换为创建应用的包名。
+   c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建应用的包名。
 
 2. 配置华为账号服务。
 
    a. 将应用的client ID配置到products/entry/src/main路径下的module.json5文件中，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
-
-   c. 申请华为账号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。
+   b. 申请华为账号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。
 
 3. 配置支付服务。
 
    华为支付当前仅支持商户接入，在使用服务前，需要完成商户入网、开发服务等相关配置，本模板仅提供了端侧集成的示例。详细参考：[支付服务接入准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/payment-preparations)。
 
+4. 配置华为账号收货地址管理服务。
+
+   当前模板的地址管理组件支持获取华为账号收货地址，使用此功能需满足一定条件。详细参考：[收货地址服务开发前提](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-choose-address-dev#section1061219267293)。
+
+5. 对应用进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
+
+6. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)
+
 ### 运行调试工程
 
 1. 连接调试手机和PC。
 
-2. 对应用[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
-
-3. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
-
+2. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
 
 ## 权限要求
 

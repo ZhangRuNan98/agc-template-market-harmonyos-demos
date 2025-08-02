@@ -1,8 +1,7 @@
-import { BleScanView } from '../view/BleScanView'
 import { AddButtonView } from '../view/AddButtonView';
-import { BleScanViewModel } from '../viewmodel/BleScanViewModel';
-import { BleScannedDevicesView } from '../view/BleScannedDevicesView';
 import { AddDeviceViewModel } from '../viewmodel/AddDeviceViewModel';
+import { BleScannedDevicesView, BleScanView, BleScanViewModel, ScannedDeviceViewModel } from 'bluetooth_scan';
+import { AdapterModel } from 'external_interactions';
 
 @Builder
 export function AddDevicePageBuilder(name: string, param: Object) {
@@ -18,11 +17,16 @@ export struct AddDevicePage {
   build() {
     NavDestination() {
       Column() {
-        BleScanView({pathStack : this.pathStack, bleScanViewModel: this.bleScanViewModel})
-        AddButtonView({pathStack : this.pathStack})
-          .margin({top: 20})
-        BleScannedDevicesView({pathStack : this.pathStack, bleClientViewModel: this.bleScanViewModel})
-          .margin({top: 20})
+        BleScanView({ pathStack: this.pathStack, bleScanViewModel: this.bleScanViewModel })
+        AddButtonView({ pathStack: this.pathStack })
+          .margin({ top: 20 })
+        BleScannedDevicesView({
+          pathStack: this.pathStack, bleScanViewModel: this.bleScanViewModel,
+          getDeviceImage: (bleClientViewModel: ScannedDeviceViewModel) => {
+            return AdapterModel.getInstance().getDeviceInfo(bleClientViewModel.deviceName).deviceInfo.deviceImage
+          }
+        })
+          .margin({ top: 20 })
       }
       .height('100%')
       .width('100%')

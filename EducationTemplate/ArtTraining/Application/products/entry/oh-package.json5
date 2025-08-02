@@ -14,6 +14,8 @@
     "mine": "file:../../feature/mine",
     "checkin": "file:../../feature/checkin",
     "home": "file:../../feature/home",
+    "module_course_list": "file:../../components/module_course_list",
+    "module_store_map": "file:../../components/module_store_map",
     "@hw-agconnect/auth": "^1.0.2"
   }
 }

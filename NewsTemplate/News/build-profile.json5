@@ -27,7 +27,7 @@
   "modules": [
     {
       "name": "entry",
-      "srcPath": "./products",
+      "srcPath": "./entry",
       "targets": [
         {
           "name": "default",

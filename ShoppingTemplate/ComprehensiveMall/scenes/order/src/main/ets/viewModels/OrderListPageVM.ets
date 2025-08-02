@@ -1,9 +1,9 @@
-import { OrderCardDto, OrderCardVM } from '../http/Type';
+import { AddressModel, OrderCardVM } from '../http/Type';
 import { OrderApi } from '../http/Api';
 import { common } from '@kit.AbilityKit';
 import { paymentService } from '@kit.PaymentKit';
 import { formatTime } from '../utils';
-import { routerStack } from 'lib_foundation';
+import { OrderCardDto, routerStack } from 'lib_foundation';
 
 @ObservedV2
 export class OrderListPageVM {
@@ -31,11 +31,11 @@ export class OrderListPageVM {
       'OrderListPage',
     ) as number[];
     if (params.length && params[params.length - 1]) {
-      this.curIndex = params[params.length - 1]
-      this.type = params[params.length - 1]
+      this.curIndex = params[params.length - 1];
+      this.type = params[params.length - 1];
     } else {
-      this.curIndex = 0
-      this.type = 0
+      this.curIndex = 0;
+      this.type = 0;
     }
   }
 
@@ -61,10 +61,11 @@ export class OrderListPageVM {
           card.logisticsInfo = cards[i].logisticsInfo;
           card.totalPrice = cards[i].totalPrice;
           card.remainingTime = cards[i].remainingTime ?? '';
-          card.address = cards[i].address;
+          card.address = cards[i].address as AddressModel;
           card.remark = cards[i].remark;
           card.refundTime = cards[i].refundTime ?? '';
-          card.receivingMethod = cards[i].receivingMethod ?? ''
+          card.receivingMethod = cards[i].receivingMethod ?? '';
+          card.discount = cards[i].discount ?? 0;
           orderCards.push(card);
         }
         this.orderCards = orderCards;
@@ -88,9 +89,9 @@ export class OrderListPageVM {
       })
       .finally(() => {
         OrderApi.payOrderByCode(code).then(() => {
-          this.refresh()
-        })
-      })
+          this.refresh();
+        });
+      });
   }
 
   // 待支付订单设置定时器
@@ -109,38 +110,38 @@ export class OrderListPageVM {
     if (type === 0) {
       switch (card.type) {
         case 1:
-          return '待付款'
+          return '待付款';
         case 2:
-          return '已付款'
+          return '已付款';
         case 3:
-          return '已发货'
+          return '已发货';
         case 4:
-          return '已完成'
+          return '已完成';
         case 5:
-          return '已取消'
+          return '已取消';
         case 6:
-          return '已退款'
+          return '已退款';
       }
     }
     if (type === 1 && card.remainingTime) {
-      return card.remainingTime + '后取消'
+      return card.remainingTime + '后取消';
     } else {
       switch (card.type) {
         case 1:
-          return '待付款'
+          return '待付款';
         case 2:
-          return '已付款'
+          return '已付款';
         case 3:
-          return '已发货'
+          return '已发货';
         case 4:
-          return '已完成'
+          return '已完成';
         case 5:
-          return '已取消'
+          return '已取消';
         case 6:
-          return '已退款'
+          return '已退款';
       }
     }
-    return ''
+    return '';
   }
 
   public static get instance() {

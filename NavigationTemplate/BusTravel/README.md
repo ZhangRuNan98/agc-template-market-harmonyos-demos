@@ -10,6 +10,14 @@
 
 ## 功能介绍
 
+您可以基于此模板直接定制应用，也可以挑选此模板中提供的多种组件使用，从而降低您的开发难度，提高您的开发效率。
+
+此模板提供如下组件，所有组件存放在工程根目录的components下，如果您仅需使用组件，可参考对应组件的指导链接；如果您使用此模板，请参考本文档。
+
+| 组件                     | 描述           | 使用指导                                      |
+|------------------------|--------------|-------------------------------------------|
+| 公交路线详情组件（route_detail） | 支持展示公交线路详情   | [使用指导](components/route_detail/README.md) |
+| 公交路线搜索组件（route_search） | 支持展示公交路线搜索结果 | [使用指导](components/route_search/README.md) |
 本模板为公交类应用提供了常用功能的开发样例，模板主要分为首页，出行，乘车码和我的四大模块：
 
 * 首页：可查看最近新闻热点，开通、打开乘车码，查看禁携物品和寻找遗失物品。
@@ -78,7 +86,10 @@ BusTravel
 │  ├─model                                             // 模型定义
 │  ├─page                                              // 公共页面
 │  └─utils                                             // 公共方法
-│
+├─components                                           // 组件
+│  ├─route_detail                                      // 公交详情路线展示组件
+│  ├─route_search                                      // 公交路线搜索组件  
+|
 ├─entry
 │  ├─src/main/ets
 │  │  ├─constants
@@ -139,7 +150,7 @@ BusTravel
 │     ├─page
 │     │  ├─BusLinePlan.ets                             // 出行页
 │     │  ├─realTimeBus.ets                             // 实时公交
-│     │  ├─routeDetail.ets                             // 公交地图详情页
+│     │  ├─routeDetailPage.ets                             // 公交地图详情页
 │     │  └─TravelPlan.ets                              // 路径规划
 │     └─viewmodels
 │        └─RouterParams.ets                            // 路由参数
@@ -154,41 +165,42 @@ BusTravel
 * HarmonyOS版本：HarmonyOS 5.0.0 Release及以上
 
 ## 快速入门
+
+### 配置工程
 在运行此模板前，需要完成以下配置：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建应用，将包名配置到模板中。
 
-2. 在AppGallery Connect创建应用，将包名配置到模板中。
-
-   a. 参考[创建应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)。
+   a.
+   参考[创建HarmonyOS应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)
+   为应用创建APP ID，并将APP ID与应用进行关联。
 
    b. 返回应用列表页面，查看应用的包名。
 
-   c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建应用的包名。
+   c. 将AppScope/app.json5文件中的bundleName替换为创建应用的包名。
 
-3. 配置华为账号服务。
+2. 配置华为账号服务。
 
-   a. 将应用的client ID配置到entry模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
+   a. 将应用的client ID配置到entry模块的[module.json5](entry/src/main/module.json5)
+   文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+   b.
+   申请华为账号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)
+   。在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-get-phonenumber)。
 
-   c. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-get-phonenumber)。
+3. 配置地图服务。
 
-4. 配置地图服务。
+   a. 将应用的client ID配置到entry模块的[module.json5](entry/src/main/module.json5)文件，如果华为账号服务已配置，可跳过此步骤。
 
-   a. 将应用的client ID配置到entry模块的module.json5文件，如果华为账号服务已配置，可跳过此步骤。
-
-   b. 添加公钥指纹，如果华为账号服务已配置，可跳过此步骤。
-
-   c. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
+   b. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
+4. 对应用进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
+5. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)
    
 ### 运行调试工程
 
 1. 连接调试手机和PC。
 
-2. 对应用[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
-
-3. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
+2. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
 
 
 ## 示例效果

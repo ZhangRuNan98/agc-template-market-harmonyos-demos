@@ -6,7 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    commonlib: 'file:../../commons/commonLib',
+    common: "file:../../commons/common",
     network: 'file:../../commons/network',
     home: 'file:../../features/tab/home',
     find: 'file:../../features/tab/find',

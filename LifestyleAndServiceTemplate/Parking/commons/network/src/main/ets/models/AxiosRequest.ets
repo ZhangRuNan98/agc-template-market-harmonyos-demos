@@ -1,7 +1,7 @@
 import { AxiosHttpRequest } from './AxiosHttp';
 import { AxiosRequestHeaders, AxiosResponse } from '@ohos/axios';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { AccountUtil, FullLoading } from 'commonlib';
+import { AccountUtil, CommonConstants, FullLoading } from 'common';
 
 const axiosClient = new AxiosHttpRequest(
   {
@@ -40,7 +40,7 @@ const axiosClient = new AxiosHttpRequest(
       },
     },
   },
-  true,
+  CommonConstants.OPEN_MOCK,
 );
 
 export default axiosClient;

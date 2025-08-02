@@ -1,4 +1,4 @@
-import { iData, routerStack, LoadingStatus, TabSwiper, Style } from 'lib_foundation';
+import { iData, routerStack, LoadingStatus, TabSwiper, Style, BreakpointSystem } from 'lib_foundation';
 import { IndexLogic } from '../logic/IndexLogic';
 import { uiObserver } from '@kit.ArkUI';
 
@@ -9,6 +9,7 @@ struct Index {
   private readonly logic: IndexLogic = new IndexLogic();
 
   aboutToAppear(): void {
+    BreakpointSystem.register(this.getUIContext())
     iData.global.isNavPathStackEmpty = routerStack.size() === 0;
     uiObserver.on('navDestinationUpdate', (_: NavDestinationInfo) => {
       iData.global.isNavPathStackEmpty = routerStack.size() === 0;
@@ -43,6 +44,7 @@ struct Index {
       .width('100%')
       .height('100%')
       .titleMode(NavigationTitleMode.Mini)
+      .mode(NavigationMode.Stack)
       .hideTitleBar(true, false)
       .hideBackButton(true)
     }

@@ -55,10 +55,8 @@ News
   │─commons/commonLib/src/main   
   │  ├─ets
   │  │  ├─constants
-  │  │  │      BreakpointConstants.ets         // 断点常量
   │  │  │      CommonContants.ets              // 公共常量
   │  │  │      CommonEnums.ets                 // 公共枚举常量
-  │  │  │      HomeConstants.ets               // 首页常量
   │  │  ├─database                           
   │  │  │      PreferencesUtil.ets             // 首选项存储工具
   │  │  ├─model                           
@@ -91,10 +89,10 @@ News
   │─commons/network/src/main   
   │  ├─ets
   │  │  ├─axiosHttpRequest
-  │  │  │      AxiosHttp.ets                   // 评论详情组件
-  │  │  │      AxiosModel.ets                  // 新闻详情组件
-  │  │  │      AxiosRequest.ets                // 新闻列表刷新组件
-  │  │  │      HttpRequestApi.ets              // 热门和本地新闻切换组件
+  │  │  │      AxiosHttp.ets                   // 网络请求封装
+  │  │  │      AxiosModel.ets                  // 网络请求对象
+  │  │  │      AxiosRequest.ets                // 网络请求定义
+  │  │  │      HttpRequestApi.ets              // 网络请求接口
   │  │  ├─cardManager                            
   │  │  │      CardManager.ets                 // 卡片管理
   │  │  │      EntryContext.ets                // 应用上下文
@@ -130,7 +128,6 @@ News
   │  │  │      HistoryRecord.ets               // 历史记录组件
   │  │  │      MyComment.ets                   // 我的评论组件
   │  │  │      MySettings.ets                  // 我的设置组件
-  │  │  │      NavHeaderBar.ets                // 头部导航标题组件
   │  │  │      PrivacyPolicyPage.ets           // 隐私协议组件
   │  │  │      SetFontSize.ets                 // 字号设置组件
   │  │  │      UserInfoSettingPage             // 用户信息设置组件
@@ -148,16 +145,13 @@ News
   │  │  │      VideoPlayer.ets                 // 视频组件
   │  │  │─pages
   │  │  │      VideoView.ets                   // 视频列表页
-  │  │  │       VideoDetailPage.ets            // 视频详情页
+  │  │  │      VideoDetailPage.ets             // 视频详情页
   │  │  │─utils
   │  │  │      CommonDataSource.ets            // 视频公共数据工具
   │  │  └─viewModels                           // 与页面一一对应的vm层
   │  └─resources
-  └─products/src/main   
+  └─entry/src/main   
      ├─ets
-     │  ├─components
-     │  │      CityView.ets                    // 城市组件
-     │  │      MineView.ets                    // 我的组件
      │  ├─constants
      │  │      Constants.ets                   // 入口页公共数据
      │  ├─entryability
@@ -184,33 +178,32 @@ News
 ###  配置工程
 在运行此模板前，需要完成以下配置：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建元服务，将包名配置到模板中。
 
-2. 在AppGallery Connect创建元服务，将包名配置到模板中。
-
-   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APPID，并进行关联。
+   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APP ID，并将APP ID与元服务进行关联。
 
    b. 返回应用列表页面，查看元服务的包名。
 
    c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建元服务的包名。
 
-3. 配置服务器域名。
+2. 配置服务器域名。
 
    本模板接口均采用mock数据，由于元服务包体大小有限制，部分图片资源将从云端拉取，所以需为模板项目[配置服务器域名](https://developer.huawei.com/consumer/cn/doc/atomic-guides/agc-help-harmonyos-server-domain)，“httpRequest合法域名”需要配置为：`https://agc-storage-drcn.platform.dbankcloud.cn`
 
-4. 配置华为账号服务。
+3. 配置华为账号服务。
 
-   a. 将元服务的client ID配置到entry模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-atomic-client-id)。
+   a. 将元服务的client ID配置到entry/src/main路径下的module.json5文件中，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+   b. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)
+   ，并在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
 
-   c. 如需获取用户真实手机号，需要申请phone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-permissions)。在端侧使用快速验证手机号码Button进行[验证获取手机号码](https://developer.huawei.com/consumer/cn/doc/atomic-guides/account-guide-atomic-get-phonenumber)。
+4. 对元服务进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)
+
+5. 添加手工签名所用证书对应的公钥指纹。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)
 
 ###  运行调试工程
 
 1. 连接调试手机和PC。
-
-2. 对元服务进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing)。
 
 3. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
 

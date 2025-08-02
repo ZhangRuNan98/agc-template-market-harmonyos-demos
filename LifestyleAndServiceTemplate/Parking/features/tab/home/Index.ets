@@ -1,1 +1,1 @@
-export { HomePageBuilder } from './src/main/ets/pages/HomePage';
+export { homePageBuilder as HomePageBuilder } from './src/main/ets/pages/HomePage';

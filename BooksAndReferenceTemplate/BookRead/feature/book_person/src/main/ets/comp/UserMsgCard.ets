@@ -1,10 +1,10 @@
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { BusinessError, emitter } from '@kit.BasicServicesKit';
 import { promptAction } from '@kit.ArkUI';
-
-import { AvatarIcon, SelectAvatarCard } from './SelectAvatarCard';
 import { Constants, TCRouter, UserInfoModel, UserInfoUtil } from 'common';
 import { UserInfo } from 'base_common';
+import { AvatarIcon, SelectAvatarCard } from './SelectAvatarCard';
+
 @ComponentV2
 export struct UserMsgCard {
   @Local userName: string = ''
