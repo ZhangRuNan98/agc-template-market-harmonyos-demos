@@ -1,8 +1,13 @@
-import { BussController, RichEditorArea } from 'richeditor';
-import { common } from '@kit.AbilityKit';
-import { KeyboardAvoidMode, promptAction } from '@kit.ArkUI';
-import { CommonConstants } from '@ohos_agcit/notes_utils';
-import { Category, Note, NoteService } from '@ohos_agcit/notes_datasource';
+import { RichEditorController, RichEditorArea, ChangeRecord, MORE_ACTION_LIST,
+  MoreFunction, SnapShotController, ACTION_NAME,
+  Note,
+  SNAPSHOT_ID} from 'richeditor';
+import { KeyboardAvoidMode } from '@kit.ArkUI';
+import { Category, NoteService } from '@ohos_agcit/notes_datasource';
+import { ThemeController } from '../controller/ThemeController';
+import { unifiedDataChannel } from '@kit.ArkData';
+import { pasteboard } from '@kit.BasicServicesKit';
+import { JSON } from '@kit.ArkTS';
 
 @Builder
 export function EditNotesBuilder() {
@@ -11,165 +16,256 @@ export function EditNotesBuilder() {
 
 @ComponentV2
 struct EditNotes {
-  context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
-  private richEditorController: RichEditorController = new RichEditorController();
-  private bussController: BussController = new BussController();
   @Consumer('appPathStack') appPathStack: NavPathStack = new NavPathStack();
+  richEditorController: RichEditorController = RichEditorController.instance;
+  themeController: ThemeController = ThemeController.instance;
   noteService: NoteService = NoteService.instance;
-  @Local currentNote: Note = new Note('');
+  snapShotController: SnapShotController = new SnapShotController(SNAPSHOT_ID, new Scroller());
+  @Local currentNote: Note = new Note(new MutableStyledString(''));
   @Local noteTitle: string = '';
-  @Local hasEdit: boolean = false;
   @Local isEditNote: boolean = false;
+
 
   aboutToAppear(): void {
     // 启用压缩模式避让软键盘
-    this.context.windowStage.getMainWindowSync()
-      .getUIContext()
-      .setKeyboardAvoidMode(KeyboardAvoidMode.RESIZE_WITH_CARET);
+    this.getUIContext().setKeyboardAvoidMode(KeyboardAvoidMode.RESIZE_WITH_CARET);
   }
 
   aboutToDisappear(): void {
     // 还原默认上抬模式
-    this.context.windowStage.getMainWindowSync()
-      .getUIContext()
-      .setKeyboardAvoidMode(KeyboardAvoidMode.OFFSET);
+    this.getUIContext().setKeyboardAvoidMode(KeyboardAvoidMode.OFFSET);
+
+    this.richEditorController.currentIndex = -1;
+    // 操作记录
+    this.richEditorController.historyRecordArray = [];
+    this.richEditorController.initState();
+  }
+
+  copyNoteText() {
+    if (this.currentNote?.description === '') {
+      this.getUIContext().getPromptAction().showToast({
+        message:'请输入内容后复制！',
+        alignment: Alignment.Center,
+        duration: 1500
+      })
+      return;
+    }
+    let copyText = this.currentNote?.description || '';
+    let plainTextData = new unifiedDataChannel.UnifiedData();
+    let plainText = new unifiedDataChannel.PlainText();
+    plainText.details = {
+      key: 'delayPlaintext',
+      value: copyText,
+    };
+    plainText.textContent = copyText;
+    plainText.abstract = 'delayTextContent';
+    plainTextData.addRecord(plainText);
+    let systemPasteboard: pasteboard.SystemPasteboard = pasteboard.getSystemPasteboard();
+    systemPasteboard.setUnifiedData(plainTextData);
+    this.getUIContext().getPromptAction().showToast({
+      message:'复制成功',
+      alignment: Alignment.Center,
+      duration: 1500
+    })
+  }
+  /**
+   * 显示更多选项视图
+   */
+  @Builder
+  moreFunctionMenu(){
+    Column(){
+      List(){
+        ForEach(MORE_ACTION_LIST, (item: MoreFunction) => {
+          ListItem(){
+            Row(){
+              Image(item.icon)
+                .width(24)
+                .height(24)
+                .margin({
+                  left: 12,
+                  right: 8
+                })
+
+              Text(item.name)
+                .fontSize(14)
+                .fontColor($r('sys.color.font_primary'))
+            }
+            .width('100%')
+            .height(48)
+            .onClick(() => {
+              if (item.name === ACTION_NAME.share) {
+                this.snapShotController.onceSnapshot()
+              } else if (item.name === ACTION_NAME.copy) {
+                this.copyNoteText()
+              }
+            })
+          }
+        }, (item: MoreFunction) => JSON.stringify(item))
+      }
+      .divider({
+        strokeWidth: 0.5
+      })
+      .scrollBar(BarState.Off)
+    }
+    .width(114)
+    .backgroundColor($r('app.color.bg_more_function'))
+    .margin({ top: 4, bottom: 4 })
   }
 
   @Builder
   toolBar() {
-    Row() {
-      Image($r('app.media.share'))
-        .height(32)
-        .width(32)
-        .margin({
-          right: 12,
-        })
-        .onClick(() => {
-          this.bussController.shareData();
-        });
-      Image($r('app.media.save'))
-        .height(32)
-        .width(32)
-        .onClick(() => {
-          this.saveNote();
-        });
+    if (this.richEditorController.showMoreFunction === true){
+      Row(){
+        Image($r('app.media.show_more_function'))
+          .width(40)
+          .height(40)
+          .bindMenu(this.moreFunctionMenu)
+      }
+      .height('100%')
+      .width(150)
+      .justifyContent(FlexAlign.End)
+      .margin({
+        right: 16,
+      });
+    } else {
+      Row({ space: 12 }) {
+        Image(this.richEditorController.currentIndex < 1 ? $r('app.media.undo_expire') : $r('app.media.undo_effect'))
+          .width(40)
+          .height(40)
+          .onClick(() => {
+            this.richEditorController.onDo();
+          });
+
+        Image(this.richEditorController.currentIndex >= this.richEditorController.historyRecordArray.length - 1 ?
+        $r('app.media.redo_expire') : $r('app.media.redo_effect'))
+          .width(40)
+          .height(40)
+          .onClick(() => {
+            this.richEditorController.reDo();
+          });
+
+        Image($r('app.media.save'))
+          .height(40)
+          .width(40)
+          .onClick(() => {
+            if (this.saveNote()){
+              // 点击保存后退出选中状态
+              this.richEditorController.controller.setSelection(0, 0);
+              // 退出编辑状态
+              this.richEditorController.textInputController.stopEditing();
+              this.richEditorController.controller.stopEditing();
+              this.richEditorController.showMoreFunction = true;
+            }
+          });
+      }
+      .height('100%')
+      .width(150)
+      .justifyContent(FlexAlign.Center)
+      .margin({
+        right: 16,
+      });
     }
-    .height(CommonConstants.FULL_PERCENT)
-    .width(76)
-    .justifyContent(FlexAlign.Center)
-    .margin({
-      right: 16,
-    });
   }
 
   /**
    * 保存笔记
    */
-  saveNote() {
-    let content = JSON.stringify(this.richEditorController.getSpans());
-    if (this.isEditNote) {
-      this.currentNote.updateContent(content, this.noteTitle);
-    } else {
-      if ((content === undefined && this.noteTitle === undefined) || (content === '[]' && this.noteTitle === '')) {
-        promptAction.showToast({
-          message: '还没有输入笔记内容哦 ~',
-          alignment: Alignment.Center,
-          duration: 1500,
-        });
-        return;
-      }
-      this.currentNote.content = content;
-      this.currentNote.title = this.noteTitle;
-      this.currentNote.getDescription();
-      this.noteService.addNote(this.currentNote);
+  saveNote(): boolean {
+    let styledString = this.richEditorController.controller.getStyledString();
+    let content = styledString.getString();
+    // 若新增笔记 内容和标题为空，不保存
+    // 修改笔记   内容和标题为空，按返回无响应
+    if (content === '' && this.noteTitle === '') {
+      return this.isEditNote ? false: true;
     }
-    promptAction.showToast({
-      message: '保存成功',
-      alignment: Alignment.Center,
-      duration: 1500,
-    });
-    this.isEditNote = true;
-    this.hasEdit = false;
+
+    if (this.isEditNote) {
+      this.currentNote.updateContent(styledString, this.noteTitle);
+    } else {
+      this.currentNote.title = this.noteTitle
+      this.currentNote.styledString = this.richEditorController.controller.getStyledString();
+      this.currentNote.description = this.currentNote.styledString.getString();
+      this.noteService.addNote(this.currentNote);
+      this.isEditNote = true;
+    }
+    return true;
   }
 
-  sureDialog: CustomDialogController = new CustomDialogController({
+  backDialogController: CustomDialogController = new CustomDialogController({
     builder: () => {
-      this.makeSureDialog();
+      this.backDialog();
     },
-    alignment: DialogAlignment.Center,
-    cornerRadius: {
-      topLeft: 16,
-      topRight: 16,
-      bottomLeft: 16,
-      bottomRight: 16,
-    },
-    width: '90%',
+    alignment: DialogAlignment.Center
   });
 
   @Builder
-  makeSureDialog() {
-    Column({ space: 24 }) {
-      Text($r('app.string.save_tip'))
-        .fontColor('rgba(0,0,0,0.9)')
-        .fontSize(14)
-        .width(CommonConstants.FULL_PERCENT)
-        .textAlign(TextAlign.Center);
-      Text($r('app.string.save'))
-        .fontColor('#FFAA00')
-        .fontSize(14)
-        .width(CommonConstants.FULL_PERCENT)
-        .textAlign(TextAlign.Center)
+  backDialog() {
+    Column({ space: 18 }) {
+      Text('确认返回')
+        .fontSize(20)
+        .fontWeight(FontWeight.Medium)
+        .fontColor($r('sys.color.font_primary'))
+
+      Column(){
+        Text('当前笔记尚未保存，立刻返回则')
+          .fontSize(14)
+          .fontColor($r('sys.color.font_primary'))
+
+        Text('无法保存当前笔记内容，是否确定返回？')
+          .fontSize(14)
+          .fontColor($r('sys.color.font_primary'))
+      }
+
+      Flex({justifyContent: FlexAlign.SpaceAround}){
+        Row(){
+          Text('取消')
+            .fontColor($r('sys.color.icon_emphasize'))
+            .fontSize(16)
+        }
+        .justifyContent(FlexAlign.Center)
+        .width('50%')
         .onClick(() => {
-          this.saveNote();
-          this.appPathStack.pop();
-          this.sureDialog.close();
-        });
-      Text($r('app.string.give_up'))
-        .fontColor('rgba(0,0,0,0.9)')
-        .fontSize(14)
-        .width(CommonConstants.FULL_PERCENT)
-        .textAlign(TextAlign.Center)
+          this.backDialogController.close();
+        })
+
+        Row(){
+          Text('确定')
+            .fontColor($r('sys.color.icon_emphasize'))
+            .fontSize(16)
+        }
+        .justifyContent(FlexAlign.Center)
+        .width('50%')
         .onClick(() => {
-          this.appPathStack.pop();
-          this.sureDialog.close();
-        });
-      Text($r('app.string.cancel'))
-        .fontColor('rgba(0,0,0,0.4)')
-        .fontSize(14)
-        .width(CommonConstants.FULL_PERCENT)
-        .textAlign(TextAlign.Center)
-        .onClick(() => {
-          this.sureDialog.close();
-        });
+          this.backDialogController.close();
+          this.appPathStack.pop()
+        })
+      }
+      .padding({
+        top: 10
+      })
     }
-    .alignItems(HorizontalAlign.Center)
-    .padding({
-      top: 24,
-      bottom: 24,
-    });
+    .justifyContent(FlexAlign.Center)
+    .backgroundColor(this.themeController.dialogBgWhite)
+    .borderRadius(32)
+    .height(158)
+    .width('92%')
   }
 
   build() {
     NavDestination() {
       Column() {
         RichEditorArea({
-          richEditorController: this.richEditorController,
-          bussController: this.bussController,
-          noteContent: this.currentNote.content,
-          onEditorChange: (hasChange: boolean) => {
-            this.hasEdit = hasChange;
-          },
           noteTitle: this.currentNote.title,
+          noteContent: this.currentNote.styledString,
+          snapShotController: this.snapShotController,
           titleChange: (title: string) => {
             this.noteTitle = title;
           },
         })
-          .layoutWeight(1)
       }
-      .height(CommonConstants.FULL_PERCENT)
-      .width(CommonConstants.FULL_PERCENT);
+      .height('100%')
+      .width('100%');
     }
-    .title(this.isEditNote ? $r('app.string.editor') : $r('app.string.create_note'))
     .menus(this.toolBar())
     .onReady((cxt: NavDestinationContext) => {
       let params = cxt.pathInfo.param as Record<string, Object>;
@@ -183,19 +279,21 @@ struct EditNotes {
           this.currentNote = note;
         }
       }
+
+      this.richEditorController.currentIndex = 0;
+      this.richEditorController.historyRecordArray.push(new ChangeRecord(this.currentNote.styledString))
       this.currentNote.categoryId = (params.currentCategory as Category).id;
     })
-    .linearGradient({
-      angle: 180,
-      colors: [['#FFF0D4', 0], ['#E4E1D1', 0.08], ['#F1F3F5', 0.2], ['#F1F3F5', 1]],
-    })
     .onBackPressed(() => {
-      if (this.hasEdit) {
-        this.sureDialog.open();
+      // 若已处于显示更多选项状态，直接返回，否则先退出编辑态，处于更多选项状态
+      if (this.richEditorController.showMoreFunction) {
+        this.appPathStack.pop();
         return true;
       }
-      this.hasEdit = false;
-      return false;
+
+      // 按返回键弹出弹窗
+      this.backDialogController.open();
+      return true;
     });
   }
 }

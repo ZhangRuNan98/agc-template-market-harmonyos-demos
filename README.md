@@ -163,9 +163,13 @@
     <td><a href="./CarsTemplate/DriverLicenseExam/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
-    <td><a href="#新闻">新闻</a></td>
+    <td rowspan="2"><a href="#新闻">新闻</a></td>
     <td><a href="#新闻元服务模板">新闻元服务模板</a></td>
     <td><a href="./NewsTemplate/News/README.md" target="_blank">快速开始</a></td>
+  </tr>
+   <tr>
+    <td><a href="#综合新闻元服务模板">综合新闻元服务模板</a></td>
+    <td><a href="./NewsTemplate/ComprehensiveNews/README.md" target="_blank">快速开始</a></td>
   </tr>
   <tr>
     <td><a href="#阅读与工具书">阅读与工具书</a></td>
@@ -933,6 +937,30 @@
 | 首页                                                             | 视频                                                             | 我的                                                             |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
 | <img src="./NewsTemplate/News/screenshots/首页.jpeg" alt="首页"> | <img src="./NewsTemplate/News/screenshots/视频.jpeg" alt="视频"> | <img src="./NewsTemplate/News/screenshots/我的.jpeg" alt="我的"> |
+
+
+## 综合新闻
+
+### 综合新闻应用模板
+
+**功能介绍**
+本模板为新闻类应用提供了常用功能的开发样例，模板主要分首页、视频、互动和我的四大模块：
+
+* 首页：提供推荐新闻信息流、搜索、扫码、热榜、本地等功能。
+
+* 视频：提供关注、精选、推荐短视频等功能。
+
+* 互动：支持查看关注、推荐、附近博主发文、支持一键发帖。
+
+* 我的：提供个人主页查看、评论、消息、管理收藏/点赞/浏览历史、意见反馈、设置等功能。
+
+本模板已集成华为账号、推送、预加载、广告、朗读、微信登录等服务，只需做少量配置和定制即可快速实现华为账号的登录、新闻阅读等功能。
+
+| 首页                                             | 视频                                              | 互动                                                    | 我的                                             |
+|------------------------------------------------|-------------------------------------------------|-------------------------------------------------------|------------------------------------------------|
+| <img src="./NewsTemplate/ComprehensiveNews/screenshots/home.jpg" width="300"> | <img src="./NewsTemplate/ComprehensiveNews/screenshots/video.jpg" width="300"> | <img src="./NewsTemplate/ComprehensiveNews/screenshots/interaction.jpg" width="300"> | <img src="./NewsTemplate/ComprehensiveNews/screenshots/mine.jpg" width="300"> |
+
+
 
 ## 阅读与工具书
 

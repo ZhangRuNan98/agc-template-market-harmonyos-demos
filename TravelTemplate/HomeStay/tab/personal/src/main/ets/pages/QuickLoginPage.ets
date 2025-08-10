@@ -3,7 +3,7 @@ import { util } from '@kit.ArkTS';
 import promptAction from '@ohos.promptAction';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { LoginErrorCode } from '../model/Index';
-import { AgreementDialog } from 'component';
+import { AgreementDialog, TitleBar } from 'component';
 import { Logger } from 'util';
 import { AccountUtil } from 'account';
 import { Constants, NavPathName } from 'constant';
@@ -212,147 +212,149 @@ export struct QuickLoginPage {
 
   build() {
     NavDestination() {
-      Scroll() {
-        Column() {
+      Column() {
+        TitleBar({
+          isShowBack: true, title: '', clickEvent: () => {
+            this.mainPathStack.pop();
+          },
+        });
+        Scroll() {
           Column() {
-            Row() {
-              Image($r('app.media.icon'))
-                .width(80)
-                .height(80)
-                .draggable(false)
-                .copyOption(CopyOptions.None)
-                .borderRadius(20)
-                .onComplete(() => {
-                  Logger.info(this.domainId, this.logTag, 'Succeed in loading appIcon.');
-                })
-                .onError(() => {
-                  Logger.error(this.domainId, this.logTag, 'Failed to load appIcon.');
-                });
-            }.margin({
-              top: 44,
-              left: 124,
-              right: 124,
-            });
-
             Column() {
-              Text(this.anonymousPhone)
-                .fontSize(36)
-                .fontColor($r('sys.color.ohos_id_color_text_primary'))
-                .fontFamily($r('sys.string.ohos_id_text_font_family_medium'))
-                .fontWeight(FontWeight.Bold)
-                .lineHeight(48)
-                .textAlign(TextAlign.Center)
-                .maxLines(1)
-                .constraintSize({ maxWidth: '100%', minHeight: 48 });
-
-              Text('华为账号绑定号码')
-                .fontSize($r('sys.float.ohos_id_text_size_body2'))
-                .fontColor($r('sys.color.ohos_id_color_text_secondary'))
-                .fontFamily($r('sys.string.ohos_id_text_font_family_regular'))
-                .fontWeight(FontWeight.Regular)
-                .lineHeight(19)
-                .textAlign(TextAlign.Center)
-                .maxLines(1)
-                .constraintSize({ maxWidth: '100%' })
-                .margin({
-                  top: 8,
-                });
-            }.margin({
-              top: 64,
-            });
-
-            Column() {
-              LoginWithHuaweiIDButton({
-                params: {
-                  style: loginComponentManager.Style.BUTTON_CUSTOM,
-                  loginType: loginComponentManager.LoginType.QUICK_LOGIN,
-                  supportDarkMode: true,
-                  customButtonParams: {
-                    fontColor: loginComponentManager.FontColor.WHITE,
-                    backgroundColor: '#007DFF',
-                  },
-                },
-                controller: this.controller,
+              Row() {
+                Image($r('app.media.icon'))
+                  .width(80)
+                  .height(80)
+                  .draggable(false)
+                  .copyOption(CopyOptions.None)
+                  .borderRadius(20)
+                  .onComplete(() => {
+                    Logger.info(this.domainId, this.logTag, 'Succeed in loading appIcon.');
+                  })
+                  .onError(() => {
+                    Logger.error(this.domainId, this.logTag, 'Failed to load appIcon.');
+                  });
+              }.margin({
+                top: 44,
+                left: 124,
+                right: 124,
               });
-            }
-            .height(40)
-            .width('100%')
-            .constraintSize({ maxWidth: 448 })
-            .margin({
-              top: 56,
-            });
-          };
 
-          Row() {
-            Row() {
-              Checkbox({ name: 'privacyCheckbox', group: 'privacyCheckboxGroup' })
-                .width(20)
-                .height(20)
-                .focusable(true)
-                .focusOnTouch(true)
-                .selectedColor('#007DFF')
-                .select(this.isSelected)
-                .enabled(this.enableStatus)
-                .margin({ top: 0 })
-                .onChange((value: boolean) => {
-                  Logger.info(this.domainId, this.logTag, `agreementChecked: ${value}`);
-                  if (value) {
-                    this.isSelected = true;
-                    // 设置协议状态为ACCEPTED
-                    this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.ACCEPTED);
-                  } else {
-                    this.isSelected = false;
-                    // 设置协议状态为NOT_ACCEPTED
-                    this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.NOT_ACCEPTED);
-                  }
+              Column() {
+                Text(this.anonymousPhone)
+                  .fontSize(36)
+                  .fontColor($r('sys.color.ohos_id_color_text_primary'))
+                  .fontFamily($r('sys.string.ohos_id_text_font_family_medium'))
+                  .fontWeight(FontWeight.Bold)
+                  .lineHeight(48)
+                  .textAlign(TextAlign.Center)
+                  .maxLines(1)
+                  .constraintSize({ maxWidth: '100%', minHeight: 48 });
+
+                Text('华为账号绑定号码')
+                  .fontSize($r('sys.float.ohos_id_text_size_body2'))
+                  .fontColor($r('sys.color.ohos_id_color_text_secondary'))
+                  .fontFamily($r('sys.string.ohos_id_text_font_family_regular'))
+                  .fontWeight(FontWeight.Regular)
+                  .lineHeight(19)
+                  .textAlign(TextAlign.Center)
+                  .maxLines(1)
+                  .constraintSize({ maxWidth: '100%' })
+                  .margin({
+                    top: 8,
+                  });
+              }.margin({
+                top: 64,
+              });
+
+              Column() {
+                LoginWithHuaweiIDButton({
+                  params: {
+                    style: loginComponentManager.Style.BUTTON_CUSTOM,
+                    loginType: loginComponentManager.LoginType.QUICK_LOGIN,
+                    supportDarkMode: true,
+                    customButtonParams: {
+                      fontColor: loginComponentManager.FontColor.WHITE,
+                      backgroundColor: '#007DFF',
+                    },
+                  },
+                  controller: this.controller,
                 });
-            }
+              }
+              .height(40)
+              .width('100%')
+              .constraintSize({ maxWidth: 448 })
+              .margin({
+                top: 56,
+              });
+            };
 
             Row() {
-              Text() {
-                if (this.privacyText && this.privacyText.length >= 5) {
-                  this.BuildSpan(this.privacyText[0].text, $r('sys.color.ohos_id_color_text_secondary'),
-                    $r('sys.string.ohos_id_text_font_family_regular'), FontWeight.Regular, 0);
+              Row() {
+                Checkbox({ name: 'privacyCheckbox', group: 'privacyCheckboxGroup' })
+                  .width(20)
+                  .height(20)
+                  .focusable(true)
+                  .focusOnTouch(true)
+                  .selectedColor('#007DFF')
+                  .select(this.isSelected)
+                  .enabled(this.enableStatus)
+                  .margin({ top: 0 })
+                  .onChange((value: boolean) => {
+                    Logger.info(this.domainId, this.logTag, `agreementChecked: ${value}`);
+                    if (value) {
+                      this.isSelected = true;
+                      // 设置协议状态为ACCEPTED
+                      this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.ACCEPTED);
+                    } else {
+                      this.isSelected = false;
+                      // 设置协议状态为NOT_ACCEPTED
+                      this.controller.setAgreementStatus(loginComponentManager.AgreementStatus.NOT_ACCEPTED);
+                    }
+                  });
+              }
 
-                  this.BuildSpan(this.privacyText[1].text, '#007DFF',
-                    $r('sys.string.ohos_id_text_font_family_medium'), FontWeight.Medium, 1, true, true);
+              Row() {
+                Text() {
+                  if (this.privacyText && this.privacyText.length >= 5) {
+                    this.BuildSpan(this.privacyText[0].text, $r('sys.color.ohos_id_color_text_secondary'),
+                      $r('sys.string.ohos_id_text_font_family_regular'), FontWeight.Regular, 0);
 
-                  this.BuildSpan(this.privacyText[2].text, $r('sys.color.ohos_id_color_text_secondary'),
-                    $r('sys.string.ohos_id_text_font_family_regular'), FontWeight.Regular, 2);
+                    this.BuildSpan(this.privacyText[1].text, '#007DFF',
+                      $r('sys.string.ohos_id_text_font_family_medium'), FontWeight.Medium, 1, true, true);
 
-                  this.BuildSpan(this.privacyText[3].text, '#007DFF',
-                    $r('sys.string.ohos_id_text_font_family_medium'), FontWeight.Medium, 3, true, true);
+                    this.BuildSpan(this.privacyText[2].text, $r('sys.color.ohos_id_color_text_secondary'),
+                      $r('sys.string.ohos_id_text_font_family_regular'), FontWeight.Regular, 2);
 
-                  this.BuildSpan(this.privacyText[4].text, $r('sys.color.ohos_id_color_text_secondary'),
-                    $r('sys.string.ohos_id_text_font_family_regular'), FontWeight.Regular, 4);
+                    this.BuildSpan(this.privacyText[3].text, '#007DFF',
+                      $r('sys.string.ohos_id_text_font_family_medium'), FontWeight.Medium, 3, true, true);
+
+                    this.BuildSpan(this.privacyText[4].text, $r('sys.color.ohos_id_color_text_secondary'),
+                      $r('sys.string.ohos_id_text_font_family_regular'), FontWeight.Regular, 4);
+                  }
                 }
               }
+              .constraintSize({ minHeight: 24 });
             }
-            .constraintSize({ minHeight: 24 });
+            .alignItems(VerticalAlign.Top)
+            .width(Constants.FULL_SCREEN)
+            .justifyContent(FlexAlign.Center)
+            .margin({
+              bottom: 44,
+            });
           }
-          .alignItems(VerticalAlign.Top)
-          .width(Constants.FULL_SCREEN)
-          .justifyContent(FlexAlign.Center)
+          .justifyContent(FlexAlign.SpaceBetween)
+          .constraintSize({ minHeight: '100%' })
           .margin({
-            bottom: 44,
+            left: 16,
+            right: 16,
           });
-        }
-        .justifyContent(FlexAlign.SpaceBetween)
-        .constraintSize({ minHeight: '100%' })
-        .margin({
-          left: 16,
-          right: 16,
-        });
-      }.backgroundColor('#F1F3F5');
+        }.backgroundColor('#F1F3F5').edgeEffect(EdgeEffect.Spring).height('90%');
+      }
     }
     .hideTitleBar(true)
     .width('100%')
     .height('100%')
-    .onShown(() => {
-      if (this.customerDiaLogOpen) {
-        this.agreementDialog.open();
-      }
-    })
     .backgroundColor('#F1F3F5');
   }
 

@@ -1,0 +1,64 @@
+import { ComponentModifier } from '../utils/Modifier'
+import { LayoutParams, LayoutSetting } from 'lib_news_api'
+import { CommonConstants, FormatCount, SettingModel } from 'lib_common'
+import { PersistenceV2, UIUtils } from '@kit.ArkUI'
+import { NewsEnum } from 'lib_common/src/main/ets/constants/NewsEnum'
+import { CardViewModel } from '../viewModel/CardViewModel'
+
+@Builder
+export function VerticalBigImageCard(cardData: LayoutParams) {
+  NativeComponent({
+    cardData: cardData,
+  })
+}
+
+@ComponentV2
+struct NativeComponent {
+  @Param @Require cardData: LayoutParams
+  @Local layout: LayoutSetting = new LayoutSetting()
+  @Local settingInfo: SettingModel = PersistenceV2.connect(SettingModel, () => new SettingModel())!
+  @Local cardViewModel: CardViewModel = new CardViewModel()
+
+  aboutToAppear(): void {
+    this.cardData.nativeCardData = UIUtils.makeObserved(this.cardData.nativeCardData)
+    this.layout = this.cardData.layout
+  }
+
+  @Computed
+  get getSurface() {
+    return this.cardData.nativeCardData.type === NewsEnum.Video ?
+    this.cardData.nativeCardData?.postImgList?.[0].surfaceUrl :
+    this.cardData.nativeCardData?.postImgList?.[0].picVideoUrl
+  }
+
+  build() {
+    Stack({ alignContent: Alignment.BottomEnd }) {
+      Image(this.getSurface).objectFit(ImageFit.Fill)
+      Column({ space: CommonConstants.SPACE_S }) {
+        Flex({ alignItems: ItemAlign.Center }) {
+          Image($r('app.media.play_secondary')).width(14).height(14)
+            .margin({ right: 5 })
+          Text() {
+            Span(FormatCount.formatToK(Number(this.cardData.nativeCardData?.playCount)))
+            Span('次播放')
+          }
+          .fontSize(12 * this.settingInfo.fontSizeRatio)
+          .fontColor($r('sys.color.font_on_secondary'))
+        }
+
+        Text(this.cardData.nativeCardData?.title)
+          .fontSize(14 * this.settingInfo.fontSizeRatio)
+          .fontColor($r('sys.color.font_on_primary'))
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .width(CommonConstants.FULL_PERCENT)
+      .alignItems(HorizontalAlign.Start)
+      .padding({ left: 12, right: 12, bottom: 12 })
+    }
+    .attributeModifier(new ComponentModifier(this.layout.style)).clip(true)
+    .onClick(() => {
+      this.cardViewModel.pushToNewsDetails(this.cardData)
+    })
+  }
+}

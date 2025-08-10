@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import { Decimal } from '@kit.ArkTS';
 import { CalcConstants, Priority, SymbolicEnumeration } from './Constant';
 import CheckEmptyUtil from './CheckEmptyUtil';
 
@@ -238,7 +239,7 @@ class CalculateUtil {
     let rightLen = arg2.split(CalcConstants.DOTS)[1] ? arg2.split(CalcConstants.DOTS)[1].length : 0;
     if (mulFlag) {
       return Number(arg1.replace(CalcConstants.DOTS, '')) *
-        Number(arg2.replace(CalcConstants.DOTS, '')) / Math.pow(CalcConstants.TEN, leftLen + rightLen);
+      Number(arg2.replace(CalcConstants.DOTS, '')) / Math.pow(CalcConstants.TEN, leftLen + rightLen);
     }
     return Number(arg1.replace(CalcConstants.DOTS, '')) /
       (Number(arg2.replace(CalcConstants.DOTS, '')) / Math.pow(CalcConstants.TEN, rightLen - leftLen));
@@ -274,7 +275,8 @@ class CalculateUtil {
       return resultStr;
     }
     let suffix = (Math.floor(Math.log(result) / Math.LN10));
-    let prefix = (result * Math.pow(CalcConstants.TEN, -suffix) * prefixNumber);
+    let prefix = (new Decimal(result).mul(new Decimal(Math.pow(CalcConstants.TEN, -suffix)))
+      .mul(new Decimal(prefixNumber)));
     return (prefix + CalcConstants.E + suffix);
   }
 }

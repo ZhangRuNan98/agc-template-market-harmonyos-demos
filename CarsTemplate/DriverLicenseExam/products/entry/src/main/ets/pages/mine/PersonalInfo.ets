@@ -43,10 +43,12 @@ struct PersonalInfo {
               size: 16,
               color: '#000000',
             },
-          }).onChange((value: string) => {
-          if (value.length <= 10) {
-            this.nickName = value;
-          }        });
+          })
+          .onChange((value: string) => {
+            if (value.length <= 10) {
+              this.nickName = value;
+            }
+          });
       };
 
       Button('确定')
@@ -55,6 +57,14 @@ struct PersonalInfo {
         .width('100%')
         .margin({ left: 28, right: 28 })
         .onClick(() => {
+          const trimmedName = this.nickName.toString().trim();
+          if (!trimmedName) {
+            this.getUIContext().getPromptAction().showToast({
+              message: '昵称不能为空或空格',
+              alignment: Alignment.Bottom
+            })
+            return;
+          }
           const userInfo = AccountUtil.getUserInfo();
           userInfo.nickname = this.nickName;
           AccountUtil.setUserInfo(userInfo);

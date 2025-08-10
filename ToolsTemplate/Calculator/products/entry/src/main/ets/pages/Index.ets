@@ -10,9 +10,11 @@ struct Index {
   @Local selectIndex: number = 0;
   aboutToAppear() {
    let message = AppStorage.get('widget_router') ?? ''
-    if (!message) {
+    if (!message || message === 'all') {
       return
     }
+    // 直接点击卡片
+    RouterModule.getStack().clear();
     if (message === 'calculator') {
       this.selectIndex = 0;
     } else {

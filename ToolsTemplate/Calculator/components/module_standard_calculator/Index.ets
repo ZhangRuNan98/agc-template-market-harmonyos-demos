@@ -16,3 +16,5 @@
 export { StandardCalcKeyboard } from './src/main/ets/components/StandardCalcKeyboard'
 
 export { BUTTON_TYPE, CalculatorType, CalcConstants} from './src/main/ets/common/Constant'
+
+export { StandardCalculator } from './src/main/ets/components/StandardCalculator'

@@ -82,6 +82,7 @@ export struct PageGround {
         .width(CommonConstant.FULL_PERCENT);
       });
     }
+    .edgeEffect(EdgeEffect.Spring)
     .cachedCount(10)
     .columnsTemplate('1fr 1fr')
     .columnsGap(6)

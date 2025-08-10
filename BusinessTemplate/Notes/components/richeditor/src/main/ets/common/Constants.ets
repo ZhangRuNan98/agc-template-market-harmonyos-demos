@@ -1,4 +1,5 @@
-import { BusinessError } from '@kit.BasicServicesKit';
+export const SNAPSHOT_ID = 'SNAPSHOT_ID'
+export const RICH_ID = 'RICH_ID';
 
 // 原色滤镜
 export const ORIGIN_COLOR_FILTER: ColorFilter = [

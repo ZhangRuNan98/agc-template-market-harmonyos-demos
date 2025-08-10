@@ -1,0 +1,101 @@
+import { PersistenceV2, UIUtils } from '@kit.ArkUI'
+import {
+  CommonConstants,
+  FormatCount, RouterMap, RouterToNews, RouterUtils, SettingModel, TimeUtils, UserInfoModel } from 'lib_common'
+import { LayoutParams } from 'lib_news_api'
+import { Share } from 'module_share'
+import { FeedCard } from 'module_newsfeed'
+import { CardViewModel } from '../viewModel/CardViewModel'
+
+@Builder
+export function FeedDetailsCard(cardData: LayoutParams) {
+  NativeComponent({
+    cardData: cardData,
+  })
+}
+
+@ComponentV2
+export struct NativeComponent {
+  @Param @Require cardData: LayoutParams
+  @Local currentIndex: number = 0
+  @Local selectedId: string = '1'
+  @Local cardViewModel: CardViewModel = new CardViewModel()
+  @Local settingInfo: SettingModel = PersistenceV2.connect(SettingModel, () => new SettingModel())!
+  @Local userInfoModel: UserInfoModel = PersistenceV2.connect(UserInfoModel, () => new UserInfoModel())!;
+
+  aboutToAppear(): void {
+    this.cardViewModel.setAuthorId(this.cardData.nativeCardData.author.authorId)
+    this.cardData.nativeCardData = UIUtils.makeObserved(this.cardData.nativeCardData)
+  }
+
+  @Builder
+  shareCommentBuilder() {
+    Column({ space: CommonConstants.SPACE_XS }) {
+      Image($r('app.media.share_active'))
+        .width(21)
+        .height(21)
+        .fillColor($r('sys.color.font_primary'))
+      Text(FormatCount.formatToK(this.cardData.nativeCardData.shareCount))
+        .fontSize($r('sys.float.Caption_M'))
+        .fontColor($r('sys.color.font_primary'))
+    }
+  }
+
+  handlerCoverImage() {
+    return this.cardData.nativeCardData.postImgList?.[0]?.surfaceUrl ||
+      this.cardData.nativeCardData.postImgList?.[0]?.picVideoUrl
+  }
+
+  @Builder
+  shareBuilder() {
+    Share({
+      qrCodeInfo: {
+        id: this.cardData.nativeCardData.id,
+        type: this.cardData.nativeCardData.type,
+        title:this.cardData.nativeCardData.title,
+        createTime: TimeUtils.formatDate(this.cardData.nativeCardData.createTime, 'YYYY-MM-DD HH:MM'),
+        coverUrl:  this.handlerCoverImage(),
+        isVideo: !!this.cardData.nativeCardData.postImgList?.[0]?.surfaceUrl,
+        articleFrom: this.cardData.nativeCardData.articleFrom,
+      },
+      shareRenderBuilder: () => {
+        this.shareCommentBuilder()
+      },
+    })
+  }
+
+  build() {
+    Column() {
+      FeedCard({
+        componentId: 'home_news',
+        feedCardInfo: this.cardData.nativeCardData,
+        isAll: true,
+        isNeedOperation: false,
+        isNeedFollow: !!this.cardData.extraInfo?.isFollow,
+        showUserBar: this.cardData.extraInfo?.showUserBar as boolean ?? true,
+        showTimeBottom: this.cardData.extraInfo?.showTimeBottom as boolean ?? false,
+        fontSizeRatio: this.settingInfo.fontSizeRatio,
+        searchKey: this.cardData?.extraInfo?.searchKey as string,
+        onArticle: (type?: string) => {
+          this.cardViewModel.pushToNewsDetails(this.cardData,type)
+        },
+        onVideo:() => {
+          this.cardViewModel.pushToNewsDetails(this.cardData)
+        },
+        shareBuilder: () => this.shareBuilder,
+        onGoUserInfo: (authorId: string) => {
+          RouterUtils.pushPathByName(RouterMap.PROFILE_HOME, authorId)
+        },
+        onWatch: () => {
+          this.cardViewModel.watchOperation()
+        },
+        onLike: () => {
+          this.cardViewModel.likeOperation(this.cardData.nativeCardData)
+        },
+        onComment: () => {
+          RouterToNews.routerToNewsByDetails(this.cardData.nativeCardData, 'comment')
+        },
+      })
+    }
+  }
+}

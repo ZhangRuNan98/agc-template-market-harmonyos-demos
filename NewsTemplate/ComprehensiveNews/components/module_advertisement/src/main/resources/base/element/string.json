@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "page_show",
+      "value": "page from package"
+    },
+    {
+      "name": "reason",
+      "value": "获得oaid"
+    },
+    {
+      "name": "agcit_huawei_comprehensive_news_module_advertisement",
+      "value": "1.0.0"
+    },
+    {
+      "name": "agcittype_huawei_comprehensive_news_module_advertisement",
+      "value": "serviceComponent"
+    }
+  ]
+}

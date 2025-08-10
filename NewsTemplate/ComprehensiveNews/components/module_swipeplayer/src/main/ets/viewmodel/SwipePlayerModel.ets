@@ -1,0 +1,130 @@
+import { media } from '@kit.MediaKit';
+import { util } from '@kit.ArkTS';
+import { PlayerLayoutSize } from '../controller/PlayerLayoutSize';
+import { VideoPlayerModel } from './VideoPlayerModel';
+import { AVPlayerManager, AVPlayerSession } from '../controller/AVPlayerManager';
+import { VideoPlayerData } from '../type/Index';
+
+@ObservedV2
+export class SwipePlayerModel extends VideoPlayerModel {
+  // AVPlayer管理器
+  avPlayerManager: AVPlayerManager = new AVPlayerManager()
+  // 视频播放会话
+  playerSession: AVPlayerSession = new AVPlayerSession();
+  componentId: string = ''
+  xComponentId: string = ''
+  // 视频渲染尺寸
+  @Trace playerLayoutSize: PlayerLayoutSize = new PlayerLayoutSize();
+  // 是否从列表页点击卡片跳转过来
+  isFromList: boolean = false;
+  // 点击列表卡片的播放器实例
+  itemAVPlayer: media.AVPlayer | undefined
+  // 是否横屏
+  @Trace isLandscape: boolean = false
+  // 倍速
+  @Trace isAccelerate: boolean = false;
+  @Trace leftRateOpacity: number = 0;
+  @Trace rightRateOpacity: number = 1;
+
+  initPlayerManager(data: VideoPlayerData, videoItemPlayerSession?: AVPlayerSession) {
+    // 设置视频数据
+    this.setVideoData(data);
+    this.playerId = 'player_' + data.getVideoId() + util.generateRandomUUID();
+
+    if (this.index === 0 && videoItemPlayerSession) {
+      this.isFromList = true;
+      this.itemAVPlayer = videoItemPlayerSession!.avPlayer
+    }
+    this.avPlayerManager.setPlayerId(this.index, this.playerId);
+    this.avPlayerManager.setSession(this.playerId, this.playerSession!);
+  }
+
+  async initAVPlayer() {
+    if (this.isFromList && this.index === 0 && this.itemAVPlayer) {
+      this.showCover = false
+      this.isPause = false
+      this.itemAVPlayer!.surfaceId = this.surfaceId
+      this.itemAVPlayer.play()
+      this.playerSession.setAVPlayer(this.itemAVPlayer);
+      this.initPlayerListener(this.itemAVPlayer)
+      return
+    }
+    // 创建播放器
+    const avPlayer = await media.createAVPlayer();
+    if (avPlayer) {
+      this.playerSession.setAVPlayer(avPlayer);
+      // 设置视频url
+      this.setDataSource();
+      // 初始化监听事件
+      this.initPlayerListener(avPlayer)
+    }
+  }
+
+  initPlayerListener(avPlayer: media.AVPlayer) {
+    // 设置状态监听
+    this.onStateChangeListener(avPlayer);
+    // 设置播放器事件回调
+    this.setAVPlayerCallback(avPlayer);
+    // 设置音频事件回调
+    this.setAVPlayerInterruptCallback(avPlayer)
+  }
+
+  initXComponentId() {
+    this.componentId = 'VideoPlayer_' + this.playerId;
+    this.xComponentId = 'XComponentId' + this.playerId;
+  }
+
+  playOrPause() {
+    if (this.isPause) {
+      this.playerSession?.avPlayer?.play();
+    } else {
+      this.playerSession?.avPlayer?.pause();
+    }
+  }
+
+  // 是否显示全屏按钮
+  showFullScreenBtn(): boolean {
+    let height = Number(this.playerLayoutSize.getXComponentHeight())
+    let width = Number(this.playerLayoutSize.getXComponentWidth())
+    return height / width < 1
+  }
+
+  // 自适应视频尺寸
+  adaptiveVideoSize() {
+    let size = this.uiContext!.getComponentUtils().getRectangleById(this.componentId).size;
+    let playerLayoutWidth = size.width;
+    let playerLayoutHeight = size.height;
+
+    let videoRatio = Number(this.videoWidth) / Number(this.videoHeight);
+    let screenRatio = playerLayoutWidth / playerLayoutHeight;
+
+    let widthForVp = this.uiContext!.px2vp(Number(this.videoWidth) * playerLayoutHeight / Number(this.videoHeight))
+    let heightForVp = this.uiContext!.px2vp(playerLayoutHeight)
+    if (videoRatio > screenRatio) {
+      widthForVp = this.uiContext!.px2vp(playerLayoutWidth)
+      heightForVp = this.uiContext!.px2vp(Number(this.videoHeight) * playerLayoutWidth / Number(this.videoWidth))
+    }
+    this.playerLayoutSize.updateXComponentWidth(widthForVp);
+    this.playerLayoutSize.updateXComponentHeight(heightForVp);
+  }
+
+  // 长按加速
+  onLongPress(event: GestureEvent) {
+    if (this.playerSession?.avPlayer?.state === 'playing') {
+      // 快进图标显隐变化
+      this.leftRateOpacity = 1;
+      this.rightRateOpacity = 0;
+      if (event?.repeat) {
+        this.isAccelerate = true;
+        this.playerSession.avPlayer.setSpeed(media.PlaybackSpeed.SPEED_FORWARD_2_00_X)
+      }
+    }
+  }
+  // 取消长按
+  offLongPress() {
+    if (this.playerSession?.avPlayer?.state === 'playing') {
+      this.isAccelerate = false;
+      this.playerSession.avPlayer.setSpeed(media.PlaybackSpeed.SPEED_FORWARD_1_00_X)
+    }
+  }
+}

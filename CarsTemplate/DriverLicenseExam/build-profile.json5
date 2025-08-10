@@ -6,6 +6,7 @@
         "name": "default",
         "signingConfig": "default",
         "compatibleSdkVersion": "5.0.1(13)",
+        "targetSdkVersion": "5.0.1(13)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
@@ -17,7 +18,7 @@
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
@@ -47,11 +48,11 @@
     },
     {
       "name": "datasource",
-      "srcPath": "./commons/datasource",
+      "srcPath": "./commons/datasource"
     },
     {
       "name": "guide",
-      "srcPath": "./components/guide",
+      "srcPath": "./components/guide"
     },
     {
       "name": "module_city_select",
@@ -59,11 +60,11 @@
     },
     {
       "name": "exam",
-      "srcPath": "./components/exam",
+      "srcPath": "./components/exam"
     },
     {
       "name": "search",
-      "srcPath": "./components/search",
+      "srcPath": "./components/search"
     }
   ]
 }

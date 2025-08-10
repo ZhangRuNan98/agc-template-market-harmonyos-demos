@@ -10,8 +10,18 @@ export { AppUtil } from './src/main/ets/utils/AppUtil';
 
 export { DateConstants } from './src/main/ets/constants/DateConstants';
 
-export { CommonConstants } from './src/main/ets/constants/CommonConstants';
+export { readDataFromRawFile } from './src/main/ets/utils/ReadDataUtil';
 
-export { AccountUtil } from './src/main/ets/utils/AccountUtil';
+export { DialogUtil } from './src/main/ets/utils/DialogUtil';
 
-export { showToast } from './src/main/ets/utils/ShowToast';
+export { WantUtil } from './src/main/ets/utils/WantUtil';
+
+export { NotificationUtil } from './src/main/ets/utils/NotificationUtil';
+
+export { WindowUtil } from './src/main/ets/utils/WindowUtil';
+
+export { NotificationBasicOptions } from './src/main/ets/model/NotificationOptions';
+
+export { GlobalInfoModel, BreakpointTypeEnum } from './src/main/ets/model/GlobalInfoModel';
+
+export { BreakpointType } from './src/main/ets/utils/BreakpointSystem';

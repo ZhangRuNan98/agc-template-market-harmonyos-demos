@@ -73,16 +73,16 @@
       "value": "HUAWEI ID User Authentication Agreement"
     },
     {
-      "name":"and",
-      "value":" and "
+      "name": "and",
+      "value": " and "
     },
     {
-      "name":"end",
-      "value":"."
+      "name": "end",
+      "value": "."
     },
     {
-      "name":"read_and_agree",
-      "value":"read_and_agree"
+      "name": "read_and_agree",
+      "value": "read_and_agree"
     },
     {
       "name": "hwid_no_internet_connect",

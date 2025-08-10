@@ -52,8 +52,8 @@ export struct PushKit {
       },
     }),
   })
-  @Param @Require navPathStack:NavPathStack
   @Local unreadMessage:number = 0
+  @Event backPop: () => void = () => {}
 
   aboutToAppear(): void {
     for (let y = 0; y < 6; y++) {
@@ -77,7 +77,7 @@ export struct PushKit {
           .width('40vp')
           .margin({ right: '8vp' })
           .onClick(() => {
-            this.navPathStack.pop()
+            this.backPop()
           })
         Row() {
           Text('系统消息')

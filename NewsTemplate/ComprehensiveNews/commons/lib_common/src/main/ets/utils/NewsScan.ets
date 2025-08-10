@@ -1,0 +1,42 @@
+import { scanBarcode, scanCore } from '@kit.ScanKit';
+import { BusinessError } from '@kit.BasicServicesKit';
+import { promptAction, PromptAction } from '@kit.ArkUI';
+import { NewsEnum } from '../constants/NewsEnum';
+import { RouterToNews } from './NewsPushUtils';
+import { Logger } from './Logger';
+
+export class NewsScan {
+  static TAG: string = 'NewsScan'
+
+  public scan() {
+    // 定义扫码参数options
+    let options: scanBarcode.ScanOptions = {
+      scanTypes: [scanCore.ScanType.ALL],
+      enableMultiMode: true,
+      enableAlbum: true,
+    };
+    try {
+      // 可调用getContext接口获取当前页面关联的UIAbilityContext
+      scanBarcode.startScanForResult(getContext(this), options).then((result: scanBarcode.ScanResult) => {
+        // 解析码值结果跳转应用服务页
+        let resultParams: Record<string, string | NewsEnum> = JSON.parse(result.originalValue)
+        if(!resultParams?.articleId) {
+          promptAction.showToast({ message: '扫码错误，仅支持模板内文章海报生成的二维码' })
+          return
+        }
+        let routerParams = {
+          'id': resultParams?.articleId,
+        } as Record<string, string>
+        RouterToNews.routerToNewsById(routerParams.id)
+      }).catch((error: BusinessError) => {
+        promptAction.showToast({ message: '扫码错误' })
+        Logger.error(NewsScan.TAG, '[Scan CPSample]',
+          `Failed to get ScanResult by promise with options. Code:${error.code}, message: ${error.message}`);
+      });
+    } catch (error) {
+      promptAction.showToast({ message: '扫码错误' })
+      Logger.error(NewsScan.TAG, '[Scan CPSample]',
+        `Failed to start the scanning service. Code:${error.code}, message: ${error.message}`);
+    }
+  }
+}

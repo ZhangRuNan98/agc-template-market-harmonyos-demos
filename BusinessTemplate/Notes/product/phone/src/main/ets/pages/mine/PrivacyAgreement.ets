@@ -8,10 +8,10 @@ export function PrivacyAgreementBuilder() {
 
 @ComponentV2
 export struct PrivacyAgreement {
-  topRectHeight: number = 0;
   @Consumer('appPathStack') appPathStack: NavPathStack = new NavPathStack()
   controller: webview.WebviewController = new webview.WebviewController();
-  privacyAgreementPath : string = getContext(this).resourceManager.getStringSync($r('app.string.privacyAgreementPath'));
+  privacyAgreementPath : string = this.getUIContext().getHostContext()!.
+    resourceManager.getStringSync($r('app.string.privacyAgreementPath'));
 
   build() {
     NavDestination() {
@@ -21,9 +21,6 @@ export struct PrivacyAgreement {
         .geolocationAccess(false)
     }
     .hideTitleBar(true)
-    .margin({
-      top: px2vp(this.topRectHeight)
-    })
     .onReady((cxt: NavDestinationContext) => {
       let param = cxt.pathInfo.param as Record<string, Object>;
       if (ObjectUtil.isNotNull(param)) {

@@ -3,18 +3,22 @@
 ## 目录
 
 - [功能介绍](#功能介绍)
-- [环境要求](#环境要求)
-- [组件](#组件)
+- [约束与限制](#约束与限制)
 - [快速入门](#快速入门)
 - [示例效果](#示例效果)
-- [权限要求](#权限要求)
 - [开源许可协议](#开源许可协议)
 
 ## 功能介绍
 
-您可以基于此[模板](#模板)直接定制元服务，也可以挑选此模板中提供的多种[组件](#组件)使用，从而降低您的开发难度，提高您的开发效率。
+您可以基于此模板直接定制元服务，也可以挑选此模板中提供的多种组件使用，从而降低您的开发难度，提高您的开发效率。
 
-### 模板
+本模板中提供了多种组件，您可以按需选择合适的组件进行使用，所有组件存放在工程根目录的components下。
+
+| 组件                        | 描述                         | 使用指导                                             |
+|---------------------------|----------------------------|--------------------------------------------------|
+| 日期间隔与计算（module_date_calculation）  | 本组件提供日期之间计算能力，包括计算2个日期之间的天数，计算选中日期前后的时间等功能 | [使用指导](components/module_date_calculation/README.md)    |
+| 标准计算器（module_standard_calculator） | 提供标准计算器计算以及查看历史记录能力        | [使用指导](components/module_standard_calculator/README.md)     |
+
 本模板为计算器元服务提供了常用功能的开发样例，模板主要分为计算器、工具、和我的三大模块：
 
 - 计算器：主要提供标准计算器、查看历史记录等功能。
@@ -37,7 +41,7 @@
 计算器模板
  |-- 计算器
  |    |-- 计算器
- |    |-- 查看计算的历史记录
+ |    |-- 查看历史记录
  |-- 工具
  |    |-- 日期间隔
  |    |-- 日期计算
@@ -57,13 +61,13 @@ Calculator
 │     │  └──utils                            // 工具类
 │     └──Index.ets                           // 对外接口类
 ├──├──components                             // 公共组件
-│   ├──base_apis/src/main/ets                // 通用组件
+│   ├──module_base_apis/src/main/ets         // 通用组件
 │     │  └──apis                             // 基础函数
 │     │  └──components                       // 基础组件（模态框，弹窗，选择器等）
 │     │  └──model                            // 基础组件数据模型
 │     │  └──utils                            // 工具类
 │     └──Index.ets                           // 对外接口类
-│   ├──base_calendar                         // 日历组件
+│   ├──module_date_calculation               // 日历组件
 │     │  └──components                       // 基础组件（日期间隔，日期计算等）
 │     │  └──constants                        // 常量定义
 │     │  └──model                            // 基础组件数据模型
@@ -79,7 +83,6 @@ Calculator
 │  ├──business_home/src/main/ets             // 计算器
 │  │  ├──components                          
 │     │  ├──HomePage.ets                     // 计算器入口
-│     │  ├──HistoryResult.ets                // 查看历史记录入口
 │  ├──business_home/Index.ets                // 对外接口类
 │  ├──business_mine/src/main/ets             // 我的
 │     ├──components                          
@@ -106,16 +109,7 @@ Calculator
 ```
 
 
-## 组件
-
-本模板中提供了多种组件，您可以按需选择合适的组件进行使用，所有组件存放在工程根目录的components下。
-
-| 组件                        | 描述                              | 使用指导                                             |
-|---------------------------|---------------------------------|--------------------------------------------------|
-| 日期计算（DateToolsCalculate）  | 提供日期计算的相关能力，包括日期间隔，日期计算等功能 | [使用指导](components/date_calculation/README.md)    |
-| 标准计算器（StandardCalcKeyboard） | 提供标准计算器计算能力         | [使用指导](components/module_standard_calculator/README.md)     |
-
-## 环境要求
+## 约束与限制
 
 ### 软件
 
@@ -125,7 +119,7 @@ Calculator
 ### 硬件
 
 * 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+* HarmonyOS版本：HarmonyOS 5.0.4(16)及以上
 
 ## 快速入门
 
@@ -133,22 +127,30 @@ Calculator
 
 在运行此模板前，需要完成以下配置：
 
-1. 在AppGallery Connect创建应用，将包名配置到模板中。
+1. 在AppGallery Connect创建元服务，将包名配置到模板中。
 
-   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为元服务创建APPID，并将APP ID与元服务进行关联。
+   a. 参考[创建元服务](https://developer.huawei.com/consumer/cn/doc/app/agc-help-create-atomic-service-0000002247795706)为元服务创建APP ID，并将APP ID与元服务进行关联。
 
    b. 返回应用列表页面，查看元服务的包名。
 
-   c. 将工程根目录下AppScope/app.json5文件中的bundleName替换为创建元服务的包名。
+   c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建元服务的包名。
 
+
+2. 对元服务进行[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
 
 ### 运行调试工程
 
-1. 连接调试手机和PC。
+1. 用USB线连接调试手机和PC。
 
-2. 对元服务[手工签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
+2. 配置多模块调试：由于本模板存在多个模块，运行时需确保所有模块安装至调试设备。
 
-3. 菜单选择“Run > Run 'entry' ”或者“Run > Debug 'entry' ”，运行或调试模板工程。
+   a. 运行模块选择“entry”。
+
+   b. 下拉框选择“Edit Configurations”，在“Run/Debug Configurations”界面，选择“Deploy Multi Hap”页签，勾选上模板中所有模块。
+
+   ![调试步骤](screenshot/调试步骤.png)
+
+   c. 点击"Run"，运行模板工程。
 
 ## 示例效果
 
@@ -157,10 +159,6 @@ Calculator
 - [工具](./screenshot/tool.mp4)
 
 - [我的](./screenshot/mine.mp4)
-
-## 权限要求
-
-无
 
 ## 开源许可协议
 

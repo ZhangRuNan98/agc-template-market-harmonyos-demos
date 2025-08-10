@@ -54,7 +54,7 @@ struct DrawLock {
             .onPatternComplete((input: number[]) => {
               // 输入密码长度小于5位时，提示错误
               if (!input || input.length < 5) {
-                this.message = '图形密码长度需大于5位，请确认！';
+                this.message = '图形密码长度需不少于5位，请确认！';
                 // 设置图案密码错误
                 this.patternLockController?.setChallengeResult(PatternLockChallengeResult.WRONG);
                 setTimeout(() => {

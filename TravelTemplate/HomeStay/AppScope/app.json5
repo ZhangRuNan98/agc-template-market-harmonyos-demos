@@ -1,6 +1,7 @@
 {
   "app": {
-    "bundleName": "xxx.xxx.xxx",
+    // todo 替换为您创建的应用的包名
+    "bundleName": "com.huawei.xxx",
     "vendor": "example",
     "versionCode": 1000000,
     "versionName": "1.0.0",

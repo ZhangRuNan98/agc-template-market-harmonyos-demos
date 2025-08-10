@@ -21,7 +21,7 @@
 - DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
 - HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
 - 设备类型：华为手机（直板机）
-- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+- HarmonyOS版本：HarmonyOS 5.0.4(16)及以上
 
 ## 快速入门
 
@@ -47,8 +47,8 @@
     ```typescript
     // xxx为组件存放的目录名称
     "dependencies": {
-      "reader_tool_bar": "file:../xxx/reader_tool_bar",
-      "base_common": "file:../xxx/base_common"
+      "reader_tool_bar": "file:./xxx/reader_tool_bar",
+      "base_common": "file:./xxx/base_common"
     }
     ```
 

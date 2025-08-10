@@ -1,5 +1,5 @@
 import { Constants } from '../constant/Constants';
-import { CalendarOption, DateModel, Price } from '../model/DateModel';
+import { DateModel, Price } from '../model/DateModel';
 import { CustomCalendarPickerDialog } from '../components/CustomCalendarPickerDialog';
 import { CalendarUtil } from '../utils/CalendarUtil';
 

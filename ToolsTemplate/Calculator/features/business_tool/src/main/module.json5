@@ -1,9 +1,11 @@
 {
   "module": {
     "name": "business_tool",
-    "type": "har",
+    "type": "shared",
     "deviceTypes": [
       "default"
-    ]
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": true
   }
 }

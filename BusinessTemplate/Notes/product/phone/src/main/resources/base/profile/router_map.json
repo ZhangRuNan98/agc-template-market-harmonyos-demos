@@ -12,14 +12,6 @@
       "name": "MineView",
       "pageSourceFile": "src/main/ets/pages/mine/MineView.ets",
       "buildFunction": "MineViewBuilder"
-    },{
-      "name": "QuickLoginPage",
-      "pageSourceFile": "src/main/ets/pages/mine/QuickLoginPage.ets",
-      "buildFunction": "QuickLoginPageBuilder"
-    },{
-      "name": "UserInfoPage",
-      "pageSourceFile": "src/main/ets/pages/mine/UserInfoPage.ets",
-      "buildFunction": "UserInfoBuilder"
     },
     {
       "name": "Trash",
@@ -40,6 +32,51 @@
       "name": "SecretSetting",
       "pageSourceFile": "src/main/ets/pages/mine/SecretSetting.ets",
       "buildFunction": "SecretSettingBuilder"
+    },
+    {
+      "name": "DeleteNoteDialog",
+      "pageSourceFile": "src/main/ets/dialog/DeleteNoteDialog.ets",
+      "buildFunction": "DeleteNoteDialogBuilder"
+    },
+    {
+      "name": "CompleteDeleteNoteDialog",
+      "pageSourceFile": "src/main/ets/dialog/CompleteDeleteNoteDialog.ets",
+      "buildFunction": "CompleteDeleteNoteDialogBuilder"
+    },
+    {
+      "name": "RecoveryNoteDialog",
+      "pageSourceFile": "src/main/ets/dialog/RecoveryNoteDialog.ets",
+      "buildFunction": "RecoveryNoteDialogBuilder"
+    },
+    {
+      "name": "FeedBackPage",
+      "pageSourceFile": "src/main/ets/pages/mine/FeedBackPage.ets",
+      "buildFunction": "FeedBackPageBuilder"
+    },
+    {
+      "name": "FeedBackChoose",
+      "pageSourceFile": "src/main/ets/pages/mine/FeedBackChoose.ets",
+      "buildFunction": "FeedBackChooseBuilder"
+    },
+    {
+      "name": "FeedbackRecordPage",
+      "pageSourceFile": "src/main/ets/pages/mine/FeedbackRecordPage.ets",
+      "buildFunction": "FeedbackRecordPageBuilder"
+    },
+    {
+      "name": "LogOutDialog",
+      "pageSourceFile": "src/main/ets/dialog/LogOutDialog.ets",
+      "buildFunction": "LogOutDialogBuilder"
+    },
+    {
+      "name": "PrivacySetting",
+      "pageSourceFile": "src/main/ets/pages/mine/PrivacySetting.ets",
+      "buildFunction": "PrivacySettingBuilder"
+    },
+    {
+      "name": "AboutUs",
+      "pageSourceFile": "src/main/ets/pages/mine/AboutUs.ets",
+      "buildFunction": "AboutUsBuilder"
     }
   ]
 }

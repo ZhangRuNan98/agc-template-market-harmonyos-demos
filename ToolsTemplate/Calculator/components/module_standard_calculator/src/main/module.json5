@@ -2,6 +2,7 @@
   "module": {
     "name": "module_standard_calculator",
     "type": "har",
+    "routerMap": "$profile:route_map",
     "deviceTypes": [
       "default"
     ]

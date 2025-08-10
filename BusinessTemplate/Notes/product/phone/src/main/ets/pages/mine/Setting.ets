@@ -1,160 +1,132 @@
-import { AccountUtil, CommonConstants } from '@ohos_agcit/notes_utils';
-import { rightArrow } from '../../components/RightArrow';
-import { buffer } from '@kit.ArkTS';
-import { hilog } from '@kit.PerformanceAnalysisKit';
-import { CustomContentDialog } from '@kit.ArkUI';
+import { AppUtil, BreakpointType, GlobalInfoModel, DialogUtil} from '@ohos_agcit/notes_utils';
+import { MergeArrow,
+  DarkModeToggle,
+  NoticeToggle, SingleArrow } from '../../components/SettingComponents';
+import { AppStorageV2, ComponentContent } from '@kit.ArkUI';
+import { checkUpdate, findNewVersion, Params } from 'check_app_update';
+import { ThemeController } from '../../controller/ThemeController';
+import { UserInfo } from 'login';
 
 @Builder
 export function SettingBuilder() {
-  SettingPage();
+  Setting();
 }
-const PRIVACY_URL = 'privacy_url';
-
-@Entry
+let themeController: ThemeController = ThemeController.instance;
 @ComponentV2
-export struct SettingPage {
+export struct Setting {
   @Consumer('appPathStack') appPathStack: NavPathStack = new NavPathStack();
-
-  logTag: string = 'AboutPage';
-  domainId: number = 0x0000;
-
-  // 退出登录对话框
-  logOutDialogController: CustomDialogController = new CustomDialogController({
-    builder: CustomContentDialog({
-      primaryTitle: '账号退出登录',
-      contentBuilder: () => {
-        this.logOutContent();
-      },
-      buttons: [
-        {
-          value: $r('app.string.cancel'),
-          buttonStyle: ButtonStyleMode.TEXTUAL,
-          action: () => {
-            this.logOutDialogController.close();
-          },
-        },
-        {
-          value: $r('app.string.confirm'),
-          buttonStyle: ButtonStyleMode.TEXTUAL,
-          action: () => {
-            AccountUtil.loginOut();
-            this.appPathStack.pop();
-          },
-        },
-      ],
-    }),
-  });
-
-  // 退出登陆
-  @Builder
-  logOutContent() {
-    Column() {
-      Row() {
-        Text('请确认是否退出当前账户？')
-          .fontSize(14);
-      };
-    }
-    .width('100%')
-    .borderRadius(16)
-    .margin({
-      left: '4%',
-      right: '4%',
-      bottom: 5,
-    });
-  }
+  private userInfo: UserInfo = UserInfo.instance;
+  @Local globalInfo: GlobalInfoModel =
+    AppStorageV2.connect<GlobalInfoModel>(GlobalInfoModel, () => new GlobalInfoModel())!;
 
   build() {
     NavDestination() {
-      Column({space: 17}){
-        Row() {
-          Text('隐私协议')
-            .textExtend();
-          Blank();
-          rightArrow()
-        }
-        .borderRadius(16)
-        .height(46)
-        .backgroundColor(Color.White)
-        .width(CommonConstants.FULL_PERCENT)
-        .onClick(() => {
-          const params: Record<string, Object> = { 'protocolUrl': this.getProtocolUrl(PRIVACY_URL) };
-          this.appPathStack.pushPathByName('PrivacyAgreement', params);
-        })
-        .padding({
-          left: 12,
-          right: 12
-        })
+      Column(){
+        Scroll(){
+          Column({ space: 17 }) {
+            SingleArrow({
+              text: '保密设置',
+            })
+              .onClick(() => {
+                this.appPathStack.pushPathByName('SecretSetting', undefined);
+              });
 
-        Row() {
-          Text('保密设置')
-            .textExtend();
-          Blank();
-          rightArrow()
-        }
-        .borderRadius(16)
-        .height(46)
-        .backgroundColor(Color.White)
-        .width(CommonConstants.FULL_PERCENT)
-        .onClick(() => {
-          this.appPathStack.pushPathByName('SecretSetting', undefined);
-        })
-        .padding({
-          left: 12,
-          right: 12
-        })
+            SingleArrow({
+              text: '隐私设置',
+            })
+              .onClick(() => {
+                this.appPathStack.pushPathByName('PrivacySetting', undefined);
+              });
 
-        Row() {
-          Text($r('app.string.log_out'))
-            .textExtend();
-          Blank();
-          rightArrow()
+            NoticeToggle({
+              text: '通知开关'
+            });
+
+            DarkModeToggle()
+
+            MergeArrow({
+              text1: '检测版本',
+              text1Click: () => {
+                checkUpdateFunc();
+              },
+              text2: '关于我们',
+              text2Click: () => {
+                this.appPathStack.pushPathByName('AboutUs', undefined);
+              },
+            });
+
+            Blank()
+              .layoutWeight(1)
+
+            if (this.userInfo.isLogin){
+              Button('退出登录')
+                .width('100%')
+                .height(40)
+                .fontWeight(FontWeight.Medium)
+                .backgroundColor($r('sys.color.comp_background_tertiary'))
+                .fontColor($r('sys.color.font_primary'))
+                .margin({
+                  bottom: 44,
+                })
+                .onClick(() => {
+                  this.appPathStack.pushPathByName('LogOutDialog', undefined);
+                });
+            }
+          }
+          .width('100%')
         }
-        .borderRadius(16)
-        .height(46)
-        .backgroundColor(Color.White)
-        .width(CommonConstants.FULL_PERCENT)
-        .onClick(() => {
-          this.logOutDialogController.open();
-        })
-        .padding({
-          left: 12,
-          right: 12
-        })
-        .visibility(AccountUtil.getUserInfo().phone === '' ? Visibility.None : Visibility.Visible)
+        .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring)
       }
-      .width(CommonConstants.FULL_PERCENT)
-      .height(CommonConstants.FULL_PERCENT)
-      .padding({
-        top: 10,
-        left: '4%',
-        right: '4%'
-      })
-
-
+      .height('100%')
+      .padding(new BreakpointType<Padding>({
+        sm: {
+          top: 10,
+          left: $r('sys.float.padding_level8'),
+          right: $r('sys.float.padding_level8'),
+        },
+        md: {
+          top: 10,
+          left: $r('sys.float.padding_level12'),
+          right: $r('sys.float.padding_level12'),
+        },
+        lg: {
+          top: 10,
+          left: $r('sys.float.padding_level16'),
+          right: $r('sys.float.padding_level16'),
+        },
+      }).getValue(this.globalInfo.currentBreakpoint))
     }
-    .backgroundColor('#F1F3F5')
-    .title('设置')
-  }
-
-  getProtocolUrl(privacyUrl: string): string {
-    try {
-      // Read files from /AppScope/resources/rawfile.
-      const value: Uint8Array = getContext().resourceManager.getRawFileContentSync('data.json');
-      // Return the link to the HUAWEI ID User Authentication Agreement.
-      return JSON.parse(buffer.from(value.buffer).toString())[privacyUrl] as string;
-    } catch (error) {
-      hilog.error(this.domainId, this.logTag,
-        `getProtocolUrl Error. errCode is ${error.code}, errMessage is ${error.message}`);
-      return '';
-    }
+    .backgroundColor($r('sys.color.background_secondary'))
+    .title('设置');
   }
 }
 
-@Extend(Text)
-function textExtend() {
-  .fontSize(16)
-  .fontFamily('鸿蒙黑体')
-  .fontWeight(FontWeight.Medium)
-  .opacity(0.9)
-  .fontColor($r('sys.color.black'));
+/**
+ * 发现新版本
+ * @param ctx
+ */
+export function checkUpdateFunc() {
+  checkUpdate(AppUtil.getContext())
+    .then(version => {
+      // 0 不存在新版本， 1 存在新版本
+      if (version === 1) {
+        showNewVersionDialog(version);
+      } else {
+        // mock 新版本
+        showNewVersionDialog(version);
+      }
+    });
+}
+
+/**
+ * 发现新版本弹窗
+ * @param version
+ */
+export function showNewVersionDialog(version: number) {
+  let contentNode: ComponentContent<object> =
+    new ComponentContent(AppUtil.getUIContext(), wrapBuilder(findNewVersion),
+      new Params(version, themeController.dialogBgWhite));
+  DialogUtil.setOptions({ alignment: DialogAlignment.Center, offset: { dx: 0, dy: 100 } });
+  DialogUtil.openDialog(AppUtil.getUIContext(), contentNode);
 }

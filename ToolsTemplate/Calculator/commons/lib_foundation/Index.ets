@@ -17,6 +17,8 @@ export { RouterModule, NavRouterInfo } from './src/main/ets/router/RouterModule'
 
 export * from './src/main/ets/common/Constant';
 
-export { HistoryUtils, HistoryItem } from './src/main/ets/utils/HistoryUtils';
-
 export { Logger } from './src/main/ets/utils/Logger';
+
+export  { BaseTitleBuilder } from './src/main/ets/components/BaseTitleBuilder'
+
+export  { BaseNavTitle } from './src/main/ets/components/BaseNavTitle'

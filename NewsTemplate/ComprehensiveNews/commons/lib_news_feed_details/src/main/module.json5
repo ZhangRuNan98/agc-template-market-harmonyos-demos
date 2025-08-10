@@ -1,0 +1,13 @@
+{
+  "module": {
+    "name": "lib_news_feed_details",
+    "type": "har",
+    "routerMap": "$profile:route_map",
+    "deviceTypes": [
+      "default",
+      "tablet",
+      "2in1",
+      "wearable"
+    ]
+  }
+}

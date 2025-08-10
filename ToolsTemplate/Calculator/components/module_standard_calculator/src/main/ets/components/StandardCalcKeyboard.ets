@@ -1,6 +1,8 @@
+import {  common } from '@kit.AbilityKit';
+import { Logger } from 'module_base_apis';
 import { BUTTON_TYPE, CalcConstants, Symbol } from '../common/Constant';
 import { CalcButtonItemModel } from '../model/CalcButtonItemModel'
-import { HistoryUtils, Logger } from 'lib_foundation';
+import { HistoryUtils } from '../utils/HistoryUtils';
 import CheckEmptyUtil from '../common/CheckEmptyUtil';
 import CalculateUtil from '../common/CalculateUtil';
 
@@ -13,7 +15,9 @@ export struct StandardCalcKeyboard {
   @Local arr: string[] = []
   @Local lastBtnIsEqu: boolean = false
   @Local isClickEquBtn: boolean = false
-  @Event changeResult: (result:string, expression: string) => void = (result:string, expression: string) => {}
+  context: common.Context = getContext(this) as common.UIAbilityContext;
+  @Event changeResult: (result: string, expression: string) => void = (result: string, expression: string) => {
+  }
   calcButtonItemModel: CalcButtonItemModel[] = [
     new CalcButtonItemModel($r('app.media.ic_standard_delete'), 'del', BUTTON_TYPE.LETTERS, 0),
     new CalcButtonItemModel($r('app.media.ic_standard_clear'), 'C', BUTTON_TYPE.LETTERS, 2),
@@ -68,12 +72,17 @@ export struct StandardCalcKeyboard {
       ForEach(this.calcButtonItemModel, (item: CalcButtonItemModel) => {
         GridItem() {
           Column() {
-            Image(item.iconUrl).objectFit(ImageFit.Contain).height(70).width(item.value === '0' ? 155: 70)
+            Image(item.iconUrl).objectFit(ImageFit.Contain).height(70).width(item.value === '0' ? 155 : 70)
           }
         }
         .onClick(() => {
           // 根据flag判断是数字还是符号
           if (item.flag === 0 || item.flag === 2 || item.flag === 3) {
+            // 如果表达式没有值，同时calValue有值且不为0，
+            if (!this.expressions.length && item.flag === 2 && !CheckEmptyUtil.isEmpty(this.inputValue) &&
+              this.inputValue !== '0') {
+              this.expressions.push(this.inputValue);
+            }
             this.inputSymbol(item.value);
           } else {
             if (this.lastBtnIsEqu) {
@@ -115,6 +124,7 @@ export struct StandardCalcKeyboard {
         break;
       case Symbol.EQU:
         if (len === 0) {
+          this.calValue = this.inputValue;
           return;
         }
         this.getResult().then((result: boolean) => {
@@ -146,10 +156,11 @@ export struct StandardCalcKeyboard {
     if (CheckEmptyUtil.isEmpty(value) || (!this.expressions.length && value === '.')) {
       return;
     }
-    if (value === '.' && CalculateUtil.isSymbol(this.expressions[this.expressions.length - 1])) {
+    let len = this.expressions.length;
+    if ([CalcConstants.PERCENT_SIGN, CalcConstants.DOTS].includes(value) &&
+        CalculateUtil.isSymbol(this.expressions[len - 1])) {
       return;
     }
-    let len = this.expressions.length;
     let last = len > 0 ? this.expressions[len - 1] : '';
     let secondLast = len > 1 ? this.expressions[len - CalcConstants.TWO] : undefined;
     if (!this.validateEnter(last, value)) {
@@ -181,9 +192,6 @@ export struct StandardCalcKeyboard {
    */
   validateEnter(last: string, value: string) {
     if (!last && value === CalcConstants.PERCENT_SIGN) {
-      return false;
-    }
-    if ((last === CalcConstants.MIN) && (value === CalcConstants.PERCENT_SIGN)) {
       return false;
     }
     if (last.endsWith(CalcConstants.PERCENT_SIGN)) {
@@ -222,7 +230,11 @@ export struct StandardCalcKeyboard {
       this.calValue = '0';
       return;
     }
-    this.getResult();
+    if (!CalculateUtil.isSymbol(this.expressions[len - 1])) {
+      this.getResult();
+    } else {
+      this.calValue = '';
+    }
   }
 
   /**
@@ -309,6 +321,9 @@ export struct StandardCalcKeyboard {
    * @return Whether the result is incorrect.
    */
   async getResult() {
+    if (this.expressions.length === 1 || CalculateUtil.isSymbol(this.expressions[this.expressions.length - 1])) {
+      return false;
+    }
     let calResult = CalculateUtil.parseExpression(this.deepCopy());
     if (calResult === 'NaN' || calResult === 'null' || CalculateUtil.isSymbol(calResult)) {
       this.calValue = this.resourceToString($r('app.string.error'));
@@ -341,7 +356,7 @@ export struct StandardCalcKeyboard {
     }
     let result = '';
     try {
-      result = getContext(this).resourceManager.getStringSync(resource.id);
+      result = this.context.resourceManager.getStringSync(resource);
     } catch (error) {
       Logger.error('[CalculateModel] getResourceString fail: ' + JSON.stringify(error))
     }

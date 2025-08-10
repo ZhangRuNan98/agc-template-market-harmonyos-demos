@@ -13,46 +13,6 @@
       "value": "笔记模板"
     },
     {
-      "name": "huawei_user",
-      "value": "华为用户"
-    },
-    {
-      "name": "app_user_agreement",
-      "value": "《用户协议》"
-    },
-    {
-      "name": "app_privacy_policy",
-      "value": "《隐私政策》"
-    },
-    {
-      "name": "huaweiId_user_authentication_protocol",
-      "value": "《华为账号用户认证协议》"
-    },
-    {
-      "name":"and",
-      "value":"和"
-    },
-    {
-      "name":"end",
-      "value":"。"
-    },
-    {
-      "name":"read_and_agree",
-      "value":"已阅读并同意"
-    },
-    {
-      "name": "hwid_no_internet_connect",
-      "value": "网络未连接，请检查网络设置"
-    },
-    {
-      "name": "bind_huaweiId_number",
-      "value": "华为账号绑定号码"
-    },
-    {
-      "name": "read_and_agree_protocol",
-      "value": "请先阅读并同意协议"
-    },
-    {
       "name": "avatar",
       "value": "头像"
     },
@@ -114,7 +74,11 @@
     },
     {
       "name": "search_note",
-      "value": "请输入你想搜索的笔记"
+      "value": "请输入关键字搜索"
+    },
+    {
+      "name": "searchtrash_note",
+      "value": "请输入关键字搜索"
     },
     {
       "name": "delete_note",
@@ -145,14 +109,6 @@
       "value": "放弃修改"
     },
     {
-      "name": "save",
-      "value": "保存修改"
-    },
-    {
-      "name": "save_tip",
-      "value": "还有未保存的内容哦，要保存吗？"
-    },
-    {
       "name": "editor",
       "value": "编辑"
     },
@@ -163,6 +119,14 @@
     {
       "name": "privacyAgreementPath",
       "value": "https://developer.huawei.com/"
+    },
+    {
+      "name": "earliest_in_trash",
+      "value": "最早进入回收站时间"
+    },
+    {
+      "name": "latest_in_trash",
+      "value": "最迟进入回收站时间"
     }
   ]
 }

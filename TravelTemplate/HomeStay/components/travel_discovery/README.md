@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -13,42 +14,59 @@
 
 <img src="screenshots/discovery.jpg" width="300">
 
-## 使用
+## 约束与限制
+### 环境
+* DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.1 Release SDK及以上
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.1(13)及以上
 
+### 权限
+* 无
+
+## 快速入门
 1. 安装组件。
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
 
-   需要将模板根目录的components下[travel_discovery](../travel_discovery)目录拷贝至您工程根目录components/，并添加依赖和module声明。
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
 
-```
-// main/oh-package.json5
-"dependencies": {
-  "travel_discovery": "file:../components/travel_discovery"
-}
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的xxx目录下。
 
-// build-profile.json5
-"modules": [
-  {
-    "name": "travel_discovery",
-    "srcPath": "./components/travel_discovery",
-  }
-]
-```
+   b. 在项目根目录build-profile.json5并添加travel_discovery模块
+   ```
+   "modules": [
+   {
+      "name": "travel_discovery",
+      "srcPath": "./xxx/travel_discovery",
+      }
+   ]
+   ```
+   c. 在项目根目录oh-package.json5中添加依赖
+   ```
+   "dependencies": {
+      "travel_discovery": "file:./xxx/travel_discovery"
+   }
+   ```
 
 2. 引入组件。
 
-```
-import { PageGround } from 'travel_discovery';
-```
+   ```
+   import { PageGround } from 'travel_discovery';
+   ```
 
 ## API参考
 
-### PageGround(isShowBack: boolean)
+### 接口
+
+PageGround(isShowBack: boolean)
+
+游记组件。
 
 #### 参数说明
 
-| 参数名              | 类型                                | 必填 | 说明     |
-|:-----------------|:----------------------------------|:---|:-------|
-| isShowBack       | boolean                       | 是  | 是否展示返回 |
+| 参数名              | 类型                                | 是否必填 | 说明     |
+|:-----------------|:----------------------------------|:-----|:-------|
+| isShowBack       | boolean                       | 是    | 是否展示返回 |
 
 ## 示例代码
 

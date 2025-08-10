@@ -1,13 +1,14 @@
 {
   "app": {
     "signingConfigs": [
-
+      // todo 请配置您的手动签名信息
     ],
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "5.0.0(12)",
+        "targetSdkVersion": "5.0.1(13)",
+        "compatibleSdkVersion": "5.0.1(13)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
@@ -179,5 +180,5 @@
       "name": "travel_map",
       "srcPath": "./components/travel_map",
     }
-  ]
+  ],
 }

@@ -24,9 +24,9 @@ struct SearchPage {
           appPathStack: this.vm.navStack,
           hotSearchBuilder: this.hotSearch.bind(this),
           historySearchBuilder: this.historySearch.bind(this),
-          searchResultBuilder: this.searchResult,
+          searchResultBuilder: this.searchResult.bind(this),
           getSearchResult: this.getSearchResult.bind(this),
-        });
+        })
       }
       .width('100%')
       .height('100%')
@@ -42,7 +42,7 @@ struct SearchPage {
       this.searchController.isShowResult = false;
       this.vm.navStack.pop();
       return true;
-    });
+    })
   }
 
   @Builder

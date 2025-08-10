@@ -88,7 +88,7 @@ export struct HotelDetail {
                 };
               };
             };
-          }.height('75%').align(Alignment.Top).scrollBar(BarState.Off);
+          }.height('75%').align(Alignment.Top).scrollBar(BarState.Off).edgeEffect(EdgeEffect.Spring);
         };
 
         Row() {

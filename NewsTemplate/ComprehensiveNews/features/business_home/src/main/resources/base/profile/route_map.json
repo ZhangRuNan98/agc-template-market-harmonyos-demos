@@ -1,0 +1,14 @@
+{
+  "routerMap": [
+    {
+      "name": "HomePage",
+      "pageSourceFile": "src/main/ets/pages/HomePage.ets",
+      "buildFunction": "HomePageBuilder"
+    },
+    {
+      "name": "NewsSearch",
+      "pageSourceFile": "src/main/ets/components/NewsSearch.ets",
+      "buildFunction": "NewsSearchBuilder"
+    }
+  ]
+}

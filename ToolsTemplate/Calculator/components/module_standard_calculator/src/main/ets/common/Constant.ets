@@ -215,3 +215,6 @@ export enum SymbolicEnumeration {
   MUL = '×',
   DIV = '÷'
 }
+export enum AppStorageMap {
+  HISTORY_RESULT = 'historyResult',
+}

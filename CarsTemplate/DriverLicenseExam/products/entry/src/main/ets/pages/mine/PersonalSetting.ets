@@ -82,7 +82,7 @@ struct PersonalSetting {
           .onClick(() => {
             this.vm.navStack.pushPathByName('PrivacyAgreement', undefined)
           })
-          .width(328)
+          .width('100%')
           .height(61)
           .justifyContent(FlexAlign.SpaceBetween)
           .alignItems(VerticalAlign.Center)
@@ -104,7 +104,7 @@ struct PersonalSetting {
           .onClick(() => {
             this.vm.navStack.pushPathByName('PrivacyAgreement', undefined)
           })
-          .width(328)
+          .width('100%')
           .height(61)
           .justifyContent(FlexAlign.SpaceBetween)
           .alignItems(VerticalAlign.Center)
@@ -114,7 +114,6 @@ struct PersonalSetting {
         }
         .width(CommonConstants.FULL_WIDTH)
 
-
         Blank()
         Row() {
           Text($r('app.string.log_out'))
@@ -123,7 +122,7 @@ struct PersonalSetting {
             .fontWeight(FontWeight.Medium)
         }
         .justifyContent(FlexAlign.Center)
-        .width(304)
+        .width('94%')
         .height(40)
         .borderRadius(20)
         .backgroundColor('#808080')
@@ -132,7 +131,6 @@ struct PersonalSetting {
           right: 28,
           bottom: 50
         })
-
         .onClick(() => {
           this.logOutDialogController.open();
         })

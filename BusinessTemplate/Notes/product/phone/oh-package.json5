@@ -9,7 +9,10 @@
     "@ohos_agcit/notes_utils": "../../common/utils",
     "@ohos_agcit/notes_datasource": "../../common/datasource",
     "secretlock": "../../components/secretlock",
-    "richeditor": "../../components/richeditor"
+    "login": "../../components/login",
+    "richeditor": "../../components/richeditor",
+    "check_app_update": "../../components/check_app_update",
+    "feed_back": "../../components/feed_back",
   }
 }
 

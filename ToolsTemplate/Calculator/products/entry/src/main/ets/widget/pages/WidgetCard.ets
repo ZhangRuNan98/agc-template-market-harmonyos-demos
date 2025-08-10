@@ -1,5 +1,3 @@
-import { HistoryUtils } from 'lib_foundation';
-
 @Entry
 @Component
 struct WidgetCard {
@@ -76,7 +74,7 @@ struct WidgetCard {
         action: this.actionType,
         abilityName: this.abilityName,
         params: {
-          message: 'calculator'
+          message: 'all'
         }
       });
     })

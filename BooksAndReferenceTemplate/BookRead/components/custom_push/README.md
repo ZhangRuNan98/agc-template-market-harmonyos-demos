@@ -12,14 +12,14 @@
 
 本组件提供了推送组件功能，**其中消息中心数据均为mock数据，实际开发中可以做借鉴使用，具体推送请对接实际业务**
 
-<img src="./screenshot/pushKit.jpg" width="300">
+<img src="./screenshot/custom_push.jpeg" width="300">
 
 ## 约束与限制
 ### 环境
 * DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
 * HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
 * 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+* HarmonyOS版本：HarmonyOS 5.0.4(16)及以上
 
 ### 调试
 
@@ -50,7 +50,7 @@
    ```typescript
    // xxx为组件存放的目录名称
     "dependencies": {
-     "custom_push": "file:../xxx/custom_push",
+     "custom_push": "file:./xxx/custom_push",
    }
    ```
    
@@ -101,11 +101,11 @@
    
 5. 配置skills标签。
 
-   在主模块入口(src\main\ets\entryability\EntryAbility.ets)的中查看不同的能力：
+   在主模块入口(src\main\ets\entryability\module.json5)的中查看不同的能力：
    - "actions": "action.system.home"进入应用首页
    - "actions": "com.test.action"进入应用首页
-   
-   为EntryAbility-skill-action字段赋值。
+
+   为module.json5文件中skills-->actions新增action。
    ```json5
    "skills": [
           {
@@ -138,6 +138,36 @@
    运行JsonWebTokenFactory.java即可收到推送。
    
 8. 修改推送内容(custom_push\src\main\ets\pushKitForJava\messageBody.json)，详细参考[发送通知消息](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/push-send-alert)开发步骤4请求示例。
+
+   推送内容示例，本示例通过title、body、actionType实现打开应用首页并设置标题为BookReadTitle，内容为BookReadContent。
+
+```json5
+   {
+   "payload": {
+      "notification": {
+         "category": "EXPRESS",
+         "title": "BookReadTitle",
+         "body": "内容为BookReadContent",
+         "badge": {
+            "addNum": 1,
+            "setNum": 1
+         },
+         "clickAction": {
+            "actionType": 0,
+            "action": "com.test.action",
+            "pushData": {
+               "pushContent": "亲爱的用户您好~2025.06.26 24:00:00-02:00进行安全升级，部分评价功能将无法使用，给您带来不便万分抱歉！感谢您的理解和支持！",
+               "time": "2小时前"
+            }
+         },
+         "foregroundShow": true
+      }
+   },
+   "target": {
+      "token": ["xxx"]
+   }
+}
+```
 
 9. 推送流程。
 
@@ -172,66 +202,20 @@
 
 ## 示例代码
 
-### 示例1（修改锁屏状态下的title,body并打开应用首页）
-
-本示例通过title、body、actionType实现打开应用首页并设置标题为BookReadTitle，内容为BookReadContent。
-
-```json5
-   {
-   "payload": {
-      "notification": {
-         "category": "EXPRESS",
-         "title": "BookReadTitle",
-         "body": "内容为BookReadContent",
-         "badge": {
-            "addNum": 1,
-            "setNum": 1
-         },
-         "clickAction": {
-            "actionType": 0,
-            "action": "com.test.action",
-            "data": {
-               "content": "亲爱的用户您好~2025.06.26 24:00:00-02:00进行安全升级，部分评价功能将无法使用，给您带来不便万分抱歉！感谢您的理解和支持！",
-               "time": "2小时前"
-            }
-         },
-         "foregroundShow": true
-      }
-   },
-   "target": {
-      "token": ["xxx"]
-   }
-}
-```
-
-### 示例2（修改消息中心的时间和消息内容）
-
-本示例通过pushData设置消息中心的时间和消息内容。
-
-```json5
-   {
-   "payload": {
-      "notification": {
-         "category": "EXPRESS",
-         "title": "普通标题",
-         "body": "普通内容",
-         "badge": {
-            "addNum": 1,
-            "setNum": 1
-         },
-         "clickAction": {
-            "actionType": 0,
-            "action": "com.test.action",
-            "pushData": {
-               "pushContent": "改变的消息内容",
-               "time": "改变的消息时间"
-            }
-         },
-         "foregroundShow": true
-      }
-   },
-   "target": {
-      "token": ["xxx"]
-   }
+```typescript
+import { PushKit } from 'custom_push';
+@Entry
+@ComponentV2
+struct Index{
+  
+  build() {
+    NavDestination(){
+      PushKit({
+        // 传入路由栈
+      })
+    }
+    .hideTitleBar(true)
+    .hideBackButton(true)
+  }
 }
 ```

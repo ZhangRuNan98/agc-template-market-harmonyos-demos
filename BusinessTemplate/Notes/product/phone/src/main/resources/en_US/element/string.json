@@ -13,50 +13,6 @@
       "value": "Content Publisher"
     },
     {
-      "name": "get_mobile_number_error",
-      "value": "Failed to obtain the anonymous mobile number."
-    },
-    {
-      "name":"read_and_agree",
-      "value":"read_and_agree"
-    },
-    {
-      "name": "hwid_no_internet_connect",
-      "value": "hwid_no_internet_connect"
-    },
-    {
-      "name": "bind_huaweiId_number",
-      "value": "bind_huaweiId_number"
-    },
-    {
-      "name": "read_and_agree_protocol",
-      "value": "read_and_agree_protocol"
-    },
-    {
-      "name": "app_user_agreement",
-      "value": "User Service Agreement, "
-    },
-    {
-      "name": "app_privacy_policy",
-      "value": "Privacy Policy,"
-    },
-    {
-      "name": "huaweiId_user_authentication_protocol",
-      "value": "HUAWEI ID User Authentication Agreement"
-    },
-    {
-      "name":"and",
-      "value":" and "
-    },
-    {
-      "name":"end",
-      "value":"."
-    },
-    {
-      "name": "huawei_user",
-      "value": "Huawei user"
-    },
-    {
       "name": "avatar",
       "value": "avatar"
     },
@@ -149,14 +105,6 @@
       "value": "give up"
     },
     {
-      "name": "save",
-      "value": "save"
-    },
-    {
-      "name": "save_tip",
-      "value": "save tip"
-    },
-    {
       "name": "editor",
       "value": "editor"
     },
@@ -167,6 +115,14 @@
     {
       "name": "privacyAgreementPath",
       "value": "https://developer.huawei.com/"
+    },
+    {
+      "name": "earliest_in_trash",
+      "value": "earliest_in_trash"
+    },
+    {
+      "name": "latest_in_trash",
+      "value": "latest_in_trash"
     }
   ]
 }

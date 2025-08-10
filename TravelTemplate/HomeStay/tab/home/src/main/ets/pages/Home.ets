@@ -269,7 +269,7 @@ export struct Home {
           }.borderRadius({ topLeft: 8, topRight: 8 })
           .width(Constants.FULL_SCREEN).padding(12);
         };
-      }.scrollBar(BarState.Off);
+      }.scrollBar(BarState.Off).edgeEffect(EdgeEffect.Spring);
     }.hideTitleBar(true);
   }
 }

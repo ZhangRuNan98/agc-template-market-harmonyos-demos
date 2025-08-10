@@ -3,7 +3,8 @@
 ## 目录
 
 - [简介](#简介)
-- [使用](#使用)
+- [约束与限制](#约束与限制)
+- [快速入门](#快速入门)
 - [API参考](#API参考)
 - [示例代码](#示例代码)
 
@@ -15,41 +16,54 @@
 |--------------------------------|--------------------------------|
 | <img src="screenshots/full.jpg" width="300"> | <img src="screenshots/part.jpg" width="300"> |
 
-## 使用
+## 约束与限制
+### 环境
+* DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.1 Release SDK及以上
+* 设备类型：华为手机（直板机）
+* HarmonyOS版本：HarmonyOS 5.0.1(13)及以上
 
+### 权限
+- 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION、ohos.permission.LOCATION。
+
+## 快速入门
 1. 安装组件。
+   如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
 
-   需要将模板根目录的components下[travel_map](../travel_map)目录拷贝至您工程根目录components/，并添加依赖和module声明。
+   如果是从生态市场下载组件，请参考以下步骤安装组件。
 
-```
-// main/oh-package.json5
-"dependencies": {
-  "travel_map": "file:../components/travel_map"
-}
+   a. 解压下载的组件包，将包中所有文件夹拷贝至您工程根目录的xxx目录下。
 
-// build-profile.json5
-"modules": [
-  {
-    "name": "travel_map",
-    "srcPath": "./components/travel_map",
-  }
-]
-```
+   b. 在项目根目录build-profile.json5并添加travel_map模块
+   ```
+   "modules": [
+   {
+      "name": "travel_map",
+      "srcPath": "./xxx/travel_map",
+      }
+   ]
+   ```
+   c. 在项目根目录oh-package.json5中添加依赖
+   ```
+   "dependencies": {
+      "travel_map": "file:./xxx/travel_map"
+   }
+   ```
 
 2. 引入组件。
 
-```
-import { CommonMap } from 'travel_map';
-```
+   ```
+   import { CommonMap } from 'travel_map';
+   ```
 
 3. 配置地图相关权限。
 
-   在主工程的module.json5文件中配置如下地图相关权限。
-```
-"requestPermissions": [
+   a.在主工程的module.json5文件中配置如下地图相关权限。
+   ```
+   "requestPermissions": [
       {
         "name": "ohos.permission.LOCATION",
-        "reason": "$string:add_remark",
+        "reason": "$string:app_name",
         "usedScene": {
           "abilities": [
             "EntryAbility"
@@ -59,7 +73,7 @@ import { CommonMap } from 'travel_map';
       },
       {
         "name": "ohos.permission.APPROXIMATELY_LOCATION",
-        "reason": "$string:about",
+        "reason": "$string:app_name",
         "usedScene": {
           "abilities": [
             "EntryAbility"
@@ -68,15 +82,26 @@ import { CommonMap } from 'travel_map';
         }
       }
     ],
-```
+   ```
+   
+   b.将应用的client ID配置到主工程模块的src/main/module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
 ## API参考
 
-### DateInfo(travelMapOptions: TravelMapOptions)
+### 接口
+CommonMap(travelMapOptions: TravelMapOptions)
+
+地图选点组件。
+
+#### 参数说明
+
+| 参数名              | 类型                    | 是否必填 | 说明     |
+|:-----------------|:----------------------|:-----|:-------|
+| travelMapOptions       | [TravelMapOptions](#TravelMapOptions对象说明) | 是    | 地图选点详情 |
 
 #### TravelMapOptions对象说明
 
-| 参数名              | 类型            | 必填 | 说明       |
+| 参数名              | 类型            | 是否必填 | 说明       |
 |:-----------------|:--------------|:---|:---------|
 | location       | [Location](#Location类型说明)      | 是  | 位置信息     |
 | icon       | ResourceStr   | 是  | 标记点图标    |
@@ -88,16 +113,15 @@ import { CommonMap } from 'travel_map';
 
 #### Location类型说明
 
-| 参数名       | 类型     | 必填 | 说明 |
+| 参数名       | 类型     | 是否必填 | 说明 |
 |:----------|:-------|:---|:---|
 | latitude  | number | 是  | 纬度 |
 | longitude | number | 是  | 经度 |
 
 
-
 #### TitleOptions类型说明
 
-| 参数名                | 类型     | 必填 | 说明 |
+| 参数名                | 类型     | 是否必填 | 说明 |
 |:-------------------|:-------|:---|:---|
 | name              | string | 是  | 标记点名称 |
 | strokeColor      | number | 是  | 标记点展示颜色 |

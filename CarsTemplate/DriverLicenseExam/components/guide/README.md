@@ -23,9 +23,9 @@
 ## 约束与限制
 ### 环境
 * DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
-* HarmonyOS SDK版本：HarmonyOS 5.0.1(13) Release SDK及以上
-* 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.1 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.1 Release SDK及以上
+* 设备类型：华为手机（包括双折叠和阔折叠）
+* 系统版本：HarmonyOS 5.0.1(13)及以上
 
 ## 快速入门
 
@@ -59,13 +59,13 @@
 2. 引入组件。
 
     ```
-    import { GuideService, licenseTypeName } from '@ohos_agcit/driver_license_exam_guide'
+    import { GuideView, GuideService } from '@ohos_agcit/driver_license_exam_guide'
     ```
 
 3. 调用组件，详细参数配置说明参见[API参考](#API参考)。
 
 ```typescript
-import { GuideView, GuideService, licenseTypeName, GuideData } from '@ohos_agcit/driver_license_exam_guide'
+import { GuideView, GuideService } from '@ohos_agcit/driver_license_exam_guide'
 import { promptAction } from '@kit.ArkUI';
 
 @Entry
@@ -124,7 +124,7 @@ struct DrivingTestPage {
 ## 示例代码
 
 ```
-import { GuideView, GuideService, licenseTypeName, GuideData } from '@ohos_agcit/driver_license_exam_guide'
+import { GuideView, GuideService } from '@ohos_agcit/driver_license_exam_guide'
 import { promptAction } from '@kit.ArkUI';
 
 @Entry

@@ -46,7 +46,8 @@ export struct SecretLockSwitch {
     Column({ space: 12 }) {
       Row() {
         Text('手势密码')
-          .fontSize(16);
+          .fontSize(16)
+          .fontColor($r('sys.color.font_primary'))
         Blank();
 
         Toggle({
@@ -66,7 +67,7 @@ export struct SecretLockSwitch {
             this.appPathStack.pushPathByName('DrawLock', params);
           });
       }
-      .backgroundColor(Color.White)
+      .backgroundColor($r('sys.color.comp_background_list_card'))
       .borderRadius(16)
       .height(56)
       .width('100%')
@@ -86,7 +87,9 @@ export struct SecretLockSwitch {
 
       Row() {
         Text('指纹解锁')
-          .fontSize(16);
+          .fontSize(16)
+          .fontColor($r('sys.color.font_primary'))
+
         Blank();
 
         Toggle({
@@ -104,7 +107,7 @@ export struct SecretLockSwitch {
             PersistenceV2.save(SecretLock);
           });
       }
-      .backgroundColor(Color.White)
+      .backgroundColor($r('sys.color.comp_background_list_card'))
       .borderRadius(16)
       .height(56)
       .width('100%')
@@ -121,13 +124,10 @@ export struct SecretLockSwitch {
         PersistenceV2.save(SecretLock);
       });
     }
-    .backgroundColor('#F1F3F5')
     .width('100%')
     .height('100%')
     .padding({
-      top: 15,
-      left: 16,
-      right: 16,
+      top: 10
     });
   }
 

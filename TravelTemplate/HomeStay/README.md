@@ -3,17 +3,22 @@
 ## 目录
 
 - [功能介绍](#功能介绍)
-- [环境要求](#环境要求)
+- [约束与限制](#约束与限制)
 - [快速入门](#快速入门)
 - [示例效果](#示例效果)
-- [权限要求](#权限要求)
 - [开源许可协议](#开源许可协议)
 
 ## 功能介绍
 
-您可以基于此[模板](#模板)直接定制应用/元服务，也可以挑选此模板中提供的多种[组件](#组件)使用，从而降低您的开发难度，提高您的开发效率。
+您可以基于此模板直接定制应用，也可以挑选此模板中提供的多种组件使用，从而降低您的开发难度，提高您的开发效率。
 
-### 模板
+本模板提供如下组件，所有组件存放在工程根目录的components下，如果您仅需使用组件，可参考对应组件的指导链接；如果您使用此模板，请参考本文档。
+
+| 组件                | 描述 | 使用指导 |
+| ------------------- | ---- | -------- |
+| 日历组件（calendar_select） |  提供入住、离开日期选择的功能。    |[使用指导](components/calendar_select/README.md)|
+| 游记组件（travel_discovery）               |   提供游记浏览搜索、详情查看及评论等功能。   |  [使用指导](components/travel_discovery/README.md) |
+| 地图（定位选点）组件（travel_map）               |   提供地图展示能力，并支持地图定位和选点定制功能。   |  [使用指导](components/travel_map/README.md) |
 
 本模板为民宿住宿类应用提供了常用功能的开发样例，模板主要分首页、发现、地图、商城和我的五大模块：
 
@@ -198,64 +203,51 @@ HomeStay
   |   |    └- viewmodel                           // 与页面一一对应的vm层           
 ```
 
-### 组件
-本模板中提供了多种组件，您可以按需选择合适的组件进行使用，所有组件存放在工程根目录的components下。
+## 约束与限制
 
-| 组件                | 描述 | 使用指导 |
-| ------------------- | ---- | -------- |
-| 日历组件（calendar_select） |  提供入住、离开日期选择的功能。    |[使用指导](components/calendar_select/README.md)|
-|      游记组件（travel_discovery）               |   提供游记浏览搜索、详情查看及评论等功能。   |  [使用指导](components/travel_discovery/README.md)        |
-|      地图（定位选点）组件（travel_map）               |   提供地图展示能力，并支持地图定位和选点定制功能。   |  [使用指导](components/travel_map/README.md)        |
-
-## 环境要求
-
-### 软件
-* DevEco Studio版本：DevEco Studio 5.0.0 Release及以上
-* HarmonyOS SDK版本：HarmonyOS 5.0.0 Release SDK及以上
-### 硬件
+### 环境
+* DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.1 Release SDK及以上
 * 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.0 Release及以上
+* HarmonyOS版本：HarmonyOS 5.0.1(13)及以上
 
+### 权限
+- 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION、ohos.permission.LOCATION。
+- 网络权限：ohos.permission.INTERNET
 
 ## 快速入门
 
 ###  配置工程
 在运行此模板前，需要完成以下配置：
 
-1. 在DevEco Studio中打开此模板。
+1. 在AppGallery Connect创建应用，将包名配置到模板中。
 
-2. 在AppGallery Connect创建应用，将包名配置到模板中。
-
-   a. 参考[创建应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建APPID，并进行关联。
+   a. 参考[创建应用](https://developer.huawei.com/consumer/cn/doc/app/agc-help-createharmonyapp-0000001945392297)为应用创建APP ID，并将APP ID与应用进行关联。
 
    b. 返回应用列表页面，查看应用的包名。
 
    c. 将模板工程根目录下AppScope/app.json5文件中的bundleName替换为创建应用的包名。
 
-3. 配置华为账号服务。
+2. 配置华为账号服务。
 
-   a. 将应用的client ID配置到main模块的module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
+   a. 将应用的client ID配置到main模块的src/main/module.json5文件，详细参考：[配置Client ID](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-client-id)。
 
-   b. 添加公钥指纹，详细参考：[配置应用证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
+   b. 申请华为帐号一键登录所需的quickLoginMobilePhone权限，详细参考：[配置scope权限](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/account-config-permissions)。
 
-4. 配置地图服务。
+3. 开通并[配置地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
 
-   a. 将应用的client ID配置到main模块的module.json5文件，如果华为账号服务已配置，可跳过此步骤。
-
-   b. 添加公钥指纹，如果华为账号服务已配置，可跳过此步骤。
-
-   c. [开通地图服务](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/map-config-agc)。
-
-5. 配置支付服务。
+4. 配置支付服务。
 
    华为支付当前仅支持商户接入，在使用服务前，需要完成商户入网、开发服务等相关配置，本模板仅提供了端侧集成的示例。详细参考：[支付服务接入准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/payment-preparations)。
+
+5. 对应用进行[手动签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
+
+6. 添加手工签名所用证书对应的公钥证书。详细参考：[配置应用签名证书指纹](https://developer.huawei.com/consumer/cn/doc/app/agc-help-signature-info-0000001628566748#section5181019153511)。
 
 ###  运行调试工程
 1. 连接调试手机和PC。
 
-2. 对应用签名：由于模板中集成了华为账号、地图等服务，所以需要采用[手动签名](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ide-signing#section297715173233)。
-
-3. 配置多模块调试：由于本模板存在多个模块，运行时需确保所有模块安装至调试设备。
+2. 配置多模块调试：由于本模板存在多个模块，运行时需确保所有模块安装至调试设备。
 
    a. 在DevEco Studio菜单选择“Run > Edit Configurations”，进入“Run/Debug Configurations”界面。
 
@@ -274,10 +266,7 @@ HomeStay
 
    [商品购买展示](./screenshots/purchase.mp4)
 
-## 权限要求
 
-- 获取位置权限：ohos.permission.APPROXIMATELY_LOCATION、ohos.permission.LOCATION。
-- 网络权限：ohos.permission.INTERNET
 
 ## 开源许可协议
 

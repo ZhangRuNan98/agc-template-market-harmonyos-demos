@@ -17,7 +17,6 @@ import { fileIo } from '@kit.CoreFileKit';
 import { image } from '@kit.ImageKit';
 import { promptAction } from '@kit.ArkUI';
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
-import { PopupUtils } from '../util/PopupUtils';
 
 
 
@@ -25,6 +24,7 @@ import { systemShare } from '@kit.ShareKit';
 import { uniformTypeDescriptor as utd } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
 import { fileUri } from '@kit.CoreFileKit';
+import { PopupUtils } from '../utils/PopupUtils';
 
 const TAG: string = '[SnapshotPreview]';
 
@@ -114,7 +114,7 @@ export struct SnapshotPreview {
       imagePackerApi.packToData(this.mergedImage, packOpts).then(async (data) => {
         fileIo.writeSync(file.fd, data);
         fileIo.closeSync(file.fd);
-        promptAction.showToast({
+        this.getUIContext().getPromptAction().showToast({
           message: '已保存至相册',
           duration: 1800
         })
@@ -280,14 +280,14 @@ export struct SnapshotPreview {
         text: SaveDescription.DOWNLOAD_AND_SHARE,
         buttonType: ButtonType.Capsule
       })
-        // [StartExclude Save_button]
+      // [StartExclude Save_button]
         .backgroundColor(Color.White)
         .fontColor($r('sys.color.font_emphasize'))
         .iconColor($r('sys.color.font_emphasize'))
         .width('calc(50% - 24vp)')
         .height(40)
         .fontSize(16)
-          // [EndExclude Save_button]
+        // [EndExclude Save_button]
         .onClick((event, result) => {
           this.saveSnapshot(result);
         })

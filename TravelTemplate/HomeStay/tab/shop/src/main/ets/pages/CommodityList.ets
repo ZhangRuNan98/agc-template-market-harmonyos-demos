@@ -36,6 +36,7 @@ export struct CommodityList {
               .width(Constants.FULL_SCREEN);
             }, (item: Commodity) => item.id.toString());
           }
+          .edgeEffect(EdgeEffect.Spring)
           .cachedCount(10)
           .columnsTemplate('1fr 1fr')
           .columnsGap(8)

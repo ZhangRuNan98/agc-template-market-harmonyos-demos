@@ -1,0 +1,290 @@
+import { PersistenceV2 } from '@kit.ArkUI'
+import dayjs from 'dayjs'
+import { webview } from '@kit.ArkWeb'
+import { BusinessError } from '@kit.BasicServicesKit'
+import { FormatCount, RouterMap, RouterUtils, SettingModel } from 'lib_common'
+import { ImagePreview, PreviewVerticalAlign } from 'module_imagepreview'
+import { Share } from 'module_share'
+import { handlerCoverImage } from '../utils/Utils'
+import NewsFeedVM from '../viewModel/NewsFeedVM'
+
+class Native {
+  preview = (srcList: string[], index: number) => {
+  }
+}
+
+@ComponentV2
+export struct NewsContent {
+  @Param fontSizeRatio: number = 1
+  @Local newsFeedVM: NewsFeedVM = NewsFeedVM.instance
+  @Local settingInfo: SettingModel = PersistenceV2.connect(SettingModel, () => new SettingModel())!
+  webViewController: webview.WebviewController = new webview.WebviewController();
+  @Local nativeObj: Native = new Native();
+  @Local isExpand: boolean = false
+  @Event onAddLike: () => void = () => {}
+  @Event onAddWatch: () => void = () => {}
+  @Event onComment: () => void = () => {}
+  @Local timer: number = 0
+  @Local richTextHeight: number = 300
+
+  expandAnimation() {
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
+    animateTo({
+      duration: 500,
+      curve: Curve.EaseOut,
+      playMode: PlayMode.Normal,
+    }, () => {
+      this.isExpand = true
+      this.timer = setTimeout(() => {
+        this.isExpand = false
+      }, 2000)
+    })
+  }
+
+  @Builder
+  authorBuilder() {
+    Flex({ alignItems: ItemAlign.Center }) {
+      Row({ space: 5 }) {
+        Image(this.newsFeedVM.articleDetails.author.authorIcon).width(24).height(24).borderRadius(12).clip(true)
+        Text(this.newsFeedVM.articleDetails.author.authorNickName).fontColor($r('sys.color.font_on_primary'))
+          .fontSize(16 * this.fontSizeRatio)
+      }
+
+      Row() {
+        Text() {
+          Span(this.newsFeedVM.isWatch() ? '已关注' : '关注')
+        }
+        .fontSize(14 * this.fontSizeRatio)
+        .fontColor(this.newsFeedVM.isWatch() ? $r('app.color.app_theme') : $r('sys.color.background_primary'))
+        .onClick(() => {
+          this.onAddWatch()
+        })
+      }
+      .width(72)
+      .height(28)
+      .margin({ left: 16 })
+      .backgroundColor(this.newsFeedVM.isWatch() ? $r('sys.color.background_primary') : $r('app.color.app_theme'))
+      .borderRadius(14)
+      .justifyContent(FlexAlign.Center)
+    }
+    .visibility(this.isExpand ? Visibility.None : Visibility.Visible)
+  }
+
+  @Builder
+  operationBuilder() {
+    Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
+      Row({ space: 5 }) {
+        Row() {
+          Image(this.isExpand ? $r('app.media.down') : $r('app.media.up')).width(17).height(9)
+        }
+        .width(24).height(24)
+        .borderRadius(12)
+        .backgroundColor($r('sys.color.comp_background_tertiary'))
+
+        Text(this.isExpand ? '收起' : '展开').fontColor($r('sys.color.font_on_primary'))
+          .fontSize(16 * this.fontSizeRatio)
+      }
+      .onClick(() => {
+        animateTo({
+          duration: 500,
+          curve: Curve.EaseOut,
+          playMode: PlayMode.Normal,
+        }, () => {
+          this.isExpand = !this.isExpand
+        })
+      })
+
+      Row({ space: 25 }) {
+        Column({ space: 5 }) {
+          Image($r('app.media.image_comment')).width(20).height(20)
+          Text(this.newsFeedVM.articleDetails.commentCount?.toString())
+            .fontColor($r('sys.color.font_on_primary'))
+            .fontSize(10 * this.fontSizeRatio)
+        }
+        .onClick(() => {
+          ImagePreview.hide()
+          this.onComment()
+        })
+
+        Column({ space: 5 }) {
+          Image(this.newsFeedVM.articleDetails.isLiked ? $r('app.media.like_active') : $r('app.media.preview_like'))
+            .width(23)
+            .height(20)
+          Text(this.newsFeedVM.articleDetails.likeCount?.toString())
+            .fontColor($r('sys.color.font_on_primary'))
+            .fontSize(10 * this.fontSizeRatio)
+        }
+        .onClick(() => {
+          this.onAddLike()
+        })
+
+        this.shareBuilder()
+      }
+      .visibility(!this.isExpand ? Visibility.Visible : Visibility.None)
+    }
+  }
+
+  aboutToAppear(): void {
+    this.nativeObj.preview = this.preview
+  }
+
+  preview = (srcList: string[], index: number) => {
+    ImagePreview.show(srcList, {
+      indexPosition: PreviewVerticalAlign.Top,
+      startIndex: index,
+      authorBuilder: () => {
+        this.authorBuilder()
+      },
+      operationBuilder: () => {
+        this.operationBuilder()
+      },
+      onCloseExpand: () => {
+        this.expandAnimation()
+      },
+    })
+  }
+
+  @Builder
+  shareCommentBuilder() {
+    Column({ space: 5 }) {
+      Image($r('app.media.image_forward'))
+        .width(21)
+        .height(21)
+      Text(FormatCount.formatToK(this.newsFeedVM.articleDetails.shareCount))
+        .fontSize(10 * this.fontSizeRatio)
+        .fontColor($r('sys.color.font_on_primary'))
+    }
+  }
+
+  @Builder
+  shareBuilder() {
+    Share({
+      qrCodeInfo: {
+        id: this.newsFeedVM.articleDetails.id,
+        type: this.newsFeedVM.articleDetails.type,
+        title: this.newsFeedVM.articleDetails.title,
+        articleFrom: this.newsFeedVM.articleDetails.articleFrom,
+        createTime: dayjs(this.newsFeedVM.articleDetails.createTime).format('YYYY-MM-DD hh:mm'),
+        coverUrl: handlerCoverImage(this.newsFeedVM.articleDetails),
+        isVideo: !!this.newsFeedVM.articleDetails.postImgList?.[0]?.surfaceUrl,
+      },
+      shareRenderBuilder: () => {
+        this.shareCommentBuilder()
+      },
+    })
+  }
+
+  @Computed
+  get setWebFontSize() {
+    if (this.settingInfo.fontSizeRatio < 1) {
+      return this.settingInfo.fontSizeRatio
+    } else if (this.settingInfo.fontSizeRatio > 1) {
+      return this.settingInfo.fontSizeRatio * 2
+    }
+    return this.settingInfo.fontSizeRatio * 1.2
+  }
+
+  @Builder
+  authorInfoBuilder() {
+    Flex({ alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceBetween }) {
+      Row({ space: 5 }) {
+        Image(this.newsFeedVM.articleDetails.author.authorIcon)
+          .width(40)
+          .height(40)
+          .borderRadius(20)
+          .clip(true)
+          .onClick(() => {
+            RouterUtils.pushPathByName(RouterMap.PROFILE_HOME, this.newsFeedVM.articleDetails.author.authorId)
+          })
+        Column({ space: 5 }) {
+          Text(this.newsFeedVM.articleDetails.author.authorNickName)
+            .fontSize(14 * this.fontSizeRatio)
+            .fontWeight(FontWeight.Medium)
+            .fontColor($r('sys.color.font_primary'))
+          Text(dayjs(this.newsFeedVM.articleDetails.createTime).format('YYYY-MM-DD hh:mm'))
+            .fontSize(12 * this.fontSizeRatio)
+            .fontWeight(FontWeight.Regular)
+            .fontColor($r('sys.color.font_tertiary'))
+        }
+        .alignItems(HorizontalAlign.Start)
+      }
+
+      Row() {
+        Text() {
+          Span(this.newsFeedVM.isWatch() ? '已关注' : '关注')
+        }
+        .fontSize(14 * this.fontSizeRatio)
+        .fontColor(this.newsFeedVM.isWatch() ? $r('app.color.app_theme') : $r('sys.color.background_primary'))
+        .onClick(() => {
+          this.newsFeedVM.watchOperation()
+        })
+      }
+      .width(72)
+      .height(28)
+      .margin({ left: 16 })
+      .backgroundColor(this.newsFeedVM.isWatch() ? $r('sys.color.comp_background_tertiary') : $r('app.color.app_theme'))
+      .borderRadius(14)
+      .justifyContent(FlexAlign.Center)
+    }
+    .margin({ top: 17, bottom: 25 })
+  }
+
+  build() {
+    Column() {
+      Column() {
+        Column() {
+          Text(this.newsFeedVM.articleDetails.title)
+            .fontSize(20 * this.settingInfo.fontSizeRatio)
+            .fontWeight(FontWeight.Bold)
+            .fontColor($r('sys.color.font_primary'))
+        }
+        .width('100%')
+        .alignItems(HorizontalAlign.Start)
+      }
+      .padding(16)
+      .backgroundColor($r('sys.color.background_primary'))
+
+      Column() {
+        this.authorInfoBuilder()
+      }
+      .padding({ left: 16, right: 16 })
+      .backgroundColor($r('sys.color.background_primary'))
+
+      Column() {
+        Web({
+          src: '',
+          controller: this.webViewController,
+        })
+          .fileAccess(false)
+          .height(this.richTextHeight)
+          .geolocationAccess(false)
+          .defaultFontSize(16 * this.setWebFontSize)
+          .backgroundColor($r('sys.color.background_primary'))
+          .onControllerAttached(() => {
+            this.webViewController.loadData(
+              this.newsFeedVM.setRichToHtml(this.settingInfo.darkSwitch),
+              'text/html',
+              'UTF-8',
+            );
+            try {
+              this.webViewController.registerJavaScriptProxy(this.nativeObj, 'native', ['preview'],
+              );
+            } catch (error) {
+              console.error(`ErrorCode: ${(error as BusinessError).code},  Message: ${(error as BusinessError).message}`);
+            }
+          })
+          .onPageEnd(() => {
+            this.webViewController.runJavaScript(`getSize()`)
+              .then((result: string) => {
+                let res: Record<string, number> = JSON.parse(result)
+                this.richTextHeight = px2vp(res.height) * 1.2
+              })
+          })
+      }
+      .padding({ left: 16, right: 16 })
+      .backgroundColor($r('sys.color.background_primary'))
+    }
+  }
+}

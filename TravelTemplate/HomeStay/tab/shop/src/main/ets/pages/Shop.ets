@@ -107,7 +107,7 @@ export struct Shop {
             }.margin({ top: 12 });
           }.padding({ left: 16, right: 16 });
         };
-      }.scrollBar(BarState.Off);
+      }.scrollBar(BarState.Off).edgeEffect(EdgeEffect.Spring);
     };
   }
 

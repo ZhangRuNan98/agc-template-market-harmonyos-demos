@@ -1,5 +1,7 @@
-import { CategoryService } from '../../../Index';
-import { Notes } from './Model';
+import { Note } from 'richeditor';
+import { CategoryService } from './CategotyService';
+import { SortEnum } from './Model';
+
 
 @ObservedV2
 export class NoteService {
@@ -67,15 +69,15 @@ export class NoteService {
    * @param id
    * @returns
    */
-  public getNoteList(id?: string,sortType?:string,keyWord:string=''): Note[] {
+  public getNoteList(id?: string,sortType?:SortEnum,keyWord:string=''): Note[] {
 
     let notes: Note[] = this.search(keyWord);
     if (id !== undefined && id !== '-1') {
       notes = notes.filter((item) => item.categoryId === id);
     }
-    if (sortType === 'createTime') {
+    if (sortType === SortEnum.CREATE_TIME) {
       notes = notes.sort((a, b) => parseInt(b.createTime) - parseInt(a.createTime));
-    } else if (sortType === 'updateTime'){
+    } else if (sortType === SortEnum.UPDATE_TIME){
       notes = notes.sort((a, b) =>  parseInt(b.updateTime) - parseInt(a.updateTime));
     }
 
@@ -197,53 +199,14 @@ export class NoteService {
       item.categoryId = '-1';
     });
   }
-}
 
-@ObservedV2
-export class Note implements Notes {
-  id: string = '';
-  @Trace title: string = '';
-  categoryId: string = '';
-  content: string = '';
-  createTime: string = '';
-  updateTime: string = '';
-  @Trace description: string = '';
 
-  constructor(content: string, title?: string, categoryId?: string) {
-    this.content = content || '';
-    this.title = title || '';
-    this.categoryId = categoryId || '';
-    this.id = new Date().getTime().toString();
-    this.createTime = new Date().getTime().toString();
-    this.updateTime = this.createTime
-    this.getDescription();
+  public initSelectedState(){
+    this.notes.forEach(item => item.isSelected = false)
   }
 
-  updateContent(content: string, title?: string, category?: string): boolean {
-    if (!content) {
-      return false;
-    }
-    this.content = content;
-    this.title = title || this.title;
-    this.categoryId = category || this.categoryId;
-    this.updateTime = new Date().getTime().toString();
-    this.getDescription();
-    return true;
-  }
-
-  getDescription() {
-    if (!this.content || this.content === '') {
-      this.description = '';
-      return;
-    }
-    const content: [] = JSON.parse(this.content);
-    let description = '';
-    content.forEach((item) => {
-      if (typeof (item as RichEditorImageSpanResult).imageStyle === 'undefined' &&
-        typeof (item as RichEditorTextSpanResult).symbolSpanStyle === 'undefined') {
-        description += (item as RichEditorTextSpanResult).value;
-      }
-    });
-    this.description = description;
+  public deleteNotes(notes: Note[]): Note[]{
+    notes.forEach((item) => {this.deleteNote(item.id, item.categoryId)})
+    return this.notes
   }
 }

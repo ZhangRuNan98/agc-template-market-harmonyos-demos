@@ -1,0 +1,178 @@
+import { emitter } from '@kit.BasicServicesKit';
+import { SwipePlayerController } from '../controller/SwipePlayerController';
+import { PlayerDataSource } from '../datasource/PlayerDataSource';
+import { AVPlayerSession } from '../controller/AVPlayerManager';
+import { VideoPlayerView } from '../components/VideoPlayerView';
+import { AVPlayerState, VideoPlayerData } from '../type/Index';
+import { toast } from '../utils/Util';
+import { PlayerLayoutSize } from '../controller/PlayerLayoutSize';
+import { VideoNetworkModel, VideoNetworkSetting } from '../models/VideoNetworkModel';
+import { uiObserver } from '@kit.ArkUI';
+
+@ComponentV2({ freezeWhenInactive: true })
+export struct VideoSwipePlayer {
+  // 当前视频索引
+  @Local currentIndex: number = 0;
+  // 播放控制器
+  @Param swipePlayerController: SwipePlayerController = new SwipePlayerController();
+  // 懒加载数据源
+  @Param datasource: PlayerDataSource<VideoPlayerData> = new PlayerDataSource<VideoPlayerData>();
+  // 视频播放的外层交互组件
+  @Param videoLayerBuilder:
+  WrappedBuilder<[ESObject, AVPlayerSession, SwipePlayerController, PlayerLayoutSize]> | undefined = undefined;
+  // 全屏按钮
+  @BuilderParam fullBtnBuilder: () => void = this.defaultFullBtnBuilder
+  // 配置项信息
+  @Param options: SwipePlayerOptions | undefined = undefined
+  // 底部tab的高度
+  @Provider() bottomTabHeight: Length | undefined = this.options?.bottomTabHeight;
+  // 点击列表页的视频卡片对应的视频
+  @Param videoItemPlayerSession: AVPlayerSession | undefined = undefined
+  // 网络
+  @Param videoNetwork: VideoNetworkModel | undefined = undefined
+  @Param videoNetworkSetting: VideoNetworkSetting | undefined = undefined
+  // 路由栈
+  @Param @Require pathStack: NavPathStack
+  // 播放状态回调
+  @Event playerStateCallback: (state: string, id: string) => void = (state: string, id: string) => {}
+  // 滑动控制器
+  swiperController: SwiperController = new SwiperController();
+  @Local videoState: AVPlayerState = AVPlayerState.IDLE;
+
+  @Provider() navDestinationUpdateListeners: Map<string, (info: uiObserver.NavDestinationInfo) => void> = new Map();
+
+  @Computed
+  get avPlayerManager() {
+    return this.swipePlayerController.getAVPlayerMgr()!
+  }
+
+  @Monitor('videoNetwork.isCellular', 'videoState')
+  onNetworkChange() {
+    let videoState = this.avPlayerManager.getAVPlayer(this.currentIndex)?.state
+    if (videoState === AVPlayerState.PLAYING) {
+      if (this.videoNetwork?.isCellular && !this.videoNetwork?.hasUseMobileDataTip) {
+        toast(this.getUIContext(), {
+          message: '正在使用流量播放',
+          alignment: Alignment.Center,
+        })
+        this.videoNetwork.hasUseMobileDataTip = true
+      }
+    }
+  }
+
+  aboutToAppear(): void {
+    this.swipePlayerController?.setSwiperController(this.swiperController);
+    // 网络
+    this.handleNetwork()
+    // 当前视频的状态
+    emitter.on('swipeVideoPlayerState', (eventData: emitter.EventData) => {
+      let state = eventData.data!.state as AVPlayerState;
+      let id = eventData.data!.id as string;
+      this.videoState = state
+      this.playerStateCallback && this.playerStateCallback(this.videoState, id)
+    })
+
+    // 无感监听路由变化
+    uiObserver.on('navDestinationUpdate', (info: uiObserver.NavDestinationInfo) => {
+      this.navDestinationUpdateListeners.forEach((callback, key) => {
+        if (key === 'fullScreenListener') {
+          callback(info)
+        }
+      })
+    })
+  }
+
+  handleNetwork() {
+    if (this.videoNetwork && !this.videoNetwork.hasNet) {
+      toast(this.getUIContext(), {
+        message: '网络连接不可用',
+        alignment: Alignment.Center,
+        textColor: Color.Red
+      })
+    }
+  }
+
+  build() {
+    Stack({ alignContent: Alignment.TopStart }) {
+      Swiper(this.swiperController) {
+        LazyForEach(this.datasource, (item: VideoPlayerData, index: number) => {
+          VideoPlayerView({
+            videoData: item,
+            index: index,
+            autoPlay: this.options?.autoPlay,
+            currentIndex: this.currentIndex,
+            totalCount: this.options?.totalCount,
+            swipePlayerController: this.swipePlayerController,
+            videoItemPlayerSession: this.videoItemPlayerSession,
+            videoNetwork: this.videoNetwork,
+            videoNetworkSetting: this.videoNetworkSetting,
+            videoLayerBuilder: this.videoLayerBuilder,
+            fullBtnBuilder: this.fullBtnBuilder,
+            pathStack: this.pathStack,
+          })
+        }, (item: VideoPlayerData, index: number) => item.getVideoId() + index);
+      }
+      .cachedCount(this.options?.cachedCount ?? 2)
+      .width('100%')
+      .height('100%')
+      .vertical(true)
+      .loop(false)
+      .curve(Curve.Ease)
+      .duration(300)
+      .indicator(false)
+      .backgroundColor(Color.Black)
+      .effectMode(EdgeEffect.Spring)
+      .onChange((index: number) => {
+        this.currentIndex = index;
+        if (this.options?.swiperCallback?.onChange) {
+          this.options.swiperCallback?.onChange(index);
+        }
+      })
+      .onAnimationStart((index: number, targetIndex: number, extraInfo: SwiperAnimationEvent) => {
+        this.currentIndex = targetIndex;
+        if (this.options?.swiperCallback?.onAnimationStart) {
+          this.options.swiperCallback?.onAnimationStart(index, targetIndex, extraInfo);
+        }
+      })
+    }
+    .width('100%')
+    .height('100%')
+    .id('player')
+  }
+
+  // 默认全屏播放按钮
+  @Builder
+  defaultFullBtnBuilder() {
+    Row({space: 4}) {
+      Image($r('app.media.ic_expand_full')).width(13).height(13)
+      Text('全屏播放')
+        .fontColor(Color.White)
+        .fontSize(14).fontWeight(500)
+    }
+    .padding({
+      left: 10,
+      top: 8,
+      bottom: 8,
+      right: 10
+    })
+    .border({
+      width: 1,
+      color: '#99ffffff',
+      style: BorderStyle.Solid,
+      radius: 30,
+    })
+  }
+}
+
+export class SwipePlayerOptions {
+  cachedCount?: number;
+  autoPlay?: boolean;
+  swiperCallback?: SwiperCallback;
+  bottomTabHeight?: Length;
+  totalCount?: number;
+}
+
+export class SwiperCallback {
+  onChange?: (index: number) => void;
+  onAnimationStart?: (index: number, targetIndex: number, extraInfo: SwiperAnimationEvent) => void;
+}

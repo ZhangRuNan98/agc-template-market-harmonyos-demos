@@ -27,6 +27,10 @@
     {
       "name": "widget_display_name",
       "value": "计算器模板卡片"
+    },
+    {
+      "name": "agcit_huawei_calculator",
+      "value": "1.0.1"
     }
   ]
 }

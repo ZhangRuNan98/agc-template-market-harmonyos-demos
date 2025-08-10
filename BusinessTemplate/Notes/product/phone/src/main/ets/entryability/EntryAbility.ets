@@ -13,14 +13,23 @@
  * limitations under the License.
  */
 
-import { UIAbility } from '@kit.AbilityKit';
+import { Configuration, UIAbility } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { KeyboardAvoidMode, window } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { ThemeController } from '../controller/ThemeController';
+import { AppUtil, WindowUtil } from '@ohos_agcit/notes_utils';
+import { notificationManager } from '@kit.NotificationKit';
+import { SettingController } from '../controller/SettingController';
 
 export default class EntryAbility extends UIAbility {
+  private themeController: ThemeController = ThemeController.instance;
+  private settingController: SettingController = SettingController.instance;
+
   onCreate(): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+    AppUtil.init(this.context)
+    this.themeController.currentColorMode = this.context.config.colorMode;
   }
 
   onDestroy(): void {
@@ -43,8 +52,11 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+    // 一多适配-折叠屏
+    WindowUtil.registerBreakPoint(windowStage);
     this.initWindow(windowStage);
     let windowClass: window.Window = windowStage.getMainWindowSync();
+    // 隐藏底部导航栏
     windowClass.setSpecificSystemBarEnabled('navigationIndicator', false).then(() => {
       console.info('Succeeded in setting the navigation indicator to be invisible.');
     }).catch((err: BusinessError) => {
@@ -69,12 +81,27 @@ export default class EntryAbility extends UIAbility {
   }
 
   onForeground(): void {
-    // Ability has brought to foreground
+    // 判断是否通知授权
+    let isEnabled = notificationManager.isNotificationEnabled();
+    isEnabled.then(result => {
+      this.settingController.isNoticeGrant =  result;
+    })
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onForeground');
   }
 
   onBackground(): void {
     // Ability has back to background
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
+  }
+
+  /**
+   * 夜间模式
+   * @param newConfig
+   */
+  onConfigurationUpdate(newConfig: Configuration): void {
+    if (this.themeController.currentColorMode !== newConfig.colorMode &&
+      this.themeController.isFollowSystemSetting) {
+      this.themeController.currentColorMode = newConfig.colorMode;
+    }
   }
 }

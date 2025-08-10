@@ -21,9 +21,9 @@
 - DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
 - HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
 - 设备类型：华为手机（直板机）
-- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+- HarmonyOS版本：HarmonyOS 5.0.4(16)及以上
 
-## 使用
+## 快速入门
 
 1. 安装组件。  
    如果是在DevEvo Studio使用插件集成组件，则无需安装组件，请忽略此步骤。
@@ -43,7 +43,7 @@
    ```typescript
    // xxx为组件存放的目录名称
    "dependencies": {
-     "incentive_ad": "file:../xxx/incentive_ad",
+     "incentive_ad": "file:./xxx/incentive_ad",
    }
    ```
 
@@ -66,17 +66,15 @@
 
 ### 接口
 
-### 接口
-
 IncentiveAdvertising(options?: IncentiveAdvertisingOptions)
 
-搜索菜谱组件。
+展示激励广告页面组件。
 
 **参数：**
 
-| 参数名     | 类型                                          | 必填 | 说明       |
-|---------|---------------------------------------------|----|----------|
-| options | [IncentiveAdvertisingOptions](#IncentiveAdvertisingOptions对象说明) | 否  | 搜索菜谱的参数。 |
+| 参数名     | 类型                                          | 必填 | 说明      |
+|---------|---------------------------------------------|----|---------|
+| options | [IncentiveAdvertisingOptions](#IncentiveAdvertisingOptions对象说明) | 否  | 激励广告参数。 |
 
 ### IncentiveAdvertisingOptions对象说明
 

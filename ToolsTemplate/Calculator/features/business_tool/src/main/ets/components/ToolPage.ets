@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { DateToolsCalculate } from 'date_calculation';
-import { BaseTitleBuilder } from 'base_apis';
+import { DateToolsCalculate } from 'module_date_calculation';
+import { BaseTitleBuilder } from 'lib_foundation';
 
 @ComponentV2
 export struct ToolPage {

@@ -3,18 +3,16 @@ import { PushKit } from 'custom_push'
 
 
 @ComponentV2
-export struct messagePage{
-
-  @Local navPathStack:NavPathStack = TCRouter.getStack()
+export struct messagePage {
   build() {
-    NavDestination(){
+    NavDestination() {
       PushKit({
-        navPathStack:this.navPathStack
+        backPop: () => {
+          TCRouter.pop()
+        }
       })
     }
     .hideTitleBar(true)
     .hideBackButton(true)
   }
-
-
 }

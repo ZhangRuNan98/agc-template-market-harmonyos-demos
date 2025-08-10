@@ -14,11 +14,15 @@
     },
     {
       "name": "agcit_huawei_driver_license_exam_search",
-      "value": "1.0.0"
+      "value": "1.0.2"
     },
     {
       "name": "agcittype_huawei_driver_license_exam_search",
       "value": "serviceComponent"
+    },
+    {
+      "name": "agcitkid_huawei_driver_license_exam_search",
+      "value": "agcit_huawei_driver_license_exam_exam/1.0.2"
     }
   ]
 }

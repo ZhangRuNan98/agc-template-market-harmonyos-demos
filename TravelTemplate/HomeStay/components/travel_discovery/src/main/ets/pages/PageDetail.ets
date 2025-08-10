@@ -545,7 +545,7 @@ export struct PageDetail {
             this.buildContent();
             this.buildComment();
           };
-        }.layoutWeight(1).align(Alignment.Top).scrollBar(BarState.Off);
+        }.layoutWeight(1).align(Alignment.Top).scrollBar(BarState.Off).edgeEffect(EdgeEffect.Spring);
 
         this.buildBottomBar();
       }

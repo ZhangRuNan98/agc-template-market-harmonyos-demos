@@ -6,6 +6,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "exam": "../exam"
+    "exam": "file:../exam"
   }
 }

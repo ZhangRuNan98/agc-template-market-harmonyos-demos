@@ -1,5 +1,5 @@
 import { RouterModule, CommonConstants } from 'lib_foundation';
-import { BaseTitleBuilder } from 'base_apis';
+import { BaseTitleBuilder } from 'lib_foundation';
 @ComponentV2
 export struct MinePage {
 

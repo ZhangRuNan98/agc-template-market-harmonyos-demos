@@ -1,18 +1,18 @@
 {
   "app": {
-    "signingConfigs": [
-    ],
+    "signingConfigs": [],
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "5.0.0(12)",
-        "runtimeOS": "HarmonyOS",
+        "compatibleSdkVersion": "5.0.3(15)",
+        "targetSdkVersion": "5.0.3(15)",
+        "runtimeOS": "HarmonyOS"
       }
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
@@ -22,11 +22,11 @@
   "modules": [
     {
       "name": "datasource",
-      "srcPath": "./common/datasource",
+      "srcPath": "./common/datasource"
     },
     {
       "name": "utils",
-      "srcPath": "./common/utils",
+      "srcPath": "./common/utils"
     },
     {
       "name": "phone",
@@ -42,11 +42,23 @@
     },
     {
       "name": "secretlock",
-      "srcPath": "./components/secretlock",
+      "srcPath": "./components/secretlock"
     },
     {
       "name": "richeditor",
-      "srcPath": "./components/richeditor",
+      "srcPath": "./components/richeditor"
+    },
+    {
+      "name": "check_app_update",
+      "srcPath": "./components/check_app_update"
+    },
+    {
+      "name": "login",
+      "srcPath": "./components/login"
+    },
+    {
+      "name": "feed_back",
+      "srcPath": "./components/feed_back"
     }
   ]
 }

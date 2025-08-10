@@ -15,7 +15,7 @@ interface PushData {
 const DOMAIN_NUMBER: number = 0xFF00;
 
 export default class EntryAbility extends UIAbility {
-  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+  async onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): Promise<void> {
 
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
     this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT);
@@ -26,7 +26,7 @@ export default class EntryAbility extends UIAbility {
     let pushToken: string
     // 获取Push Token
     try {
-      const pushToken = pushService.getToken();
+      const pushToken = await pushService.getToken();
       AppStorage.setOrCreate('PushToken', pushToken)
       hilog.info(0x0000, 'testTag', 'Succeeded in getting push token');
     } catch (err) {
@@ -46,6 +46,7 @@ export default class EntryAbility extends UIAbility {
       AppStorage.setOrCreate('pushData', pushData)
     }
 
+    // 上报Push Token到服务端
     // axios.post("http://localhost:8080/upload", pushToken, {
     //   headers: {
     //     "Content-Type": "application/json"
@@ -57,7 +58,6 @@ export default class EntryAbility extends UIAbility {
     //   .catch((err:BusinessError) => {
     //     console.error("请求失败:", err);
     //   });
-    // 上报Push Token到服务端
   }
 
   onNewWant(want: Want, launchParam: AbilityConstant.LaunchParam): void {

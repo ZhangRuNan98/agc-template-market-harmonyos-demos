@@ -69,16 +69,16 @@
       "value": "《华为账号用户认证协议》"
     },
     {
-      "name":"and",
-      "value":"和"
+      "name": "and",
+      "value": "和"
     },
     {
-      "name":"end",
-      "value":"。"
+      "name": "end",
+      "value": "。"
     },
     {
-      "name":"read_and_agree",
-      "value":"已阅读并同意"
+      "name": "read_and_agree",
+      "value": "已阅读并同意"
     },
     {
       "name": "hwid_no_internet_connect",
@@ -156,7 +156,6 @@
       "name": "no_question",
       "value": "暂时没有题目可以练习"
     },
-
     {
       "name": "screen_is_taking",
       "value": "正在截图，请稍等..."

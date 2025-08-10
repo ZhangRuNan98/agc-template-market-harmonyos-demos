@@ -1,4 +1,4 @@
-# 驾考-考试组件快速入门
+# 考试组件快速入门
 
 ## 目录
 
@@ -20,9 +20,9 @@
 ## 约束与限制
 ### 环境
 * DevEco Studio版本：DevEco Studio 5.0.1 Release及以上
-* HarmonyOS SDK版本：HarmonyOS 5.0.1(13) Release SDK及以上
-* 设备类型：华为手机（直板机）
-* HarmonyOS版本：HarmonyOS 5.0.1 Release及以上
+* HarmonyOS SDK版本：HarmonyOS 5.0.1 Release SDK及以上
+* 设备类型：华为手机（包括双折叠和阔折叠）
+* 系统版本：HarmonyOS 5.0.1(13)及以上
 
 ## 快速入门
 1. 安装组件。
@@ -209,55 +209,7 @@ mockExamCall: (score: number) => void = (score: number) => {}
 // 记录模拟考试分数回调, 用于计算模拟考试平均分
 
 ## 示例代码
-> Index.ets
-```typescript
-@Entry
-@ComponentV2
-struct Index {
-   @Provider('appPathStack') appPathStack: NavPathStack = new NavPathStack();
-
-   build() {
-      Navigation(this.appPathStack) {
-         Column({space: 50}) {
-            Text('顺序练习')
-               .textAlign(TextAlign.Center)
-               .fontSize(24)
-               .width('50%')
-               .height(64)
-               .fontColor(Color.White)
-               .backgroundColor(Color.Blue)
-               .borderRadius(10)
-               .onClick(() => {
-                  this.appPathStack.pushPathByName('SequencePractice', undefined)
-               })
-
-            Text('模拟考试')
-               .textAlign(TextAlign.Center)
-               .fontSize(24)
-               .width('50%')
-               .height(64)
-               .fontColor(Color.White)
-               .backgroundColor(Color.Blue)
-               .borderRadius(10)
-               .onClick(() => {
-                  this.appPathStack.pushPathByName('MockExam', undefined)
-               })
-         }
-         .padding({
-            top: 200
-         })
-            .width('100%')
-            .height('100%')
-            .backgroundColor('#F1F3F5')
-      }
-      .hideTitleBar(true)
-      .hideToolBar(true)
-      .hideBackButton(true)
-      .mode(NavigationMode.Stack)
-   }
-}
-```
-> 同级目录新建MockExam.ets
+> Index.ets同级目录新建MockExam.ets，模拟考试页面
 ```typescript
 import { Exam, ExamController, ExamManager, showSettingSheet } from 'exam';
 import { generateExamDetail } from './SequencePractice';
@@ -326,7 +278,7 @@ export struct MockExam {
    }
 }
 ```
-> 同级目录新建SequencePractice.ets
+> Index.ets同级目录新建SequencePractice.ets，顺序练习页面
 ```typescript
 import { ClassificationTypeEnum, Exam, ExamDetail, ExamManager, QuestionTypeEnum, showSettingSheet } from 'exam';
 
@@ -528,7 +480,54 @@ export function generateExamDetail(): Array<ExamDetail> {
 ```
 > **在 src/main/module.json5 下 module中添加  "routerMap": "$profile:router_map",** 
 
+> Index.ets，入口页面
+```typescript
+@Entry
+@ComponentV2
+struct Index {
+   @Provider('appPathStack') appPathStack: NavPathStack = new NavPathStack();
 
+   build() {
+      Navigation(this.appPathStack) {
+         Column({space: 50}) {
+            Text('顺序练习')
+               .textAlign(TextAlign.Center)
+               .fontSize(24)
+               .width('50%')
+               .height(64)
+               .fontColor(Color.White)
+               .backgroundColor(Color.Blue)
+               .borderRadius(10)
+               .onClick(() => {
+                  this.appPathStack.pushPathByName('SequencePractice', undefined)
+               })
+
+            Text('模拟考试')
+               .textAlign(TextAlign.Center)
+               .fontSize(24)
+               .width('50%')
+               .height(64)
+               .fontColor(Color.White)
+               .backgroundColor(Color.Blue)
+               .borderRadius(10)
+               .onClick(() => {
+                  this.appPathStack.pushPathByName('MockExam', undefined)
+               })
+         }
+         .padding({
+            top: 200
+         })
+            .width('100%')
+            .height('100%')
+            .backgroundColor('#F1F3F5')
+      }
+      .hideTitleBar(true)
+      .hideToolBar(true)
+      .hideBackButton(true)
+      .mode(NavigationMode.Stack)
+   }
+}
+```
 
 | 首页                                               | 顺序练习                                 | 模拟考试                                       |
 |--------------------------------------------------|--------------------------------------|--------------------------------------------|

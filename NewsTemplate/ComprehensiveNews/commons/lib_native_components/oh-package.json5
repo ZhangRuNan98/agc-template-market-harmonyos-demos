@@ -1,0 +1,20 @@
+{
+  "name": "lib_native_components",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "Index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "lib_widget": "file:../lib_widget",
+    "module_newsfeed": "file:../../components/module_newsfeed",
+    "lib_news_api": "file:../lib_news_api",
+    "module_share": "file:../../components/module_share",
+    "lib_common": "file:../lib_common",
+    "lib_account": "file:../lib_account",
+    "lib_news_feed_details": "file:../lib_news_feed_details",
+    "module_swipeplayer": "file:../../components/module_swipeplayer",
+    "module_highlight": "file:../../components/module_highlight",
+    "module_advertisement": "file:../../components/module_advertisement"
+  }
+}

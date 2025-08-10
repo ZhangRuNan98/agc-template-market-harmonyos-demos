@@ -21,7 +21,7 @@
 - DevEco Studio版本：DevEco Studio 5.0.4 Release及以上
 - HarmonyOS SDK版本：HarmonyOS 5.0.4 Release SDK及以上
 - 设备类型：华为手机（直板机）
-- HarmonyOS版本：HarmonyOS 5.0.4 Release及以上
+- HarmonyOS版本：HarmonyOS 5.0.4(16)及以上
 
 ## 快速入门
 
@@ -47,7 +47,7 @@
    ```typescript
    // xxx为组件存放的目录名称
      "dependencies": {
-     "swiper_card": "file:../xxx/swiper_card"
+     "swiper_card": "file:./xxx/swiper_card"
    }
    ```
 

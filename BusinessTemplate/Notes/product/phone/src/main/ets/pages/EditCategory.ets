@@ -1,8 +1,8 @@
-import { Category, CategoryService, Note, NoteService } from '@ohos_agcit/notes_datasource';
-import { JSON } from '@kit.ArkTS';
-import { CommonConstants, StringUtil } from '@ohos_agcit/notes_utils';
-import { promptAction } from '@kit.ArkUI';
-import { Callback } from '@kit.BasicServicesKit';
+import { Category, CategoryService, NoteService } from '@ohos_agcit/notes_datasource';
+import { BreakpointType, DialogUtil, GlobalInfoModel, StringUtil } from '@ohos_agcit/notes_utils';
+import { AppStorageV2, ComponentContent, promptAction } from '@kit.ArkUI';
+import { SelectedController } from '../controller/SelectedController';
+import { Note } from 'richeditor';
 
 @Builder
 export function EditCategoryBuilder() {
@@ -12,108 +12,123 @@ export function EditCategoryBuilder() {
 
 @ComponentV2
 export struct EditCategory {
+  private scroller: ListScroller = new ListScroller();
   @Consumer('appPathStack') appPathStack: NavPathStack = new NavPathStack();
   categoryService: CategoryService = CategoryService.instance;
   noteService: NoteService = NoteService.instance;
+  private selectedController: SelectedController = SelectedController.instance;
+  @Local globalInfo: GlobalInfoModel =
+    AppStorageV2.connect<GlobalInfoModel>(GlobalInfoModel, () => new GlobalInfoModel())!;
   @Local categoryList: Array<Category> = [];
   @Local categoryId: string = '';
   @Local isEditCategoryName: boolean = true;
   @Local isEditCategory: boolean = true;
   @Local currentCategory: Category = this.categoryService.getFirstCategory();;
-  @Local currentNote: Note | undefined;
-  editDialogController: CustomDialogController = new CustomDialogController({
-    builder: () => {
-      this.editCategoryDialog(
-        this.isEditCategoryName,
-        this.categoryService.getCategoryById(this.categoryId),
-        '',
-        () => {
-          this.editDialogController.close();
-        },
-      );
-    },
-    alignment: DialogAlignment.Center,
-    cornerRadius: 16,
-  });
-  deleteDialogController: CustomDialogController = new CustomDialogController({
-    builder: () => {
-      this.deleteCategoryDialog();
-    },
-    alignment: DialogAlignment.Center,
-    cornerRadius: 16,
-    width: '80%',
-  });
+  @Local noteList: Note[] | undefined;
 
+  selectFontColor(item: Category): ResourceStr {
+   if (this.isEditCategory) {
+       return this.currentCategory.id === item.id ? $r('sys.color.font_primary') : $r('sys.color.font_secondary');
+   }
 
-   selectFontColor(item: Category){
-     if (this.isEditCategory) {
-         return this.currentCategory.id === item.id ? 'rgba(0,0,0,0.90)' : 'rgba(0,0,0,0.60)';
-     }
-    return this.currentNote?.categoryId === item.id ? 'rgba(0,0,0,0.40)' : 'rgba(0,0,0,0.60)';
+   return this.noteList?.find(note => note.categoryId === item.id) ?
+      $r('sys.color.font_tertiary') : $r('sys.color.font_secondary');
   }
 
-  selectFontWeight(item: Category){
+  selectFontWeight(item: Category): FontWeight {
     if (this.isEditCategory) {
       return this.currentCategory.id === item.id ? FontWeight.Medium : FontWeight.Regular;
     }
-    return this.currentNote?.categoryId === item.id ? FontWeight.Medium : FontWeight.Regular;
+    return this.noteList?.find(note => note.categoryId === item.id) ? FontWeight.Medium : FontWeight.Regular;
+  }
+
+  /**
+   * 右滑样式设置
+   * @param item
+   */
+  @Builder
+  categoryEnd(item: Category){
+    Row() {
+      Image($r('app.media.edit_category'))
+        .width(40)
+        .height(40)
+        .margin({ left: 16, right: 16})
+        .onClick(() => {
+          this.isEditCategoryName = true;
+          this.categoryId = item.id;
+
+          let contentNode: ComponentContent<object> =
+            new ComponentContent(this.getUIContext(),wrapBuilder(editCategoryDialog),
+              new EditCategoryParam(this.isEditCategoryName,
+                this.categoryService.getCategoryById(this.categoryId), this.scroller));
+          DialogUtil.openDialog(this.getUIContext(), contentNode);
+        })
+
+      Image($r('app.media.delete_category'))
+        .width(40)
+        .height(40)
+        .onClick(() => {
+          this.categoryId = item.id;
+          let contentNode: ComponentContent<object> =
+            new ComponentContent(this.getUIContext(),wrapBuilder(deleteCategoryDialog),
+              new DeleteCategoryParam(this.categoryId, this.scroller));
+          DialogUtil.openDialog(this.getUIContext(), contentNode);
+        })
+    }
+    .width(112)
+    .height(48)
   }
 
   build() {
     NavDestination() {
       Scroll(){
         Column({space: 15}) {
-          List({ space: 12 }) {
+          List({ space: 12, scroller: this.scroller }) {
             ForEach(this.categoryList, (item: Category, index: number) => {
               ListItem() {
                 Row() {
                   Text(item.name)
                     .fontSize(18)
                     .fontColor(this.selectFontColor(item))
-                    .fontWeight(this.selectFontColor(item))
+                    .fontWeight(this.selectFontWeight(item))
                   Blank();
-
-                  Row({ space: 18 }) {
-                    Text(String(item.totalCount))
-                      .fontSize(18)
-                      .fontWeight(FontWeight.Medium);
-                    if (index !== 0 && this.isEditCategory) {
-                      Image($r('app.media.edit_category'))
-                        .width(24)
-                        .height(24)
-                        .onClick(() => {
-                          this.isEditCategoryName = true;
-                          this.categoryId = item.id;
-                          this.editDialogController.open();
-                        });
-
-                      Image($r('app.media.delete_category'))
-                        .width(24)
-                        .height(24)
-                        .onClick(() => {
-                          this.categoryId = item.id;
-                          this.deleteDialogController.open();
-                        });
-                    }
-                  };
+                  Text(String(item.totalCount))
+                    .fontSize(18)
+                    .fontWeight(FontWeight.Medium)
+                    .fontColor($r('sys.color.font_primary'))
                 }
                 .borderRadius(16)
-                .backgroundColor(!this.isEditCategory && this.currentNote?.categoryId === item.id ?
-                  'rgba(255,255,255,0.20)' : Color.White)
+                .backgroundColor(!this.isEditCategory && this.partOfNoteList(item.id) ?
+                  $r('sys.color.background_tertiary') : $r('sys.color.comp_background_list_card'))
                 .height(48)
-                .width(CommonConstants.FULL_PERCENT)
+                .width('100%')
                 .padding({
-                  left: 12,
-                  right: 12,
+                  left: '3%',
+                  right: '3%',
                 })
               }
+              .swipeAction({
+                end: {
+                  builder: () => {
+                    if (item.name !== '全部笔记') {
+                      this.categoryEnd(item)
+                    }
+                  }
+                }
+              })
               .onClick(() => {
                 // 非编辑模式
-                if (!this.isEditCategory && this.currentNote) {
+                if (!this.isEditCategory && this.noteList) {
                   // 移动分类
-                  this.categoryService.moveCategory(this.currentNote.categoryId, item.id);
-                  this.currentNote.categoryId = item.id;
-                  this.noteService.updateNote(this.currentNote);
+                  this.noteList.forEach(note => {
+                    this.categoryService.moveCategory(note.categoryId, item.id);
+                    note.categoryId = item.id;
+                    note.isSelected = false;
+                  })
+                  this.noteList.forEach(note => {
+                    this.noteService.updateNote(note);
+                  })
+                  this.selectedController.recoverInitState()
                   this.appPathStack.pop();
                 }
               })
@@ -125,35 +140,56 @@ export struct EditCategory {
               .width(24)
               .height(24)
             Text('新建分类')
-              .fontSize(18);
+              .fontSize(18)
+              .fontColor($r('sys.color.font_secondary'))
           }
           .justifyContent(FlexAlign.Center)
-          .backgroundColor(Color.White)
+          .backgroundColor($r('sys.color.comp_background_list_card'))
           .borderRadius(16)
           .height(48)
-          .width(CommonConstants.FULL_PERCENT)
+          .width('100%')
           .onClick(() => {
             this.isEditCategoryName = false;
-            this.editDialogController.open();
+            let contentNode: ComponentContent<object> =
+              new ComponentContent(this.getUIContext(),wrapBuilder(editCategoryDialog),
+                new EditCategoryParam(this.isEditCategoryName,
+                  this.categoryService.getCategoryById(this.categoryId), this.scroller));
+            DialogUtil.openDialog(this.getUIContext(), contentNode);
           });
         }
-        .width(CommonConstants.FULL_PERCENT)
-        .padding({
-          top: 10,
-          right: 16,
-          left: 16,
-          bottom: 50
-        });
+        .width('100%')
+        .padding(new BreakpointType<Padding>({
+          sm: {
+            left: $r('sys.float.padding_level8'),
+            right: $r('sys.float.padding_level8'),
+            top: 10,
+            bottom: 50,
+          },
+          md: {
+            left: $r('sys.float.padding_level12'),
+            right: $r('sys.float.padding_level12'),
+            top: 10,
+            bottom: 50,
+          },
+          lg: {
+            left: $r('sys.float.padding_level16'),
+            right: $r('sys.float.padding_level16'),
+            top: 10,
+            bottom: 50,
+          },
+        }).getValue(this.globalInfo.currentBreakpoint))
+
       }
       .scrollBar(BarState.Off)
     }
+    .backgroundColor($r('sys.color.background_secondary'))
     .onReady((cxt: NavDestinationContext) => {
       this.categoryList = this.categoryService.getCategoryList();
       let params = cxt.pathInfo.param as Record<string, Object>;
       this.isEditCategory = params.isEditCategory as boolean;
       this.currentCategory = params.currentCategory as Category;
       if (!this.isEditCategory) {
-        this.currentNote = params.currentNote as  Note;
+        this.noteList = params.noteList as Note[];
       }
     })
     .title('笔记分类')
@@ -161,18 +197,44 @@ export struct EditCategory {
       this.appPathStack.pop();
       return true;
     })
-    .linearGradient({
-      angle: 180,
-      colors: [['#FFF0D4', 0], ['#E4E1D1', 0.08],['#F1F3F5', 0.2],['#F1F3F5', 1]],
-    })
-    .backgroundColor('#FFF0D4');
   }
 
-  @Builder
-  editCategoryDialog(isEdit: boolean, category: Category | undefined, newName: string,
-    cancelClick: Callback<void>) {
+  partOfNoteList(categoryId: string): boolean{
+    if (this.noteList) {
+      return this.noteList.find(item => item.categoryId === categoryId) ? true : false;
+    }
+    return false;
+  }
+}
+
+class EditCategoryParam{
+  isEdit: boolean;
+  category: Category | undefined
+  scroller: ListScroller
+
+  constructor(isEdit: boolean, category: Category | undefined, scroller: ListScroller) {
+    this.isEdit = isEdit;
+    this.category = category;
+    this.scroller = scroller
+  }
+}
+
+@Builder
+function editCategoryDialog(params: EditCategoryParam) {
+  EditCategoryDialog({
+    params: params
+  })
+}
+
+@ComponentV2
+struct EditCategoryDialog {
+  @Param @Require params: EditCategoryParam;
+  @Local newName: string = '';
+  categoryService: CategoryService = CategoryService.instance;
+
+  build() {
     Column() {
-      Text(isEdit ? '重命名' : '新建分类')
+      Text(this.params.isEdit ? '重命名' : '新建分类')
         .fontSize(18)
         .fontWeight(FontWeight.Medium)
         .padding({
@@ -181,7 +243,7 @@ export struct EditCategory {
         });
 
       TextInput({
-        text: isEdit ? category?.name : '',
+        text: this.params.isEdit ? this.params.category?.name : '',
       })
         .height(48)
         .fontSize(18)
@@ -192,7 +254,7 @@ export struct EditCategory {
           right: '3%',
         })
         .onChange((value) => {
-          newName = value;
+          this.newName = value;
         });
 
       Row() {
@@ -204,7 +266,7 @@ export struct EditCategory {
         .height(70)
         .width('50%')
         .onClick(() => {
-          cancelClick();
+          DialogUtil.closeDialog();
         });
 
         Row() {
@@ -215,51 +277,80 @@ export struct EditCategory {
         .height(70)
         .width('50%')
         .onClick(() => {
-          if (isEdit) {
-            if (category) {
-              category.name = newName;
-            }
-            cancelClick();
-            return;
-          }
-          if (StringUtil.isBlank(newName)) {
-            promptAction.showToast({
+          if (StringUtil.isBlank(this.newName)) {
+            this.getUIContext().getPromptAction().showToast({
               message: '分类名称为空, 请重新填写 ~',
               duration: 1500,
               alignment: Alignment.Center,
             });
             return;
           }
-          if (this.categoryService.addCategory(new Category(newName, 0))) {
-            cancelClick();
-          }
 
+          this.params.scroller.closeAllSwipeActions()
+          if (this.params.isEdit) {
+            if (this.params.category) {
+              this.params.category.name = this.newName;
+            }
+            DialogUtil.closeDialog();
+            return;
+          }
+          if (this.categoryService.addCategory(new Category(this.newName, 0))) {
+            DialogUtil.closeDialog();
+          }
         });
       };
     }
+    .borderRadius(16)
+    .backgroundColor($r('sys.color.comp_background_list_card'))
+    .width('92%')
     .height(158);
   }
+}
 
-  @Builder
-  deleteCategoryDialog() {
+
+class DeleteCategoryParam{
+  categoryId: string
+  scroller: ListScroller
+
+  constructor(categoryId: string, scroller: ListScroller) {
+    this.categoryId = categoryId;
+    this.scroller = scroller
+  }
+}
+
+@Builder
+function deleteCategoryDialog(params: DeleteCategoryParam){
+  DeleteCategoryDialog({
+    params: params
+  })
+}
+
+@ComponentV2
+struct DeleteCategoryDialog {
+  @Param @Require params: DeleteCategoryParam;
+  noteService: NoteService = NoteService.instance;
+  categoryService: CategoryService = CategoryService.instance;
+
+  build() {
     Column({ space: 30 }) {
       Row() {
         Text('仅删除分类')
           .fontSize(16)
           .onClick(() => {
-            this.noteService.moveNotesCategory(this.categoryId);
-            this.categoryService.deleteCategoryById(this.categoryId);
+            this.noteService.moveNotesCategory(this.params.categoryId);
+            this.categoryService.deleteCategoryById(this.params.categoryId);
 
             promptAction.showToast({
               message: '删除成功 ~',
               alignment: Alignment.Center,
               duration: 1500,
             });
-            this.deleteDialogController.close();
+            this.params.scroller.closeAllSwipeActions();
+            DialogUtil.closeDialog();
           });
       }
       .justifyContent(FlexAlign.Center)
-      .width(CommonConstants.FULL_PERCENT)
+      .width('100%')
       .height(20);
 
       Row() {
@@ -268,22 +359,23 @@ export struct EditCategory {
           .fontColor(Color.Red)
           .onClick(() => {
             // 删除笔记
-            let notes = this.noteService.getNoteList(this.categoryId);
+            let notes = this.noteService.getNoteList(this.params.categoryId);
             notes.forEach((item) => {
               this.noteService.deleteNote(item.id);
             });
             // 删除分类
-            this.categoryService.deleteCategoryById(this.categoryId);
+            this.categoryService.deleteCategoryById(this.params.categoryId);
             promptAction.showToast({
               message: '删除成功 ~',
               alignment: Alignment.Center,
               duration: 1500,
             });
-            this.deleteDialogController.close();
+            this.params.scroller.closeAllSwipeActions();
+            DialogUtil.closeDialog();
           });
       }
       .justifyContent(FlexAlign.Center)
-      .width(CommonConstants.FULL_PERCENT)
+      .width('100%')
       .height(20);
 
       Row() {
@@ -291,19 +383,24 @@ export struct EditCategory {
           .fontSize(16)
           .fontColor(Color.Grey)
           .onClick(() => {
-            this.deleteDialogController.close();
+            DialogUtil.closeDialog()
           });
       }
       .justifyContent(FlexAlign.Center)
-      .width(CommonConstants.FULL_PERCENT)
+      .width('100%')
       .height(20);
     }
+    .backgroundColor($r('sys.color.comp_background_list_card'))
+    .width('92%')
+    .borderRadius(16)
     .padding({
       top: 30,
       bottom: 30,
     });
   }
 }
+
+
 
 @Extend(Text)
 function editCategoryButtonStyle() {

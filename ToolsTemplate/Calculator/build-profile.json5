@@ -5,19 +5,20 @@
       {
         "name": "default",
         "signingConfig": "default",
+        "targetSdkVersion": "5.0.4(16)",
         "compatibleSdkVersion": "5.0.4(16)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
             "caseSensitiveCheck": true,
-            "useNormalizedOHMUrl": false
+            "useNormalizedOHMUrl": true
           }
         }
       }
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
@@ -39,31 +40,55 @@
     },
     {
       "name": "lib_foundation",
-      "srcPath": "./commons/lib_foundation",
+      "srcPath": "./commons/lib_foundation"
     },
     {
       "name": "module_standard_calculator",
-      "srcPath": "./components/module_standard_calculator",
+      "srcPath": "./components/module_standard_calculator"
+    },
+    {
+      "name": "module_date_calculation",
+      "srcPath": "./components/module_date_calculation"
+    },
+    {
+      "name": "module_base_apis",
+      "srcPath": "./components/module_base_apis"
     },
     {
       "name": "business_home",
       "srcPath": "./features/business_home",
-    },
-    {
-      "name": "date_calculation",
-      "srcPath": "./components/date_calculation",
-    },
-    {
-      "name": "base_apis",
-      "srcPath": "./components/base_apis",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
     },
     {
       "name": "business_tool",
       "srcPath": "./features/business_tool",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
     },
     {
       "name": "business_mine",
       "srcPath": "./features/business_mine",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,5 +1,4 @@
-import { CommonConstants, RouterModule } from 'lib_foundation';
-import { BaseNavTitle } from 'base_apis';
+import { CommonConstants, RouterModule, BaseNavTitle } from 'lib_foundation';
 
 @Builder
 export function AgreementPrivacyBuilder() {

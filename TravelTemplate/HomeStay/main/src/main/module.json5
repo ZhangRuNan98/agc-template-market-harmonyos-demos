@@ -80,7 +80,8 @@
     "metadata": [
       {
         "name": "client_id",
-        "value": "6917569041039602209"  // 配置为获取的Client ID
+        // todo 替换为您的应用的client_id值
+        "value": "xxx"
       },
     ],
   }
